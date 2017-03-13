@@ -53,9 +53,9 @@ public class GuiAdvBackpack extends GuiWithTanks
         this.isTile = true;
         xSize = 248;
         ySize = 207;
-        this.X = tileBackpack.xCoord;
-        this.Y = tileBackpack.yCoord;
-        this.Z = tileBackpack.zCoord;
+        this.X = tileBackpack.getPos().getX();
+        this.Y = tileBackpack.getPos().getY();
+        this.Z = tileBackpack.getPos().getZ();
         this.player = player;
         this.lefties = guiLeft;
         this.topsies = guiTop;
@@ -79,7 +79,7 @@ public class GuiAdvBackpack extends GuiWithTanks
     {
         if (inventory != null)
         {
-            inventory.closeInventory();
+            inventory.closeInventory(null);
         }
         super.onGuiClosed();
     }
@@ -144,7 +144,7 @@ public class GuiAdvBackpack extends GuiWithTanks
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
 
-        inventory.openInventory();
+        inventory.openInventory(null);
         lft = inventory.getLeftTank();
         rgt = inventory.getRightTank();
         tankLeft.draw(this, lft);
@@ -211,7 +211,7 @@ public class GuiAdvBackpack extends GuiWithTanks
             if (bedButton.inButton(this, mouseX, mouseY))
             {
                 TileAdventureBackpack te = (TileAdventureBackpack) inventory;
-                ModNetwork.net.sendToServer(new SleepingBagPacket.SleepingBagMessage(te.xCoord, te.yCoord, te.zCoord));
+                ModNetwork.net.sendToServer(new SleepingBagPacket.SleepingBagMessage(te.getPos().getX(), te.getPos().getY(), te.getPos().getZ()));
             }
         } else
         {
@@ -233,7 +233,15 @@ public class GuiAdvBackpack extends GuiWithTanks
 
             }
         }
-        super.mouseClicked(mouseX, mouseY, button);
+        try
+        {
+            super.mouseClicked(mouseX, mouseY, button);
+        }
+        catch (Exception e)
+        {
+
+        }
+
     }
 
     @Override
@@ -243,6 +251,11 @@ public class GuiAdvBackpack extends GuiWithTanks
         {
             player.closeScreen();
         }
-        super.keyTyped(key, keycode);
+        try
+        {
+            super.keyTyped(key, keycode);
+        }
+        catch (Exception e)
+        {}
     }
 }

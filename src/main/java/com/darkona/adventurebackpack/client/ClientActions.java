@@ -36,16 +36,16 @@ public class ClientActions
             switch (particleCode)
             {
                 case EntityParticlePacket.COPTER_PARTICLE:
-                    Visuals.CopterParticles(player, player.worldObj);
+                    Visuals.CopterParticles(player, player.world);
                     break;
                 case EntityParticlePacket.NYAN_PARTICLE:
-                    Visuals.NyanParticles(player, player.worldObj);
+                    Visuals.NyanParticles(player, player.world);
                     break;
                 case EntityParticlePacket.SLIME_PARTICLE:
-                    Visuals.SlimeParticles(player, player.worldObj);
+                    Visuals.SlimeParticles(player, player.world);
                     break;
                 case EntityParticlePacket.JETPACK_PARTICLE:
-                    Visuals.JetpackParticles(player, player.worldObj);
+                    Visuals.JetpackParticles(player, player.world);
                     break;
             }
         }

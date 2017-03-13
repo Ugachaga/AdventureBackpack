@@ -597,13 +597,13 @@ public class TileAdventureBackpack extends TileEntity implements IInventoryAdven
             {
                 if (Wearing.isWearingBackpack(player))
                 {
-                    player.addTextComponentString(new TextComponentTranslation("adventurebackpack:messages.already.equipped.backpack"));
+                    player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.already.equipped.backpack"));
                 } else if (Wearing.isWearingCopter(player))
                 {
-                    player.addTextComponentString(new TextComponentTranslation("adventurebackpack:messages.already.equipped.copterpack"));
+                    player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.already.equipped.copterpack"));
                 } else if (Wearing.isWearingJetpack(player))
                 {
-                    player.addTextComponentString(new TextComponentTranslation("adventurebackpack:messages.already.equipped.jetpack"));
+                    player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.already.equipped.jetpack"));
                 }
             }
             if (!player.inventory.addItemStackToInventory(stacky))
@@ -632,7 +632,7 @@ public class TileAdventureBackpack extends TileEntity implements IInventoryAdven
         droppedItem.motionY = (4 + world.rand.nextFloat()) * mult;
         droppedItem.motionZ = (-0.5F + world.rand.nextFloat()) * mult;
 
-        return world.spawnEntityInWorld(droppedItem);
+        return world.spawnEntity(droppedItem);
     }
 
     @Override

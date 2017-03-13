@@ -14,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidTank;
 
@@ -302,9 +303,9 @@ public class InventoryBackpack implements IInventoryAdventureBackpack
     }
 
     @Override
-    public String getInventoryName()
+    public ITextComponent getDisplayName()
     {
-        return "Adventure Backpack";
+        return new ITextComponent("Adventure Backpack");
     }
 
     @Override
@@ -327,19 +328,19 @@ public class InventoryBackpack implements IInventoryAdventureBackpack
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player)
+    public boolean isUsableByPlayer(EntityPlayer player)
     {
         return true;
     }
 
     @Override
-    public void openInventory()
+    public void openInventory(EntityPlayer player)
     {
         loadFromNBT(containerStack.stackTagCompound);
     }
 
     @Override
-    public void closeInventory()
+    public void closeInventory(EntityPlayer player)
     {
        /* if(Utils.inServer())
         {*/
@@ -415,6 +416,36 @@ public class InventoryBackpack implements IInventoryAdventureBackpack
         containerStack.stackTagCompound.getCompoundTag("backpackData").removeTag("ABPItems");
         containerStack.stackTagCompound.getCompoundTag("backpackData").setTag("ABPItems", items);
     }
+
+    @Override
+    public void clear()
+    {
+        //TODO: clear the inventory
+    }
+
+    @Override
+    public int getFieldCount()
+    {
+        return inventory.length;
+    }
+
+    @Override
+    public void setField(int id, int type)
+    {
+    }
+
+    @Override
+    public int getField(int id)
+    {
+        return 0;
+    }
+
+    @Override
+    public ItemStack removeStackFromSlot(int id)
+    {
+        return inventory[id] = null;
+    }
+
 
     public boolean hasBlock(Block block)
     {
