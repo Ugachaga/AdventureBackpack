@@ -27,7 +27,6 @@ import com.darkona.adventurebackpack.init.ModBlocks;
 import com.darkona.adventurebackpack.init.ModItems;
 import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
 import com.darkona.adventurebackpack.util.Utils;
-import com.jadarstudios.developercapes.DevCapes;
 
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -173,12 +172,6 @@ public class ClientProxy implements IProxy
                 }
             }
         }
-    }
-
-    @Override
-    public void Capes()
-    {
-        DevCapes.getInstance().registerConfig("https://raw.githubusercontent.com/runescapejon/Adventurebackpack-Capes/master/capes.json");
     }
 
 }
