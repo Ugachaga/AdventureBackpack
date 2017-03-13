@@ -15,6 +15,7 @@ import com.darkona.adventurebackpack.util.Wearing;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import net.minecraft.util.math.BlockPos;
 
 /**
  * Created on 12/10/2014
@@ -38,12 +39,15 @@ public class GuiHandler implements IGuiHandler
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
     {
+
+        BlockPos pos = new BlockPos(x, y, z);
+
         switch (ID)
         {
             case BACKPACK_TILE:
-                if (world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileAdventureBackpack)
+                if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileAdventureBackpack)
                 {
-                    return new ContainerBackpack(player, (TileAdventureBackpack) world.getTileEntity(x, y, z), ContainerBackpack.SOURCE_TILE);
+                    return new ContainerBackpack(player, (TileAdventureBackpack) world.getTileEntity(pos), ContainerBackpack.SOURCE_TILE);
                 }
                 break;
             case BACKPACK_WEARING:
@@ -94,12 +98,15 @@ public class GuiHandler implements IGuiHandler
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
     {
+
+        BlockPos pos = new BlockPos(x, y, z);
+
         switch (ID)
         {
             case BACKPACK_TILE:
-                if (world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileAdventureBackpack)
+                if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileAdventureBackpack)
                 {
-                    return new GuiAdvBackpack(player, (TileAdventureBackpack) world.getTileEntity(x, y, z));
+                    return new GuiAdvBackpack(player, (TileAdventureBackpack) world.getTileEntity(pos));
                 }
                 break;
             case BACKPACK_WEARING:

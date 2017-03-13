@@ -352,7 +352,7 @@ public class ItemHose extends ItemAB
                                         {
                                             if (!world.isRemote && flag && !material.isLiquid())
                                             {
-                                                world.func_147480_a(x, y, z, true);
+                                                world.destroyBlock(x, y, z, true);
                                             }
 
                                             if (fluid.getFluid().getBlock() == Blocks.water)

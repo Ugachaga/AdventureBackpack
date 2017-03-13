@@ -139,7 +139,7 @@ public class TileAdventureBackpack extends TileEntity implements IInventoryAdven
         {
             if (world.getBlock(sbx, sby, sbz) == ModBlocks.blockSleepingBag)
             {
-                world.func_147480_a(sbx, sby, sbz, false);
+                world.destroyBlock(sbx, sby, sbz, false);
                 this.sleepingBagDeployed = false;
                 markDirty();
                 return true;

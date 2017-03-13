@@ -258,7 +258,7 @@ public class EntityInflatableBoat extends EntityBoat implements IInventoryTanks,
                         this.isCollidedHorizontally = false;
                     } else if (block == Blocks.waterlily)
                     {
-                        this.worldObj.func_147480_a(i1, k, j, true);
+                        this.worldObj.destroyBlock(i1, k, j, true);
                         this.isCollidedHorizontally = false;
                     }
                 }

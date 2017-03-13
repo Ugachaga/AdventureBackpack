@@ -86,12 +86,13 @@ public class GeneralEventHandler
     public void detectBow(ArrowNockEvent event)
     {
         if (!ConfigHandler.backpackAbilities) return;
-        if (Wearing.isWearingTheRightBackpack(event.entityPlayer, "Skeleton"))
+        if (Wearing.isWearingTheRightBackpack(event.getEntityPlayer(), "Skeleton"))
         {
-            InventoryBackpack backpack = new InventoryBackpack(Wearing.getWearingBackpack(event.entityPlayer));
-            if (backpack.hasItem(Items.arrow))
+            InventoryBackpack backpack = new InventoryBackpack(Wearing.getWearingBackpack(event.getEntityPlayer()));
+            if (backpack.hasItem(Items.ARROW))
             {
-                event.entityPlayer.setItemInUse(event.result, event.result.getMaxItemUseDuration());
+                //TODO: find out what this dose
+                //event.getPlayer().setItemInUse(event.getResult(), event.getBow().getMaxItemUseDuration());
                 event.setCanceled(true);
             }
         }
@@ -101,12 +102,12 @@ public class GeneralEventHandler
     public void detectArrow(ArrowLooseEvent event)
     {
         if (!ConfigHandler.backpackAbilities) return;
-        if (Wearing.isWearingTheRightBackpack(event.entityPlayer, "Skeleton"))
+        if (Wearing.isWearingTheRightBackpack(event.getEntityPlayer(), "Skeleton"))
         {
-            InventoryBackpack backpack = new InventoryBackpack(Wearing.getWearingBackpack(event.entityPlayer));
-            if (backpack.hasItem(Items.arrow))
+            InventoryBackpack backpack = new InventoryBackpack(Wearing.getWearingBackpack(event.getEntityPlayer()));
+            if (backpack.hasItem(Items.ARROW))
             {
-                ServerActions.leakArrow(event.entityPlayer, event.bow, event.charge);
+                ServerActions.leakArrow(event.getEntityPlayer(), event.getBow(), event.getCharge());
                 event.setCanceled(true);
             }
         }
@@ -118,9 +119,9 @@ public class GeneralEventHandler
     @SubscribeEvent
     public void detectLightning(EntityStruckByLightningEvent event)
     {
-        if (event.entity != null && event.entity instanceof EntityPlayer)
+        if (event.getEntity() != null && event.getEntity() instanceof EntityPlayer)
         {
-            ServerActions.electrify((EntityPlayer) event.entity);
+            ServerActions.electrify((EntityPlayer) event.getEntity());
         }
     }
 
@@ -128,16 +129,17 @@ public class GeneralEventHandler
     public void makeHorsesFollowOwner(EntityJoinWorldEvent event)
     {
         if (!ConfigHandler.backpackAbilities) return;
-        if (event.entity instanceof EntityHorse)
+        if (event.getEntity() instanceof EntityHorse)
         {
 
-            EntityHorse horse = ((EntityHorse) event.entity);
-            if (!horse.isDead && horse.isTame() && horse.hasCustomNameTag())
+            EntityHorse horse = ((EntityHorse) event.getEntity());
+            if (!horse.isDead && horse.isTame() && horse.hasCustomName())
             {
-                String ownerUUIDstring = horse.func_152119_ch();
+                String ownerUUIDstring = horse.getOwnerUniqueId().toString();
                 if (ownerUUIDstring != null && !ownerUUIDstring.isEmpty())
                 {
                     boolean set = true;
+                    /**
                     if (horse.worldObj.func_152378_a(UUID.fromString(ownerUUIDstring)) != null)
                     {
                         for (Object entry : horse.tasks.taskEntries)
@@ -157,6 +159,7 @@ public class GeneralEventHandler
                             horse.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.followRange).setBaseValue(100.0D);
                         }
                     }
+                    **/
                 }
             }
         }

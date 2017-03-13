@@ -80,8 +80,10 @@ public class ClientEventHandler
         {
             //LogHelper.debug("Mouse Wheel moving");
 
-            //TODO: why is this erroring?
-            EntityPlayerSP player = mc.thePlayer;
+            /**
+             * TODO: why is this erroring?
+
+            EntityPlayer player = mc.thePlayer;
             if (player != null && !player.isDead && player.isSneaking())
             {
                 ItemStack backpack = Wearing.getWearingBackpack(player);
@@ -110,6 +112,7 @@ public class ClientEventHandler
                     }
                 }
             }
+            **/
         }
     }
 }
