@@ -27,14 +27,14 @@ public class ModelFullArmor extends ModelBiped
         {
             EntityLivingBase owner = (EntityLivingBase)entity;
             this.isSneak = owner.isSneaking();
-            this.onGround = entity.onGround ? 1 : 0;
-            this.heldItemRight = (owner.getHeldItem() != null) ? 1 : 0;
+            //this.onGround = entity.onGround ? 1 : 0;
+            //this.heldItemRight = (owner.getItemInMainHand() != null) ? 1 : 0;
             this.isRiding = entity.isRiding();
             if(owner instanceof EntityPlayer)
             {
                 EntityPlayer player = (EntityPlayer) owner;
-                this.aimedBow = player.isUsingItem() && player.getItemInUse() != null && player.getItemInUse().getItemUseAction() == EnumAction.bow;
-                this.heldItemRight = (player.getCurrentEquippedItem() != null) ? 1 : 0;
+                //this.aimedBow = player.isUsingItem() && player.getItemInUse() != null && player.getItemInUse().getItemUseAction() == EnumAction.BOW;
+                //this.heldItemRight = (player.getCurrentEquippedItem() != null) ? 1 : 0;
             }
         }
        super.render(entity, f, f1, f2, f3, f4, f5);

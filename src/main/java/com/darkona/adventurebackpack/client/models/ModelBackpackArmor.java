@@ -247,7 +247,7 @@ public class ModelBackpackArmor extends ModelWearable
     private void renderBackpack(Float scale)
     {
         InventoryBackpack backpack = new InventoryBackpack(this.backpack);
-        backpack.openInventory();
+        //backpack.openInventory();
         String color = backpack.getColorName();
         for (ModelRenderer model : (List<ModelRenderer>) bipedBody.childModels)
         {
@@ -261,8 +261,8 @@ public class ModelBackpackArmor extends ModelWearable
         if (ConfigHandler.enableToolsRender)
         {
 	    lowerTool.stack = backpack.getStackInSlot(Constants.lowerTool);
-	    upperTool.stack = backpack.getStackInSlot(Constants.upperTool);	
-        }	
+	    upperTool.stack = backpack.getStackInSlot(Constants.upperTool);
+        }
 
         if (color.equals("Quartz") || color.equals("Slime") || color.equals("Snow"))
         {

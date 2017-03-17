@@ -54,6 +54,7 @@ public abstract class ModelWearable extends ModelBiped
 
     public void renderFluidInTank(FluidTank tank, Vector3 minCoords, Vector3 maxCoords, Vector3 offset, ModelRenderer parent)
     {
+        /**
         if (tank != null && tank.getFluid() != null && tank.getFluid().getFluid().getIcon() != null)
         {
             Vector3 victor = new Vector3(
@@ -65,6 +66,7 @@ public abstract class ModelWearable extends ModelBiped
             //Thanks Chickenbones!
             RenderUtils.renderFluidCuboid(tank.getFluid(), cat.add(victor),((1.0F * tank.getFluidAmount()) / (1.0F * tank.getCapacity())), 0.8);
         }
+        */
     }
 
 }

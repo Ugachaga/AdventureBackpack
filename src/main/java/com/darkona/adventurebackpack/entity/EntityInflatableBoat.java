@@ -22,7 +22,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidTank;
 
@@ -113,11 +115,17 @@ public class EntityInflatableBoat extends EntityBoat implements IInventoryTanks,
 
         for (int i = 0; i < b0; ++i)
         {
-            double d1 = this.boundingBox.minY + (this.boundingBox.maxY - this.boundingBox.minY) * (i + 0) / b0 - 0.125D;
-            double d3 = this.boundingBox.minY + (this.boundingBox.maxY - this.boundingBox.minY) * (i + 1) / b0 - 0.125D;
-            AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(this.boundingBox.minX, d1, this.boundingBox.minZ, this.boundingBox.maxX, d3, this.boundingBox.maxZ);
+            double d1 = this.getEntityBoundingBox().minY + (this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY) * (i + 0) / b0 - 0.125D;
+            double d3 = this.getEntityBoundingBox().minY + (this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY) * (i + 1) / b0 - 0.125D;
 
-            if (this.worldObj.isAABBInMaterial(axisalignedbb, Material.water))
+            AxisAlignedBB axisalignedbb = new AxisAlignedBB(this.getEntityBoundingBox().minX,
+                                                            d1,
+                                                            this.getEntityBoundingBox().minZ,
+                                                            this.getEntityBoundingBox().maxX,
+                                                            d3,
+                                                            this.getEntityBoundingBox().maxZ);
+
+            if (this.world.isAABBInMaterial(axisalignedbb, Material.WATER))
             {
                 d0 += 1.0D / (double) b0;
             }
@@ -144,12 +152,12 @@ public class EntityInflatableBoat extends EntityBoat implements IInventoryTanks,
                 {
                     d8 = this.posX - d2 * d5 * 0.8D + d4 * d6;
                     d9 = this.posZ - d4 * d5 * 0.8D - d2 * d6;
-                    this.worldObj.spawnParticle("splash", d8, this.posY - 0.125D, d9, this.motionX, this.motionY, this.motionZ);
+                    this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, d8, this.posY - 0.125D, d9, this.motionX, this.motionY, this.motionZ);
                 } else
                 {
                     d8 = this.posX + d2 + d4 * d5 * 0.7D;
                     d9 = this.posZ + d4 - d2 * d5 * 0.7D;
-                    this.worldObj.spawnParticle("splash", d8, this.posY - 0.125D, d9, this.motionX, this.motionY, this.motionZ);
+                    this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, d8, this.posY - 0.125D, d9, this.motionX, this.motionY, this.motionZ);
                 }
             }
         }
@@ -157,14 +165,14 @@ public class EntityInflatableBoat extends EntityBoat implements IInventoryTanks,
         double d11;
         double d12;
 
-        if (this.worldObj.isRemote && this.isBoatEmpty)
+        if (this.world.isRemote && this.isBoatEmpty)
         {
             if (this.boatPosRotationIncrements > 0)
             {
                 d2 = this.posX + (this.boatX - this.posX) / (double) this.boatPosRotationIncrements;
                 d4 = this.posY + (this.boatY - this.posY) / (double) this.boatPosRotationIncrements;
                 d11 = this.posZ + (this.boatZ - this.posZ) / (double) this.boatPosRotationIncrements;
-                d12 = MathHelper.wrapAngleTo180_double(this.boatYaw - (double) this.rotationYaw);
+                d12 = MathHelper.wrapDegrees(this.boatYaw - (double) this.rotationYaw);
                 this.rotationYaw = (float) ((double) this.rotationYaw + d12 / (double) this.boatPosRotationIncrements);
                 this.rotationPitch = (float) ((double) this.rotationPitch + (this.boatPitch - (double) this.rotationPitch) / (double) this.boatPosRotationIncrements);
                 --this.boatPosRotationIncrements;
@@ -204,10 +212,10 @@ public class EntityInflatableBoat extends EntityBoat implements IInventoryTanks,
                 this.motionY += 0.007000000216066837D;
             }
 
-            if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityLivingBase)
+            if (this.getRidingEntity() != null && this.getRidingEntity() instanceof EntityLivingBase)
             {
-                EntityLivingBase entitylivingbase = (EntityLivingBase) this.riddenByEntity;
-                float f = this.riddenByEntity.rotationYaw + -entitylivingbase.moveStrafing * 90.0F;
+                EntityLivingBase entitylivingbase = (EntityLivingBase) this.getRidingEntity();
+                float f = this.getRidingEntity().rotationYaw + -entitylivingbase.moveStrafing * 90.0F;
                 this.motionX += -Math.sin((double) (f * (float) Math.PI / 180.0F)) * this.speedMultiplier * (double) entitylivingbase.moveForward * 0.05000000074505806D;
                 this.motionZ += Math.cos((double) (f * (float) Math.PI / 180.0F)) * this.speedMultiplier * (double) entitylivingbase.moveForward * 0.05000000074505806D;
             }
@@ -244,21 +252,21 @@ public class EntityInflatableBoat extends EntityBoat implements IInventoryTanks,
 
             for (l = 0; l < 4; ++l)
             {
-                int i1 = MathHelper.floor_double(this.posX + ((double) (l % 2) - 0.5D) * 0.8D);
-                j = MathHelper.floor_double(this.posZ + ((double) (l / 2) - 0.5D) * 0.8D);
+                int i1 = MathHelper.floor(this.posX + ((double) (l % 2) - 0.5D) * 0.8D);
+                j = MathHelper.floor(this.posZ + ((double) (l / 2) - 0.5D) * 0.8D);
 
                 for (int j1 = 0; j1 < 2; ++j1)
                 {
-                    int k = MathHelper.floor_double(this.posY) + j1;
-                    Block block = this.worldObj.getBlock(i1, k, j);
+                    int k = MathHelper.floor(this.posY) + j1;
+                    Block block = this.world.getBlockState(new BlockPos(i1, k, j)).getBlock();
 
-                    if (block == Blocks.snow_layer)
+                    if (block == Blocks.SNOW_LAYER)
                     {
-                        this.worldObj.setBlockToAir(i1, k, j);
+                        this.world.setBlockToAir(new BlockPos(i1, k, j));
                         this.isCollidedHorizontally = false;
-                    } else if (block == Blocks.waterlily)
+                    } else if (block == Blocks.WATERLILY)
                     {
-                        this.worldObj.destroyBlock(i1, k, j, true);
+                        this.world.destroyBlock(new BlockPos(i1, k, j), true);
                         this.isCollidedHorizontally = false;
                     }
                 }
@@ -271,7 +279,7 @@ public class EntityInflatableBoat extends EntityBoat implements IInventoryTanks,
                 this.motionZ *= 0.5D;
             }
 
-            this.moveEntity(this.motionX, this.motionY, this.motionZ);
+            this.move(this.motionX, this.motionY, this.motionZ);
 
             /* if (this.isCollidedHorizontally && d10 > 0.2D)
             {
@@ -307,7 +315,7 @@ public class EntityInflatableBoat extends EntityBoat implements IInventoryTanks,
                 d4 = (double) ((float) (Math.atan2(d12, d11) * 180.0D / Math.PI));
             }
 
-            double d7 = MathHelper.wrapAngleTo180_double(d4 - (double) this.rotationYaw);
+            double d7 = MathHelper.wrapDegrees(d4 - (double) this.rotationYaw);
 
             if (d7 > 20.0D)
             {
@@ -322,10 +330,11 @@ public class EntityInflatableBoat extends EntityBoat implements IInventoryTanks,
             this.rotationYaw = (float) ((double) this.rotationYaw + d7);
             this.setRotation(this.rotationYaw, this.rotationPitch);
 
-            if (!this.worldObj.isRemote)
+            if (!this.world.isRemote)
             {
+                /**
                 @SuppressWarnings("rawtypes")
-                List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(0.20000000298023224D, 0.0D, 0.20000000298023224D));
+                List list = this.worldgetEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(0.20000000298023224D, 0.0D, 0.20000000298023224D));
 
                 if (list != null && !list.isEmpty())
                 {
@@ -333,17 +342,18 @@ public class EntityInflatableBoat extends EntityBoat implements IInventoryTanks,
                     {
                         Entity entity = (Entity) list.get(k1);
 
-                        if (entity != this.riddenByEntity && entity.canBePushed() && entity instanceof EntityBoat)
+                        if (entity != this.getRidingEntity() && entity.canBePushed() && entity instanceof EntityBoat)
                         {
                             entity.applyEntityCollision(this);
                         }
                     }
                 }
 
-                if (this.riddenByEntity != null && this.riddenByEntity.isDead)
+                if (this.getRidingEntity() != null && this.getRidingEntity().isDead)
                 {
-                    this.riddenByEntity = null;
+                    this.getRidingEntity() = null;
                 }
+                **/
             }
         }
     }
@@ -351,10 +361,10 @@ public class EntityInflatableBoat extends EntityBoat implements IInventoryTanks,
     @Override
     public boolean attackEntityFrom(DamageSource damageSource, float damage)
     {
-        if (this.isEntityInvulnerable())
+        if (this.isEntityInvulnerable(damageSource))
         {
             return false;
-        } else if (!this.worldObj.isRemote && !this.isDead)
+        } else if (!this.world.isRemote && !this.isDead)
         {
             this.setForwardDirection(-this.getForwardDirection());
             this.setTimeSinceHit(10);
@@ -364,9 +374,9 @@ public class EntityInflatableBoat extends EntityBoat implements IInventoryTanks,
 
             if (flag || this.getDamageTaken() > 40.0F)
             {
-                if (this.riddenByEntity != null)
+                if (this.getRidingEntity() != null)
                 {
-                    this.riddenByEntity.mountEntity(this);
+                    //((EntityPlayerMp)this.getRidingEntity()).mountEntity(this);
                 }
 
                 if (!flag)
@@ -384,7 +394,7 @@ public class EntityInflatableBoat extends EntityBoat implements IInventoryTanks,
         }
     }
 
-    @Override
+    //@Override
     public EntityItem func_145778_a(Item item, int quantity, float someFloat)
     {
         return this.entityDropItem(new ItemStack(item, quantity, 0), someFloat);
@@ -394,18 +404,42 @@ public class EntityInflatableBoat extends EntityBoat implements IInventoryTanks,
     public boolean interactFirst(EntityPlayer p_130002_1_)
     {
         if (inflation < 1.0f) return false;
-        if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityPlayer && this.riddenByEntity != p_130002_1_)
+        if (this.getRidingEntity() != null && this.getRidingEntity() instanceof EntityPlayer && this.getRidingEntity() != p_130002_1_)
         {
             return true;
         } else
         {
-            if (!this.worldObj.isRemote)
+            if (!this.world.isRemote)
             {
-                p_130002_1_.mountEntity(this);
+                //p_130002_1_.getRidingEntity()(this);
             }
 
             return true;
         }
+    }
+
+    @Override
+    public void clear()
+    {
+        //TODO: implement this
+    }
+
+    @Override
+    public int getFieldCount()
+    {
+        return inventory.length;
+    }
+
+    @Override
+    public void setField(int id, int value)
+    {
+        //TODO: implement
+    }
+
+    public int getField(int id)
+    {
+        //TODO: fix this
+        return 0;
     }
 
     /**
@@ -607,22 +641,22 @@ public class EntityInflatableBoat extends EntityBoat implements IInventoryTanks,
     /**
      * Do not make give this method the name canInteractWith because it clashes with Container
      *
-     * @param p_70300_1_
+     * @param player
      */
     @Override
-    public boolean isUseableByPlayer(EntityPlayer p_70300_1_)
+    public boolean isUsableByPlayer(EntityPlayer player)
     {
         return false;
     }
 
     @Override
-    public void openInventory()
+    public void openInventory(EntityPlayer player)
     {
 
     }
 
     @Override
-    public void closeInventory()
+    public void closeInventory(EntityPlayer player)
     {
 
     }
@@ -649,5 +683,13 @@ public class EntityInflatableBoat extends EntityBoat implements IInventoryTanks,
     public void readSpawnData(ByteBuf data)
     {
         this.motorized = data.readBoolean();
+    }
+
+    @Override
+    public ItemStack removeStackFromSlot(int index)
+    {
+        ItemStack i = inventory[index];
+        inventory[index] = null;
+        return i;
     }
 }

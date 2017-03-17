@@ -4,6 +4,7 @@ import com.darkona.adventurebackpack.client.models.ModelInflatableBoat;
 import com.darkona.adventurebackpack.entity.EntityInflatableBoat;
 import com.darkona.adventurebackpack.util.Resources;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
@@ -20,8 +21,9 @@ public class RendererInflatableBoat extends Render
     private  ResourceLocation boatTexture = Resources.modelTextures("inflatableBoat");
     private  ModelInflatableBoat boatModel = new ModelInflatableBoat();
 
-    public RendererInflatableBoat()
+    public RendererInflatableBoat(RenderManager renderManager)
     {
+        super(renderManager);
         this.shadowSize = 0.5F;
     }
 

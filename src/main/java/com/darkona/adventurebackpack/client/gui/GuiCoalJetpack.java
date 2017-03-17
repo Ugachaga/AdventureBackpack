@@ -1,5 +1,7 @@
 package com.darkona.adventurebackpack.client.gui;
 
+import java.io.IOException;
+
 import org.lwjgl.opengl.GL11;
 
 import com.darkona.adventurebackpack.config.ConfigHandler;
@@ -47,7 +49,7 @@ public class GuiCoalJetpack extends GuiWithTanks
     @Override
     protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int mouseX, int mouseY)
     {
-        inventory.openInventory();
+        inventory.openInventory(player);
         this.mc.renderEngine.bindTexture(texture);
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
@@ -70,9 +72,7 @@ public class GuiCoalJetpack extends GuiWithTanks
                 equipButton.draw(this, 1, 167);
             }
         }
-
         //if (wearing) inventory = new InventoryCoalJetpack(Wearing.getWearingJetpack(player));
-
     }
 
     @Override
@@ -159,7 +159,14 @@ public class GuiCoalJetpack extends GuiWithTanks
                 player.closeScreen();
             }
         }
-        super.mouseClicked(mouseX, mouseY, mouseButton);
+        try
+        {
+            super.mouseClicked(mouseX, mouseY, mouseButton);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -187,6 +194,14 @@ public class GuiCoalJetpack extends GuiWithTanks
         {
             player.closeScreen();
         }
-        super.keyTyped(key, keycode);
+        try
+        {
+            super.keyTyped(key, keycode);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
+
 }

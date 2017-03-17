@@ -195,11 +195,11 @@ public class ModelCopterPack extends ModelWearable
     private void renderCopterPack(Entity entity, float scale)
     {
         InventoryCopterPack copterInv = new InventoryCopterPack(this.copterPack);
-        copterInv.openInventory();
+        //copterInv.openInventory();
         Axis.isHidden = true;
-        if (copterPack != null && copterPack.stackTagCompound != null && copterPack.stackTagCompound.hasKey("status"))
+        if (copterPack != null && copterPack.getTagCompound() != null && copterPack.getTagCompound().hasKey("status"))
         {
-            if (copterPack.stackTagCompound.getByte("status") != ItemCopterPack.OFF_MODE)
+            if (copterPack.getTagCompound().getByte("status") != ItemCopterPack.OFF_MODE)
             {
                 Axis.isHidden = false;
                 int degrees;
