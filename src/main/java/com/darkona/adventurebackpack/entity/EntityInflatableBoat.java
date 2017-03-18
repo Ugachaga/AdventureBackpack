@@ -400,7 +400,8 @@ public class EntityInflatableBoat extends EntityBoat implements IInventoryTanks,
         return this.entityDropItem(new ItemStack(item, quantity, 0), someFloat);
     }
 
-    @Override
+    //TODO: look in to this method
+   //@Override
     public boolean interactFirst(EntityPlayer p_130002_1_)
     {
         if (inflation < 1.0f) return false;
@@ -427,7 +428,8 @@ public class EntityInflatableBoat extends EntityBoat implements IInventoryTanks,
     @Override
     public int getFieldCount()
     {
-        return inventory.length;
+        //TODO: check what this should be?
+        return 0;
     }
 
     @Override
@@ -448,10 +450,10 @@ public class EntityInflatableBoat extends EntityBoat implements IInventoryTanks,
      * @param compound
      */
     @Override
-    public void writeToNBT(NBTTagCompound compound)
+    public NBTTagCompound writeToNBT(NBTTagCompound compound)
     {
-        super.writeToNBT(compound);
         writeEntityToNBT(compound);
+        return super.writeToNBT(compound);
     }
 
     /**
@@ -578,45 +580,15 @@ public class EntityInflatableBoat extends EntityBoat implements IInventoryTanks,
     }
 
     /**
-     * When some containers are closed they call this on each slot, then drop whatever it returns as an EntityItem -
-     * like when you close a workbench GUI.
-     *
-     * @param p_70304_1_
-     */
-    @Override
-    public ItemStack getStackInSlotOnClosing(int p_70304_1_)
-    {
-        return null;
-    }
-
-    /**
      * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
      *
-     * @param p_70299_1_
-     * @param p_70299_2_
+     * @param id
+     * @param item
      */
     @Override
-    public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_)
+    public void setInventorySlotContents(int id, ItemStack item)
     {
-
-    }
-
-    /**
-     * Returns the name of the inventory
-     */
-    @Override
-    public String getInventoryName()
-    {
-        return null;
-    }
-
-    /**
-     * Returns if the inventory is named
-     */
-    @Override
-    public boolean hasCustomInventoryName()
-    {
-        return false;
+        //TODO: implement
     }
 
     /**
@@ -688,8 +660,8 @@ public class EntityInflatableBoat extends EntityBoat implements IInventoryTanks,
     @Override
     public ItemStack removeStackFromSlot(int index)
     {
-        ItemStack i = inventory[index];
-        inventory[index] = null;
-        return i;
+        //ItemStack i = inventory[index];
+        //inventory[index] = null;
+        return null;
     }
 }

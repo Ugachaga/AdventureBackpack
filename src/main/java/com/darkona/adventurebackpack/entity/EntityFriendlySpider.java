@@ -6,13 +6,19 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionType;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 
 import java.util.Random;
 
@@ -36,86 +42,76 @@ public class EntityFriendlySpider extends EntityCreature
     @Override
     protected void entityInit() {
         super.entityInit();
-        this.dataWatcher.addObject(16, (byte)0);
+        //this.dataWatcher.addObject(16, (byte)0);
     }
 
     @Override
     protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(20.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.15D);
-        this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(40.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.15D);
+        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(40.0D);
     }
 
     public EntityFriendlySpider(World world) {
         super(world);
         this.setSize(1.4F, 0.9F);
         this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(2, this.aiControlledByPlayer = new EntityAIControlledByPlayer(this, 0.3F));
+        //TODO: add ai for play control
+        //this.tasks.addTask(2, new EntityAIFollowParent(this, 0.3F));
         this.tasks.addTask(6, new EntityAIWander(this, 0.7D));
         this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
         this.tasks.addTask(8, new EntityAILookIdle(this));
     }
-    @Override
-    protected boolean isAIEnabled()
-    {
-        return true;
-    }
+
     @Override
     public int getTalkInterval()
     {
         return 300;
     }
+
     /**
      * Returns the sound this mob makes while it's alive.
      */
     @Override
-    protected String getLivingSound()
+    protected SoundEvent getAmbientSound()
     {
-        return "mob.spider.say";
+        return SoundEvents.ENTITY_SPIDER_AMBIENT;
     }
 
     /**
      * Returns the sound this mob makes when it is hurt.
      */
     @Override
-    protected String getHurtSound()
+    protected SoundEvent getHurtSound()
     {
-        return "mob.spider.say";
+        return SoundEvents.ENTITY_SPIDER_HURT;
     }
 
-    /**
-     * Returns the sound this mob makes on death.
-     */
-    @Override
-    protected String getDeathSound()
-    {
-        return "mob.spider.death";
-    }
-
-    @Override
+    //TODO: find out what this is
+    //@Override
     protected void func_145780_a(int x, int y, int z, Block block)
     {
-        this.playSound("mob.spider.step", 0.15F, 1.0F);
+        this.playSound(SoundEvents.ENTITY_SPIDER_STEP, 0.15F, 1.0F);
     }
 
     @Override
-    protected String getSwimSound()
+    protected SoundEvent getSwimSound()
     {
-        return "game.hostile.swim";
+        return SoundEvents.ENTITY_HOSTILE_SWIM;
     }
 
     @Override
-    protected String getSplashSound()
+    protected SoundEvent getSplashSound()
     {
-        return "game.hostile.swim.splash";
+        return SoundEvents.ENTITY_HOSTILE_SPLASH;
     }
 
     @Override
     public boolean attackEntityFrom(DamageSource damageSource, float amount)
     {
-        if (this.isEntityInvulnerable())
+        if (this.isEntityInvulnerable(damageSource))
         {
             return false;
         }
@@ -123,19 +119,15 @@ public class EntityFriendlySpider extends EntityCreature
         {
             Entity entity = damageSource.getEntity();
 
-            if (this.riddenByEntity != entity && this.ridingEntity != entity)
+            if (this.isRiding() && this.getRidingEntity() != entity)
             {
                 if (entity != this)
                 {
-                    this.entityToAttack = entity;
+                    //TODO: come back to this to make sure we are doing damage to the right thing
+                    //this.entityToAttack = entity;
                 }
-
-                return true;
             }
-            else
-            {
-                return true;
-            }
+            return true;
         }
         else
         {
@@ -148,9 +140,9 @@ public class EntityFriendlySpider extends EntityCreature
      * Args: x, y, z
      */
     @Override
-    public float getBlockPathWeight(int p_70783_1_, int p_70783_2_, int p_70783_3_)
+    public float getBlockPathWeight(BlockPos pos)
     {
-        return 0.5F - this.worldObj.getLightBrightness(p_70783_1_, p_70783_2_, p_70783_3_);
+        return 0.5F - this.world.getLightBrightness(pos);
     }
 
     /**
@@ -162,60 +154,15 @@ public class EntityFriendlySpider extends EntityCreature
         return false;
     }
 
-    @Override
-    protected boolean func_146066_aG()
-    {
-        return true;
-    }
-    /**
-     * Returns the item that this EntityLiving is holding, if any.
-     */
-    @Override
-    public ItemStack getHeldItem()
-    {
-        return null;
-    }
-
-    /**
-     * 0: Tool in Hand; 1-4: Armor
-     * */
-    @Override
-    public ItemStack getEquipmentInSlot(int slot)
-    {
-        return null;
-    }
-
-    /**
-     * Sets the held item, or an armor slot. Slot 0 is held item. Slot 1-4 is armor. Params: Item, slot
-     *
-     * @param slot
-     * @param stack
-     */
-    @Override
-    public void setCurrentItemOrArmor(int slot, ItemStack stack)
-    {
-
-    }
-
-    @Override
-    public ItemStack[] getLastActiveItems()
-    {
-        return new ItemStack[0];
-    }
-
-    @Override
-    public boolean canRiderInteract() {
-        return false;
-    }
-
-    @Override
+    //@Override
     protected boolean interact(EntityPlayer player) {
 
         try
         {
-            if (!this.worldObj.isRemote && Wearing.isWearingTheRightBackpack(player, "Spider"))
+            if (!this.world.isRemote && Wearing.isWearingTheRightBackpack(player, "Spider"))
             {
-                player.mountEntity(this);
+                //player.mountEntity(this);
+                this.addPassenger(player);
                 return true;
             }
         } catch (Exception oops)
@@ -231,22 +178,6 @@ public class EntityFriendlySpider extends EntityCreature
     }
 
     @Override
-    protected Entity findPlayerToAttack() {
-        if (this.riddenByEntity != null)
-            return null;
-        float f = this.getBrightness(1.0F);
-
-        if (f < 0.5F)
-        {
-            double d0 = 16.0D;
-            return this.worldObj.getClosestVulnerablePlayerToEntity(this, d0);
-        } else
-        {
-            return null;
-        }
-    }
-
-    @Override
     public boolean canBeCollidedWith() {
         return !isDead;
     }
@@ -255,53 +186,34 @@ public class EntityFriendlySpider extends EntityCreature
     public boolean shouldRiderFaceForward(EntityPlayer player) {
         return true;
     }
-    public boolean isBesideClimbableBlock()
-    {
-        return (this.dataWatcher.getWatchableObjectByte(16) & 1) != 0;
-    }
-
-    /**
-     * Updates the WatchableObject (Byte) created in entityInit(), setting it to 0x01 if par1 is true or 0x00 if it is
-     * false.
-     */
-    public void setBesideClimbableBlock(boolean p_70839_1_)
-    {
-        byte b0 = this.dataWatcher.getWatchableObjectByte(16);
-
-        if (p_70839_1_)
-        {
-            b0 = (byte)(b0 | 1);
-        }
-        else
-        {
-            b0 &= -2;
-        }
-
-        this.dataWatcher.updateObject(16, Byte.valueOf(b0));
-    }
 
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (this.worldObj.isRemote && this.dataWatcher.hasChanges())
-        {
-            this.dataWatcher.func_111144_e();
-        }
-        if (this.riddenByEntity instanceof EntityPlayer)
+        //if (this.world.isRemote && this.dataWatcher.hasChanges())
+        //{
+        //TODO: find out what dataWatcher is
+        //    this.dataWatcher.func_111144_e();
+        //}
+        if (this.getRidingEntity() instanceof EntityPlayer)
         {
 
         }
-        if (this.riddenByEntity != null && this.riddenByEntity.isDead)
+        if (this.getRidingEntity() != null && this.getRidingEntity().isDead)
         {
-            this.riddenByEntity = null;
+            //TODO: what to do when our rider dies
+            //not sure on this on
+            //this.setRidingEntity() = null;
         }
-        if (!this.worldObj.isRemote)
+        if (!this.world.isRemote)
         {
-            this.setBesideClimbableBlock(this.isCollidedHorizontally);
+            //this.setBesideClimbableBlock(this.isCollidedHorizontally);
         }
     }
 
     private void normalLivingUpdateWithNoAI(){
+        /**
+         * TODO: whats this all doing?
         if (this.jumpTicks > 0)
         {
             --this.jumpTicks;
@@ -341,7 +253,7 @@ public class EntityFriendlySpider extends EntityCreature
             this.motionZ = 0.0D;
         }
 
-        this.worldObj.theProfiler.startSection("ai");
+        this.world.theProfiler.startSection("ai");
 
         if (this.isMovementBlocked())
         {
@@ -393,11 +305,12 @@ public class EntityFriendlySpider extends EntityCreature
         }
 
         this.worldObj.theProfiler.endSection();
+        **/
     }
 
     @Override
     public void onLivingUpdate() {
-        if (this.riddenByEntity != null)
+        if (this.getRidingEntity() != null)
         {
             normalLivingUpdateWithNoAI();
         } else
@@ -414,14 +327,14 @@ public class EntityFriendlySpider extends EntityCreature
 
     @Override
     public void moveEntityWithHeading(float strafe, float forward) {
-        if (this.riddenByEntity != null)
+        if (this.getRidingEntity() != null)
         {
-            this.prevRotationYaw = this.rotationYaw = this.riddenByEntity.rotationYaw;
-            this.rotationPitch = this.riddenByEntity.rotationPitch * 0.5F;
+            this.prevRotationYaw = this.rotationYaw = this.getRidingEntity().rotationYaw;
+            this.rotationPitch = this.getRidingEntity().rotationPitch * 0.5F;
             this.setRotation(this.rotationYaw, this.rotationPitch);
             this.rotationYawHead = this.renderYawOffset = this.rotationYaw;
-            strafe = ((EntityLivingBase)this.riddenByEntity).moveStrafing * 0.5F;
-            forward = ((EntityLivingBase)this.riddenByEntity).moveForward;
+            strafe = ((EntityLivingBase)this.getRidingEntity()).moveStrafing * 0.5F;
+            forward = ((EntityLivingBase)this.getRidingEntity()).moveForward;
 
             if (forward <= 0.0F)
             {
@@ -430,16 +343,16 @@ public class EntityFriendlySpider extends EntityCreature
             this.stepHeight = 1.0F;
             this.jumpMovementFactor = this.getAIMoveSpeed() * 0.2F;
 
-            if (!this.worldObj.isRemote)
+            if (!this.world.isRemote)
             {
-                this.setAIMoveSpeed((float)this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getAttributeValue());
+                this.setAIMoveSpeed((float)this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
                 super.moveEntityWithHeading(strafe, forward);
             }
 
             this.prevLimbSwingAmount = this.limbSwingAmount;
             double d0 = this.posX - this.prevPosX;
             double d1 = this.posZ - this.prevPosZ;
-            float f4 = MathHelper.sqrt_double(d0 * d0 + d1 * d1) * 4.0F;
+            float f4 = MathHelper.sqrt(d0 * d0 + d1 * d1) * 4.0F;
 
             if (f4 > 1.0F)
             {
@@ -456,27 +369,6 @@ public class EntityFriendlySpider extends EntityCreature
             super.moveEntityWithHeading(strafe, forward);
         }
     }
-
-    @Override
-    public void updateRiderPosition() {
-        super.updateRiderPosition();
-
-		if (this.prevRearingAmount > 0.0F)
-		{
-			float f = MathHelper.sin(this.renderYawOffset * (float) Math.PI / 180.0F);
-			float f1 = MathHelper.cos(this.renderYawOffset * (float) Math.PI / 180.0F);
-			float f2 = 0.7F * this.prevRearingAmount;
-			float f3 = 0.15F * this.prevRearingAmount;
-			this.riddenByEntity.setPosition(this.posX + (f2 * f), this.posY + this.getMountedYOffset() + this.riddenByEntity.getYOffset()
-					+  f3, this.posZ -  (f2 * f1));
-
-			if (this.riddenByEntity instanceof EntityLivingBase)
-			{
-				((EntityLivingBase) this.riddenByEntity).renderYawOffset = this.renderYawOffset;
-			}
-		}
-    }
-
 
     public void spiderJump()
     {
@@ -496,52 +388,19 @@ public class EntityFriendlySpider extends EntityCreature
 
             if (i <= 1)
             {
-                this.field_111105_a = Potion.moveSpeed.id;
+                this.field_111105_a = PotionType.getID(PotionTypes.SWIFTNESS);
             }
             else if (i <= 2)
             {
-                this.field_111105_a = Potion.damageBoost.id;
+                this.field_111105_a = PotionType.getID(PotionTypes.STRENGTH);
             }
             else if (i <= 3)
             {
-                this.field_111105_a = Potion.regeneration.id;
+                this.field_111105_a = PotionType.getID(PotionTypes.REGENERATION);
             }
             else if (i <= 4)
             {
-                this.field_111105_a = Potion.invisibility.id;
-            }
-        }
-    }
-
-    /**
-     * Basic mob attack. Default to touch of death in EntityCreature. Overridden by each mob to define their attack.
-     */
-    @Override
-    protected void attackEntity(Entity p_70785_1_, float p_70785_2_)
-    {
-        float f1 = this.getBrightness(1.0F);
-
-        if (f1 > 0.5F && this.rand.nextInt(100) == 0)
-        {
-            this.entityToAttack = null;
-        }
-        else
-        {
-            if (p_70785_2_ > 2.0F && p_70785_2_ < 6.0F && this.rand.nextInt(10) == 0)
-            {
-                if (this.onGround)
-                {
-                    double d0 = p_70785_1_.posX - this.posX;
-                    double d1 = p_70785_1_.posZ - this.posZ;
-                    float f2 = MathHelper.sqrt_double(d0 * d0 + d1 * d1);
-                    this.motionX = d0 / (double)f2 * 0.5D * 0.800000011920929D + this.motionX * 0.20000000298023224D;
-                    this.motionZ = d1 / (double)f2 * 0.5D * 0.800000011920929D + this.motionZ * 0.20000000298023224D;
-                    this.motionY = 0.4000000059604645D;
-                }
-            }
-            else
-            {
-                super.attackEntity(p_70785_1_, p_70785_2_);
+                this.field_111105_a = PotionType.getID(PotionTypes.INVISIBILITY);
             }
         }
     }
@@ -549,7 +408,7 @@ public class EntityFriendlySpider extends EntityCreature
     @Override
     protected Item getDropItem()
     {
-        return Items.string;
+        return Items.STRING;
     }
 
     /**
@@ -563,7 +422,7 @@ public class EntityFriendlySpider extends EntityCreature
 
         if (p_70628_1_ && (this.rand.nextInt(3) == 0 || this.rand.nextInt(1 + p_70628_2_) > 0))
         {
-            this.dropItem(Items.spider_eye, 1);
+            this.dropItem(Items.SPIDER_EYE, 1);
         }
     }
 
@@ -573,7 +432,8 @@ public class EntityFriendlySpider extends EntityCreature
     @Override
     public boolean isOnLadder()
     {
-        return this.isBesideClimbableBlock();
+        //TODO: implement
+        return false;
     }
 
     /**
@@ -592,9 +452,9 @@ public class EntityFriendlySpider extends EntityCreature
     }
 
     @Override
-    public boolean isPotionApplicable(PotionEffect p_70687_1_)
+    public boolean isPotionApplicable(PotionEffect potEffect)
     {
-        return p_70687_1_.getPotionID() == Potion.poison.id ? false : super.isPotionApplicable(p_70687_1_);
+        return Potion.getIdFromPotion(potEffect.getPotion()) == PotionType.getID(PotionTypes.POISON) ? false : super.isPotionApplicable(potEffect);
     }
 }
 
