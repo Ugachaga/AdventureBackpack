@@ -7,10 +7,12 @@ import com.darkona.adventurebackpack.util.Resources;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-//import net.minecraft.client.renderer.texture.IIconRegister;
+
 import net.minecraft.entity.Entity;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+
 
 /**
  * Created on 11/10/2014.
@@ -23,9 +25,9 @@ public class ArmorAB extends ItemArmor
      * @param type        2 Chain
      * @param renderIndex 0 Helmet, 1 Plate, 2 Pants, 3 Boots
      */
-    public ArmorAB(int renderIndex, int type)
+    public ArmorAB(int renderIndex, EntityEquipmentSlot slot)
     {
-        super(ModMaterials.ruggedLeather, renderIndex, type);
+        super(ModMaterials.ruggedLeather, renderIndex, slot);
         setCreativeTab(CreativeTabAB.ADVENTURE_BACKPACK_CREATIVE_TAB);
     }
 
@@ -44,22 +46,6 @@ public class ArmorAB extends ItemArmor
     public String getUnlocalizedName()
     {
         return String.format("item.%s%s", ModInfo.MOD_ID.toLowerCase() + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
-    }
-
-    //@Override
-    //@SideOnly(Side.CLIENT)
-    //public void registerIcons(IIconRegister iconRegister)
-    //{
-    //    itemIcon = iconRegister.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf(".") + 1));
-    //}
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type)
-    {
-        String uName = this.getUnlocalizedName();
-        return Resources.modelTextureResourceString(uName.substring(uName.indexOf(":") + 1)) + "_texture.png";
-        //return Textures.modelTextureName(getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
     }
 
 }
