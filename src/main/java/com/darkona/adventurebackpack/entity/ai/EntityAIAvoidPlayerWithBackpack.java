@@ -66,6 +66,7 @@ public class EntityAIAvoidPlayerWithBackpack extends EntityAIBase
      */
     public boolean shouldExecute()
     {
+        /**
         if (this.targetEntityClass == EntityPlayer.class)
         {
             if (this.theEntity instanceof EntityTameable && ((EntityTameable) this.theEntity).isTamed())
@@ -73,7 +74,10 @@ public class EntityAIAvoidPlayerWithBackpack extends EntityAIBase
                 return false;
             }
 
-            List<?> list = this.theEntity.worldObj.selectEntitiesWithinAABB(this.targetEntityClass, this.theEntity.boundingBox.expand(this.distanceFromEntity, 3.0D, this.distanceFromEntity), this.field_98218_a);
+            List<?> list = this.theEntity.world.selectEntitiesWithinAABB(this.targetEntityClass,
+                                                                         this.theEntity.getEntityBoundingBox().expand(
+                                                                                    this.distanceFromEntity, 3.0D, this.distanceFromEntity),
+                                                                        this.field_98218_a);
 
             if (list.isEmpty())
             {
@@ -94,7 +98,7 @@ public class EntityAIAvoidPlayerWithBackpack extends EntityAIBase
             }
 
 
-            Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.theEntity, 16, 7, Vec3d.createVectorHelper(this.closestLivingEntity.posX, this.closestLivingEntity.posY, this.closestLivingEntity.posZ));
+            Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.theEntity, 16, 7, new Vec3d(this.closestLivingEntity.posX, this.closestLivingEntity.posY, this.closestLivingEntity.posZ));
 
             if (vec3d == null)
             {
@@ -108,6 +112,7 @@ public class EntityAIAvoidPlayerWithBackpack extends EntityAIBase
   //              return this.entityPathEntity != null && this.entityPathEntity.isDestinationSame(Vec3d);
             }
         }
+        **/
         return false;
     }
 
@@ -124,7 +129,7 @@ public class EntityAIAvoidPlayerWithBackpack extends EntityAIBase
      */
     public void startExecuting()
     {
-        this.entityPathNavigate.setPath(this.entityPathEntity, this.farSpeed);
+        //this.entityPathNavigate.setPath(this.theEntity.createNavigator(theEntity.world), this.farSpeed);
     }
 
     /**

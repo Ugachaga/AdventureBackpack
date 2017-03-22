@@ -1,8 +1,11 @@
 package com.darkona.adventurebackpack.fluids;
 
 import com.darkona.adventurebackpack.client.Icons;
-//import net.minecraft.util.IIcon;
+
 import net.minecraft.world.World;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -14,7 +17,7 @@ public class FluidMelonJuice extends Fluid
 
     public FluidMelonJuice()
     {
-        super("melonJuice");
+        super("melonJuice", new ResourceLocation("modid", "fluid.mushroomStewStill.png"), new ResourceLocation("modid", "fluid.mushroomStewFlowing.png"));
         setUnlocalizedName("melonJuice");
     }
 
@@ -48,7 +51,7 @@ public class FluidMelonJuice extends Fluid
     }
 
     @Override
-    public boolean isGaseous(World world, int x, int y, int z)
+    public boolean isGaseous(World world, BlockPos pos)
     {
         return false;
     }

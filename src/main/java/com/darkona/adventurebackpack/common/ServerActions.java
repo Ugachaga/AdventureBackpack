@@ -295,9 +295,9 @@ public class ServerActions
             {
                 case NORTH:
                     --coordZ;
-                    if (world.isAirBlock(pos) && world.getBlock(new BlockPos(coordX, coordY - 1, coordZ)).getMaterial().isSolid())
+                    if (world.isAirBlock(pos) && world.getBlockState(new BlockPos(coordX, coordY - 1, coordZ)).getMaterial().isSolid())
                     {
-                        if (world.isAirBlock(new BlockPos(coordX, coordY, coordZ - 1)) && world.getBlock(new BlockPos(coordX, coordY - 1, coordZ - 1)).getMaterial().isSolid())
+                        if (world.isAirBlock(new BlockPos(coordX, coordY, coordZ - 1)) && world.getBlockState(new BlockPos(coordX, coordY - 1, coordZ - 1)).getMaterial().isSolid())
                         {
                             newMeta = 2;
                         }
@@ -305,7 +305,7 @@ public class ServerActions
                     break;
                 case EAST:
                     ++coordX;
-                    if (world.isAirBlock(pos) && world.getBlock(new BlockPos(coordX, coordY - 1, coordZ)).getMaterial().isSolid())
+                    if (world.isAirBlock(pos) && world.getBlockState(new BlockPos(coordX, coordY - 1, coordZ)).getMaterial().isSolid())
                     {
                         if (world.isAirBlock(new BlockPos(coordX + 1, coordY, coordZ)) && world.getBlockState(new BlockPos(coordX + 1, coordY - 1, coordZ)).getMaterial().isSolid())
                         {
@@ -315,9 +315,9 @@ public class ServerActions
                     break;
                 case SOUTH:
                     ++coordZ;
-                    if (world.isAirBlock(coordX, coordY, coordZ) && world.getBlock(coordX, coordY - 1, coordZ).getMaterial().isSolid())
+                    if (world.isAirBlock(pos) && world.getBlockState(new BlockPos(coordX, coordY - 1, coordZ)).getMaterial().isSolid())
                     {
-                        if (world.isAirBlock(coordX, coordY, coordZ + 1) && world.getBlock(coordX, coordY - 1, coordZ + 1).getMaterial().isSolid())
+                        if (world.isAirBlock(new BlockPos(coordX, coordY, coordZ + 1)) && world.getBlockState(new BlockPos(coordX, coordY - 1, coordZ + 1)).getMaterial().isSolid())
                         {
                             newMeta = 0;
                         }
@@ -325,9 +325,9 @@ public class ServerActions
                     break;
                 case WEST:
                     --coordX;
-                    if (world.isAirBlock(coordX, coordY, coordZ) && world.getBlock(coordX, coordY - 1, coordZ).getMaterial().isSolid())
+                    if (world.isAirBlock(pos) && world.getBlockState(new BlockPos(coordX, coordY - 1, coordZ)).getMaterial().isSolid())
                     {
-                        if (world.isAirBlock(coordX - 1, coordY, coordZ) && world.getBlock(coordX - 1, coordY - 1, coordZ).getMaterial().isSolid())
+                        if (world.isAirBlock(new BlockPos(coordX - 1, coordY, coordZ)) && world.getBlockState(new BlockPos(coordX - 1, coordY - 1, coordZ)).getMaterial().isSolid())
                         {
                             newMeta = 1;
                         }
@@ -350,7 +350,7 @@ public class ServerActions
     {
         if (ConfigHandler.allowSoundPiston)
         {
-            player.playSound("tile.piston.out", 0.5F, player.getRNG().nextFloat() * 0.25F + 0.6F);
+            player.playSound(SoundEvents.BLOCK_PISTON_EXTEND, 0.5F, player.getRNG().nextFloat() * 0.25F + 0.6F);
         }
         player.motionY += ConfigHandler.pistonBootsJumpHeight / 10.0F;
         player.jumpMovementFactor += 0.3;
@@ -363,14 +363,14 @@ public class ServerActions
 
         if (!copter.hasTagCompound())
         {
-            copter.stackTagCompound = new NBTTagCompound();
+            copter.setTagCompound(new NBTTagCompound());
         }
-        if (!copter.stackTagCompound.hasKey("status"))
+        if (!copter.getTagCompound().hasKey("status"))
         {
-            copter.stackTagCompound.setByte("status", ItemCopterPack.OFF_MODE);
+            copter.getTagCompound().setByte("status", ItemCopterPack.OFF_MODE);
         }
 
-        byte mode = copter.stackTagCompound.getByte("status");
+        byte mode = copter.getTagCompound().getByte("status");
         byte newMode = ItemCopterPack.OFF_MODE;
 
         if (type == WearableModePacket.COPTER_ON_OFF)
@@ -380,7 +380,7 @@ public class ServerActions
                 newMode = ItemCopterPack.NORMAL_MODE;
                 message = "adventurebackpack:messages.copterpack.normal";
                 actionPerformed = true;
-                if (!player.worldObj.isRemote)
+                if (!player.world.isRemote)
                 {
                     ModNetwork.sendToNearby(new EntitySoundPacket.Message(EntitySoundPacket.COPTER_SOUND, player), player);
 
@@ -411,10 +411,10 @@ public class ServerActions
 
         if (actionPerformed)
         {
-            copter.stackTagCompound.setByte("status", newMode);
-            if (player.worldObj.isRemote)
+            copter.getTagCompound().setByte("status", newMode);
+            if (player.world.isRemote)
             {
-                player.addChatComponentMessage(new TextComponentTranslation(message));
+                player.sendStatusMessage(new TextComponentTranslation(message));
             }
 
         }
@@ -429,17 +429,17 @@ public class ServerActions
             {
                 inv.setDisableCycling(false);
                 inv.markDirty();
-                if (player.worldObj.isRemote)
+                if (player.world.isRemote)
                 {
-                    player.addChatComponentMessage(new TextComponentTranslation("adventurebackpack:messages.cycling.on"));
+                    player.sendStatusMessage(new TextComponentTranslation("adventurebackpack:messages.cycling.on"));
                 }
             } else
             {
                 inv.setDisableCycling(true);
                 inv.markDirty();
-                if (player.worldObj.isRemote)
+                if (player.world.isRemote)
                 {
-                    player.addChatComponentMessage(new TextComponentTranslation("adventurebackpack:messages.cycling.off"));
+                    player.sendStatusMessage(new TextComponentTranslation("adventurebackpack:messages.cycling.off"));
                 }
             }
         }
@@ -452,19 +452,19 @@ public class ServerActions
         {
             inv.setDisableNVision(false);
             inv.markDirty();
-            if (player.worldObj.isRemote)
+            if (player.world.isRemote)
             {
-                player.playSound("mob.bat.idle", 0.2F, 1.0F);
-                player.addChatComponentMessage(new TextComponentTranslation("adventurebackpack:messages.nightvision.on"));
+                player.playSound(SoundEvents.ENTITY_BAT_AMBIENT, 0.2F, 1.0F);
+                player.sendStatusMessage(new TextComponentTranslation("adventurebackpack:messages.nightvision.on"));
             }
         } else
         {
             inv.setDisableNVision(true);
             inv.markDirty();
-            if (player.worldObj.isRemote)
+            if (player.world.isRemote)
             {
-                player.playSound("mob.bat.death", 0.2F, 2.0F);
-                player.addChatComponentMessage(new TextComponentTranslation("adventurebackpack:messages.nightvision.off"));
+                player.playSound(SoundEvents.ENTITY_BAT_DEATH, 0.2F, 2.0F);
+                player.sendStatusMessage(new TextComponentTranslation("adventurebackpack:messages.nightvision.off"));
             }
         }
     }
@@ -476,17 +476,17 @@ public class ServerActions
         {
             inv.setStatus(false);
             inv.markDirty();
-            if (player.worldObj.isRemote)
+            if (player.world.isRemote)
             {
-                player.addChatComponentMessage(new TextComponentTranslation("adventurebackpack:messages.jetpack.off"));
+                player.sendStatusMessage(new TextComponentTranslation("adventurebackpack:messages.jetpack.off"));
             }
         } else
         {
             inv.setStatus(true);
             inv.markDirty();
-            if (player.worldObj.isRemote)
+            if (player.world.isRemote)
             {
-                player.addChatComponentMessage(new TextComponentTranslation("adventurebackpack:messages.jetpack.on"));
+                player.sendStatusMessage(new TextComponentTranslation("adventurebackpack:messages.jetpack.on"));
             }
         }
     }

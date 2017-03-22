@@ -1,5 +1,6 @@
 package com.darkona.adventurebackpack.develop;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentTranslation;
 public class ChatHandler
@@ -7,6 +8,6 @@ public class ChatHandler
 	  public static void sendServerMessage(String string)
 	  {
 	    TextComponentTranslation translation = new TextComponentTranslation(string, new Object[0]);
-	    MinecraftServer.getServer().getConfigurationManager().sendChatMsg(translation);
+	    Minecraft.getMinecraft().getIntegratedServer().getPlayerList().sendChatMsg(translation);
 	  }
   }

@@ -20,7 +20,7 @@ public class ToolAB extends ItemTool
 
     public ToolAB(ToolMaterial material, @SuppressWarnings("rawtypes") Set breakableBlocks)
     {
-        super(1f, material, breakableBlocks);
+        super(material, breakableBlocks);
         //setCreativeTab(CreativeTabAB.ADVENTURE_BACKPACK_CREATIVE_TAB);
     }
 

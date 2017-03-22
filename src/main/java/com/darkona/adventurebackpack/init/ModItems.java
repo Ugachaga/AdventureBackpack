@@ -35,7 +35,7 @@ public class ModItems
     public static final ItemAdventureBackpack adventureBackpack = new ItemAdventureBackpack();
     public static final ItemComponent component = new ItemComponent();
     public static final ItemHose hose = new ItemHose();
-    public static final ItemJuiceBottle melonJuiceBottle = new ItemJuiceBottle();
+    public static final ItemJuiceBottle MELON_JUICE_BOTTLE = new ItemJuiceBottle();
 
     public static void init()
     {
@@ -50,6 +50,6 @@ public class ModItems
         GameRegistry.registerItem(adventureBackpack, "adventureBackpack");
         GameRegistry.registerItem(component, "backpackComponent");
         GameRegistry.registerItem(hose, "backpackHose");
-        GameRegistry.registerItem(melonJuiceBottle, "melonJuiceBottle");
+        GameRegistry.registerItem(MELON_JUICE_BOTTLE, "melonJuiceBottle");
     }
 }

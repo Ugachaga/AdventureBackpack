@@ -3,11 +3,19 @@ package com.darkona.adventurebackpack.item;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.entity.projectile.EntityTippedArrow;
 import net.minecraft.init.Items;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
@@ -38,9 +46,9 @@ public class ItemCrossbow extends ItemAB
     }
 
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
+    public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand)
     {
-        return false;
+        return EnumActionResult.PASS;
     }
 
     @Override
@@ -56,15 +64,15 @@ public class ItemCrossbow extends ItemAB
     }
 
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
+    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-        return false;
+        return EnumActionResult.PASS;
     }
 
     @Override
     public EnumAction getItemUseAction(ItemStack p_77661_1_)
     {
-        return EnumAction.bow;
+        return EnumAction.BOW;
     }
 
     /**
@@ -87,7 +95,7 @@ public class ItemCrossbow extends ItemAB
     }
 
     @Override
-    public void onUsingTick(ItemStack stack, EntityPlayer player, int count)
+    public void onUsingTick(ItemStack stack, EntityLivingBase player, int count)
     {
 
     }
@@ -97,17 +105,17 @@ public class ItemCrossbow extends ItemAB
     {
         if (!stack.hasTagCompound())
         {
-            stack.stackTagCompound = new NBTTagCompound();
-            stack.stackTagCompound.setByte("Shot", (byte) 0);
-            stack.stackTagCompound.setInteger("Reloading", 0);
+            stack.setTagCompound(new NBTTagCompound());
+            stack.getTagCompound().setByte("Shot", (byte) 0);
+            stack.getTagCompound().setInteger("Reloading", 0);
         }
 
         if (current)
         {
-            byte shot = stack.stackTagCompound.getByte("Shot");
-            int reloading = stack.stackTagCompound.getInteger("Reloading");
-            if (shot > 0) stack.stackTagCompound.setByte("Shot", (byte) (shot - 1));
-            if (reloading > 0) stack.stackTagCompound.setInteger("Reloading", reloading - 1);
+            byte shot = stack.getTagCompound().getByte("Shot");
+            int reloading = stack.getTagCompound().getInteger("Reloading");
+            if (shot > 0) stack.getTagCompound().setByte("Shot", (byte) (shot - 1));
+            if (reloading > 0) stack.getTagCompound().setInteger("Reloading", reloading - 1);
             if (entity instanceof EntityPlayer)
             {
                 //((EntityPlayer)entity).setItemInUse(stack,2);
@@ -116,20 +124,20 @@ public class ItemCrossbow extends ItemAB
     }
 
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
+    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand)
     {
         if (!stack.hasTagCompound()) stack.setTagCompound(new NBTTagCompound());
-        if (!stack.stackTagCompound.hasKey("Reloading")) stack.stackTagCompound.setInteger("Reloading", 0);
-        int reloading = stack.stackTagCompound.getInteger("Reloading");
+        if (!stack.getTagCompound().hasKey("Reloading")) stack.getTagCompound().setInteger("Reloading", 0);
+        int reloading = stack.getTagCompound().getInteger("Reloading");
         if (reloading <= 0)
         {
-            shootArrow(stack, player.worldObj, player, 1000);
-            stack.stackTagCompound.setByte("Shot", (byte) 4);
+            shootArrow(stack, player.world, player, 1000);
+            stack.getTagCompound().setByte("Shot", (byte) 4);
             int reloadTime = 20;
-            stack.stackTagCompound.setInteger("Reloading", reloadTime);
+            stack.getTagCompound().setInteger("Reloading", reloadTime);
 
         }
-        return stack;
+        return new ActionResult(EnumActionResult.PASS, stack);
     }
 
     @Override
@@ -139,7 +147,7 @@ public class ItemCrossbow extends ItemAB
     }
 
     @Override
-    public void onPlayerStoppedUsing(ItemStack stack, World world, EntityPlayer player, int counter)
+    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft)
     {
     }
 
@@ -147,9 +155,9 @@ public class ItemCrossbow extends ItemAB
     {
         int j = count;
 
-        boolean flag = player.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0;
+        boolean flag = player.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
 
-        if (flag || player.inventory.hasItem(Items.arrow))
+        if (flag || player.inventory.hasItemStack(new ItemStack(Items.ARROW)))
         {
             float f = j / 20.0F;
             f = (f * f + f * 2.0F) / 3.0F;
@@ -164,7 +172,7 @@ public class ItemCrossbow extends ItemAB
                 f = 1.0F;
             }
 
-            EntityArrow entityarrow = new EntityArrow(world, player, f * 3.0F);
+            EntityArrow entityarrow = new EntityTippedArrow(world, player, f * 3.0F);
             f = 1.0f;
 
             int k = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, stack);

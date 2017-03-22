@@ -27,7 +27,7 @@ public class msg {
 	    if (isDev(player.getUniqueID().toString())) {
 	      ChatHandler.sendServerMessage(TextFormatting.AQUA
 																			+ "~~AdventureBackPack Mod Dev~~ "
-																			+ TextFormatting.UNDERLIN
+																			+ TextFormatting.UNDERLINE
 																			+ player.getDisplayName()
 																			+ TextFormatting.AQUA +
 																			" has joined.");

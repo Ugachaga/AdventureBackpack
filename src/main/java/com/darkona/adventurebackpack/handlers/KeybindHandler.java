@@ -50,7 +50,7 @@ public class KeybindHandler
     {
         Key keypressed = getPressedKeyBinding();
         Minecraft mc = Minecraft.getMinecraft();
-        EntityPlayer player = mc.thePlayer;
+        EntityPlayer player = mc.player;
 
         if (player != null)
         {
@@ -131,10 +131,10 @@ public class KeybindHandler
 
             if (keypressed == Key.JUMP)
             {
-                if (player.ridingEntity != null && player.ridingEntity instanceof EntityFriendlySpider)
+                if (player.getRidingEntity() != null && player.getRidingEntity() instanceof EntityFriendlySpider)
                 {
                     ModNetwork.net.sendToServer(new PlayerActionPacket.ActionMessage(PlayerActionPacket.spiderJump));
-                    ((EntityFriendlySpider) player.ridingEntity).setJumping(true);
+                    ((EntityFriendlySpider) player.getRidingEntity()).setJumping(true);
                 }
             }
         }
