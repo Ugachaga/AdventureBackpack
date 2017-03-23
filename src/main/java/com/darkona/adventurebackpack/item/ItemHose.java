@@ -14,21 +14,26 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-//import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-//import net.minecraft.util.IIcon;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -60,36 +65,10 @@ public class ItemHose extends ItemAB
     }
 
     // ================================================ GETTERS  =====================================================//
-    /**
-     * TODO: rendering
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(ItemStack stack, int pass)
-    {
-        switch (getHoseMode(stack))
-        {
-            case HOSE_SUCK_MODE:
-                return suckIcon;
-            case HOSE_SPILL_MODE:
-                return spillIcon;
-            case HOSE_DRINK_MODE:
-                return drinkIcon;
-            default:
-                return itemIcon;
-        }
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIconFromDamage(int par1)
-    {
-        return itemIcon;
-    }
-    */
 
     public static int getHoseMode(ItemStack hose)
     {
-        return hose.stackTagCompound != null ? hose.stackTagCompound.getInteger("mode") : -1;
+        return hose.getTagCompound() != null ? hose.getTagCompound().getInteger("mode") : -1;
     }
 
     public static int getHoseTank(ItemStack hose)
@@ -100,11 +79,11 @@ public class ItemHose extends ItemAB
     @Override
     public EnumAction getItemUseAction(ItemStack stack)
     {
-        if (stack.stackTagCompound != null && stack.stackTagCompound.hasKey("mode"))
+        if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("mode"))
         {
-            return (stack.stackTagCompound.getInteger("mode") == 2) ? EnumAction.drink : EnumAction.none;
+            return (stack.getTagCompound().getInteger("mode") == 2) ? EnumAction.DRINK : EnumAction.NONE;
         }
-        return EnumAction.none;
+        return EnumAction.NONE;
     }
 
     @Override
@@ -143,16 +122,8 @@ public class ItemHose extends ItemAB
     }
 
     // ================================================ SETTERS  =====================================================//
-    // ================================================= ICONS  ======================================================//
-    //@Override
-    //@SideOnly(Side.CLIENT)
-    //public void registerIcons(IIconRegister iconRegister)
-    //{
-    //    drinkIcon = iconRegister.registerIcon(Resources.getIconString("hoseDrink"));
-    //    spillIcon = iconRegister.registerIcon(Resources.getIconString("hoseSpill"));
-    //    suckIcon = iconRegister.registerIcon(Resources.getIconString("hoseSuck"));
-    //    itemIcon = iconRegister.registerIcon(Resources.getIconString("hoseLeft"));
-    //}
+
+
     // ================================================ ACTIONS  =====================================================//
 
     @Override
@@ -161,7 +132,7 @@ public class ItemHose extends ItemAB
         if (entity == null || !(entity instanceof EntityPlayer)) return;
 
         EntityPlayer player = (EntityPlayer) entity;
-        if (world.isRemote && player.getItemInUse() != null && player.getItemInUse().getItem().equals(this)) return;
+        if (world.isRemote && player.getActiveItemStack() != null && player.getActiveItemStack().getItem().equals(this)) return;
 
         NBTTagCompound nbt = stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound();
         ItemStack backpack = Wearing.getWearingBackpack(player);
@@ -191,14 +162,14 @@ public class ItemHose extends ItemAB
     }
 
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
+    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-        if (!Wearing.isWearingBackpack(player)) return true;
+        if (!Wearing.isWearingBackpack(player)) return EnumActionResult.SUCCESS;
 
         InventoryBackpack inv = new InventoryBackpack(Wearing.getWearingBackpack(player));
-        inv.openInventory();
+        inv.openInventory(player);
         FluidTank tank = getHoseTank(stack) == 0 ? inv.getLeftTank() : inv.getRightTank();
-        TileEntity te = world.getTileEntity(x, y, z);
+        TileEntity te = world.getTileEntity(pos);
         if (te != null && te instanceof IFluidHandler)
         {
             IFluidHandler exTank = (IFluidHandler) te;
@@ -207,30 +178,30 @@ public class ItemHose extends ItemAB
             {
                 case HOSE_SUCK_MODE:
 
-                    accepted = tank.fill(exTank.drain(EnumFacing.UNKNOWN, Constants.bucket, false), false);
+                    accepted = tank.fill(exTank.drain(EnumFacing.UP, Constants.bucket, false), false);
                     if (accepted > 0)
                     {
-                        tank.fill(exTank.drain(ForgeDEnumFacingirection.UNKNOWN, accepted, true), true);
+                        tank.fill(exTank.drain(EnumFacing.UP, accepted, true), true);
                         te.markDirty();
                         inv.dirtyTanks();
-                        return true;
+                        return EnumActionResult.SUCCESS;
                     }
                     break;
 
                 case HOSE_SPILL_MODE:
 
-                    accepted = exTank.fill(EnumFacing.UNKNOWN, tank.drain(Constants.bucket, false), false);
+                    accepted = exTank.fill(EnumFacing.UP, tank.drain(Constants.bucket, false), false);
                     if (accepted > 0)
                     {
-                        exTank.fill(EnumFacing.UNKNOWN, tank.drain(accepted, true), true);
+                        exTank.fill(EnumFacing.UP, tank.drain(accepted, true), true);
                         te.markDirty();
                         inv.dirtyTanks();
-                        return true;
+                        return EnumActionResult.SUCCESS;
                     }
                     break;
             }
         }
-        return false;
+        return EnumActionResult.FAIL;
 
     }
 
@@ -248,12 +219,12 @@ public class ItemHose extends ItemAB
      * @param player
      */
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
+    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand)
     {
-        if (!Wearing.isWearingBackpack(player)) return stack;
+        if (!Wearing.isWearingBackpack(player)) return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
         InventoryBackpack inv = new InventoryBackpack(Wearing.getWearingBackpack(player));
-        inv.openInventory();
-        RayTraceResult mop = getMovingObjectPositionFromPlayer(world, player, true);
+        inv.openInventory(player);
+        RayTraceResult mop = rayTrace(world, player, true);
         FluidTank tank = getHoseTank(stack) == 0 ? inv.getLeftTank() : inv.getRightTank();
         if (tank != null)
         {
@@ -261,19 +232,14 @@ public class ItemHose extends ItemAB
             {
                 case HOSE_SUCK_MODE: // If it's in Suck Mode
 
-                    if (mop != null && mop.typeOfHit == RayTraceResult.MovingObjectType.BLOCK)
+                    if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK)
                     {
-                        /* if (!world.canMineBlock(player, mop.blockX, mop.blockY, mop.blockZ))
-                         {
-                         return stack;
-                         }*/
-
-                        if (!player.canPlayerEdit(mop.blockX, mop.blockY, mop.blockZ, mop.sideHit, null))
+                        if (!player.canPlayerEdit(mop.getBlockPos(), mop.sideHit, null))
                         {
-                            return stack;
+                            return new ActionResult(EnumActionResult.PASS, stack);
                         }
                         //TODO adjust for Adventure Mode
-                        Fluid fluidBlock = FluidRegistry.lookupFluidForBlock(world.getBlock(mop.blockX, mop.blockY, mop.blockZ));
+                        Fluid fluidBlock = FluidRegistry.lookupFluidForBlock(world.getBlockState(mop.getBlockPos()).getBlock());
                         if (fluidBlock != null)
                         {
                             FluidStack fluid = new FluidStack(fluidBlock, Constants.bucket);
@@ -282,7 +248,7 @@ public class ItemHose extends ItemAB
                                 int accepted = tank.fill(fluid, false);
                                 if (accepted > 0)
                                 {
-                                    world.setBlockToAir(mop.blockX, mop.blockY, mop.blockZ);
+                                    world.setBlockToAir(mop.getBlockPos());
                                     tank.fill(new FluidStack(fluidBlock, accepted), true);
                                 }
                             }
@@ -292,33 +258,30 @@ public class ItemHose extends ItemAB
                     break;
 
                 case HOSE_SPILL_MODE: // If it's in Spill Mode
-                    if (mop != null && mop.typeOfHit == RayTraceResult.MovingObjectType.BLOCK)
+                    if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK)
                     {
-                        int x = mop.blockX;
-                        int y = mop.blockY;
-                        int z = mop.blockZ;
-                        if (world.getBlock(x, y, z).isBlockSolid(world, x, y, z, mop.sideHit))
+                        if (world.getBlockState(mop.getBlockPos()).getBlock().isBlockSolid(world, mop.getBlockPos(), mop.sideHit))
                         {
 
                             switch (mop.sideHit)
                             {
-                                case 0:
-                                    --y;
+                                case DOWN:
+                                    mop.getBlockPos().down();
                                     break;
-                                case 1:
-                                    ++y;
+                                case UP:
+                                    mop.getBlockPos().up();
                                     break;
-                                case 2:
-                                    --z;
+                                case NORTH:
+                                    mop.getBlockPos().north();
                                     break;
-                                case 3:
-                                    ++z;
+                                case SOUTH:
+                                    mop.getBlockPos().south();
                                     break;
-                                case 4:
-                                    --x;
+                                case EAST:
+                                    mop.getBlockPos().east();
                                     break;
-                                case 5:
-                                    ++x;
+                                case WEST:
+                                    mop.getBlockPos().west();
                                     break;
                             }
                         }
@@ -329,20 +292,20 @@ public class ItemHose extends ItemAB
                             {
                                 if (fluid.getFluid().canBePlacedInWorld())
                                 {
-                                    Material material = world.getBlock(x, y, z).getMaterial();
+                                    Material material = world.getBlockState(mop.getBlockPos()).getMaterial();
                                     boolean flag = !material.isSolid();
-                                    if (!world.isAirBlock(x, y, z) && !flag)
+                                    if (!world.isAirBlock(mop.getBlockPos()) && !flag)
                                     {
-                                        return stack;
-                                    }
+                                        return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
+                                                                        }
                                     /* IN HELL DIMENSION No, I won't let you put water in the nether. You freak*/
-                                    if (world.provider.isHellWorld && fluid.getFluid() == FluidRegistry.WATER)
+                                    if (world.provider.doesWaterVaporize() && fluid.getFluid() == FluidRegistry.WATER)
                                     {
                                         tank.drain(Constants.bucket, true);
-                                        world.playSoundEffect(x + 0.5F, y + 0.5F, z + 0.5F, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
+                                        player.playSound(SoundEvents.ENTITY_CREEPER_PRIMED, 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
                                         for (int l = 0; l < 12; ++l)
                                         {
-                                            world.spawnParticle("largesmoke", x + Math.random(), y + Math.random(), z + Math.random(), 0.0D, 0.0D, 0.0D);
+                                            world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, mop.getBlockPos().getX(), mop.getBlockPos().getY(), mop.getBlockPos().getZ(), 0, 0, 0);
                                         }
                                     } else
                                     {
@@ -352,22 +315,22 @@ public class ItemHose extends ItemAB
                                         {
                                             if (!world.isRemote && flag && !material.isLiquid())
                                             {
-                                                world.destroyBlock(x, y, z, true);
+                                                world.destroyBlock(mop.getBlockPos(), true);
                                             }
 
-                                            if (fluid.getFluid().getBlock() == Blocks.water)
+                                            if (fluid.getFluid().getBlock() == Blocks.WATER)
                                             {
-                                                if (world.setBlock(x, y, z, Blocks.flowing_water, 0, 3))
+                                                if (world.setBlockState(mop.getBlockPos(), Blocks.FLOWING_WATER.getDefaultState(), 3))
                                                 {
                                                     tank.drain(Constants.bucket, true);
                                                 }
-                                            } else if (fluid.getFluid().getBlock() == Blocks.lava)
+                                            } else if (fluid.getFluid().getBlock() == Blocks.LAVA)
                                             {
-                                                if (world.setBlock(x, y, z, Blocks.flowing_lava, 0, 3))
+                                                if (world.setBlockState(mop.getBlockPos(), Blocks.FLOWING_LAVA.getDefaultState(), 3))
                                                 {
                                                     tank.drain(Constants.bucket, true);
                                                 }
-                                            } else if (world.setBlock(x, y, z, fluid.getFluid().getBlock(), 0, 3))
+                                            } else if (world.setBlockState(mop.getBlockPos(), fluid.getFluid().getBlock().getDefaultState(), 3))
                                             {
                                                 tank.drain(Constants.bucket, true);
                                             }
@@ -384,19 +347,19 @@ public class ItemHose extends ItemAB
                     {
                         if (FluidEffectRegistry.hasFluidEffect(tank.getFluid().getFluid()))
                         {
-                            player.setItemInUse(stack, this.getMaxItemUseDuration(stack));
+                            player.setActiveHand(hand);
                         }
                     }
                     break;
                 default:
-                    return stack;
+                   return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
             }
         }
-        return stack;
+        return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
     }
 
     @Override
-    public boolean onBlockStartBreak(ItemStack itemstack, int X, int Y, int Z, EntityPlayer player)
+    public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player)
     {
         return false;
     }
@@ -407,13 +370,14 @@ public class ItemHose extends ItemAB
         return false;
     }
 
-    @Override
-    public ItemStack onEaten(ItemStack hose, World world, EntityPlayer player)
+    //TODO: what this been plreaceed with
+    //@Override
+    public ItemStack onEaten(ItemStack hose, World world, EntityPlayer player, EnumHand hand)
     {
         if (!Wearing.isWearingBackpack(player)) return hose;
         int mode = -1;
         int tank = -1;
-        if (hose.stackTagCompound != null)
+        if (hose.getTagCompound() != null)
         {
             tank = getHoseTank(hose);
             mode = getHoseMode(hose);
@@ -421,7 +385,7 @@ public class ItemHose extends ItemAB
         if (mode == HOSE_DRINK_MODE && tank > -1)
         {
             InventoryBackpack inv = new InventoryBackpack(Wearing.getWearingBackpack(player));
-            inv.openInventory();
+            inv.openInventory(player);
             FluidTank backpackTank = (tank == 0) ? inv.getLeftTank() : (tank == 1) ? inv.getRightTank() : null;
             if (backpackTank != null)
             {
@@ -443,11 +407,11 @@ public class ItemHose extends ItemAB
 
     // ================================================ BOOLEANS =====================================================//
     @Override
-    public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase entity)
+    public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase entity, EnumHand hand)
     {
         if (!Wearing.isWearingBackpack(player)) return false;
         InventoryBackpack inventory = new InventoryBackpack(Wearing.getWearingBackpack(player));
-        inventory.openInventory();
+        inventory.openInventory(player);
         if (entity instanceof EntityCow && !(entity instanceof EntityMooshroom))
         {
 
@@ -472,9 +436,9 @@ public class ItemHose extends ItemAB
     }
 
     @Override
-    public boolean canHarvestBlock(Block block, ItemStack stack)
+    public boolean canHarvestBlock(IBlockState block, ItemStack stack)
     {
-        return FluidRegistry.lookupFluidForBlock(block) != null;
+        return FluidRegistry.lookupFluidForBlock(block.getBlock()) != null;
     }
 
 }

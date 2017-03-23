@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -199,14 +200,15 @@ public class ItemComponent extends ItemAB
                     EntityInflatableBoat inflatableBoat = new EntityInflatableBoat(world, i + 0.5, j + 1.0, k + 0.5, motorized);
 
                     inflatableBoat.rotationYaw = (float) (((MathHelper.floor((double) (player.rotationYaw * 4.0 / 360.0) + 0.5D) & 3) - 1) * 90);
-                    if (!world.getCollidingBoundingBoxes(inflatableBoat, inflatableBoat.getEntityBoundingBox().expand(-0.1, -0.1, -0.1)).isEmpty())
+                    if (!world.getCollisionBoxes
+                    (inflatableBoat, inflatableBoat.getEntityBoundingBox().expand(-0.1, -0.1, -0.1)).isEmpty())
                     {
                         return stack;
                     }
 
                     if (!world.isRemote)
                     {
-                        world.spawnEntityInWorld(inflatableBoat);
+                        world.spawnEntity(inflatableBoat);
                     }
 
                     if (!player.capabilities.isCreativeMode)
@@ -227,10 +229,10 @@ public class ItemComponent extends ItemAB
      * @param player
      */
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
+    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand)
     {
-        if (stack.getItemDamage() == 7) return placeBoat(stack, world, player, false);
-        if (stack.getItemDamage() == 8) return placeBoat(stack, world, player, true);
-        return stack;
+        if (stack.getItemDamage() == 7) return new ActionResult(EnumActionResult.PASS, placeBoat(stack, world, player, false));
+        if (stack.getItemDamage() == 8) return new ActionResult(EnumActionResult.PASS, placeBoat(stack, world, player, true));
+        return new ActionResult(EnumActionResult.PASS, stack);
     }
 }

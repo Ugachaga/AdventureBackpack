@@ -64,11 +64,11 @@ public class ModNetwork
 
     public static void sendToNearby(IMessage message, EntityPlayer player)
     {
-        if (player != null && player.worldObj instanceof WorldServer)
+        if (player != null && player.world instanceof WorldServer)
         {
             try
             {
-                ((WorldServer) player.worldObj).getEntityTracker().func_151248_b(player, ModNetwork.net.getPacketFrom(message));
+                ((WorldServer) player.world).getEntityTracker().sendToTracking(player, ModNetwork.net.getPacketFrom(message));
             } catch (Exception ex)
             {
                 ex.printStackTrace();

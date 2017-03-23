@@ -13,6 +13,8 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.inventory.ClickType;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraftforge.fluids.FluidTank;
 
 /**
@@ -49,7 +51,7 @@ public class ContainerBackpack extends Container implements IWearableContainer
         this.player = player;
         inventory = backpack;
         makeSlots(player.inventory);
-        inventory.openInventory();
+        inventory.openInventory(player);
         this.source = source;
     }
 
@@ -147,13 +149,13 @@ public class ContainerBackpack extends Container implements IWearableContainer
     @Override
     public boolean canInteractWith(EntityPlayer player)
     {
-        return inventory.isUseableByPlayer(player);
+        return inventory.isUsableByPlayer(player);
     }
 
     @Override
     public void onCraftMatrixChanged(IInventory par1IInventory)
     {
-        craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(craftMatrix, player.worldObj));
+        craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(craftMatrix, player.world));
     }
 
     @Override
@@ -162,40 +164,40 @@ public class ContainerBackpack extends Container implements IWearableContainer
         super.onContainerClosed(player);
         if (source == SOURCE_WEARING)
         {
-            this.crafters.remove(player);
+            this.setCanCraft(player, false);
         }
-        if (!player.worldObj.isRemote)
+        if (!player.world.isRemote)
         {
             for (int i = 0; i < inventory.getSizeInventory(); i++)
             {
-                ItemStack itemstack = this.inventory.getStackInSlotOnClosing(i);
+                ItemStack itemstack = this.inventory.getStackInSlot(i);
                 if (itemstack != null)
                 {
                     inventory.setInventorySlotContents(i, null);
-                    player.dropPlayerItemWithRandomChoice(itemstack, false);
+                    player.dropItem(itemstack, false);
                 }
             }
 
             for (int i = 0; i < 9; i++)
             {
-                ItemStack itemstack = this.craftMatrix.getStackInSlotOnClosing(i);
+                ItemStack itemstack = this.craftMatrix.getStackInSlot(i);
 
                 if (itemstack != null)
                 {
-                    player.dropPlayerItemWithRandomChoice(itemstack, false);
+                    player.dropItem(itemstack, false);
                 }
             }
         }
     }
 
     @Override
-    public ItemStack slotClick(int slot, int button, int flag, EntityPlayer player)
+    public ItemStack slotClick(int slot, int button, ClickType clickTypeIn, EntityPlayer player)
     {
-        if (slot >= 0 && getSlot(slot) != null && getSlot(slot).getStack() == player.getHeldItem() && source == SOURCE_HOLDING)
+        if (slot >= 0 && getSlot(slot) != null && getSlot(slot).getStack() == player.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) && source == SOURCE_HOLDING)
         {
             return null;
         }
-        return super.slotClick(slot, button, flag, player);
+        return super.slotClick(slot, button, clickTypeIn, player);
     }
 
     @Override
@@ -416,7 +418,7 @@ public class ContainerBackpack extends Container implements IWearableContainer
     @Override
     public void refresh()
     {
-        inventory.openInventory();
+        inventory.openInventory(player);
         this.onCraftMatrixChanged(craftMatrix);
     }
 }

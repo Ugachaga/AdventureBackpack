@@ -1,5 +1,8 @@
 # Items THIS IS ALL UPDATED ALL OF THE OTHER LANGUAGE IS NOT
 
+## Material
+materal.adventurebackpack:ruggar
+
 ## Component Items For Crafting
 item.adventurebackpack:backpackComponent.name=Backpack Component Item
 item.adventurebackpack:sleepingBag.name=Sleeping Bag
@@ -12,7 +15,7 @@ item.adventurebackpack:hydroBlades.name=Hydro Blades
 item.adventurebackpack:inflatableBoat.name=Inflatable Boat
 item.adventurebackpack:inflatableBoatMotorized.name=Inflatable Boat (Motorized)
 
-## Entity 
+## Entity
 entity.adventurebackpack.inflatableBoat.name=Inflatable Boat
 
 ## Tools and consumables
