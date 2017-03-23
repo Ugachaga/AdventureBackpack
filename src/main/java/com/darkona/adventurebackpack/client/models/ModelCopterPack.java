@@ -45,7 +45,6 @@ public class ModelCopterPack extends ModelWearable
     public ModelRenderer EscapeFilter;
     private ItemStack copterPack;
 
-    @SuppressWarnings("unchecked")
     private void init()
     {
         this.textureWidth = 64;

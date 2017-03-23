@@ -4,7 +4,7 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumAction;
+//import net.minecraft.item.EnumAction;
 
 /**
  * Created on 19/10/2014
@@ -32,8 +32,8 @@ public class ModelFullArmor extends ModelBiped
             this.isRiding = entity.isRiding();
             if(owner instanceof EntityPlayer)
             {
-                EntityPlayer player = (EntityPlayer) owner;
-                //this.aimedBow = player.isUsingItem() && player.getItemInUse() != null && player.getItemInUse().getItemUseAction() == EnumAction.BOW;
+                //EntityPlayer player = (EntityPlayer) owner;
+                //this.aimedBow = player.isUsingItem() && player.getMainHandItem() != null && player.getMainHandItem().getItemUseAction() == EnumAction.BOW;
                 //this.heldItemRight = (player.getCurrentEquippedItem() != null) ? 1 : 0;
             }
         }

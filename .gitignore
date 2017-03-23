@@ -2,7 +2,7 @@
 *.MF
 build
 bin
-Baubles
+run
 
 # macOS File System Dust
 *.DS_STORE

@@ -1,7 +1,5 @@
 package com.darkona.adventurebackpack.client.models;
 
-import codechicken.lib.render.RenderUtils;
-import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Vector3;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;

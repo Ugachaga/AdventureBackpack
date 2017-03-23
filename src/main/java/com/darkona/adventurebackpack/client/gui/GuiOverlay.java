@@ -1,37 +1,9 @@
 package com.darkona.adventurebackpack.client.gui;
 
-import java.util.Collection;
-import java.util.Iterator;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
-import com.darkona.adventurebackpack.common.Constants;
-import com.darkona.adventurebackpack.config.ConfigHandler;
-import com.darkona.adventurebackpack.inventory.IInventoryTanks;
-import com.darkona.adventurebackpack.item.ItemHose;
-import com.darkona.adventurebackpack.reference.ModInfo;
-import com.darkona.adventurebackpack.util.LogHelper;
-import com.darkona.adventurebackpack.util.Wearing;
-
-//import codechicken.lib.render.TextureUtils;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.RenderHelper;
-//import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-// /import net.minecraft.util.IIcon;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
 
 /**
  * Created on 09/01/2015
@@ -46,7 +18,7 @@ public class GuiOverlay extends Gui
 //    protected static RenderItem itemRender = new RenderItem();
     protected FontRenderer fontRendererObj;
     ScaledResolution resolution;
-    @SuppressWarnings("static-access")
+
 	public GuiOverlay(Minecraft mc)
     {
         super();

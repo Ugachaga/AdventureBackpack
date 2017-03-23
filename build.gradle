@@ -38,11 +38,10 @@ dependencies
 {
     compile group: "codechicken",
             name: "CodeChickenLib",
-            version: "1.10.2-2.5.6.233",
+            version: "1.10.2-2.5.7.241",
             classifier: "deobf"
 
     compile project(":Baubles")
-
 }
 
 processResources

@@ -1,10 +1,5 @@
 package com.darkona.adventurebackpack.client.models;
 
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.RenderUtils;
-import codechicken.lib.vec.Cuboid6;
-import codechicken.lib.vec.Vector3;
-import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.common.IInventoryAdventureBackpack;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;

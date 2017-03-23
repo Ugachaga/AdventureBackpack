@@ -31,7 +31,6 @@ public class ModelCoalJetpack extends ModelWearable
     public ModelRenderer tubeBendRight;
     private ItemStack jetpack;
 
-    @SuppressWarnings("unchecked")
     public ModelCoalJetpack()
     {
         this.textureWidth = 64;
