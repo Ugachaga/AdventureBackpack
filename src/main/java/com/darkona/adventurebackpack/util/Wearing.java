@@ -132,7 +132,7 @@ public class Wearing
      */
     public static InventoryBackpack getBackpackInv(EntityPlayer player, boolean wearing)
     {
-        return new InventoryBackpack((wearing) ? BackpackProperty.get(player).getWearable() : player.getCurrentEquippedItem());
+        return new InventoryBackpack((wearing) ? BackpackProperty.get(player).getWearable() : player.getHeldItemMainhand());
     }
 
     public static boolean isWearingTheRightBackpack(EntityPlayer player, String... backpacks)

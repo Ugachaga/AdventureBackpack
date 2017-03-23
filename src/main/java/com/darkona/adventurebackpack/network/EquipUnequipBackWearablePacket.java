@@ -36,7 +36,7 @@ public class EquipUnequipBackWearablePacket implements IMessageHandler<EquipUneq
                     BackpackUtils.unequipWearable(player);
                 } else */if (Wearing.isHoldingWearable(player) && !Wearing.isWearingWearable(player))
                 {
-                    if (BackpackUtils.equipWearable(player.getCurrentEquippedItem(), player) == BackpackUtils.reasons.SUCCESFUL)
+                    if (BackpackUtils.equipWearable(player.getHeldItemMainhand(), player) == BackpackUtils.reasons.SUCCESFUL)
                     {
                         player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
                         player.inventoryContainer.detectAndSendChanges();
@@ -45,13 +45,13 @@ public class EquipUnequipBackWearablePacket implements IMessageHandler<EquipUneq
                 {
                     if (Wearing.isWearingBackpack(player))
                     {
-                        player.addChatComponentMessage(new TextComponentTranslation("adventurebackpack:messages.already.equipped.backpack"));
+                        player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.already.equipped.backpack"));
                     } else if (Wearing.isWearingCopter(player))
                     {
-                        player.addChatComponentMessage(new TextComponentTranslation("adventurebackpack:messages.already.equipped.copterpack"));
+                        player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.already.equipped.copterpack"));
                     } else if (Wearing.isWearingJetpack(player))
                     {
-                        player.addChatComponentMessage(new TextComponentTranslation("adventurebackpack:messages.already.equipped.jetpack"));
+                        player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.already.equipped.jetpack"));
                     }
                 }
             }

@@ -213,10 +213,10 @@ public class PlayerEventHandler
                     ((IBackWearableItem) props.getWearable().getItem()).onPlayerDeath(player.world, player, props.getWearable());
                     if (props.isForcedCampFire())
                     {
-                        ChunkPos lastCampFire = BackpackProperty.get(player).getCampFire();
+                        BlockPos lastCampFire = BackpackProperty.get(player).getCampFire();
                         if (lastCampFire != null)
                         {
-                            player.setSpawnChunk(lastCampFire.getCenterBlock(63), false, player.dimension);
+                            player.setSpawnChunk(lastCampFire, false, player.dimension);
                         }
                         //Set the forced spawn coordinates on the campfire. False, because the player must respawn at spawn point if there's no campfire.
                     }

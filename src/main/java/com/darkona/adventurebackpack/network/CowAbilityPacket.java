@@ -28,7 +28,7 @@ public class CowAbilityPacket implements IMessageHandler<CowAbilityPacket.CowAbi
     {
         if (ctx.side.isClient())
         {
-            EntityPlayer player = Minecraft.getMinecraft().theWorld.func_152378_a(UUID.fromString(message.playerID));
+            EntityPlayer player = Minecraft.getMinecraft().world.getPlayerEntityByUUID(UUID.fromString(message.playerID));
 
             if (player.openContainer instanceof ContainerBackpack)
             {
@@ -38,7 +38,7 @@ public class CowAbilityPacket implements IMessageHandler<CowAbilityPacket.CowAbi
                 switch (message.action)
                 {
                     case CONSUME_WHEAT:
-                        inv.consumeInventoryItem(Items.wheat);
+                        inv.consumeInventoryItem(Items.WHEAT);
                 }
             }
         }

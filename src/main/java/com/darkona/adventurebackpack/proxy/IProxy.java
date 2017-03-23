@@ -28,5 +28,4 @@ public interface IProxy
 
     public void registerRenderInformation();
 
-    void Capes();
 }

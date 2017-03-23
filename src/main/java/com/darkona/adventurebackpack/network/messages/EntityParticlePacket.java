@@ -27,7 +27,7 @@ public class EntityParticlePacket implements IMessageHandler<EntityParticlePacke
     {
         if (ctx.side.isClient())
         {
-            Entity entity = Minecraft.getMinecraft().theWorld.getEntityByID(message.entityID);
+            Entity entity = Minecraft.getMinecraft().world.getEntityByID(message.entityID);
             ClientActions.showParticlesAtEntity(entity, message.particleCode);
         } else
         {

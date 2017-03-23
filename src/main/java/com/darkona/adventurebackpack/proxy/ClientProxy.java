@@ -34,6 +34,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -89,7 +90,7 @@ public class ClientProxy implements IProxy
     @Override
     public void synchronizePlayer(int id, NBTTagCompound properties)
     {
-        Entity entity = Minecraft.getMinecraft().theWorld.getEntityByID(id);
+        Entity entity = Minecraft.getMinecraft().world.getEntityByID(id);
         if (Utils.notNullAndInstanceOf(entity, EntityPlayer.class) && properties != null)
         {
             EntityPlayer player = (EntityPlayer) entity;
@@ -100,33 +101,34 @@ public class ClientProxy implements IProxy
 
     public void initRenderers()
     {
+        RenderManager rm = Minecraft.getMinecraft().getRenderManager();
         renderHandler = new RenderHandler();
         MinecraftForge.EVENT_BUS.register(renderHandler);
-        rendererWearableEquipped = new RendererWearableEquipped();
+        rendererWearableEquipped = new RendererWearableEquipped(rm);
 
         rendererItemAdventureBackpack = new RendererItemAdventureBackpack();
-        MinecraftForgeClient.registerItemRenderer(ModItems.adventureBackpack, rendererItemAdventureBackpack);
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.blockBackpack), rendererItemAdventureBackpack);
+        //MinecraftForgeClient.registerItemRenderer(ModItems.adventureBackpack, rendererItemAdventureBackpack);
+        //MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.blockBackpack), rendererItemAdventureBackpack);
         ClientRegistry.bindTileEntitySpecialRenderer(TileAdventureBackpack.class, new RendererAdventureBackpackBlock());
 
         rendererItemAdventureHat = new RendererItemAdventureHat();
-        MinecraftForgeClient.registerItemRenderer(ModItems.adventureHat, rendererItemAdventureHat);
+        //MinecraftForgeClient.registerItemRenderer(ModItems.adventureHat, rendererItemAdventureHat);
 
         if (!ConfigHandler.tanksOverlay)
         {
             rendererHose = new RendererHose();
-            MinecraftForgeClient.registerItemRenderer(ModItems.hose, rendererHose);
+            //MinecraftForgeClient.registerItemRenderer(ModItems.hose, rendererHose);
         }
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileCampfire.class, new RendererCampFire());
 
-        renderInflatableBoat = new RendererInflatableBoat();
+        //renderInflatableBoat = new RendererInflatableBoat();
         RenderingRegistry.registerEntityRenderingHandler(EntityInflatableBoat.class, renderInflatableBoat);
-        renderRideableSpider = new RenderRideableSpider();
+        //renderRideableSpider = new RenderRideableSpider();
         RenderingRegistry.registerEntityRenderingHandler(EntityFriendlySpider.class, renderRideableSpider);
 
         renderCrossbow = new RendererItemClockworkCrossbow();
-        MinecraftForgeClient.registerItemRenderer(ModItems.cwxbow, renderCrossbow);
+        //MinecraftForgeClient.registerItemRenderer(ModItems.cwxbow, renderCrossbow);
     }
 
     @Override
@@ -152,13 +154,14 @@ public class ClientProxy implements IProxy
     @Override
     public void registerRenderInformation()
     {
+        RenderManager rm = Minecraft.getMinecraft().getRenderManager();
         renderHandler = new RenderHandler();
         MinecraftForge.EVENT_BUS.register(renderHandler);
-        rendererWearableEquipped = new RendererWearableEquipped();
+        rendererWearableEquipped = new RendererWearableEquipped(rm);
 
         rendererItemAdventureBackpack = new RendererItemAdventureBackpack();
-        MinecraftForgeClient.registerItemRenderer(ModItems.adventureBackpack, rendererItemAdventureBackpack);
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.blockBackpack), rendererItemAdventureBackpack);
+        //MinecraftForgeClient.registerItemRenderer(ModItems.adventureBackpack, rendererItemAdventureBackpack);
+        //MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.blockBackpack), rendererItemAdventureBackpack);
         ClientRegistry.bindTileEntitySpecialRenderer(TileAdventureBackpack.class, new RendererAdventureBackpackBlock());
         int i = 0;
         for (Field curField : EntityRenderer.class.getDeclaredFields())

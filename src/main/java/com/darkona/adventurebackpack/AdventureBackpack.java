@@ -60,7 +60,6 @@ public class AdventureBackpack
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-        proxy.Capes();
         int year = Calendar.getInstance().get(Calendar.YEAR), month = Calendar.getInstance().get(Calendar.MONTH) + 1, day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 
         //Configuration

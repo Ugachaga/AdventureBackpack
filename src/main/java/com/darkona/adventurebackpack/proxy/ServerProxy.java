@@ -104,9 +104,4 @@ public class ServerProxy implements IProxy
         FMLCommonHandler.instance().bus().register(new DeveloperJoining());
     }
 
-    @Override
-    public void Capes()
-    {
-        // TODO Auto-generated method stub
-    }
 }

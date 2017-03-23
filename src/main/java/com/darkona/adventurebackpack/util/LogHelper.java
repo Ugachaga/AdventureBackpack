@@ -23,11 +23,6 @@ public class LogHelper
         return "Coords: X= " + x + ", Y= " + y + ", Z=" + z;
     }
 
-    public static String print3DCoords(ChunkPos coords)
-    {
-        return print3DCoords(coords.posX, coords.posY, coords.posZ);
-    }
-
     public static void all(Object object)
     {
         log(Level.ALL, object);

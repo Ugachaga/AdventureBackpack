@@ -32,7 +32,7 @@ public class EntitySoundPacket implements IMessageHandler<EntitySoundPacket.Mess
     {
         if (ctx.side.isClient())
         {
-            ClientActions.playSoundAtEntity(Minecraft.getMinecraft().theWorld.getEntityByID(message.entityID), message.soundCode);
+            ClientActions.playSoundAtEntity(Minecraft.getMinecraft().world.getEntityByID(message.entityID), message.soundCode);
         } else
         {
             EntityPlayer player = ctx.getServerHandler().playerEntity;
