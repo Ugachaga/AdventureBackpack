@@ -105,7 +105,6 @@ public class ConfigHandler
         }
     }
 
-    @SuppressWarnings("static-access")
     private static void loadConfiguration()
     {
         // Gameplay

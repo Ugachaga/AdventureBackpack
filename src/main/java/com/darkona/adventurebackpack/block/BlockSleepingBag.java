@@ -293,6 +293,9 @@ public class BlockSleepingBag extends BlockHorizontal
             case WEST:
                 tileX--;
                 break;
+            case DOWN:
+            case UP:
+                break;
         }
         BlockPos foot = new BlockPos(tileX, pos.getY(), tileZ);
         //LogHelper.info("onBlockDestroyedByPlayer() Looking for tile entity in x=" +tileX+" y="+y+" z="+tileZ+" while breaking the block in x= "+x+" y="+y+" z="+z);

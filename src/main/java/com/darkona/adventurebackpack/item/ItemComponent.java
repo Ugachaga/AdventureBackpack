@@ -59,7 +59,7 @@ public class ItemComponent extends ItemAB
     @Override
     public String getUnlocalizedName(ItemStack stack)
     {
-        return super.getUnlocalizedName(names[getDamage(stack) - 1]);
+        return super.getUnlocalizedName(names[getDamage(stack)]);
 
     }
 

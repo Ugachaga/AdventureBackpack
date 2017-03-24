@@ -1,7 +1,6 @@
 package com.darkona.adventurebackpack.develop;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentTranslation;
 public class ChatHandler
 {

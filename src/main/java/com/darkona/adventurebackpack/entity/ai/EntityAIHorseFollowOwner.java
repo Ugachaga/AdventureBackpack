@@ -7,8 +7,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.world.World;
 
-import java.util.UUID;
-
 /**
  * Created on 09/01/2015
  *

@@ -63,7 +63,7 @@ public class AdventureBackpack
         int year = Calendar.getInstance().get(Calendar.YEAR), month = Calendar.getInstance().get(Calendar.MONTH) + 1, day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 
         //Configuration
-        FMLCommonHandler.instance().bus().register(new ConfigHandler());
+        MinecraftForge.EVENT_BUS.register(new ConfigHandler());
         ConfigHandler.init(event.getSuggestedConfigurationFile());
         //chineseNewYear = ChineseCalendar.isChineseNewYear(year, month, day);
         //hannukah = JewishCalendar.isHannukah(year, month, day);
@@ -86,8 +86,7 @@ public class AdventureBackpack
         MinecraftForge.EVENT_BUS.register(generalEventHandler);
         MinecraftForge.EVENT_BUS.register(clientEventHandler);
         MinecraftForge.EVENT_BUS.register(playerEventHandler);
-
-        FMLCommonHandler.instance().bus().register(playerEventHandler);
+        MinecraftForge.EVENT_BUS.register(playerEventHandler);
 
     }
 

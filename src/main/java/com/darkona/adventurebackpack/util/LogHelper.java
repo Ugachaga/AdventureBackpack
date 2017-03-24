@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Level;
 import com.darkona.adventurebackpack.reference.ModInfo;
 
 import net.minecraftforge.fml.common.FMLLog;
-import net.minecraft.util.math.ChunkPos;
 
 /**
  * Created by Darkona on 12/10/2014.
