@@ -3,6 +3,7 @@ package com.darkona.adventurebackpack.proxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.item.Item;
 
 /**
  * Created on 14/10/2014
@@ -27,5 +28,7 @@ public interface IProxy
     void init(FMLInitializationEvent event);
 
     public void registerRenderInformation();
+
+    public void registerItemRenderer(Item item, int meta, String id);
 
 }

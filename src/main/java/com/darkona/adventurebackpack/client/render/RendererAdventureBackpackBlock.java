@@ -22,7 +22,6 @@ import org.lwjgl.opengl.GL12;
 public class RendererAdventureBackpackBlock extends TileEntitySpecialRenderer
 {
 
-    //    private ModelAdventureBackpackBlock model;
     private ModelBackpackBlock model;
 
     public RendererAdventureBackpackBlock()

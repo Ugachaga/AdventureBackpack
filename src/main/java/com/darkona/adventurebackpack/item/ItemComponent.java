@@ -34,7 +34,7 @@ import net.minecraft.world.World;
  */
 public class ItemComponent extends ItemAB
 {
-    //    private HashMap<String, IIcon> componentIcons = new HashMap<String, IIcon>();
+
     private String[] names = {
             "sleepingBag",
             "backpackTank",
@@ -45,6 +45,7 @@ public class ItemComponent extends ItemAB
             "inflatableBoat",
             "inflatableBoatMotorized",
             "hydroBlades",
+            "adventureBackpack",
     };
 
 
@@ -59,9 +60,10 @@ public class ItemComponent extends ItemAB
     @Override
     public String getUnlocalizedName(ItemStack stack)
     {
-        return super.getUnlocalizedName(names[getDamage(stack)]);
-
+        return super.getUnlocalizedName(names[0]);
     }
+
+
 
     @Override
     @SideOnly(Side.CLIENT)

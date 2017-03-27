@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
@@ -103,5 +104,11 @@ public class ServerProxy implements IProxy
     {
         FMLCommonHandler.instance().bus().register(new DeveloperJoining());
     }
+
+    @Override
+    public void registerItemRenderer(Item item, int meta, String id)
+    {
+    }
+
 
 }

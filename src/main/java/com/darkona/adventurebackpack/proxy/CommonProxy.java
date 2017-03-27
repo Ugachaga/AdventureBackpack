@@ -3,8 +3,11 @@ package com.darkona.adventurebackpack.proxy;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.MinecraftForge;
+
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
+
 
 public abstract class CommonProxy implements IProxy
 {
@@ -43,4 +46,8 @@ public abstract class CommonProxy implements IProxy
     public void cape()
     {
     }
+
+    public void registerItemRenderer(Item item, int meta, String id) {
+    }
+
 }

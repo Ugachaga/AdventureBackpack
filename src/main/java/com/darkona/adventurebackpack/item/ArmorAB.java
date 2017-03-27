@@ -1,14 +1,10 @@
 package com.darkona.adventurebackpack.item;
 
+import com.darkona.adventurebackpack.AdventureBackpack;
 import com.darkona.adventurebackpack.CreativeTabAB;
 import com.darkona.adventurebackpack.init.ModMaterials;
 import com.darkona.adventurebackpack.reference.ModInfo;
-import com.darkona.adventurebackpack.util.Resources;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -47,5 +43,9 @@ public class ArmorAB extends ItemArmor
     {
         return String.format("item.%s%s", ModInfo.MOD_ID.toLowerCase() + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
     }
+
+    public void registerItemModel() {
+		AdventureBackpack.proxy.registerItemRenderer(this, 0, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+	}
 
 }

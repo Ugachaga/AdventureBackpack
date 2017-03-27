@@ -2,6 +2,7 @@ package com.darkona.adventurebackpack.proxy;
 
 import java.lang.reflect.Field;
 
+import com.darkona.adventurebackpack.AdventureBackpack;
 import com.darkona.adventurebackpack.block.TileAdventureBackpack;
 import com.darkona.adventurebackpack.block.TileCampfire;
 import com.darkona.adventurebackpack.client.gui.GuiOverlay;
@@ -23,23 +24,26 @@ import com.darkona.adventurebackpack.entity.EntityFriendlySpider;
 import com.darkona.adventurebackpack.entity.EntityInflatableBoat;
 import com.darkona.adventurebackpack.handlers.KeybindHandler;
 import com.darkona.adventurebackpack.handlers.RenderHandler;
-import com.darkona.adventurebackpack.init.ModBlocks;
-import com.darkona.adventurebackpack.init.ModItems;
 import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
 import com.darkona.adventurebackpack.util.Utils;
+import com.darkona.adventurebackpack.init.ModItems;
+import com.darkona.adventurebackpack.reference.ModInfo;
 
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 
 /**
@@ -64,10 +68,17 @@ public class ClientProxy implements IProxy
 
     public static Field camRollField;
 
+    @Mod.EventHandler
+    public void preInit(FMLPreInitializationEvent event)
+    {
+        ModItems.init();
+    }
+
+
     @Override
     public void init()
     {
-        initRenderers();
+        //initRenderers();
         registerKeybindings();
         MinecraftForge.EVENT_BUS.register(new GuiOverlay(Minecraft.getMinecraft()));
     }
@@ -160,8 +171,6 @@ public class ClientProxy implements IProxy
         rendererWearableEquipped = new RendererWearableEquipped(rm);
 
         rendererItemAdventureBackpack = new RendererItemAdventureBackpack();
-        //MinecraftForgeClient.registerItemRenderer(ModItems.adventureBackpack, rendererItemAdventureBackpack);
-        //MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.blockBackpack), rendererItemAdventureBackpack);
         ClientRegistry.bindTileEntitySpecialRenderer(TileAdventureBackpack.class, new RendererAdventureBackpackBlock());
         int i = 0;
         for (Field curField : EntityRenderer.class.getDeclaredFields())
@@ -175,6 +184,11 @@ public class ClientProxy implements IProxy
                 }
             }
         }
+    }
+
+    @Override
+    public void registerItemRenderer(Item item, int meta, String id) {
+        ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(ModInfo.MOD_ID + ":" + id, "inventory"));
     }
 
 }

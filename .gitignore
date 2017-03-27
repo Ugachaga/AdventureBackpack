@@ -3,6 +3,7 @@
 build
 bin
 run
+Baubles
 
 # macOS File System Dust
 *.DS_STORE

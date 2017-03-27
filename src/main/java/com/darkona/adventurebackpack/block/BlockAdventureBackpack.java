@@ -12,12 +12,13 @@ import com.darkona.adventurebackpack.reference.BackpackNames;
 import com.darkona.adventurebackpack.reference.ModInfo;
 import com.darkona.adventurebackpack.util.Utils;
 
-import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
-import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
+
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureType;
@@ -25,20 +26,21 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
 
 /**
  * Created on 12/10/2014.
@@ -49,6 +51,8 @@ import net.minecraft.util.EnumFacing;
 public class BlockAdventureBackpack extends BlockContainer
 {
 
+    public static final String name = "blockBackpack";
+
     public BlockAdventureBackpack()
     {
         super(new BackpackMaterial());
@@ -56,41 +60,6 @@ public class BlockAdventureBackpack extends BlockContainer
         //setStepSound(soundTypeCloth);
         setResistance(2000f);
     }
-
-    /**
-     * Pretty effects for the bookshelf ;)
-     *
-     * @param world
-     * @param x
-     * @param y
-     * @param z
-     * @param random
-     */
-    /**
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(World world, int x, int y, int z, Random random)
-    {
-        if (getAssociatedTileColorName(world, x, y, z).equals("Bookshelf"))
-        {
-            ChunkCoordinates enchTable = Utils.findBlock3D(world, x, y, z, Blocks.enchanting_table, 2, 2);
-            if (enchTable != null)
-            {
-                if (!world.isAirBlock((enchTable.posX - x) / 2 + x, enchTable.posY, (enchTable.posZ - z) / 2 + z))
-                {
-                    return;
-                }
-                for (int o = 0; o < 4; o++)
-                {
-                    world.spawnParticle("enchantmenttable", enchTable.posX + 0.5D, enchTable.posY + 2.0D, enchTable.posZ + 0.5D,
-                            ((x - enchTable.posX) + random.nextFloat()) - 0.5D,
-                            ((y - enchTable.posY) - random.nextFloat() - 1.0F),
-                            ((z - enchTable.posZ) + random.nextFloat()) - 0.5D);
-                }
-            }
-        }
-    }
-    **/
 
     private String getAssociatedTileColorName(IBlockAccess world, BlockPos pos)
     {
@@ -137,20 +106,6 @@ public class BlockAdventureBackpack extends BlockContainer
     {
         return false;
     }
-
-    /**
-     * TODO: rendering code
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister)
-    {
-        Icons.milkStill = iconRegister.registerIcon(ModInfo.MOD_ID + ":fluid.milk");
-        Icons.melonJuiceStill = iconRegister.registerIcon(ModInfo.MOD_ID + ":fluid.melonJuiceStill");
-        Icons.melonJuiceFlowing = iconRegister.registerIcon(ModInfo.MOD_ID + ":fluid.melonJuiceFlowing");
-        Icons.mushRoomStewStill = iconRegister.registerIcon(ModInfo.MOD_ID + ":fluid.mushroomStewStill");
-        Icons.mushRoomStewFlowing = iconRegister.registerIcon(ModInfo.MOD_ID + ":fluid.mushroomStewFlowing");
-    }
-    **/
 
     @Override
     public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos)
@@ -232,16 +187,6 @@ public class BlockAdventureBackpack extends BlockContainer
         createNewTileEntity(world, world.getBlockMetadata(pos));
         */
     }
-
-    /**
-     * TODO: more rendering dode
-     Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int par1, int par2)
-    {
-        return Blocks.wool.getIcon(par1, par2);
-    }
-    */
 
     /**
      * TODO: do i need this
@@ -345,4 +290,8 @@ public class BlockAdventureBackpack extends BlockContainer
     {
         //DO NOTHING
     }
+
+    public void registerItemModel(ItemBlock itemBlock) {
+		AdventureBackpack.proxy.registerItemRenderer(itemBlock, 0, name);
+	}
 }

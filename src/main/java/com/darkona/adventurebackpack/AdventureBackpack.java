@@ -2,6 +2,7 @@ package com.darkona.adventurebackpack;
 
 import java.util.Calendar;
 
+import com.darkona.adventurebackpack.AdventureBackpack;
 import com.darkona.adventurebackpack.config.ConfigHandler;
 import com.darkona.adventurebackpack.fluids.FluidEffectRegistry;
 import com.darkona.adventurebackpack.handlers.ClientEventHandler;

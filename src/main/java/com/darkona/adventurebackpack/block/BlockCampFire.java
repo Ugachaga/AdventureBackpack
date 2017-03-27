@@ -34,17 +34,6 @@ public class BlockCampFire extends BlockContainer
 
     }
 
-    /**
-     * TODO: rendering code
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister)
-    {
-        icon = iconRegister.registerIcon(ModInfo.MOD_ID + ":campFire");
-    }
-     */
-
     @Override
     public String getUnlocalizedName()
     {
@@ -101,31 +90,6 @@ public class BlockCampFire extends BlockContainer
     {
         return 11;
     }
-
-    /**
-     * TODO: rendering code
-    @Override
-    public IIcon getIcon(IBlockAccess p_149673_1_, int p_149673_2_, int p_149673_3_, int p_149673_4_, int p_149673_5_)
-    {
-        return icon;
-    }
-     */
-
-
-    /**
-     * Gets the block's texture. Args: side, meta
-     *
-     * @param p_149691_1_
-     * @param p_149691_2_
-     */
-    /**
-     * TODO: rendering code
-    @Override
-    public IIcon getIcon(int p_149691_1_, int p_149691_2_)
-    {
-        return icon;
-    }
-     */
 
     /**
      * Determines if this block is classified as a Bed, Allowing
