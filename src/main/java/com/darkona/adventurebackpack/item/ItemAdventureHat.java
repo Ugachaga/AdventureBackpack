@@ -22,5 +22,33 @@ public class ItemAdventureHat extends ArmorAB
     {
         return par2ItemStack.isItemEqual(new ItemStack(Items.LEATHER));
     }
+    
+    //TODO: confirm this
+    @Override
+    @SideOnly(Side.CLIENT)
+    public ModelBiped getArmourModel(EntityLivingBase entity, ItemStack itemstack, EntityEquipmentSlot armourSlot, ModelBiped defaultModel)
+    {
+        if (itemStack != null)
+        {
+            if (stack.getItem() instance of ArmorAB)
+            {
+                entityEquipmentSlot type = ((ArmorAB) stack.getItem()).armourType;
+                ModelBiped armourModel = null;
+                switch(type)
+                {
+                    case HEAD:
+                        armourModel = AdventureBackpack.proxy.getArmourModel(0);
+                    break;
+                    default:
+                    break;
+                }
+                
+                armourModel.bipedHead.showModel = armourSlot == EnitityEquipmentSlot.HEAD;
+                
+                return armourModel;
+            }
+        }
+        return null;
+    }
 
 }
