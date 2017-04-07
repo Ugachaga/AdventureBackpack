@@ -2,26 +2,19 @@ package com.darkona.adventurebackpack.proxy;
 
 import java.lang.reflect.Field;
 
-import com.darkona.adventurebackpack.AdventureBackpack;
 import com.darkona.adventurebackpack.block.TileAdventureBackpack;
-import com.darkona.adventurebackpack.block.TileCampfire;
 import com.darkona.adventurebackpack.client.gui.GuiOverlay;
 import com.darkona.adventurebackpack.client.models.ModelBackpackArmor;
 import com.darkona.adventurebackpack.client.models.ModelCoalJetpack;
 import com.darkona.adventurebackpack.client.models.ModelCopterPack;
 import com.darkona.adventurebackpack.client.render.RenderRideableSpider;
 import com.darkona.adventurebackpack.client.render.RendererAdventureBackpackBlock;
-import com.darkona.adventurebackpack.client.render.RendererCampFire;
 import com.darkona.adventurebackpack.client.render.RendererHose;
 import com.darkona.adventurebackpack.client.render.RendererInflatableBoat;
 import com.darkona.adventurebackpack.client.render.RendererItemAdventureBackpack;
-import com.darkona.adventurebackpack.client.render.RendererItemAdventureHat;
 import com.darkona.adventurebackpack.client.render.RendererItemClockworkCrossbow;
 import com.darkona.adventurebackpack.client.render.RendererWearableEquipped;
-import com.darkona.adventurebackpack.config.ConfigHandler;
 import com.darkona.adventurebackpack.config.Keybindings;
-import com.darkona.adventurebackpack.entity.EntityFriendlySpider;
-import com.darkona.adventurebackpack.entity.EntityInflatableBoat;
 import com.darkona.adventurebackpack.handlers.KeybindHandler;
 import com.darkona.adventurebackpack.handlers.RenderHandler;
 import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
@@ -31,20 +24,20 @@ import com.darkona.adventurebackpack.reference.ModInfo;
 
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.MinecraftForge;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.MinecraftForge;
 
 /**
  * Created on 10/10/2014
@@ -55,7 +48,6 @@ public class ClientProxy implements IProxy
 {
 
     public static RendererItemAdventureBackpack rendererItemAdventureBackpack;
-    public static RendererItemAdventureHat rendererItemAdventureHat;
     public static RendererHose rendererHose;
     public static RendererWearableEquipped rendererWearableEquipped;
     public static RenderHandler renderHandler;
@@ -108,38 +100,6 @@ public class ClientProxy implements IProxy
             if (BackpackProperty.get(player) == null) BackpackProperty.register(player);
             BackpackProperty.get(player).loadNBTData(properties);
         }
-    }
-
-    public void initRenderers()
-    {
-        RenderManager rm = Minecraft.getMinecraft().getRenderManager();
-        renderHandler = new RenderHandler();
-        MinecraftForge.EVENT_BUS.register(renderHandler);
-        rendererWearableEquipped = new RendererWearableEquipped(rm);
-
-        rendererItemAdventureBackpack = new RendererItemAdventureBackpack();
-        //MinecraftForgeClient.registerItemRenderer(ModItems.adventureBackpack, rendererItemAdventureBackpack);
-        //MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.blockBackpack), rendererItemAdventureBackpack);
-        ClientRegistry.bindTileEntitySpecialRenderer(TileAdventureBackpack.class, new RendererAdventureBackpackBlock());
-
-        rendererItemAdventureHat = new RendererItemAdventureHat();
-        //MinecraftForgeClient.registerItemRenderer(ModItems.adventureHat, rendererItemAdventureHat);
-
-        if (!ConfigHandler.tanksOverlay)
-        {
-            rendererHose = new RendererHose();
-            //MinecraftForgeClient.registerItemRenderer(ModItems.hose, rendererHose);
-        }
-
-        ClientRegistry.bindTileEntitySpecialRenderer(TileCampfire.class, new RendererCampFire());
-
-        //renderInflatableBoat = new RendererInflatableBoat();
-        RenderingRegistry.registerEntityRenderingHandler(EntityInflatableBoat.class, renderInflatableBoat);
-        //renderRideableSpider = new RenderRideableSpider();
-        RenderingRegistry.registerEntityRenderingHandler(EntityFriendlySpider.class, renderRideableSpider);
-
-        renderCrossbow = new RendererItemClockworkCrossbow();
-        //MinecraftForgeClient.registerItemRenderer(ModItems.cwxbow, renderCrossbow);
     }
 
     @Override

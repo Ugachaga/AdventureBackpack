@@ -10,6 +10,8 @@ import com.darkona.adventurebackpack.util.LogHelper;
 
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item;
@@ -109,6 +111,6 @@ public class ServerProxy implements IProxy
     public void registerItemRenderer(Item item, int meta, String id)
     {
     }
-
+    
 
 }

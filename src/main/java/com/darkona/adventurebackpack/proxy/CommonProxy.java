@@ -1,12 +1,12 @@
 package com.darkona.adventurebackpack.proxy;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.common.MinecraftForge;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
+import net.minecraft.client.model.ModelBiped;
 
 
 public abstract class CommonProxy implements IProxy
