@@ -97,9 +97,7 @@ public class BlockCampFire extends BlockContainer
      * perform the sleeping functionality in it's activated event.
      *
      * @param world  The current world
-     * @param x      X Position
-     * @param y      Y Position
-     * @param z      Z Position
+     * @param pos    the position of the block
      * @param player The player or camera entity, null in some cases.
      * @return True to treat this as a bed
      */

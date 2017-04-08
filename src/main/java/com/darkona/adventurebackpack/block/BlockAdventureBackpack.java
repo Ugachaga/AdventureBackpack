@@ -57,7 +57,6 @@ public class BlockAdventureBackpack extends BlockContainer
     {
         super(new BackpackMaterial());
         setHardness(1.0f);
-        //setStepSound(soundTypeCloth);
         setResistance(2000f);
     }
 
@@ -85,16 +84,6 @@ public class BlockAdventureBackpack extends BlockContainer
         return 0;
     }
 
-
-    /**
-     * Called when a player hits the block. Args: world, x, y, z, player
-     *
-     * @param p_149699_1_
-     * @param p_149699_2_
-     * @param p_149699_3_
-     * @param p_149699_4_
-     * @param p_149699_5_
-     */
     @Override
     public void onBlockClicked(World worldIn, BlockPos pos, EntityPlayer playerIn)
     {
@@ -165,39 +154,24 @@ public class BlockAdventureBackpack extends BlockContainer
         return false;
     }
 
-
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
     {
-        /**
-         * todo get the math helper function to work
-        int dir = MathHelper.floor_double((placer.rotationYaw * 4F) / 360F + 0.5D) & 3;
-        if (stack != null && stack.stackTagCompound != null && stack.stackTagCompound.hasKey("color"))
+        int dir = MathHelper.floor((placer.rotationYaw * 4F) / 360F + 0.5D) & 3;
+        if (stack != null && stack.getTagCompound() != null && stack.getTagCompound().hasKey("color"))
         {
-            if (stack.stackTagCompound.getString("color").contains("BlockRedstone"))
+            if (stack.getTagCompound().getString("color").contains("BlockRedstone"))
             {
                 dir = dir | 8;
             }
-            if (stack.stackTagCompound.getString("color").contains("Lightgem"))
+            if (stack.getTagCompound().getString("color").contains("Lightgem"))
             {
                 dir = dir | 4;
             }
         }
-        world.setBlockMetadataWithNotify(pos, dir, 3);
-        createNewTileEntity(world, world.getBlockMetadata(pos));
-        */
+        world.setBlockState(pos, state, 3);
+        createNewTileEntity(world, 0);
     }
-
-    /**
-     * TODO: do i need this
-    @Override
-    public MovingObjectPosition collisionRayTrace(World world, int x, int y, int z, Vec3d start, Vec3d end)
-    {
-        setBlockBoundsBasedOnState(world, x, y, z);
-        return super.collisionRayTrace(world, x, y, z, start, end);
-    }
-
-    */
 
     @Override
     public boolean canReplace(World worldIn, BlockPos pos, EnumFacing side, @Nullable ItemStack stack)
@@ -251,8 +225,7 @@ public class BlockAdventureBackpack extends BlockContainer
                     droppedItem.motionY = 4 + world.rand.nextFloat() * mult;
                     droppedItem.motionZ = -0.5 + world.rand.nextFloat() * mult;
 
-                    //TODO: make this entitiy spawn
-                    //world.spawnEntityInWorld((Entity) droppedItem);
+                    world.spawnEntity((Entity) droppedItem);
                 }
             }
 

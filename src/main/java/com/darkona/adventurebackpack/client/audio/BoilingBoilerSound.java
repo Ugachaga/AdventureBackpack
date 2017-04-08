@@ -26,7 +26,7 @@ public class BoilingBoilerSound extends MovingSound
 
     public BoilingBoilerSound(EntityPlayer player)
     {
-        super(new SoundEvent(new ResourceLocation(ModInfo.MOD_ID, "s_boiling")), SoundCategory.BLOCKS);
+        super(new SoundEvent(new ResourceLocation(ModInfo.MOD_ID, ModInfo.MOD_ID + ":s_boiling")), SoundCategory.BLOCKS);
         volume = 0.25f;
         pitch = 0.4F;
         thePlayer = player;

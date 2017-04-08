@@ -26,7 +26,7 @@ public class ModItems
 
     public static final ItemMachete machete = new ItemMachete();
     public static final ItemCrossbow cwxbow = new ItemCrossbow();
-    public static final ArmorAB adventureHat = new ItemAdventureHat();
+    public static final ItemAdventureHat adventureHat = new ItemAdventureHat();
     public static final ArmorAB adventureSuit = new ItemAdventureSuit();
     public static final ArmorAB adventurePants = new ItemAdventurePants();
     public static final ArmorAB pistonBoots = new ItemPistonBoots();

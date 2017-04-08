@@ -6,8 +6,6 @@ import net.minecraftforge.common.MinecraftForge;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
-import net.minecraft.client.model.ModelBiped;
-
 
 public abstract class CommonProxy implements IProxy
 {

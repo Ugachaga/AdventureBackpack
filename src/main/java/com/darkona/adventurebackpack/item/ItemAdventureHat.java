@@ -10,7 +10,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 
 import com.darkona.adventurebackpack.AdventureBackpack;
-import com.darkona.adventurebackpack.proxy.CommonProxy;
 import com.darkona.adventurebackpack.client.models.ModelAdventureHat;
 /**
  * Created by Darkona on 11/10/2014.
@@ -25,39 +24,59 @@ public class ItemAdventureHat extends ArmorAB
         setUnlocalizedName("adventureHat");
     }
 
-    @Override
-    public boolean getIsRepairable(ItemStack par1ItemStack, ItemStack par2ItemStack)
-    {
-        return par2ItemStack.isItemEqual(new ItemStack(Items.LEATHER));
-    }
 
-    //TODO: confirm this
     @Override
     @SideOnly(Side.CLIENT)
-    public ModelBiped getArmorModel(EntityLivingBase entity, ItemStack itemStack, EntityEquipmentSlot armourSlot, ModelBiped defaultModel)
+    public ModelBiped getArmorModel(EntityLivingBase entity, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped defaultModel)
     {
         if (itemStack != null)
         {
             if (itemStack.getItem() instanceof ArmorAB)
             {
                 EntityEquipmentSlot type = ((ArmorAB) itemStack.getItem()).armorType;
-                ModelBiped armourModel = null;
+                ModelBiped armorModel = null;
                 switch(type)
                 {
                     case HEAD:
-                        armourModel = new ModelAdventureHat();
+                        armorModel = new ModelAdventureHat();
                     break;
                     default:
                     break;
                 }
 
-                armourModel.bipedHead.showModel = armourSlot == EntityEquipmentSlot.HEAD;
+                armorModel.bipedHead.showModel = armorSlot == EntityEquipmentSlot.HEAD;
+				armorModel.bipedHeadwear.showModel = armorSlot == EntityEquipmentSlot.HEAD;
+				armorModel.bipedBody.showModel = (armorSlot == EntityEquipmentSlot.CHEST)
+						|| (armorSlot == EntityEquipmentSlot.CHEST);
+				armorModel.bipedRightArm.showModel = armorSlot == EntityEquipmentSlot.CHEST;
+				armorModel.bipedLeftArm.showModel = armorSlot == EntityEquipmentSlot.CHEST;
+				armorModel.bipedRightLeg.showModel = (armorSlot == EntityEquipmentSlot.LEGS)
+						|| (armorSlot == EntityEquipmentSlot.FEET);
+				armorModel.bipedLeftLeg.showModel = (armorSlot == EntityEquipmentSlot.LEGS)
+						|| (armorSlot == EntityEquipmentSlot.FEET);
 
-                return armourModel;
+				armorModel.isSneak = defaultModel.isSneak;
+				armorModel.isRiding = defaultModel.isRiding;
+				armorModel.isChild = defaultModel.isChild;
+				armorModel.rightArmPose = defaultModel.rightArmPose;
+				armorModel.leftArmPose = defaultModel.leftArmPose;
+
+                return armorModel;
             }
         }
         return null;
     }
+
+    @Override
+    public boolean getIsRepairable(ItemStack par1ItemStack, ItemStack par2ItemStack)
+    {
+        return par2ItemStack.isItemEqual(new ItemStack(Items.LEATHER));
+    }
+
+    @Override
+    public void registerItemModel() {
+		AdventureBackpack.proxy.registerItemRenderer(this, 0, "adventureHat");
+	}
 
 
 }

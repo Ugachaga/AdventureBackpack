@@ -222,7 +222,7 @@ public class BlockSleepingBag extends BlockHorizontal
     public void onNeighborBlockChange(World world, BlockPos pos, Block block)
     {
         /**
-         * TODO: look in to this furthe
+         * TODO: look in to this further
         int meta = world.getBlockState(pos);
         int dir = getDirection(meta);
 
