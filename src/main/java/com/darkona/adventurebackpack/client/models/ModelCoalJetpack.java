@@ -6,11 +6,11 @@ import org.lwjgl.opengl.GL11;
 
 import com.darkona.adventurebackpack.inventory.InventoryCoalJetpack;
 
-import codechicken.lib.vec.Vector3;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.Vec3d;
 
 public class ModelCoalJetpack extends ModelWearable
 {
@@ -194,7 +194,7 @@ public class ModelCoalJetpack extends ModelWearable
         tubeStraightLeft.render(f5);
 
         GL11.glPushMatrix();
-        renderFluidInTank(inv.getWaterTank(), new Vector3(0, .5f, 0), new Vector3(.155f, 0, .135f), new Vector3(0.18f, 0.0625f, -0.045f), tankTop);
+        renderFluidInTank(inv.getWaterTank(), new Vec3d(0, .5f, 0), new Vec3d(.155f, 0, .135f), new Vec3d(0.18f, 0.0625f, -0.045f), tankTop);
         GL11.glPopMatrix();
 
     }

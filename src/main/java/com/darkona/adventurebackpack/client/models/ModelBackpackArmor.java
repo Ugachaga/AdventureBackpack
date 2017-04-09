@@ -1,13 +1,15 @@
 package com.darkona.adventurebackpack.client.models;
 
-import codechicken.lib.vec.Vector3;
 import com.darkona.adventurebackpack.client.render.RendererStack;
 import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.config.ConfigHandler;
 import com.darkona.adventurebackpack.inventory.InventoryBackpack;
+
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.Vec3d;
+
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
@@ -296,9 +298,9 @@ public class ModelBackpackArmor extends ModelWearable
         GL11.glPushMatrix();
         GL11.glTranslatef(bipedBody.offsetX + 0, bipedBody.offsetY + 0.2F, bipedBody.offsetZ + 0.3f);
 
-        renderFluidInTank(backpack.getLeftTank(), new Vector3(0f,.5f,0f), new Vector3(.17f,0,.17f), new Vector3(-.17f, .05f, .2f), tankLeftTop);
+        renderFluidInTank(backpack.getLeftTank(), new Vec3d(0f,.5f,0f), new Vec3d(.17f,0,.17f), new Vec3d(-.17f, .05f, .2f), tankLeftTop);
 
-        renderFluidInTank(backpack.getRightTank(), new Vector3(0f,.5f,0f), new Vector3(.17f,0,.17f), new Vector3(.41f, .05f, .2f), tankRightTop);
+        renderFluidInTank(backpack.getRightTank(), new Vec3d(0f,.5f,0f), new Vec3d(.17f,0,.17f), new Vec3d(.41f, .05f, .2f), tankRightTop);
         GL11.glPopMatrix();
     }
 

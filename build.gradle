@@ -34,16 +34,6 @@ repositories
     maven { url "http://chickenbones.net/maven/" }
 }
 
-dependencies
-{
-    compile group: "codechicken",
-            name: "CodeChickenLib",
-            version: "1.10.2-2.5.7.241",
-            classifier: "deobf"
-
-    compile project(":Baubles")
-}
-
 processResources
 {
     // this will ensure that this task is redone when the versions change.
