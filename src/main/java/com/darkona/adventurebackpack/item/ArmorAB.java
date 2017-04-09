@@ -47,4 +47,9 @@ public class ArmorAB extends ItemArmor
 		AdventureBackpack.proxy.registerItemRenderer(this, 0, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
 	}
 
+    public void setCustomModelResourceLocation()
+    {
+        AdventureBackpack.proxy.setCustomModelResourceLocation(this, 0, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+    }
+
 }

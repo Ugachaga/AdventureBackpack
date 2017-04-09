@@ -6,12 +6,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.Entity;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
 
 import com.darkona.adventurebackpack.AdventureBackpack;
+import com.darkona.adventurebackpack.reference.ModInfo;
 import com.darkona.adventurebackpack.client.models.ModelAdventureHat;
 /**
  * Created by Darkona on 11/10/2014.
@@ -70,13 +72,15 @@ public class ItemAdventureHat extends ArmorAB
     }
 
     @Override
+    public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type)
+    {
+            return ModInfo.MOD_ID + ":"  +"textures/models/armor/adventureHat.png";
+
+    }
+
+    @Override
     public boolean getIsRepairable(ItemStack par1ItemStack, ItemStack par2ItemStack)
     {
         return par2ItemStack.isItemEqual(new ItemStack(Items.LEATHER));
     }
-
-    @Override
-    public void registerItemModel() {
-		AdventureBackpack.proxy.registerCustomItemRenderer(this, 0, getUnwrappedUnlocalizedName(getUnlocalizedName()));
-	}
 }

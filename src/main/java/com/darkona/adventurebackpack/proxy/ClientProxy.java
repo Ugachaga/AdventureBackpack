@@ -147,14 +147,14 @@ public class ClientProxy implements IProxy
     }
 
     @Override
-    public void registerItemRenderer(Item item, int meta, String id) {
+    public void registerItemRenderer(Item item, int meta, String id)
+    {
         ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(ModInfo.MOD_ID + ":" + id, "inventory"));
     }
 
-    public void registerCustomItemRenderer(Item item, int meta, String id) {
+    public void setCustomModelResourceLocation(Item item, int meta, String id)
     {
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation(ModInfo.MOD_ID + ":" + id, "inventory"));
+        ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(ModInfo.MOD_ID + ":" + id));
 	}
-}
 
 }

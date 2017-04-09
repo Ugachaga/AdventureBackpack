@@ -13,6 +13,9 @@ import com.darkona.adventurebackpack.item.ItemHose;
 import com.darkona.adventurebackpack.item.ItemJuiceBottle;
 import com.darkona.adventurebackpack.item.ItemMachete;
 import com.darkona.adventurebackpack.item.ItemPistonBoots;
+import com.darkona.adventurebackpack.reference.ModInfo;
+
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -55,7 +58,7 @@ public class ModItems
 
         machete.registerItemModel();
         cwxbow.registerItemModel();
-        adventureHat.registerItemModel();
+        adventureHat.setCustomModelResourceLocation();
         adventureSuit.registerItemModel();
         adventurePants.registerItemModel();
         pistonBoots.registerItemModel();
