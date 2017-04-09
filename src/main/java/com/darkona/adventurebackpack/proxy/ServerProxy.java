@@ -111,6 +111,9 @@ public class ServerProxy implements IProxy
     public void registerItemRenderer(Item item, int meta, String id)
     {
     }
-    
+
+     public void registerCustomItemRenderer(Item item, int meta, String id)
+     {
+     }
 
 }

@@ -4,7 +4,9 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
@@ -75,8 +77,6 @@ public class ItemAdventureHat extends ArmorAB
 
     @Override
     public void registerItemModel() {
-		AdventureBackpack.proxy.registerItemRenderer(this, 0, "adventureHat");
+		AdventureBackpack.proxy.registerCustomItemRenderer(this, 0, getUnwrappedUnlocalizedName(getUnlocalizedName()));
 	}
-
-
 }

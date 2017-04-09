@@ -52,6 +52,7 @@ public class ModItems
         GameRegistry.registerItem(pistonBoots, "pistonBoots");
         GameRegistry.registerItem(MELON_JUICE_BOTTLE, "melonJuiceBottle");
 
+
         machete.registerItemModel();
         cwxbow.registerItemModel();
         adventureHat.registerItemModel();
