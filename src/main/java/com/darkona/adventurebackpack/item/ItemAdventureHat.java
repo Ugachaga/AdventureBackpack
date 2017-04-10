@@ -28,7 +28,6 @@ public class ItemAdventureHat extends ArmorAB
         setUnlocalizedName("adventureHat");
     }
 
-
     @Override
     @SideOnly(Side.CLIENT)
     public ModelBiped getArmorModel(EntityLivingBase entity, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped defaultModel)
