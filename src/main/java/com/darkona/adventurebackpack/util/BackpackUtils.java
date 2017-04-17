@@ -6,6 +6,7 @@ import java.util.TimerTask;
 import com.darkona.adventurebackpack.events.WearableEvent;
 import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
 
+import ibxm.Player;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -30,7 +31,7 @@ public class BackpackUtils
     public static reasons equipWearable(ItemStack backpack, EntityPlayer player)
     {
         BackpackProperty prop = BackpackProperty.get(player);
-        if (prop.getWearable() == null)
+        if (prop.getWearable() == null && player != null)
         {
             player.openContainer.onContainerClosed(player);
             prop.setWearable(backpack.copy());

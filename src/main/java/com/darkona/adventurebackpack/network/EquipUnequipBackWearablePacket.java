@@ -31,10 +31,10 @@ public class EquipUnequipBackWearablePacket implements IMessageHandler<EquipUneq
             if (message.action == EQUIP_WEARABLE)
             {
                 //before reenable make sure to takes into account the delay in unequipWearable()
-                /*if (message.force && Wearing.isWearingWearable(player))
+                if (message.force && Wearing.isWearingWearable(player))
                 {
                     BackpackUtils.unequipWearable(player);
-                } else */if (Wearing.isHoldingWearable(player) && !Wearing.isWearingWearable(player))
+                } else if (Wearing.isHoldingWearable(player) && !Wearing.isWearingWearable(player))
                 {
                     if (BackpackUtils.equipWearable(player.getHeldItemMainhand(), player) == BackpackUtils.reasons.SUCCESFUL)
                     {

@@ -82,11 +82,12 @@ public class BackpackProperty //implements IExtendedEntityProperties
         //player.registerExtendedProperties(PROPERTY_NAME, new BackpackProperty(player));
     }
 
-    public static BackpackProperty get(EntityPlayer player)
+    public static BackpackProperty get(Entity player)
     {
-        //TODO: update to capabilityes
-        //return (BackpackProperty) player.getExtendedProperties(PROPERTY_NAME);
-        return new BackpackProperty(player);
+        //TODO: update to capabilities
+        //TODO: NPE
+        return (BackpackProperty) player.getExtendedProperties(PROPERTY_NAME);
+        //return new BackpackProperty(player);
     }
 
     /**

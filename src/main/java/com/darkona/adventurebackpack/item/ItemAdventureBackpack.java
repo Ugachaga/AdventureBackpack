@@ -220,7 +220,7 @@ public class ItemAdventureBackpack extends ItemAB implements IBackWearableItem
                 ModNetwork.net.sendToServer(new GUIPacket.GUImessage(GUIPacket.BACKPACK_GUI, GUIPacket.FROM_HOLDING));
             }
         }
-       return new ActionResult(EnumActionResult.PASS, itemStackIn);
+       return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
     }
 
     @Override
@@ -245,7 +245,7 @@ public class ItemAdventureBackpack extends ItemAB implements IBackWearableItem
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type)
     {
-            return ModInfo.MOD_ID + ":"  +"textures/models/armor/adventureHat.png";
+            return ModInfo.MOD_ID + ":"  +"textures/backpack/Standard.png";
 
     }
 
@@ -382,7 +382,5 @@ public class ItemAdventureBackpack extends ItemAB implements IBackWearableItem
         }
         return modelTexture;
     }
-
-
 
 }
