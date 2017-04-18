@@ -81,7 +81,7 @@ public class SlotFluid extends SlotAdventureBackpack
             }
             for (String toolID : VALID_CONTAINER_IDS)
             {
-                if (Item.itemRegistry.getNameForObject(itemCurrent).equals(toolID)) return true;
+                if (Item.REGISTRY.getNameForObject(itemCurrent).equals(toolID)) return true;
             }
 
             for (String toolName : INVALID_CONTAINER_NAMES)

@@ -16,28 +16,35 @@ import com.darkona.adventurebackpack.network.GUIPacket;
 import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
 import com.darkona.adventurebackpack.proxy.ClientProxy;
 import com.darkona.adventurebackpack.reference.BackpackNames;
+import com.darkona.adventurebackpack.reference.ModInfo;
 import com.darkona.adventurebackpack.util.BackpackUtils;
 import com.darkona.adventurebackpack.util.Resources;
 import com.darkona.adventurebackpack.util.Utils;
 import com.darkona.adventurebackpack.util.Wearing;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 /**
  * Created on 12/10/2014
@@ -127,59 +134,59 @@ public class ItemAdventureBackpack extends ItemAB implements IBackWearableItem
         BackpackNames.setBackpackColorNameFromDamage(stack, stack.getItemDamage());
     }
 
-    public boolean placeBackpack(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, boolean from)
+    public boolean placeBackpack(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, boolean from)
     {
         if (!stack.hasTagCompound()) stack.setTagCompound(new NBTTagCompound());
-        if (!player.canPlayerEdit(x, y, z, side, stack)) return false;
-        if (!stack.stackTagCompound.hasKey("colorName") || stack.stackTagCompound.getString("colorName").isEmpty())
+        if (!player.canPlayerEdit(pos, side, stack)) return false;
+        if (!stack.getTagCompound().hasKey("colorName") || stack.getTagCompound().getString("colorName").isEmpty())
         {
-            stack.stackTagCompound.setString("colorName", "Standard");
+            stack.getTagCompound().setString("colorName", "Standard");
         }
 
         // world.spawnEntityInWorld(new EntityLightningBolt(world, x, y, z));
         BlockAdventureBackpack backpack = ModBlocks.blockBackpack;
 
-        if (y <= 0 || y >= world.getHeight())
+        if (pos.getY() <= 0 || pos.getY() >= world.getHeight())
         {
             return false;
         }
-        if (backpack.canPlaceBlockOnSide(world, x, y, z, side))
+        if (backpack.canPlaceBlockOnSide(world, pos, side))
         {
-            if (world.getBlock(x, y, z).getMaterial().isSolid())
+            if (world.getBlockState(pos).getMaterial().isSolid())
             {
                 switch (side)
                 {
-                    case 0:
-                        --y;
+                    case DOWN:
+                        pos.down();
                         break;
-                    case 1:
-                        ++y;
+                    case UP:
+                        pos.up();
                         break;
-                    case 2:
-                        --z;
+                    case SOUTH:
+                        pos.south();
                         break;
-                    case 3:
-                        ++z;
+                    case EAST:
+                        pos.east();
                         break;
-                    case 4:
-                        --x;
+                    case WEST:
+                        pos.west();
                         break;
-                    case 5:
-                        ++x;
+                    case NORTH:
+                        pos.north();
                         break;
                 }
             }
-            if (y <= 0 || y >= world.getHeight())
+            if (pos.getY() <= 0 || pos.getY() >= world.getHeight())
             {
                 return false;
             }
-            if (backpack.canPlaceBlockAt(world, x, y, z))
+            if (backpack.canPlaceBlockAt(world, pos))
             {
-                if (world.setBlock(x, y, z, ModBlocks.blockBackpack))
+                if (world.setBlockState(pos, ModBlocks.blockBackpack.getDefaultState()))
                 {
-                    backpack.onBlockPlacedBy(world, x, y, z, player, stack);
-                    world.playSoundAtEntity(player, BlockAdventureBackpack.soundTypeCloth.getStepResourcePath(), 0.5f, 1.0f);
-                    ((TileAdventureBackpack) world.getTileEntity(x, y, z)).loadFromNBT(stack.stackTagCompound);
+                    backpack.onBlockPlacedBy(world, pos, ModBlocks.blockBackpack.getDefaultState(), player, stack);
+                    player.playSound(SoundEvents.BLOCK_CLOTH_PLACE, 0.5f, 1.0f);
+                    ((TileAdventureBackpack) world.getTileEntity(pos)).loadFromNBT(stack.getTagCompound());
                     if (from)
                     {
                         player.inventory.decrStackSize(player.inventory.currentItem, 1);
@@ -197,23 +204,23 @@ public class ItemAdventureBackpack extends ItemAB implements IBackWearableItem
     }
 
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
+    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-        return player.canPlayerEdit(x, y, z, side, stack) && placeBackpack(stack, player, world, x, y, z, side, true);
+        return (player.canPlayerEdit(pos, side, stack) && placeBackpack(stack, player, world, pos, side, true)) ? EnumActionResult.SUCCESS : EnumActionResult.FAIL;
     }
 
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
+    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World world, EntityPlayer player, EnumHand hand)
     {
-        MovingObjectPosition mop = getMovingObjectPositionFromPlayer(world, player, true);
-        if (mop == null || mop.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY)
+        RayTraceResult mop = rayTrace(world, player, true);
+        if (mop == null || mop.typeOfHit == RayTraceResult.Type.ENTITY)
         {
             if (world.isRemote)
             {
                 ModNetwork.net.sendToServer(new GUIPacket.GUImessage(GUIPacket.BACKPACK_GUI, GUIPacket.FROM_HOLDING));
             }
         }
-        return stack;
+       return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
     }
 
     @Override
@@ -230,24 +237,16 @@ public class ItemAdventureBackpack extends ItemAB implements IBackWearableItem
 
     @SideOnly(Side.CLIENT)
     @Override
-    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack stack, int armorSlot)
+    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default)
     {
         return new ModelBackpackArmor();
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type)
+    public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type)
     {
-        String modelTexture;
-        if (BackpackNames.getBackpackColorName(stack).equals("Standard"))
-        {
-            modelTexture = Resources.backpackTextureFromString(AdventureBackpack.instance.Holiday).toString();
-        } else
-        {
-            modelTexture = Resources.backpackTexturesStringFromColor(stack);
-        }
-        return modelTexture;
+            return ModInfo.MOD_ID + ":"  +"textures/backpack/Standard.png";
+
     }
 
     @Override
@@ -303,7 +302,7 @@ public class ItemAdventureBackpack extends ItemAB implements IBackWearableItem
 
         if (Wearing.isWearingTheRightBackpack(player, "Creeper"))
         {
-            player.worldObj.createExplosion(player, player.posX, player.posY, player.posZ, 4.0F, false);
+            player.world.createExplosion(player, player.posX, player.posY, player.posZ, 4.0F, false);
         }
 
         if (Utils.isSoulBounded(stack))
@@ -313,7 +312,7 @@ public class ItemAdventureBackpack extends ItemAB implements IBackWearableItem
         {
             if (!tryPlace(world, player, stack))
             {
-                player.dropPlayerItemWithRandomChoice(stack, false);
+                player.dropItem(stack, false);
             }
         }
 
@@ -335,10 +334,10 @@ public class ItemAdventureBackpack extends ItemAB implements IBackWearableItem
         {
             if (Y + shiftY >= 1)
             {
-                ChunkCoordinates spawn = Utils.getNearestEmptyChunkCoordinatesSpiral(world, X, Z, X, Y + shiftY, Z, 6, true, 1, (byte) 0, false);
+                ChunkPos spawn = Utils.getNearestEmptyChunkCoordinatesSpiral(world, X, Z, X, Y + shiftY, Z, 6, true, 1, (byte) 0, false);
                 if (spawn != null)
                 {
-                    return placeBackpack(backpack, player, world, spawn.posX, spawn.posY, spawn.posZ, ForgeDirection.UP.ordinal(), false);
+                    return placeBackpack(backpack, player, world, new BlockPos(spawn.getXCenter(), Y, spawn.getZCenter()), EnumFacing.UP, false);
                 }
             }
         }
@@ -383,4 +382,5 @@ public class ItemAdventureBackpack extends ItemAB implements IBackWearableItem
         }
         return modelTexture;
     }
+
 }

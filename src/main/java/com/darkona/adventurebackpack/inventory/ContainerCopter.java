@@ -4,6 +4,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.ClickType;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -26,7 +28,7 @@ public class ContainerCopter extends Container implements IWearableContainer
     {
         this.inventory = copterPack;
         makeSlots(player.inventory);
-        inventory.openInventory();
+        inventory.openInventory(player);
         this.player = player;
         this.wearing = wearing;
     }
@@ -77,9 +79,9 @@ public class ContainerCopter extends Container implements IWearableContainer
         super.onContainerClosed(player);
         if (wearing)
         {
-            this.crafters.remove(player);
+            this.setCanCraft(player, false);
         }
-        if (!player.worldObj.isRemote)
+        if (!player.world.isRemote)
         {
             for (int i = 0; i < inventory.getSizeInventory(); i++)
             {
@@ -87,20 +89,20 @@ public class ContainerCopter extends Container implements IWearableContainer
                 if (itemstack != null)
                 {
                     inventory.setInventorySlotContents(i, null);
-                    player.dropPlayerItemWithRandomChoice(itemstack, false);
+                    player.dropItem(itemstack, false);
                 }
             }
         }
     }
 
     @Override
-    public ItemStack slotClick(int slot, int button, int flag, EntityPlayer player)
+    public ItemStack slotClick(int slot, int button, ClickType clickTypeIn, EntityPlayer player)
     {
-        if (slot >= 0 && getSlot(slot) != null && getSlot(slot).getStack() == player.getHeldItem() && !wearing)
+        if (slot >= 0 && getSlot(slot) != null && getSlot(slot).getStack() == player.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) && !wearing)
         {
             return null;
         }
-        return super.slotClick(slot, button, flag, player);
+        return super.slotClick(slot, button, clickTypeIn, player);
     }
 
     @Override
@@ -159,6 +161,6 @@ public class ContainerCopter extends Container implements IWearableContainer
     @Override
     public void refresh()
     {
-        inventory.openInventory();
+        inventory.openInventory(player);
     }
 }

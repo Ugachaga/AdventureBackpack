@@ -8,10 +8,13 @@ import com.darkona.adventurebackpack.develop.DeveloperJoining;
 import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
 import com.darkona.adventurebackpack.util.LogHelper;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
@@ -105,8 +108,12 @@ public class ServerProxy implements IProxy
     }
 
     @Override
-    public void Capes()
+    public void registerItemRenderer(Item item, int meta, String id)
     {
-        // TODO Auto-generated method stub
     }
+
+     public void setCustomModelResourceLocation(Item item, int meta, String id)
+     {
+     }
+
 }

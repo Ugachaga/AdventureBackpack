@@ -28,13 +28,13 @@ public class ModFluids
         mushroomStew = new FluidMushroomStew();
 
         FluidRegistry.registerFluid(milk);
-        FluidContainerRegistry.registerFluidContainer(milk, new ItemStack(Items.milk_bucket), FluidContainerRegistry.EMPTY_BUCKET);
+        FluidContainerRegistry.registerFluidContainer(milk, new ItemStack(Items.MILK_BUCKET), FluidContainerRegistry.EMPTY_BUCKET);
 
         FluidRegistry.registerFluid(melonJuice);
-        FluidContainerRegistry.registerFluidContainer(melonJuice, new ItemStack(ModItems.melonJuiceBottle), FluidContainerRegistry.EMPTY_BOTTLE);
+        FluidContainerRegistry.registerFluidContainer(melonJuice, new ItemStack(ModItems.MELON_JUICE_BOTTLE), FluidContainerRegistry.EMPTY_BOTTLE);
 
         FluidRegistry.registerFluid(mushroomStew);
-        FluidContainerRegistry.registerFluidContainer(mushroomStew, new ItemStack(Items.mushroom_stew), new ItemStack(Items.bowl));
+        FluidContainerRegistry.registerFluidContainer(mushroomStew, new ItemStack(Items.MUSHROOM_STEW), new ItemStack(Items.BOWL));
 
         GeneralReference.init();
     }

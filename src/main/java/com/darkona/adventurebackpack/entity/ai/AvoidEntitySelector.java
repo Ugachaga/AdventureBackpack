@@ -1,9 +1,9 @@
 package com.darkona.adventurebackpack.entity.ai;
 
-import net.minecraft.command.IEntitySelector;
+// /import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 
-public class AvoidEntitySelector implements IEntitySelector
+public class AvoidEntitySelector //implements IEntitySelector
 {
 
 
@@ -13,7 +13,6 @@ public class AvoidEntitySelector implements IEntitySelector
     {
         this.entityAvoiderAI = par1EntityAIAvoidEntity;
     }
-
 
     /**
      * Return whether the specified com.darkona.adventurebackpack.entity is applicable to this filter.

@@ -4,8 +4,7 @@ import org.apache.logging.log4j.Level;
 
 import com.darkona.adventurebackpack.reference.ModInfo;
 
-import cpw.mods.fml.common.FMLLog;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraftforge.fml.common.FMLLog;
 
 /**
  * Created by Darkona on 12/10/2014.
@@ -21,11 +20,6 @@ public class LogHelper
     public static String print3DCoords(int x, int y, int z)
     {
         return "Coords: X= " + x + ", Y= " + y + ", Z=" + z;
-    }
-
-    public static String print3DCoords(ChunkCoordinates coords)
-    {
-        return print3DCoords(coords.posX, coords.posY, coords.posZ);
     }
 
     public static void all(Object object)

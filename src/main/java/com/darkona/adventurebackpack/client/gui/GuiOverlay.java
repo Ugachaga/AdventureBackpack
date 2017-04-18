@@ -3,35 +3,37 @@ package com.darkona.adventurebackpack.client.gui;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
+//import codechicken.lib.texture.TextureUtils;
 
 import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.config.ConfigHandler;
-import com.darkona.adventurebackpack.inventory.IInventoryTanks;
-import com.darkona.adventurebackpack.item.ItemHose;
-import com.darkona.adventurebackpack.reference.ModInfo;
-import com.darkona.adventurebackpack.util.LogHelper;
 import com.darkona.adventurebackpack.util.Wearing;
+import com.darkona.adventurebackpack.inventory.IInventoryTanks;
+import com.darkona.adventurebackpack.reference.ModInfo;
+import com.darkona.adventurebackpack.item.ItemHose;
+import com.darkona.adventurebackpack.util.LogHelper;
 
-import codechicken.lib.render.TextureUtils;
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
 import net.minecraft.client.Minecraft;
+//import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.fluids.FluidStack;
+//import net.minecraft.potion.PotionType;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraftforge.fluids.FluidTank;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 /**
  * Created on 09/01/2015
@@ -43,18 +45,17 @@ public class GuiOverlay extends Gui
     private Minecraft mc;
     private int screenWidth;
     private int screenHeight;
-    protected static RenderItem itemRender = new RenderItem();
+    //protected static RenderItem itemRender = new RenderItem();
     protected FontRenderer fontRendererObj;
     ScaledResolution resolution;
-    @SuppressWarnings("static-access")
+
 	public GuiOverlay(Minecraft mc)
     {
         super();
 
         // We need this to invoke the render engine.
         this.mc = mc;
-        this.itemRender.renderWithColor = false;
-        this.fontRendererObj = mc.fontRenderer;
+        this.fontRendererObj = mc.getRenderManager().getFontRenderer();
     }
 
     private static final int BUFF_ICON_SIZE = 18;
@@ -63,15 +64,14 @@ public class GuiOverlay extends Gui
     private static final int BUFF_ICON_BASE_V_OFFSET = 198;
     private static final int BUFF_ICONS_PER_ROW = 8;
 
-
     @SubscribeEvent(priority = EventPriority.NORMAL)
     public void onRenderExperienceBar(RenderGameOverlayEvent.Post event)
     {
-        if(event.type != RenderGameOverlayEvent.ElementType.EXPERIENCE)
+        if(event.getType() != RenderGameOverlayEvent.ElementType.EXPERIENCE)
         {
             return;
         }
-        resolution = new ScaledResolution(this.mc, this.mc.displayWidth, this.mc.displayHeight);
+        resolution = new ScaledResolution(this.mc);
         screenWidth = resolution.getScaledWidth();
         screenHeight = resolution.getScaledHeight();
         if(ConfigHandler.statusOverlay)
@@ -90,7 +90,7 @@ public class GuiOverlay extends Gui
             }
 
             @SuppressWarnings("rawtypes")
-			Collection collection = this.mc.thePlayer.getActivePotionEffects();
+			Collection collection = this.mc.player.getActivePotionEffects();
             if (!collection.isEmpty())
             {
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -98,11 +98,11 @@ public class GuiOverlay extends Gui
                 this.mc.renderEngine.bindTexture(new ResourceLocation("textures/gui/container/inventory.png"));
 
                 for (@SuppressWarnings("rawtypes")
-                	Iterator iterator = this.mc.thePlayer.getActivePotionEffects()
+                	Iterator iterator = this.mc.player.getActivePotionEffects()
                         .iterator(); iterator.hasNext(); xPos += xStep)
                 {
                     PotionEffect potioneffect = (PotionEffect) iterator.next();
-                    Potion potion = Potion.potionTypes[potioneffect.getPotionID()];
+                    Potion potion = potioneffect.getPotion();
 
                     if (potion.hasStatusIcon())
                     {
@@ -118,12 +118,12 @@ public class GuiOverlay extends Gui
 
         if(ConfigHandler.tanksOverlay)
         {
-            EntityPlayer player= mc.thePlayer;
+            EntityPlayer player= mc.player;
             if(Wearing.isWearingWearable(player))
             {
                 IInventoryTanks inv = Wearing.getWearableInv(player);
                 assert inv != null;
-                inv.openInventory();
+                inv.openInventory(player);
 
                 int textureHeight = 23;
                 int textureWidth = 10;
@@ -161,9 +161,9 @@ public class GuiOverlay extends Gui
                     int[] xStart = {xPos, xPos + textureWidth + 1};
                     int[] yStart = {yPos, yPos};
                     short tank = -1;
-                    if (player.getHeldItem() != null && player.getHeldItem().getItem() instanceof ItemHose)
+                    if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() instanceof ItemHose)
                     {
-                        tank = (short) (ItemHose.getHoseTank(player.getHeldItem()));
+                        tank = (short) (ItemHose.getHoseTank(player.getHeldItemMainhand()));
                     }
                     if (tank > -1)
                     {
@@ -204,8 +204,8 @@ public class GuiOverlay extends Gui
         {
             try
             {
-                IIcon icon = fluid.getFluid().getStillIcon();
-                TextureUtils.bindAtlas(fluid.getFluid().getSpriteNumber());
+                //IIcon icon = fluid.getFluid().getStillIcon();
+                //TextureUtils.bindAtlas(fluid.getFluid().getSpriteNumber());
                 int top = startY + height - (fluid.amount / liquidPerPixel);
                 for (int j = startY + height - 1; j >= top; j--)
                 {
@@ -219,7 +219,7 @@ public class GuiOverlay extends Gui
                         {
                             GL11.glColor4f(1, 1, 1, 1);
                         }
-                        GuiTank.drawFluidPixelFromIcon(i, j, icon, 1, 1, 0, 0, 0, 0,1);
+                        //GuiTank.drawFluidPixelFromIcon(i, j, icon, 1, 1, 0, 0, 0, 0,1);
                         GL11.glPopMatrix();
                     }
                 }
@@ -235,12 +235,13 @@ public class GuiOverlay extends Gui
         if(stack == null)return;
         GL11.glTranslatef(0.0F, 0.0F, 32.0F);
         this.zLevel = 200.0F;
-        itemRender.zLevel = 200.0F;
+        //itemRender.zLevel = 200.0F;
         FontRenderer font = null;
         font = stack.getItem().getFontRenderer(stack);
         if (font == null) font = fontRendererObj;
-        itemRender.renderItemIntoGUI(font,mc.getTextureManager(),stack,x,y);
+        //itemRender.renderItemIntoGUI(font,mc.getTextureManager(),stack,x,y);
         this.zLevel = 0.0F;
-        itemRender.zLevel = 0.0F;
+        //yitemRender.zLevel = 0.0F;
     }
+
 }

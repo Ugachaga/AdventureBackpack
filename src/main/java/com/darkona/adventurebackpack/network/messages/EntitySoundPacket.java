@@ -3,9 +3,9 @@ package com.darkona.adventurebackpack.network.messages;
 import com.darkona.adventurebackpack.client.ClientActions;
 import com.darkona.adventurebackpack.init.ModNetwork;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -32,7 +32,7 @@ public class EntitySoundPacket implements IMessageHandler<EntitySoundPacket.Mess
     {
         if (ctx.side.isClient())
         {
-            ClientActions.playSoundAtEntity(Minecraft.getMinecraft().theWorld.getEntityByID(message.entityID), message.soundCode);
+            ClientActions.playSoundAtEntity(Minecraft.getMinecraft().world.getEntityByID(message.entityID), message.soundCode);
         } else
         {
             EntityPlayer player = ctx.getServerHandler().playerEntity;

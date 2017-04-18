@@ -1,6 +1,5 @@
 package com.darkona.adventurebackpack.client.models;
 
-import codechicken.lib.vec.Vector3;
 import com.darkona.adventurebackpack.inventory.InventoryCopterPack;
 import com.darkona.adventurebackpack.item.ItemCopterPack;
 import com.darkona.adventurebackpack.util.Utils;
@@ -8,6 +7,8 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.Vec3d;
+
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
@@ -45,7 +46,6 @@ public class ModelCopterPack extends ModelWearable
     public ModelRenderer EscapeFilter;
     private ItemStack copterPack;
 
-    @SuppressWarnings("unchecked")
     private void init()
     {
         this.textureWidth = 64;
@@ -195,11 +195,11 @@ public class ModelCopterPack extends ModelWearable
     private void renderCopterPack(Entity entity, float scale)
     {
         InventoryCopterPack copterInv = new InventoryCopterPack(this.copterPack);
-        copterInv.openInventory();
+        //copterInv.openInventory();
         Axis.isHidden = true;
-        if (copterPack != null && copterPack.stackTagCompound != null && copterPack.stackTagCompound.hasKey("status"))
+        if (copterPack != null && copterPack.getTagCompound() != null && copterPack.getTagCompound().hasKey("status"))
         {
-            if (copterPack.stackTagCompound.getByte("status") != ItemCopterPack.OFF_MODE)
+            if (copterPack.getTagCompound().getByte("status") != ItemCopterPack.OFF_MODE)
             {
                 Axis.isHidden = false;
                 int degrees;
@@ -216,7 +216,7 @@ public class ModelCopterPack extends ModelWearable
         }
         this.Base.render(scale);
         this.Axis.render(scale);
-        renderFluidInTank(copterInv.getFuelTank(), new Vector3(0, .25f, 0), new Vector3(.25f, 0, .25f), new Vector3(0f, 0.0625f, 0.0f), TankTop);
+        renderFluidInTank(copterInv.getFuelTank(), new Vec3d(0, .25f, 0), new Vec3d(.25f, 0, .25f), new Vec3d(0f, 0.0625f, 0.0f), TankTop);
     }
 
    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5, ItemStack stack)

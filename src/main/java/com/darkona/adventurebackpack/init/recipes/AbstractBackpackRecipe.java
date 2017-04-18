@@ -69,20 +69,19 @@ public class AbstractBackpackRecipe implements IRecipe
 
     public HashMap<String, ItemStack[]> recipes;
 
-
     public ItemStack makeBackpack(ItemStack backpackIn, String colorName)
     {
         if (backpackIn == null) return null;
 
         ItemStack newBackpack = backpackIn.copy(); //new ItemStack(ModItems.adventureBackpack,1);
-        if (backpackIn.stackTagCompound == null)
+        if (backpackIn.getTagCompound() == null)
         {
             backpackIn.setTagCompound(new NBTTagCompound());
-            backpackIn.stackTagCompound.setString("colorName", "Standard");
+            backpackIn.getTagCompound().setString("colorName", "Standard");
         }
         NBTTagCompound compound = (NBTTagCompound) backpackIn.getTagCompound().copy();
         newBackpack.setTagCompound(compound);
-        newBackpack.stackTagCompound.setString("colorName", colorName);
+        newBackpack.getTagCompound().setString("colorName", colorName);
         return newBackpack;
     }
 
@@ -163,9 +162,20 @@ public class AbstractBackpackRecipe implements IRecipe
     {
         ItemStack backpack = new ItemStack(ModItems.adventureBackpack, 1);
         backpack.setTagCompound(new NBTTagCompound());
-        backpack.stackTagCompound.setString("colorName", "Standard");
+        backpack.getTagCompound().setString("colorName", "Standard");
         return backpack;
     }
 
+    public ItemStack[] getRemainingItems(InventoryCrafting inv)
+    {
+        ItemStack[] aitemstack = new ItemStack[inv.getSizeInventory()];
 
+        for (int i = 0; i < aitemstack.length; ++i)
+        {
+            ItemStack itemstack = inv.getStackInSlot(i);
+            aitemstack[i] = net.minecraftforge.common.ForgeHooks.getContainerItem(itemstack);
+        }
+
+        return aitemstack;
+    }
 }

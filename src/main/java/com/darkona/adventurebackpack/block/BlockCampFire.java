@@ -3,20 +3,17 @@ package com.darkona.adventurebackpack.block;
 import java.util.Random;
 
 import com.darkona.adventurebackpack.CreativeTabAB;
-import com.darkona.adventurebackpack.reference.ModInfo;
-import com.darkona.adventurebackpack.util.Utils;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -27,32 +24,14 @@ import net.minecraft.world.World;
  */
 public class BlockCampFire extends BlockContainer
 {
-    private IIcon icon;
+   // private IIcon icon;
 
     public BlockCampFire()
     {
-        super(Material.rock);
+        super(Material.ROCK);
         this.setTickRandomly(true);
         this.setCreativeTab(CreativeTabAB.ADVENTURE_BACKPACK_CREATIVE_TAB);
 
-    }
-
-    private void func_149978_e()
-    {
-        this.setBlockBounds(0.2F, 0.0F, 0.2F, 0.8F, 0.15F, 0.8F);
-    }
-
-    @SuppressWarnings("unused")
-    private void blockBoundsForRender()
-    {
-        this.func_149978_e();
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister)
-    {
-        icon = iconRegister.registerIcon(ModInfo.MOD_ID + ":campFire");
     }
 
     @Override
@@ -73,133 +52,43 @@ public class BlockCampFire extends BlockContainer
         return 30;
     }
 
-    @Override
-    public boolean isOpaqueCube()
-    {
-        return false;
-    }
-
-    /**
-     * If this block doesn't render as an ordinary block it will return False (examples: signs, buttons, stairs, etc)
-     */
-    @Override
-    public boolean renderAsNormalBlock()
-    {
-        return false;
-    }
-
-    @Override
-    public int getRenderType()
-    {
-        return -1;
-    }
-
-    @Override
-    public boolean isNormalCube()
-    {
-        return false;
-    }
-
-    /**
-     * Indicate if a material is a normal solid opaque cube
-     */
-    @Override
-    public boolean isBlockNormalCube()
-    {
-        return false;
-    }
-
     /**
      * A randomly called display update to be able to add particles or other items for display
      */
     @SideOnly(Side.CLIENT)
     @Override
-    public void randomDisplayTick(World world, int posX, int posY, int posZ, Random rnd)
+    public void randomDisplayTick(IBlockState stateIn, World world, BlockPos pos, Random rand)
     {
-        float rndX = posX + rnd.nextFloat();
-        float rndY = (posY + 1) - rnd.nextFloat() * 0.1F;
-        float rndZ = posZ + rnd.nextFloat();
-        world.spawnParticle("largesmoke", rndX, rndY, rndZ, 0.0D, 0.0D, 0.0D);
+        double rndX = pos.getX() + rand.nextFloat();
+        double rndY = (pos.getY() + 1) - rand.nextFloat() * 0.1F;
+        double rndZ = pos.getZ() + rand.nextFloat();
+        world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, rndX, rndY, rndZ, 0.0D, 0.0D, 0.0D);
         for (int i = 0; i < 4; i++)
         {
-            rndX = posX + 0.5f - (float) rnd.nextGaussian() * 0.08f;
-            rndY = (float) (posY + 1f - Math.cos((float) rnd.nextGaussian() * 0.1f));
-            rndZ = posZ + 0.5f - (float) rnd.nextGaussian() * 0.08f;
-            //world.spawnParticle("flame", posX+Math.sin(i/4), posY, posZ+Math.cos(i/4), 0.0D, 0.0D, 0.0D);
-            world.spawnParticle("flame", rndX, rndY + 0.16, rndZ, 0.0D, 0.0D, 0.0D);
-        }
+            rndX = pos.getX() + 0.5f - (double) rand.nextGaussian() * 0.08f;
+            rndY = (double) (pos.getY() + 1f - Math.cos((double) rand.nextGaussian() * 0.1f));
+            rndZ = pos.getX() + 0.5f - (double) rand.nextGaussian() * 0.08f;
 
+            world.spawnParticle(EnumParticleTypes.FLAME, rndX, rndY + 0.16, rndZ, 0.0D, 0.0D, 0.0D);
+        }
     }
 
     @Override
-    public TileEntity createTileEntity(World world, int metadata)
+    public TileEntity createTileEntity(World world, IBlockState state)
     {
         return new TileCampfire();
     }
 
     @Override
-    public boolean hasTileEntity(int meta)
+    public boolean hasTileEntity(IBlockState state)
     {
         return true;
     }
 
     @Override
-    public int getLightValue(IBlockAccess world, int x, int y, int z)
+    public int getLightValue(IBlockState state)
     {
         return 11;
-    }
-
-    @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess blockAccess, int x, int y, int z)
-    {
-        this.setBlockBounds(0.2F, 0.0F, 0.2F, 0.8F, 0.15F, 0.8F);
-    }
-
-    /**
-     * Returns a bounding box from the pool of bounding boxes (this means this box can change after the pool has been
-     * cleared to be reused)
-     *
-     * @param p_149668_1_
-     * @param p_149668_2_
-     * @param p_149668_3_
-     * @param p_149668_4_
-     */
-    @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World p_149668_1_, int p_149668_2_, int p_149668_3_, int p_149668_4_)
-    {
-        return super.getCollisionBoundingBoxFromPool(p_149668_1_, p_149668_2_, p_149668_3_, p_149668_4_);
-    }
-
-    /**
-     * Returns the bounding box of the wired rectangular prism to render.
-     *
-     * @param p_149633_1_
-     * @param p_149633_2_
-     * @param p_149633_3_
-     * @param p_149633_4_
-     */
-    @Override
-    public AxisAlignedBB getSelectedBoundingBoxFromPool(World p_149633_1_, int p_149633_2_, int p_149633_3_, int p_149633_4_)
-    {
-        return super.getSelectedBoundingBoxFromPool(p_149633_1_, p_149633_2_, p_149633_3_, p_149633_4_);
-    }
-
-    @Override
-    public IIcon getIcon(IBlockAccess p_149673_1_, int p_149673_2_, int p_149673_3_, int p_149673_4_, int p_149673_5_)
-    {
-        return icon;
-    }
-
-    /**
-     * Gets the block's texture. Args: side, meta
-     *
-     * @param p_149691_1_
-     * @param p_149691_2_
-     */
-    @Override
-    public IIcon getIcon(int p_149691_1_, int p_149691_2_)
-    {
-        return icon;
     }
 
     /**
@@ -208,30 +97,13 @@ public class BlockCampFire extends BlockContainer
      * perform the sleeping functionality in it's activated event.
      *
      * @param world  The current world
-     * @param x      X Position
-     * @param y      Y Position
-     * @param z      Z Position
+     * @param pos    the position of the block
      * @param player The player or camera entity, null in some cases.
      * @return True to treat this as a bed
      */
     @Override
-    public boolean isBed(IBlockAccess world, int x, int y, int z, EntityLivingBase player)
+    public boolean isBed(IBlockState state, IBlockAccess world, BlockPos pos, Entity player)
     {
         return true;
-    }
-
-    @Override
-    public ChunkCoordinates getBedSpawnPosition(IBlockAccess world, int x, int y, int z, EntityPlayer player)
-    {
-        for (int i = y - 5; i <= y + 5; i++)
-        {
-            ChunkCoordinates spawn = Utils.getNearestEmptyChunkCoordinatesSpiral(world, x, z, x, i, z, 8, true, 1, (byte) 0, true);
-
-            if (spawn != null)
-            {
-                return spawn;
-            }
-        }
-        return null;
     }
 }

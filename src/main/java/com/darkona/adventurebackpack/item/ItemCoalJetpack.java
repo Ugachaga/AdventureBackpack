@@ -11,15 +11,20 @@ import com.darkona.adventurebackpack.proxy.ClientProxy;
 import com.darkona.adventurebackpack.util.Resources;
 import com.darkona.adventurebackpack.util.Utils;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -57,13 +62,13 @@ public class ItemCoalJetpack extends ItemAB implements IBackWearableItem
     }
 
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
+    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World world, EntityPlayer playerIn, EnumHand hand)
     {
         if (world.isRemote)
         {
             ModNetwork.net.sendToServer(new GUIPacket.GUImessage(GUIPacket.JETPACK_GUI, GUIPacket.FROM_HOLDING));
         }
-        return stack;
+        return new ActionResult(EnumActionResult.PASS, itemStackIn);
     }
 
     private void runFirebox(InventoryCoalJetpack inv)
@@ -107,7 +112,7 @@ public class ItemCoalJetpack extends ItemAB implements IBackWearableItem
 
     private int getBiomeMinTemp(EntityPlayer player, World world)
     {
-        BiomeDictionary.Type[] thisBiomeTypes = BiomeDictionary.getTypesForBiome(world.getBiomeGenForCoords((int) player.posX, (int) player.posZ));
+        BiomeDictionary.Type[] thisBiomeTypes = BiomeDictionary.getTypesForBiome(world.getBiome(new BlockPos(player.posX, player.posX, player.posZ)));
         for (BiomeDictionary.Type type : thisBiomeTypes)
         {
             if (type == BiomeDictionary.Type.COLD || type == BiomeDictionary.Type.SNOWY)
@@ -130,7 +135,7 @@ public class ItemCoalJetpack extends ItemAB implements IBackWearableItem
     public void onEquippedUpdate(World world, EntityPlayer player, ItemStack stack)
     {
         InventoryCoalJetpack inv = new InventoryCoalJetpack(stack);
-        inv.openInventory();
+        inv.openInventory(player);
         boolean mustFizzz = !inv.isInUse();
         int CoalConsumed = 13;
         boolean canUse = inv.getCoalTank().drain(CoalConsumed, false) != null;
@@ -152,7 +157,7 @@ public class ItemCoalJetpack extends ItemAB implements IBackWearableItem
         //Elevation
         if (world.isRemote)
         {
-            if (inv.getStatus() && canUse && Minecraft.getMinecraft().gameSettings.keyBindJump.getIsKeyPressed())
+            if (inv.getStatus() && canUse && Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown())
             {
                 inv.setInUse(true);
                 ModNetwork.net.sendToServer(new PlayerActionPacket.ActionMessage(PlayerActionPacket.JETPACK_IN_USE));
@@ -176,7 +181,7 @@ public class ItemCoalJetpack extends ItemAB implements IBackWearableItem
             {
                 inv.setInUse(false);
             }
-            player.moveFlying(player.moveStrafing, player.moveForward, 0.02f);
+            player.moveEntityWithHeading(player.moveStrafing, player.moveForward);
             if (player.fallDistance > 1)
             {
                 player.fallDistance -= 1;
@@ -188,7 +193,7 @@ public class ItemCoalJetpack extends ItemAB implements IBackWearableItem
             if (!world.isRemote) ModNetwork.sendToNearby(new EntityParticlePacket.Message(EntityParticlePacket.JETPACK_PARTICLE, player), player);
 
         }
-        inv.closeInventory();
+        inv.closeInventory(player);
     }
 
     private void runWater(InventoryCoalJetpack inv, World world, EntityPlayer player)
@@ -298,7 +303,7 @@ public class ItemCoalJetpack extends ItemAB implements IBackWearableItem
 
     @Override
     @SideOnly(Side.CLIENT)
-    public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type)
+    public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type)
     {
         String modelTexture;
         modelTexture = Resources.modelTextures("CoalJetpack").toString();

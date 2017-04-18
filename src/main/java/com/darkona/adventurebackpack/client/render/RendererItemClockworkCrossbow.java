@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
+//import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 
@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
  */
 
 
-public class RendererItemClockworkCrossbow implements IItemRenderer
+public class RendererItemClockworkCrossbow //implements IItemRenderer
 {
 
     private final ModelClockworkCrossbow model;
@@ -27,6 +27,8 @@ public class RendererItemClockworkCrossbow implements IItemRenderer
         model = new ModelClockworkCrossbow();
     }
 
+    /**
+     * TODO: rendering
     public boolean handleRenderType(ItemStack item, ItemRenderType type)
     {
         return (type != ItemRenderType.FIRST_PERSON_MAP);
@@ -139,5 +141,5 @@ public class RendererItemClockworkCrossbow implements IItemRenderer
                 break;
         }
     }
-
+    **/
 }

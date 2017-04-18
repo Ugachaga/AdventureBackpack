@@ -1,5 +1,7 @@
 package com.darkona.adventurebackpack.client.gui;
 
+import java.io.IOException;
+
 import org.lwjgl.opengl.GL11;
 
 import com.darkona.adventurebackpack.config.ConfigHandler;
@@ -76,7 +78,7 @@ public class GuiCopterPack extends GuiWithTanks
     {
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_BLEND);
-        inventory.openInventory();
+        //inventory.openInventory();
         FluidTank fuel = inventory.getFuelTank();
         fuelTank.draw(this, fuel);
 
@@ -140,7 +142,14 @@ public class GuiCopterPack extends GuiWithTanks
                 player.closeScreen();
             }
         }
-        super.mouseClicked(mouseX, mouseY, mouseButton);
+        try
+        {
+            super.mouseClicked(mouseX, mouseY, mouseButton);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -150,7 +159,14 @@ public class GuiCopterPack extends GuiWithTanks
         {
             player.closeScreen();
         }
-        super.keyTyped(key, keycode);
+        try
+        {
+            super.keyTyped(key, keycode);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -158,7 +174,7 @@ public class GuiCopterPack extends GuiWithTanks
     {
         if (inventory != null)
         {
-            inventory.closeInventory();
+            //inventory.closeInventory();
         }
         super.onGuiClosed();
     }

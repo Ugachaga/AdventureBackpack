@@ -1,10 +1,5 @@
 package com.darkona.adventurebackpack.client.models;
 
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.RenderUtils;
-import codechicken.lib.vec.Cuboid6;
-import codechicken.lib.vec.Vector3;
-import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.common.IInventoryAdventureBackpack;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
@@ -286,6 +281,7 @@ public class ModelBackpackBlock extends ModelBase
         //renderFluidsInTanks(backpack.getLeftTank(),backpack.getRightTank(),scale);
         GL11.glPopMatrix();
 
+        /**
         if (tankLeft != null && tankLeft.getFluid() != null && tankLeft.getFluid().getFluid().getIcon() != null)
         {
             Vector3 victor = new Vector3((tankLeftTop.rotationPointX * 0.1f - 0.22f), (tankLeftTop.rotationPointY * 0.1f + 0.05f),
@@ -312,6 +308,7 @@ public class ModelBackpackBlock extends ModelBase
                     ((1.0F * tankRight.getFluidAmount()) / (1.0F * tankRight.getCapacity())), 0.8);
             GL11.glPopMatrix();
         }
+        */
     }
 
     @SuppressWarnings("unused")
@@ -327,6 +324,7 @@ public class ModelBackpackBlock extends ModelBase
         float maxY = 0f;
         float maxZ = 0.17f;
 
+        /**
         if (tankLeft != null && tankLeft.getFluid() != null && tankLeft.getFluid().getFluid().getIcon() != null)
         {
             //0.5F, -0.1F, -0.25F - Rotation Points of the top
@@ -363,6 +361,7 @@ public class ModelBackpackBlock extends ModelBase
             Cuboid6 right = new Cuboid6(minX, minY, minZ, maxX, maxY, maxZ);
             RenderUtils.renderFluidCuboid(tankRight.getFluid(), right.add(victor), ((1.0F * tankRight.getFluidAmount()) / (1.0F * Constants.basicTankCapacity)), 0.2);
         }
+        **/
 
     }
 

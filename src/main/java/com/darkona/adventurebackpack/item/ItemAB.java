@@ -1,11 +1,9 @@
 package com.darkona.adventurebackpack.item;
 
+import com.darkona.adventurebackpack.AdventureBackpack;
 import com.darkona.adventurebackpack.CreativeTabAB;
 import com.darkona.adventurebackpack.reference.ModInfo;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -38,15 +36,14 @@ public class ItemAB extends Item
         return String.format("item.%s%s", ModInfo.MOD_ID.toLowerCase() + ":", name);
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegister)
-    {
-        itemIcon = iconRegister.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf(".") + 1));
-    }
-
     protected String getUnwrappedUnlocalizedName(String unlocalizedName)
     {
         return unlocalizedName.substring(unlocalizedName.indexOf(".") + 1);
     }
+
+    public void registerItemModel() {
+		AdventureBackpack.proxy.registerItemRenderer(this, 0, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+	}
+
+
 }

@@ -4,10 +4,10 @@ import com.darkona.adventurebackpack.config.ConfigHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderItem;
+//import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.client.IItemRenderer;
+//import net.minecraft.util.IIcon;
+//import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -15,8 +15,11 @@ import org.lwjgl.opengl.GL11;
  *
  * @author Darkona
  */
-public class RendererHose implements IItemRenderer
+public class RendererHose //implements IItemRenderer
 {
+
+/**
+ * TODO rendering code
 
     private static RenderItem renderHose = new RenderItem();
     private FontRenderer fontRenderer;
@@ -81,4 +84,5 @@ public class RendererHose implements IItemRenderer
             }
         }
     }
+ */
 }

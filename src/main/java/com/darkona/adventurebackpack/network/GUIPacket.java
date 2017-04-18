@@ -7,10 +7,10 @@ import com.darkona.adventurebackpack.handlers.GuiHandler;
 import com.darkona.adventurebackpack.inventory.ContainerBackpack;
 import com.darkona.adventurebackpack.util.Wearing;
 
-import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
@@ -42,7 +42,7 @@ public class GUIPacket implements IMessageHandler<GUIPacket.GUImessage, IMessage
                 int playerX = (int) player.posX;
                 int playerY = (int) player.posY;
                 int playerZ = (int) player.posZ;
-                World world = player.worldObj;
+                World world = player.world;
 
                 if (message.type == COPTER_GUI)
                 {
@@ -84,7 +84,7 @@ public class GUIPacket implements IMessageHandler<GUIPacket.GUImessage, IMessage
                 }
                 if (message.type == BACKPACK_GUI)
                 {
-                    Integer currentDimID = (player.worldObj.provider.dimensionId);
+                    Integer currentDimID = (player.world.provider.getDimension());
                     for (String id : ConfigHandler.forbiddenDimensions)
                     {
                         if (id.equals(currentDimID.toString())) return null;
@@ -111,7 +111,7 @@ public class GUIPacket implements IMessageHandler<GUIPacket.GUImessage, IMessage
                         if (player.openContainer instanceof ContainerBackpack)
                         {
                             TileAdventureBackpack te = (TileAdventureBackpack) ((ContainerBackpack) player.openContainer).inventory;
-                            FMLNetworkHandler.openGui(player, AdventureBackpack.instance, GuiHandler.BACKPACK_TILE, world, te.xCoord, te.yCoord, te.zCoord);
+                            FMLNetworkHandler.openGui(player, AdventureBackpack.instance, GuiHandler.BACKPACK_TILE, world, te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
                             return null;
                         }
                     }

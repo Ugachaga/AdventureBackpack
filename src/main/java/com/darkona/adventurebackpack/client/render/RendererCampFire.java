@@ -25,7 +25,7 @@ public class RendererCampFire extends TileEntitySpecialRenderer
     }
 
     @Override
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float par8)
+    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage)
     {
         ResourceLocation modelTexture = Resources.modelTextures("campFire");
         GL11.glPushMatrix();

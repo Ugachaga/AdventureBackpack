@@ -1,33 +1,22 @@
 package com.darkona.adventurebackpack.block;
 
-import java.util.Iterator;
-import java.util.Random;
+import javax.annotation.Nullable;
 
-import com.darkona.adventurebackpack.init.ModBlocks;
-import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
-import com.darkona.adventurebackpack.util.LogHelper;
-import com.darkona.adventurebackpack.util.Resources;
-import com.darkona.adventurebackpack.util.Utils;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.Explosion;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.chunk.IChunkProvider;
 
 /**
@@ -35,31 +24,17 @@ import net.minecraft.world.chunk.IChunkProvider;
  *
  * @author Darkona
  */
-public class BlockSleepingBag extends BlockDirectional
+public class BlockSleepingBag extends BlockHorizontal
 {
+
+    public static final PropertyDirection FACING = BlockHorizontal.FACING;
 
     public static final int[][] footBlockToHeadBlockMap = new int[][]{{0, 1}, {-1, 0}, {0, -1}, {1, 0}};
 
-    @SideOnly(Side.CLIENT)
-    private IIcon[] endIcons;
-    @SideOnly(Side.CLIENT)
-    private IIcon[] sideIcons;
-    @SideOnly(Side.CLIENT)
-    private IIcon[] topIcons;
-
     public BlockSleepingBag()
     {
-        super(Material.cloth);
-        this.func_149978_e();
-        setBlockName(getUnlocalizedName());
-    }
-
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    protected String getTextureName()
-    {
-        return this.textureName == null ? "MISSING_ICON_BLOCK_" + getIdFromBlock(this) + "_" + getUnlocalizedName() : this.textureName;
+        super(Material.CLOTH);
+        setUnlocalizedName(getUnlocalizedName());
     }
 
     /**
@@ -71,12 +46,6 @@ public class BlockSleepingBag extends BlockDirectional
         return "blockSleepingBag";
     }
 
-
-    private void func_149978_e()
-    {
-        this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.1F, 1.0F);
-    }
-
     /**
      * Returns whether or not this bed block is the head of the bed.
      */
@@ -86,36 +55,44 @@ public class BlockSleepingBag extends BlockDirectional
         return (meta & 8) != 0;
     }
 
-    public static ChunkCoordinates verifyRespawnCoordinatesOnBlock(World world, ChunkCoordinates chunkCoordinates, boolean forced)
+    public static ChunkPos verifyRespawnCoordinatesOnBlock(World world, ChunkPos chunkCoordinates, boolean forced)
     {
+        //TODO: are we calling the right thing here?
         IChunkProvider ichunkprovider = world.getChunkProvider();
-        ichunkprovider.loadChunk(chunkCoordinates.posX - 3 >> 4, chunkCoordinates.posZ - 3 >> 4);
-        ichunkprovider.loadChunk(chunkCoordinates.posX + 3 >> 4, chunkCoordinates.posZ - 3 >> 4);
-        ichunkprovider.loadChunk(chunkCoordinates.posX - 3 >> 4, chunkCoordinates.posZ + 3 >> 4);
-        ichunkprovider.loadChunk(chunkCoordinates.posX + 3 >> 4, chunkCoordinates.posZ + 3 >> 4);
+        ichunkprovider.provideChunk(chunkCoordinates.chunkXPos - 3 >> 4, chunkCoordinates.chunkZPos - 3 >> 4);
+        ichunkprovider.provideChunk(chunkCoordinates.chunkXPos + 3 >> 4, chunkCoordinates.chunkZPos - 3 >> 4);
+        ichunkprovider.provideChunk(chunkCoordinates.chunkXPos - 3 >> 4, chunkCoordinates.chunkZPos + 3 >> 4);
+        ichunkprovider.provideChunk(chunkCoordinates.chunkXPos + 3 >> 4, chunkCoordinates.chunkZPos + 3 >> 4);
 
-        if (world.getBlock(chunkCoordinates.posX, chunkCoordinates.posY, chunkCoordinates.posZ).isBed(world, chunkCoordinates.posX, chunkCoordinates.posY, chunkCoordinates.posZ, null))
+        int y = world.getHeight(chunkCoordinates.chunkXPos, chunkCoordinates.chunkZPos);
+        BlockPos pos = new BlockPos(chunkCoordinates.chunkXPos, y, chunkCoordinates.chunkZPos);
+
+        if (world.getBlockState(pos).getBlock().isBed(world.getBlockState(pos), world, pos, null))
         {
-            ChunkCoordinates newChunkCoords = world.getBlock(chunkCoordinates.posX, chunkCoordinates.posY, chunkCoordinates.posZ).getBedSpawnPosition(world, chunkCoordinates.posX, chunkCoordinates.posY, chunkCoordinates.posZ, null);
+            ChunkPos newChunkCoords = new ChunkPos (world.getBlockState(pos).getBlock().getBedSpawnPosition(world.getBlockState(pos), world, pos, null));
             return newChunkCoords;
         }
 
-        Material material = world.getBlock(chunkCoordinates.posX, chunkCoordinates.posY, chunkCoordinates.posZ).getMaterial();
-        Material material1 = world.getBlock(chunkCoordinates.posX, chunkCoordinates.posY + 1, chunkCoordinates.posZ).getMaterial();
+        Material material = world.getBlockState(pos).getMaterial();
+        Material material1 = world.getBlockState(new BlockPos(chunkCoordinates.chunkXPos, y + 1, chunkCoordinates.chunkZPos)).getMaterial();
         boolean flag1 = (!material.isSolid()) && (!material.isLiquid());
         boolean flag2 = (!material1.isSolid()) && (!material1.isLiquid());
         return (forced) && (flag1) && (flag2) ? chunkCoordinates : null;
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int id, float f1, float f2, float f3)
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
     {
+        /**
         if (world.isRemote)
         {
             return true;
         } else
         {
-            int meta = world.getBlockMetadata(x, y, z);
+
+             * TODO: update this to use blockstates?
+
+            int meta = world.getBlockMetadata(pos);
 
             if (!isBlockHeadOfBed(meta))
             {
@@ -123,13 +100,14 @@ public class BlockSleepingBag extends BlockDirectional
                 x += footBlockToHeadBlockMap[dir][0];
                 z += footBlockToHeadBlockMap[dir][1];
 
-                if (world.getBlock(x, y, z) != this)
+                if (world.getBlock(pos) != this)
                 {
                     return true;
                 }
 
-                meta = world.getBlockMetadata(x, y, z);
+                meta = world.getBlockMetadata(pos);
             }
+
 
             if (world.provider.canRespawnHere() && world.getBiomeGenForCoords(x, z) != BiomeGenBase.hell)
             {
@@ -145,7 +123,7 @@ public class BlockSleepingBag extends BlockDirectional
 
                         if (entityplayer2.isPlayerSleeping())
                         {
-                            ChunkCoordinates chunkcoordinates = entityplayer2.playerLocation;
+                            ChunkPos chunkcoordinates = entityplayer2.getLocation();
 
                             if (chunkcoordinates.posX == x && chunkcoordinates.posY == y && chunkcoordinates.posZ == z)
                             {
@@ -156,7 +134,7 @@ public class BlockSleepingBag extends BlockDirectional
 
                     if (entityplayer1 != null)
                     {
-                        player.addChatComponentMessage(new ChatComponentTranslation("tile.bed.occupied", new Object[0]));
+                        player.addChatComponentMessage(new TextComponentTranslation("tile.bed.occupied", new Object[0]));
                         return true;
                     }
 
@@ -170,9 +148,9 @@ public class BlockSleepingBag extends BlockDirectional
                     setBedOccupied(world, x, y, z, true);
                     //This is so the wake up event can detect it. It fires before the player wakes up.
                     //and the bed location isn't set until then, normally.
-                    player.setSpawnChunk(new ChunkCoordinates(x,y,z),true,player.dimension);
+                    player.setSpawnChunk(new ChunkPos(x,y,z),true,player.dimension);
                     LogHelper.info("Looking for a campfire nearby...");
-                    ChunkCoordinates campfire = Utils.findBlock3D(world, x, y, z, ModBlocks.blockCampFire, 8, 2);
+                    ChunkPos campfire = Utils.findBlock3D(world, x, y, z, ModBlocks.blockCampFire, 8, 2);
                     if (campfire != null)
                     {
                         LogHelper.info("Campfire Found, saving coordinates. " + LogHelper.print3DCoords(campfire));
@@ -213,10 +191,14 @@ public class BlockSleepingBag extends BlockDirectional
                 return true;
             }
         }
+        */
+        return true;
     }
 
     public static void setBedOccupied(World world, int x, int y, int z, boolean flag)
     {
+        /**
+         * TODO: update with block states
         int l = world.getBlockMetadata(x, y, z);
 
         if (flag)
@@ -228,6 +210,7 @@ public class BlockSleepingBag extends BlockDirectional
         }
 
         world.setBlockMetadataWithNotify(x, y, z, l, 4);
+         */
     }
 
     public static boolean isBedOccupied(int meta)
@@ -235,10 +218,12 @@ public class BlockSleepingBag extends BlockDirectional
         return (meta & 4) != 0;
     }
 
-    @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block block)
+    //@Override
+    public void onNeighborBlockChange(World world, BlockPos pos, Block block)
     {
-        int meta = world.getBlockMetadata(x, y, z);
+        /**
+         * TODO: look in to this further
+        int meta = world.getBlockState(pos);
         int dir = getDirection(meta);
 
         if (isBlockHeadOfBed(meta))
@@ -256,116 +241,79 @@ public class BlockSleepingBag extends BlockDirectional
                 this.dropBlockAsItem(world, x, y, z, meta, 0);
             }
         }
+        */
     }
 
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z)
+    public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player)
     {
-        this.blockBoundsForRender();
-    }
-
-    private void blockBoundsForRender()
-    {
-        this.func_149978_e();
-    }
-
-    @Override
-    public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_)
-    {
-        return null;
-    }
-
-    public static ChunkCoordinates func_149977_a(World world, int x, int y, int z, int whatever)
-    {
-        int meta = world.getBlockMetadata(x, y, z);
-        int dir = BlockDirectional.getDirection(meta);
-
-        for (int k1 = 0; k1 <= 1; ++k1)
-        {
-            int l1 = x - footBlockToHeadBlockMap[dir][0] * k1 - 1;
-            int i2 = z - footBlockToHeadBlockMap[dir][1] * k1 - 1;
-            int j2 = l1 + 2;
-            int k2 = i2 + 2;
-
-            for (int l2 = l1; l2 <= j2; ++l2)
-            {
-                for (int i3 = i2; i3 <= k2; ++i3)
-                {
-                    if (World.doesBlockHaveSolidTopSurface(world, l2, y - 1, i3) && !world.getBlock(l2, y, i3).getMaterial().isOpaque() && !world.getBlock(l2, y + 1, i3).getMaterial().isOpaque())
-                    {
-                        if (whatever <= 0)
-                        {
-                            return new ChunkCoordinates(l2, y, i3);
-                        }
-
-                        --whatever;
-                    }
-                }
-            }
-        }
-
-        return null;
-    }
-
-    @Override
-    public void onBlockHarvested(World world, int x, int y, int z, int meta, EntityPlayer player)
-    {
-        int direction = getDirection(meta);
+        /**
+         * TODO: update to EnumFacing
+        int direction = world.getBlock(pos).;
         if (player.capabilities.isCreativeMode && isBlockHeadOfBed(meta))
         {
             x -= footBlockToHeadBlockMap[direction][0];
             z -= footBlockToHeadBlockMap[direction][1];
 
-            if (world.getBlock(x, y, z) == this)
+            if (world.getBlock(pos) == this)
             {
-                world.setBlockToAir(x, y, z);
+                world.setBlockToAir(pos);
             }
         }
+        */
     }
 
 
     @Override
-    public void onBlockDestroyedByExplosion(World world, int x, int y, int z, Explosion boom)
+    public void onBlockDestroyedByExplosion(World world, BlockPos pos, Explosion boom)
     {
-        this.onBlockDestroyedByPlayer(world, x, y, z, world.getBlockMetadata(x, y, z));
+        //this.onBlockDestroyedByPlayer(world,pos, world.getBlockMetadata(pos));
     }
 
     @Override
-    public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int meta)
+    public void onBlockDestroyedByPlayer(World world, BlockPos pos, IBlockState state)
     {
         //LogHelper.info("onBlockDestroyedByPlayer() : BlockSleepingBag");
-        @SuppressWarnings("unused")
-		int direction = getDirection(meta);
-        int tileZ = z;
-        int tileX = x;
-        switch (meta)
+        int tileZ = pos.getZ();
+        int tileX = pos.getX();
+
+        //TODO: confirm we are checking the right direction
+        EnumFacing dir = ((EnumFacing)state.getValue(FACING));
+        switch (dir)
         {
-            case 0:
+            case NORTH:
                 tileZ--;
                 break;
-            case 1:
+            case EAST:
                 tileX++;
                 break;
-            case 2:
+            case SOUTH:
                 tileZ++;
                 break;
-            case 3:
+            case WEST:
                 tileX--;
                 break;
+            case DOWN:
+            case UP:
+                break;
         }
+        BlockPos foot = new BlockPos(tileX, pos.getY(), tileZ);
         //LogHelper.info("onBlockDestroyedByPlayer() Looking for tile entity in x=" +tileX+" y="+y+" z="+tileZ+" while breaking the block in x= "+x+" y="+y+" z="+z);
-        if (world.getTileEntity(tileX, y, tileZ) != null && world.getTileEntity(tileX, y, tileZ) instanceof TileAdventureBackpack)
+        if (world.getTileEntity(foot) != null && world.getTileEntity(foot) instanceof TileAdventureBackpack)
         {
             // LogHelper.info("onBlockDestroyedByPlayer() Found the tile entity in x=" +tileX+" y="+y+" z="+z+" while breaking the block in x= "+x+" y="+y+" z="+z+" ...removing.");
-            ((TileAdventureBackpack) world.getTileEntity(tileX, y, tileZ)).setSleepingBagDeployed(false);
+            ((TileAdventureBackpack) world.getTileEntity(foot)).setSleepingBagDeployed(false);
         }
     }
 
     @Override
-    public boolean isBed(IBlockAccess world, int x, int y, int z, EntityLivingBase player)
+    public boolean isBed(IBlockState state, IBlockAccess world, BlockPos pos, Entity player)
     {
         return true;
     }
+
+    /**
+     * TODO: rendering code
 
     @Override
     @SideOnly(Side.CLIENT)
@@ -417,7 +365,7 @@ public class BlockSleepingBag extends BlockDirectional
 
     /**
      * Indicate if a material is a normal solid opaque cube
-     */
+     *
     @Override
     public boolean isBlockNormalCube()
     {
@@ -426,7 +374,7 @@ public class BlockSleepingBag extends BlockDirectional
 
     /**
      * If this block doesn't render as an ordinary block it will return False (examples: signs, buttons, stairs, etc)
-     */
+     *
     @Override
     public boolean renderAsNormalBlock()
     {
@@ -436,12 +384,15 @@ public class BlockSleepingBag extends BlockDirectional
     /**
      * Is this block (a) opaque and (b) a full 1m cube?  This determines whether or not to render the shared face of two
      * adjacent blocks and also whether the player can attach torches, redstone wire, etc to this block.
-     */
+     *
     @Override
     public boolean isOpaqueCube()
     {
         return false;
     }
+
+     */
+
 
     /**
      * Returns if this block is collidable (only used by Fire). Args: x, y, z

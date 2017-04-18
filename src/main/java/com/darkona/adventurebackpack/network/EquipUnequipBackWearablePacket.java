@@ -3,12 +3,12 @@ package com.darkona.adventurebackpack.network;
 import com.darkona.adventurebackpack.util.BackpackUtils;
 import com.darkona.adventurebackpack.util.Wearing;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.text.TextComponentTranslation;
 
 /**
  * Created on 08/01/2015
@@ -31,12 +31,12 @@ public class EquipUnequipBackWearablePacket implements IMessageHandler<EquipUneq
             if (message.action == EQUIP_WEARABLE)
             {
                 //before reenable make sure to takes into account the delay in unequipWearable()
-                /*if (message.force && Wearing.isWearingWearable(player))
+                if (message.force && Wearing.isWearingWearable(player))
                 {
                     BackpackUtils.unequipWearable(player);
-                } else */if (Wearing.isHoldingWearable(player) && !Wearing.isWearingWearable(player))
+                } else if (Wearing.isHoldingWearable(player) && !Wearing.isWearingWearable(player))
                 {
-                    if (BackpackUtils.equipWearable(player.getCurrentEquippedItem(), player) == BackpackUtils.reasons.SUCCESFUL)
+                    if (BackpackUtils.equipWearable(player.getHeldItemMainhand(), player) == BackpackUtils.reasons.SUCCESFUL)
                     {
                         player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
                         player.inventoryContainer.detectAndSendChanges();
@@ -45,13 +45,13 @@ public class EquipUnequipBackWearablePacket implements IMessageHandler<EquipUneq
                 {
                     if (Wearing.isWearingBackpack(player))
                     {
-                        player.addChatComponentMessage(new ChatComponentTranslation("adventurebackpack:messages.already.equipped.backpack"));
+                        player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.already.equipped.backpack"));
                     } else if (Wearing.isWearingCopter(player))
                     {
-                        player.addChatComponentMessage(new ChatComponentTranslation("adventurebackpack:messages.already.equipped.copterpack"));
+                        player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.already.equipped.copterpack"));
                     } else if (Wearing.isWearingJetpack(player))
                     {
-                        player.addChatComponentMessage(new ChatComponentTranslation("adventurebackpack:messages.already.equipped.jetpack"));
+                        player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.already.equipped.jetpack"));
                     }
                 }
             }

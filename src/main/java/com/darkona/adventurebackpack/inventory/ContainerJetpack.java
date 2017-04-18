@@ -4,6 +4,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.ClickType;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -26,7 +28,7 @@ public class ContainerJetpack extends Container implements IWearableContainer
         this.player = player;
         this.inventory = inventory;
         makeSlots(player.inventory);
-        this.inventory.openInventory();
+        this.inventory.openInventory(player);
         this.wearing = wearing;
     }
 
@@ -92,9 +94,9 @@ public class ContainerJetpack extends Container implements IWearableContainer
         super.onContainerClosed(player);
         if (wearing)
         {
-            this.crafters.remove(player);
+            this.setCanCraft(player, false);
         }
-        if (!player.worldObj.isRemote)
+        if (!player.world.isRemote)
         {
             for (int i = 0; i < 3; i++)
             {
@@ -102,7 +104,7 @@ public class ContainerJetpack extends Container implements IWearableContainer
                 if (itemstack != null)
                 {
                     inventory.setInventorySlotContents(i, null);
-                    player.dropPlayerItemWithRandomChoice(itemstack, false);
+                    player.dropItem(itemstack, false);
                 }
             }
         }
@@ -165,6 +167,6 @@ public class ContainerJetpack extends Container implements IWearableContainer
     @Override
     public void refresh()
     {
-        inventory.openInventory();
+        inventory.openInventory(player);
     }
 }

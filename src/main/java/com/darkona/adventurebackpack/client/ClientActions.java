@@ -9,9 +9,9 @@ import com.darkona.adventurebackpack.config.ConfigHandler;
 import com.darkona.adventurebackpack.network.messages.EntityParticlePacket;
 import com.darkona.adventurebackpack.network.messages.EntitySoundPacket;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,16 +36,16 @@ public class ClientActions
             switch (particleCode)
             {
                 case EntityParticlePacket.COPTER_PARTICLE:
-                    Visuals.CopterParticles(player, player.worldObj);
+                    Visuals.CopterParticles(player, player.world);
                     break;
                 case EntityParticlePacket.NYAN_PARTICLE:
-                    Visuals.NyanParticles(player, player.worldObj);
+                    Visuals.NyanParticles(player, player.world);
                     break;
                 case EntityParticlePacket.SLIME_PARTICLE:
-                    Visuals.SlimeParticles(player, player.worldObj);
+                    Visuals.SlimeParticles(player, player.world);
                     break;
                 case EntityParticlePacket.JETPACK_PARTICLE:
-                    Visuals.JetpackParticles(player, player.worldObj);
+                    Visuals.JetpackParticles(player, player.world);
                     break;
             }
         }

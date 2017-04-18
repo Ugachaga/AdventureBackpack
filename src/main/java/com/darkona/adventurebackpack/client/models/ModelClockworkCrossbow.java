@@ -194,7 +194,7 @@ public class ModelClockworkCrossbow extends ModelBase
         this.hookHead.addChild(this.hookTooth3);
 
         arrow = new RendererStack(this, true);
-        arrow.stack = new ItemStack(Items.arrow, 1);
+        arrow.stack = new ItemStack(Items.ARROW, 1);
     }
 
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5, ItemStack xbow)
@@ -233,9 +233,9 @@ public class ModelClockworkCrossbow extends ModelBase
             setOffset(arrow, -.75f, .1f, -.2f);
             arrow.render(f5);
         }
-        if(xbow != null && xbow.hasTagCompound() && xbow.stackTagCompound.hasKey("Shot"))
+        if(xbow != null && xbow.hasTagCompound() && xbow.getTagCompound().hasKey("Shot"))
         {
-            if((xbow.stackTagCompound.getByte("Shot")>0))
+            if((xbow.getTagCompound().getByte("Shot")>0))
             {
                 setRotateAngle(stringLeft, 1.5707963267948966F, -0.5235987755982988F, 0.0F);
                 setRotateAngle(stringRight, -1.5707963267948966F, 0.5235987755982988F, 0.0F);

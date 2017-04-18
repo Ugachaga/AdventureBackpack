@@ -3,9 +3,9 @@ package com.darkona.adventurebackpack.network;
 import com.darkona.adventurebackpack.entity.EntityFriendlySpider;
 import com.darkona.adventurebackpack.inventory.InventoryCoalJetpack;
 import com.darkona.adventurebackpack.util.Wearing;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 
 /**
@@ -23,9 +23,9 @@ public class PlayerActionPacket implements IMessageHandler<PlayerActionPacket.Ac
         if (ctx.side.isServer())
         {
             if(message.type == spiderJump){
-                if(ctx.getServerHandler().playerEntity.ridingEntity != null && ctx.getServerHandler().playerEntity.ridingEntity instanceof EntityFriendlySpider)
+                if(ctx.getServerHandler().playerEntity.getRidingEntity() != null && ctx.getServerHandler().playerEntity.getRidingEntity() instanceof EntityFriendlySpider)
                 {
-                    ((EntityFriendlySpider)ctx.getServerHandler().playerEntity.ridingEntity).setJumping(true);
+                    ((EntityFriendlySpider)ctx.getServerHandler().playerEntity.getRidingEntity()).setJumping(true);
                 }
             }
 

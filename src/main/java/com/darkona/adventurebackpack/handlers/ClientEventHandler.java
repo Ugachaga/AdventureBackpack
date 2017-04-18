@@ -11,16 +11,16 @@ import com.darkona.adventurebackpack.network.CycleToolPacket;
 import com.darkona.adventurebackpack.reference.BackpackNames;
 import com.darkona.adventurebackpack.util.Wearing;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fluids.FluidTank;
@@ -39,9 +39,9 @@ public class ClientEventHandler
     @SideOnly(Side.CLIENT)
     public void toolTips(ItemTooltipEvent event)
     {
-        if (event.itemStack.getItem() instanceof ItemAdventureBackpack)
+        if (event.getItemStack().getItem() instanceof ItemAdventureBackpack)
         {
-            NBTTagCompound compound = event.itemStack.stackTagCompound;
+            NBTTagCompound compound = event.getItemStack().getTagCompound();
             FluidTank tank = new FluidTank(Constants.basicTankCapacity);
             String tankInfo = "";
             if (compound != null)
@@ -50,17 +50,17 @@ public class ClientEventHandler
                 {
                     tank.readFromNBT(compound.getCompoundTag("leftTank"));
                     String name = tank.getFluid() == null ? "" : tank.getFluid().getLocalizedName();
-                    tankInfo = EnumChatFormatting.BLUE + "Left Tank: " + tank.getFluidAmount() + "/" + tank.getCapacity() + " " + name;
+                    tankInfo = TextFormatting.BLUE + "Left Tank: " + tank.getFluidAmount() + "/" + tank.getCapacity() + " " + name;
 
-                    event.toolTip.add(tankInfo);
+                    event.getToolTip().add(tankInfo);
                 }
                 if (compound.hasKey("rightTank"))
                 {
                     tank.readFromNBT(compound.getCompoundTag("rightTank"));
                     String name = tank.getFluid() == null ? "" : tank.getFluid().getLocalizedName();
-                    tankInfo = EnumChatFormatting.RED + "Right Tank: " + tank.getFluidAmount() + "/" + tank.getCapacity() + " " + name;
+                    tankInfo = TextFormatting.RED + "Right Tank: " + tank.getFluidAmount() + "/" + tank.getCapacity() + " " + name;
 
-                    event.toolTip.add(tankInfo);
+                    event.getToolTip().add(tankInfo);
                 }
             }
         }
@@ -75,24 +75,28 @@ public class ClientEventHandler
     {
         /*Special thanks go to MachineMuse, both for inspiration and the event. God bless you girl.*/
         Minecraft mc = Minecraft.getMinecraft();
-        int dWheel = event.dwheel;
+        int dWheel = event.getDwheel();
         if (dWheel != 0)
         {
             //LogHelper.debug("Mouse Wheel moving");
-            EntityClientPlayerMP player = mc.thePlayer;
+
+            /**
+             * TODO: why is this erroring?
+
+            EntityPlayer player = mc.thePlayer;
             if (player != null && !player.isDead && player.isSneaking())
             {
                 ItemStack backpack = Wearing.getWearingBackpack(player);
                 if (backpack != null && backpack.getItem() instanceof ItemAdventureBackpack)
                 {
-                    if (player.getCurrentEquippedItem() != null)
+                    if (player.getHeldItemMainhand() != null)
                     {
                         int slot = player.inventory.currentItem;
                         ItemStack heldItem = player.inventory.getStackInSlot(slot);
                         Item theItem = heldItem.getItem();
 
                         if ((ConfigHandler.enableToolsCycling && !Wearing.getBackpackInv(player, true).getDisableCycling() && SlotTool.isValidTool(heldItem))
-                                || ((BackpackNames.getBackpackColorName(backpack).equals("Skeleton") && theItem.equals(Items.bow))))
+                                || ((BackpackNames.getBackpackColorName(backpack).equals("Skeleton") && theItem.equals(Items.BOW))))
                         {
                             ModNetwork.net.sendToServer(new CycleToolPacket.CycleToolMessage(dWheel, slot, CycleToolPacket.CYCLE_TOOL_ACTION));
                             ServerActions.cycleTool(player, dWheel, slot);
@@ -108,6 +112,7 @@ public class ClientEventHandler
                     }
                 }
             }
+            **/
         }
     }
 }

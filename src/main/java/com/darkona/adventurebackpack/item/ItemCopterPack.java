@@ -14,8 +14,8 @@ import com.darkona.adventurebackpack.util.Resources;
 import com.darkona.adventurebackpack.util.Utils;
 import com.darkona.adventurebackpack.util.Wearing;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
@@ -23,10 +23,14 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.world.World;
 
 /**
@@ -62,13 +66,13 @@ public class ItemCopterPack extends ItemAB implements IBackWearableItem
     }
 
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
+    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer playerIn, EnumHand hand)
     {
         if (world.isRemote)
         {
             ModNetwork.net.sendToServer(new GUIPacket.GUImessage(GUIPacket.COPTER_GUI, GUIPacket.FROM_HOLDING));
         }
-        return stack;
+        return new ActionResult(EnumActionResult.PASS, stack);
     }
 
     @Override
@@ -83,8 +87,7 @@ public class ItemCopterPack extends ItemAB implements IBackWearableItem
         double posY = player.posY;
         double posZ = player.posZ;
         List<EntityItem> groundItems = world.getEntitiesWithinAABB(
-                EntityItem.class, AxisAlignedBB.getBoundingBox(
-                        posX, posY, posZ, posX + 1.0D, posY + 1.0D, posZ + 1.0D).expand(4.0D, 4.0D, 4.0D));
+                EntityItem.class, new AxisAlignedBB(posX, posY, posZ, posX + 1.0D, posY + 1.0D, posZ + 1.0D).expand(4.0D, 4.0D, 4.0D));
 
         for (EntityItem groundItem : groundItems)
         {
@@ -118,14 +121,14 @@ public class ItemCopterPack extends ItemAB implements IBackWearableItem
 
     @Override
     @SideOnly(Side.CLIENT)
-    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack stack, int armorSlot)
+    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack stack, EntityEquipmentSlot armorSlot, ModelBiped _default)
     {
         return ModelCopterPack.instance.setWearable(stack);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type)
+    public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type)
     {
         String modelTexture;
         modelTexture = Resources.modelTextures("copterPack").toString();
@@ -143,7 +146,7 @@ public class ItemCopterPack extends ItemAB implements IBackWearableItem
     public void onEquippedUpdate(World world, EntityPlayer player, ItemStack stack)
     {
         InventoryCopterPack inv = new InventoryCopterPack(Wearing.getWearingCopter(player));
-        inv.openInventory();
+        inv.openInventory(player);
         boolean canElevate = true;
         int fuelConsumption = 0;
         if (inv.getStatus() != OFF_MODE)
@@ -154,7 +157,7 @@ public class ItemCopterPack extends ItemAB implements IBackWearableItem
                 inv.dirtyStatus();
                 if (!world.isRemote)
                 {
-                    player.addChatComponentMessage(new ChatComponentTranslation("adventurebackpack:messages.copterpack.cantwater"));
+                    player.sendStatusMessage(new TextComponentTranslation("adventurebackpack:messages.copterpack.cantwater"));
                 }
                 return;
             }
@@ -167,7 +170,7 @@ public class ItemCopterPack extends ItemAB implements IBackWearableItem
                     inv.dirtyStatus();
                     if (!world.isRemote)
                     {
-                        player.addChatComponentMessage(new ChatComponentTranslation("adventurebackpack:messages.copterpack.off"));
+                        player.sendStatusMessage(new TextComponentTranslation("adventurebackpack:messages.copterpack.off"));
                     }
                     return;
                     //TODO play "backpackOff" sound
@@ -179,7 +182,7 @@ public class ItemCopterPack extends ItemAB implements IBackWearableItem
                     inv.dirtyStatus();
                     if (!world.isRemote)
                     {
-                        player.addChatComponentMessage(new ChatComponentTranslation("adventurebackpack:messages.copterpack.outoffuel"));
+                        player.sendStatusMessage(new TextComponentTranslation("adventurebackpack:messages.copterpack.outoffuel"));
                     }
                     return;
                     //TODO play "outofFuel" sound
@@ -228,7 +231,7 @@ public class ItemCopterPack extends ItemAB implements IBackWearableItem
                 //Airwave
                 pushEntities(world, player, 0.2f);
                 //movement boost
-                player.moveFlying(player.moveStrafing, player.moveForward, factor);
+                player.moveEntityWithHeading(player.moveStrafing, player.moveForward);
             } else
             {
                 pushEntities(world, player, factor + 0.4f);
@@ -237,7 +240,7 @@ public class ItemCopterPack extends ItemAB implements IBackWearableItem
             //Elevation clientside
             if (world.isRemote)
             {
-                if (Minecraft.getMinecraft().gameSettings.keyBindJump.getIsKeyPressed())
+                if (Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown())
                 {
                     if (inv.canConsumeFuel(fuelConsumption + 2) && canElevate)
                     {
@@ -269,8 +272,7 @@ public class ItemCopterPack extends ItemAB implements IBackWearableItem
                 inv.tickCounter = ticks;
             }
         }
-        //if(!world.isRemote)inv.closeInventory();
-        inv.closeInventory();
+        inv.closeInventory(player);
     }
 
     @Override
@@ -284,13 +286,13 @@ public class ItemCopterPack extends ItemAB implements IBackWearableItem
     public void onEquipped(World world, EntityPlayer player, ItemStack stack)
     {
         if (!stack.hasTagCompound()) stack.setTagCompound(new NBTTagCompound());
-        stack.stackTagCompound.setByte("status", OFF_MODE);
+        stack.getTagCompound().setByte("status", OFF_MODE);
     }
 
     @Override
     public void onUnequipped(World world, EntityPlayer player, ItemStack stack)
     {
-        stack.stackTagCompound.setByte("status", OFF_MODE);
+        stack.getTagCompound().setByte("status", OFF_MODE);
     }
 
     @Override

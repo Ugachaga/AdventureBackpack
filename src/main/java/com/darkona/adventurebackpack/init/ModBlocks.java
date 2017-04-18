@@ -2,7 +2,7 @@ package com.darkona.adventurebackpack.init;
 
 
 import com.darkona.adventurebackpack.block.*;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  * Created by Darkona on 12/10/2014.
@@ -22,6 +22,7 @@ public class ModBlocks
 
         GameRegistry.registerTileEntity(TileCampfire.class, "tileCampFire");
         GameRegistry.registerTileEntity(TileAdventureBackpack.class, "adventureBackpackTileEntity");
+
     }
 
 }

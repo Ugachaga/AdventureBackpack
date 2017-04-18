@@ -6,10 +6,11 @@ import java.util.TimerTask;
 import com.darkona.adventurebackpack.events.WearableEvent;
 import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
 
+import ibxm.Player;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.MinecraftForge;
 
 /**
@@ -30,7 +31,7 @@ public class BackpackUtils
     public static reasons equipWearable(ItemStack backpack, EntityPlayer player)
     {
         BackpackProperty prop = BackpackProperty.get(player);
-        if (prop.getWearable() == null)
+        if (prop.getWearable() == null && player != null)
         {
             player.openContainer.onContainerClosed(player);
             prop.setWearable(backpack.copy());
@@ -54,17 +55,17 @@ public class BackpackUtils
 
     public static NBTTagCompound getBackpackData(ItemStack backpack)
     {
-        if (backpack.hasTagCompound() && backpack.stackTagCompound.hasKey("backpackData"))
+        if (backpack.hasTagCompound() && backpack.getTagCompound().hasKey("backpackData"))
         {
-            return backpack.stackTagCompound.getCompoundTag("backpackData");
+            return backpack.getTagCompound().getCompoundTag("backpackData");
         }
         return null;
     }
 
     public static void setBackpackData(ItemStack stack, NBTTagCompound compound)
     {
-        if (!stack.hasTagCompound()) stack.stackTagCompound = new NBTTagCompound();
-        stack.stackTagCompound.setTag("backpackData", compound);
+        if (!stack.hasTagCompound()) stack.setTagCompound(new NBTTagCompound());
+        stack.getTagCompound().setTag("backpackData", compound);
     }
 
     private static class DelayUnequipTask extends TimerTask
@@ -88,14 +89,14 @@ public class BackpackUtils
                 prop.setWearable(null);
                 if (!player.inventory.addItemStackToInventory(gimme))
                 {
-                    player.dropPlayerItemWithRandomChoice(gimme, false);
+                    player.dropItem(gimme, false);
                 }
                 WearableEvent event = new WearableEvent.UnequipWearableEvent(player, gimme);
                 MinecraftForge.EVENT_BUS.post(event);
                 BackpackProperty.sync(player);
             } else
             {
-                player.addChatComponentMessage(new ChatComponentTranslation("adventurebackpack:messages.already.impossibru"));
+                player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.already.impossibru"));
             }
         }
     }

@@ -65,7 +65,7 @@ public class SlotTool extends SlotAdventureBackpack
 
             //Ender IO
             //Yeta Wrench uses shift+Scroll for switch own modes
-            if (Item.itemRegistry.getNameForObject(item).equals("EnderIO:itemYetaWrench")) return false;
+            if (Item.REGISTRY.getNameForObject(item).equals("EnderIO:itemYetaWrench")) return false;
 
             //Extra Utilities
             if (item.getClass().getName().equals("com.rwtema.extrautils.item.ItemBuildersWand")) return true;

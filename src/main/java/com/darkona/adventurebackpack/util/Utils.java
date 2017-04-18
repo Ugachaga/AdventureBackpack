@@ -4,20 +4,21 @@ import java.util.Calendar;
 
 import com.darkona.adventurebackpack.config.ConfigHandler;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
@@ -142,7 +143,7 @@ public class Utils
         int fluidID = -1;
         for (Fluid fluid : FluidRegistry.getRegisteredFluids().values())
         {
-            fluidID = (fluid.getBlock() == block) ? fluid.getID() : -1;
+            fluidID = (fluid.getBlock() == block) ? Block.getIdFromBlock(fluid.getBlock()) : -1;
             if (fluidID > 0)
             {
                 return fluidID;
@@ -177,22 +178,22 @@ public class Utils
         return valid;
     }
 
-    public static ChunkCoordinates findBlock2D(World world, int x, int y, int z, Block block, int range)
+    public static ChunkPos findBlock2D(World world, int x, int y, int z, Block block, int range)
     {
         for (int i = x - range; i <= x + range; i++)
         {
             for (int j = z - range; j <= z + range; j++)
             {
-                if (world.getBlock(i, y, j) == block)
+                if (world.getBlockState(new BlockPos(i, y, j)).getBlock() == block)
                 {
-                    return new ChunkCoordinates(i, y, j);
+                    return new ChunkPos(new BlockPos(i, y, j));
                 }
             }
         }
         return null;
     }
 
-    public static ChunkCoordinates findBlock3D(World world, int x, int y, int z, Block block, int hRange, int vRange)
+    public static ChunkPos findBlock3D(World world, int x, int y, int z, Block block, int hRange, int vRange)
     {
         for (int i = (y - vRange); i <= (y + vRange); i++)
         {
@@ -200,9 +201,9 @@ public class Utils
             {
                 for (int k = (z - hRange); k <= (z + hRange); k++)
                 {
-                    if (world.getBlock(j, i, k) == block)
+                    if (world.getBlockState(new BlockPos(j, i, k)).getBlock() == block)
                     {
-                        return new ChunkCoordinates(j, i, k);
+                        return new ChunkPos(new BlockPos(j, i, k));
                     }
                 }
             }
@@ -222,15 +223,15 @@ public class Utils
     }
 
     //This is some black magic that returns a block or entity as far as the argument reach goes.
-    public static MovingObjectPosition getMovingObjectPositionFromPlayersHat(World world, EntityPlayer player, boolean flag, double reach)
+    public static RayTraceResult getMovingObjectPositionFromPlayersHat(World world, EntityPlayer player, boolean flag, double reach)
     {
         float f = 1.0F;
         float playerPitch = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch) * f;
         float playerYaw = player.prevRotationYaw + (player.rotationYaw - player.prevRotationYaw) * f;
         double playerPosX = player.prevPosX + (player.posX - player.prevPosX) * f;
-        double playerPosY = (player.prevPosY + (player.posY - player.prevPosY) * f + 1.6200000000000001D) - player.yOffset;
+        double playerPosY = (player.prevPosY + (player.posY - player.prevPosY) * f + 1.6200000000000001D) - player.getYOffset();
         double playerPosZ = player.prevPosZ + (player.posZ - player.prevPosZ) * f;
-        Vec3 vecPlayer = Vec3.createVectorHelper(playerPosX, playerPosY, playerPosZ);
+        Vec3d vecPlayer = new Vec3d(playerPosX, playerPosY, playerPosZ);
         float cosYaw = (float) Math.cos(-playerYaw * 0.01745329F - 3.141593F);
         float sinYaw = (float) Math.sin(-playerYaw * 0.01745329F - 3.141593F);
         float cosPitch = (float) -Math.cos(-playerPitch * 0.01745329F);
@@ -238,8 +239,8 @@ public class Utils
         float pointX = sinYaw * cosPitch;
         float pointY = sinPitch;
         float pointZ = cosYaw * cosPitch;
-        Vec3 vecPoint = vecPlayer.addVector(pointX * reach, pointY * reach, pointZ * reach);
-        return world.func_147447_a/*rayTraceBlocks_do_do*/(vecPlayer, vecPoint, flag, !flag, flag);
+        Vec3d vecPoint = vecPlayer.addVector(pointX * reach, pointY * reach, pointZ * reach);
+        return world.rayTraceBlocks(vecPlayer, vecPoint, flag, !flag, flag);
     }
 
     public static String printCoordinates(int x, int y, int z)
@@ -263,33 +264,33 @@ public class Utils
         return side == Side.SERVER;
     }
 
-    private static ChunkCoordinates checkCoordsForBackpack(IBlockAccess world, int origX, int origZ, int X, int Y, int Z, boolean except)
+    private static ChunkPos checkCoordsForBackpack(IBlockAccess world, int origX, int origZ, int X, int Y, int Z, boolean except)
     {
-        if (world.isAirBlock(X, Y, Z) || isReplaceable(world, X, Y, Z))
+        if (world.isAirBlock(new BlockPos(X, Y, Z)) || isReplaceable(world, X, Y, Z))
         {
-            return new ChunkCoordinates(X, Y, Z);
+            return new ChunkPos(new BlockPos(X, Y, Z));
         }
         return null;
     }
 
     public static boolean isReplaceable(IBlockAccess world, int x, int y, int z)
     {
-        Block block = world.getBlock(x, y, z);
-        return block.isReplaceable(world, x, y, z);
+        Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
+        return block.isReplaceable(world, new BlockPos(x, y, z));
     }
 
-    private static ChunkCoordinates checkCoordsForPlayer(IBlockAccess world, int origX, int origZ, int X, int Y, int Z, boolean except)
+    private static ChunkPos checkCoordsForPlayer(IBlockAccess world, int origX, int origZ, int X, int Y, int Z, boolean except)
     {
         LogHelper.info("Checking coordinates in X=" + X + ", Y=" + Y + ", Z=" + Z);
-        if (except && world.isSideSolid(X, Y - 1, Z, ForgeDirection.UP, true) && world.isAirBlock(X, Y, Z) && world.isAirBlock(X, Y + 1, Z) && !areCoordinatesTheSame2D(origX, origZ, X, Z))
+        if (except && world.isSideSolid(new BlockPos(X, Y - 1, Z), EnumFacing.UP, true) && world.isAirBlock(new BlockPos(X, Y, Z)) && world.isAirBlock(new BlockPos(X, Y + 1, Z)) && !areCoordinatesTheSame2D(origX, origZ, X, Z))
         {
             LogHelper.info("Found spot with the exception of the origin point");
-            return new ChunkCoordinates(X, Y, Z);
+            return new ChunkPos(new BlockPos(X, Y, Z));
         }
-        if (!except && world.isSideSolid(X, Y - 1, Z, ForgeDirection.UP, true) && world.isAirBlock(X, Y, Z) && world.isAirBlock(X, Y + 1, Z))
+        if (!except && world.isSideSolid(new BlockPos(X, Y - 1, Z), EnumFacing.UP, true) && world.isAirBlock(new BlockPos(X, Y, Z)) && world.isAirBlock(new BlockPos(X, Y + 1, Z)))
         {
             LogHelper.info("Found spot without exceptions");
-            return new ChunkCoordinates(X, Y, Z);
+            return new ChunkPos(new BlockPos(X, Y, Z));
         }
         return null;
     }
@@ -311,7 +312,7 @@ public class Utils
      * @param type   True = for player, False = for backpack
      * @return The coordinates of the block in the chunk of the world of the game of the server of the owner of the computer, where you can place something above it.
      */
-    public static ChunkCoordinates getNearestEmptyChunkCoordinatesSpiral(IBlockAccess world, int origX, int origZ, int X, int Y, int Z, int radius, boolean except, int steps, byte pass, boolean type)
+    public static ChunkPos getNearestEmptyChunkCoordinatesSpiral(IBlockAccess world, int origX, int origZ, int X, int Y, int Z, int radius, boolean except, int steps, byte pass, boolean type)
     {
         //Spiral search, because I'm awesome :)
         //This is so the backpack tries to get placed near the death point first
@@ -329,7 +330,7 @@ public class Utils
                 for (; i <= X + steps; i++)
                 {
 
-                    ChunkCoordinates coords = type ? checkCoordsForPlayer(world, origX, origZ, X, Y, Z, except) : checkCoordsForBackpack(world, origX, origZ, X, Y, Z, except);
+                    ChunkPos coords = type ? checkCoordsForPlayer(world, origX, origZ, X, Y, Z, except) : checkCoordsForBackpack(world, origX, origZ, X, Y, Z, except);
                     if (coords != null)
                     {
                         return coords;
@@ -342,7 +343,7 @@ public class Utils
             {
                 for (; j >= Z - steps; j--)
                 {
-                    ChunkCoordinates coords = type ? checkCoordsForPlayer(world, origX, origZ, X, Y, Z, except) : checkCoordsForBackpack(world, origX, origZ, X, Y, Z, except);
+                    ChunkPos coords = type ? checkCoordsForPlayer(world, origX, origZ, X, Y, Z, except) : checkCoordsForBackpack(world, origX, origZ, X, Y, Z, except);
                     if (coords != null)
                     {
                         return coords;
@@ -360,7 +361,7 @@ public class Utils
             {
                 for (; i >= X - steps; i--)
                 {
-                    ChunkCoordinates coords = type ? checkCoordsForPlayer(world, origX, origZ, X, Y, Z, except) : checkCoordsForBackpack(world, origX, origZ, X, Y, Z, except);
+                    ChunkPos coords = type ? checkCoordsForPlayer(world, origX, origZ, X, Y, Z, except) : checkCoordsForBackpack(world, origX, origZ, X, Y, Z, except);
                     if (coords != null)
                     {
                         return coords;
@@ -373,7 +374,7 @@ public class Utils
             {
                 for (; j <= Z + steps; j++)
                 {
-                    ChunkCoordinates coords = type ? checkCoordsForPlayer(world, origX, origZ, X, Y, Z, except) : checkCoordsForBackpack(world, origX, origZ, X, Y, Z, except);
+                    ChunkPos coords = type ? checkCoordsForPlayer(world, origX, origZ, X, Y, Z, except) : checkCoordsForBackpack(world, origX, origZ, X, Y, Z, except);
                     if (coords != null)
                     {
                         return coords;
@@ -404,22 +405,6 @@ public class Utils
             }
         }*/
         return null;
-    }
-
-    /**
-     * Compares two coordinates. Heh.
-     *
-     * @param X1 First coordinate X.
-     * @param Y1 First coordinate Y.
-     * @param Z1 First coordinate Z.
-     * @param X2 Second coordinate X.
-     * @param Y2 Second coordinate Y.
-     * @param Z2 Second coordinate Z. I really didn't need to type all that, its obvious.
-     * @return If both coordinates are the same, returns true. This is the least helpful javadoc ever.
-     */
-    private static boolean areCoordinatesTheSame(int X1, int Y1, int Z1, int X2, int Y2, int Z2)
-    {
-        return (X1 == X2 && Y1 == Y2 && Z1 == Z2);
     }
 
     private static boolean areCoordinatesTheSame2D(int X1, int Z1, int X2, int Z2)
@@ -467,13 +452,11 @@ public class Utils
         {
             if (ConfigHandler.IS_ENDERIO)
             {
-                for (Enchantment ench : Enchantment.enchantmentsList)
+                Enchantment ench = Enchantment.getEnchantmentByLocation("enchantment.enderio.soulBound");
+                if (ench != null && ench.getName().equals("enchantment.enderio.soulBound"))
                 {
-                    if (ench != null && ench.getName().equals("enchantment.enderio.soulBound"))
-                    {
-                        soulBoundID = ench.effectId;
-                        return;
-                    }
+                    soulBoundID = Enchantment.getEnchantmentID(ench);
+                    return;
                 }
                 soulBoundID = -1;
             } else soulBoundID = -2;
@@ -500,7 +483,7 @@ public class Utils
         int soulBound = getSoulBoundID();
         if (soulBound >= 0 && book.hasTagCompound())
         {
-            NBTTagCompound bookData = book.stackTagCompound;
+            NBTTagCompound bookData = book.getTagCompound();
             if (bookData.hasKey("StoredEnchantments"))
             {
                 NBTTagList bookEnch = bookData.getTagList("StoredEnchantments", net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND);

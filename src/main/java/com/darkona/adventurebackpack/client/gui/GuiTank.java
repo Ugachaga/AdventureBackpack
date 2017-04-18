@@ -1,13 +1,11 @@
 package com.darkona.adventurebackpack.client.gui;
 
-import codechicken.lib.render.TextureUtils;
+//import codechicken.lib.render.TextureUtils;
 import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.config.ConfigHandler;
 import com.darkona.adventurebackpack.util.LogHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import org.lwjgl.opengl.GL11;
@@ -103,15 +101,16 @@ public class GuiTank
      * @param gui
      * @param
      */
+
     private void drawMethodOne(GuiWithTanks gui)
     {
         if(tank.getFluid() != null)
         {
             FluidStack fluid = tank.getFluid();
 
-            IIcon icon = fluid.getFluid().getStillIcon();
+            //IIcon icon = fluid.getFluid().getStillIcon();
             int pixelsY = fluid.amount / liquidPerPixel;
-            Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
+            Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
             int maxY = (startY + offsetY) + height;
             for (int i = (startX + offsetX); i < (startX + offsetX) + width; i += resolution)
             {
@@ -119,25 +118,23 @@ public class GuiTank
                 {
                     GL11.glPushMatrix();
                     GL11.glColor4f(1, 1, 1, 1);
-                    gui.drawTexturedModelRectFromIcon(i, j, icon, resolution, resolution);
+                    //gui.drawTexturedModelRectFromIcon(i, j, icon, resolution, resolution);
                     GL11.glPopMatrix();
                 }
             }
         }
     }
 
-    /**
-     * @param
-     */
+
     private void drawMethodTwo()
     {
         if(tank.getFluid() != null)
         {
             FluidStack fluid = tank.getFluid();
 
-            IIcon icon = fluid.getFluid().getStillIcon();
+            //IIcon icon = fluid.getFluid().getStillIcon();
             int pixelsY = fluid.amount / liquidPerPixel;
-            Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
+            Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
             int top = (startY + offsetY) + height - pixelsY;
             int maxY = (startY + offsetY) + height - 1;
             for (int i = (startX + offsetX); i < (startX + offsetX) + width; i += resolution)
@@ -147,7 +144,7 @@ public class GuiTank
                 {
                     GL11.glPushMatrix();
                     GL11.glColor4f(1, 1, 1, 1);
-                    drawFluidPixelFromIcon(i, j, icon, resolution, 1, 0, iconY, resolution, 0, zLevel);
+                    //drawFluidPixelFromIcon(i, j, icon, resolution, 1, 0, iconY, resolution, 0, zLevel);
                     iconY = (iconY == 0) ? 7 : iconY - 1;
                     GL11.glPopMatrix();
                 }
@@ -155,9 +152,6 @@ public class GuiTank
         }
     }
 
-    /**
-     * @param
-     */
     private void drawMethodThree()
     {
         if(tank.getFluid() != null)
@@ -166,8 +160,8 @@ public class GuiTank
 
             try
             {
-                IIcon icon = fluid.getFluid().getStillIcon();
-                TextureUtils.bindAtlas(fluid.getFluid().getSpriteNumber());
+                //IIcon icon = fluid.getFluid().getStillIcon();
+                //TextureUtils.bindAtlas(fluid.getFluid().getSpriteNumber());
                 int top = (startY + offsetY) + height - (fluid.amount / liquidPerPixel);
                 for (int j = (startY + offsetY) + height - 1; j >= top; j--)
                 {
@@ -181,7 +175,7 @@ public class GuiTank
                         {
                             GL11.glColor4f(1, 1, 1, 1);
                         }
-                        drawFluidPixelFromIcon(i, j, icon, 1, 1, 0, 0, 0, 0, zLevel);
+                        //drawFluidPixelFromIcon(i, j, icon, 1, 1, 0, 0, 0, 0, zLevel);
                         GL11.glPopMatrix();
                     }
                 }
@@ -206,47 +200,4 @@ public class GuiTank
         return startX <= mouseX && mouseX <= (startX + offsetX) + width && (startY + offsetY) <= mouseY && mouseY <= (startY + offsetY) + height;
     }
 
-    /**
-     * Draws a box textured with the selected box of an icon.
-     *
-     * @param x    The startX coordinate where to start drawing the box.
-     * @param y    The startY coordinate where to start drawing the box.
-     * @param icon The icon to draw from.
-     * @param w    The Width of the drawed box.
-     * @param h    The height of the drawed box.
-     * @param srcX The startX coordinate from the icon to start drawing from. Starts
-     *             at 0.
-     * @param srcY The startY coordinate from the icon to start drawing from. Starts
-     *             at 0.
-     * @param srcW The width of the selection in the icon to draw from. Starts at
-     *             0.
-     * @param srcH The height of the selection in the icon to draw from. Starts
-     *             at 0.
-     */
-    public static void drawFluidPixelFromIcon(int x, int y, IIcon icon, int w, int h, int srcX, int srcY, int srcW, int srcH, float zLevel)
-    {
-        double minU = icon.getMinU();
-        double maxU = icon.getMaxU();
-        double minV = icon.getMinV();
-        double maxV = icon.getMaxV();
-
-        double singleU = (maxU - minU) / icon.getIconHeight();
-        double singleV = (maxV - minV) / icon.getIconWidth();
-
-        double newMinU = minU + (singleU * srcX);
-        double newMinV = minV + (singleV * srcY);
-
-        double newMaxU = newMinU + (singleU * srcW);
-        double newMaxV = newMinV + (singleV * srcH);
-
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV(x, y + h, zLevel, newMinU, newMaxV);
-        tessellator.addVertexWithUV(x + w, y + h, zLevel, newMaxU, newMaxV);
-        tessellator.addVertexWithUV(x + w, y, zLevel, newMaxU, newMinV);
-        tessellator.addVertexWithUV(x, y, zLevel, newMinU, newMinV);
-        tessellator.draw();
-
-
-    }
 }

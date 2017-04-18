@@ -1,11 +1,12 @@
 package com.darkona.adventurebackpack.client.render;
 
 import com.darkona.adventurebackpack.entity.EntityFriendlySpider;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelSpider;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.RenderLiving;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -18,10 +19,10 @@ public class RenderRideableSpider extends RenderLiving
     @SuppressWarnings("unused")
 	private static final String __OBFID = "CL_00001027";
 
-    public RenderRideableSpider()
+    public RenderRideableSpider(RenderManager renderManager)
     {
-        super(new ModelSpider(), 1.0F);
-        this.setRenderPassModel(new ModelSpider());
+        super(renderManager, new ModelSpider(), 1.0F);
+        //this.setRenderPassModel(new ModelSpider());
     }
 
     protected float getDeathMaxRotation(EntityFriendlySpider p_77037_1_)

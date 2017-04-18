@@ -7,8 +7,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.world.World;
 
-import java.util.UUID;
-
 /**
  * Created on 09/01/2015
  *
@@ -24,15 +22,14 @@ public class EntityAIHorseFollowOwner extends EntityAIBase
         private int tickCounter;
         float maxDist;
         float minDist;
-        private boolean avoidWater;
         @SuppressWarnings("unused")
 		private static final String __OBFID = "CL_00001585";
 
         public EntityAIHorseFollowOwner(EntityHorse horse, double speed, float minDist, float maxDist)
         {
             theHorse = horse;
-            theWorld = horse.worldObj;
-            theOwner = theWorld.func_152378_a(UUID.fromString(theHorse.func_152119_ch()));
+            theWorld = horse.world;
+            theOwner = theWorld.getPlayerEntityByUUID(theHorse.getOwnerUniqueId());
             this.speed = speed * 2;
             petPathfinder = horse.getNavigator();
             this.minDist = minDist;
@@ -52,9 +49,9 @@ public class EntityAIHorseFollowOwner extends EntityAIBase
 
         public boolean shouldExecute()
         {
-            if(!theHorse.isTame() || theHorse.getLeashed() || !theHorse.hasCustomNameTag())return false;
+            if(!theHorse.isTame() || theHorse.getLeashed() || !theHorse.hasCustomName())return false;
             if (theOwner == null) {
-                theOwner = theWorld.func_152378_a(UUID.fromString(theHorse.func_152119_ch()));
+                theOwner = theWorld.getPlayerEntityByUUID(theHorse.getOwnerUniqueId());
                 if (theOwner == null)
                 {
                     return false;
@@ -75,7 +72,6 @@ public class EntityAIHorseFollowOwner extends EntityAIBase
         public void startExecuting()
         {
             tickCounter = 0;
-            avoidWater = this.theHorse.getNavigator().getAvoidsWater();
             petPathfinder = theHorse.getNavigator();
         }
 
@@ -83,7 +79,6 @@ public class EntityAIHorseFollowOwner extends EntityAIBase
         {
             theOwner = null;
             petPathfinder.clearPathEntity();
-            theHorse.getNavigator().setAvoidsWater(this.avoidWater);
         }
 
 

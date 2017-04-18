@@ -1,8 +1,9 @@
 package com.darkona.adventurebackpack.proxy;
 
-import cpw.mods.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.item.Item;
 
 /**
  * Created on 14/10/2014
@@ -28,5 +29,8 @@ public interface IProxy
 
     public void registerRenderInformation();
 
-    void Capes();
+    public void registerItemRenderer(Item item, int meta, String id);
+
+    public void setCustomModelResourceLocation(Item item, int meta, String id);
+
 }

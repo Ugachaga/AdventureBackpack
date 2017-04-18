@@ -5,14 +5,14 @@ import java.util.Random;
 import com.darkona.adventurebackpack.config.ConfigHandler;
 import com.darkona.adventurebackpack.reference.BackpackNames;
 
-import cpw.mods.fml.common.registry.VillagerRegistry;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandomChestContent;
+// /import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
-import net.minecraftforge.common.ChestGenHooks;
+//import net.minecraftforge.common.ChestGenHooks;
 
 /**
  * Created on 24/12/2014
@@ -23,6 +23,7 @@ public class ModWorldGen
 {
     public static void init()
     {
+        /**
 
         //Dungeon Generation
 
@@ -56,12 +57,12 @@ public class ModWorldGen
         }
 
         //Villager Trade
-
+        **/
     }
 
-    public static class TradeHandler implements VillagerRegistry.IVillageTradeHandler
+    public static class TradeHandler //implements VillagerRegistry.VillagerTrades
     {
-
+/**
         ItemStack backpack;
 
         TradeHandler(ItemStack backpack)
@@ -76,7 +77,7 @@ public class ModWorldGen
          * @param villager
          * @param recipeList
          * @param random
-         */
+         *
         @SuppressWarnings("unchecked")
         @Override
         public void manipulateTradesForVillager(EntityVillager villager, MerchantRecipeList recipeList, Random random)
@@ -94,6 +95,6 @@ public class ModWorldGen
                 recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 10), payment, this.backpack));
             }
         }
+        **/
     }
-
 }

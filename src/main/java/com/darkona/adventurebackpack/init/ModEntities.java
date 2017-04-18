@@ -4,7 +4,7 @@ import com.darkona.adventurebackpack.AdventureBackpack;
 import com.darkona.adventurebackpack.entity.EntityFriendlySpider;
 import com.darkona.adventurebackpack.entity.EntityInflatableBoat;
 
-import cpw.mods.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 /**
  * Created on 12/10/2014

@@ -1,13 +1,13 @@
 package com.darkona.adventurebackpack.client.models;
 
-import codechicken.lib.render.RenderUtils;
-import codechicken.lib.vec.Cuboid6;
-import codechicken.lib.vec.Vector3;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.Vec3d;
+
 import net.minecraftforge.fluids.FluidTank;
+
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -52,11 +52,12 @@ public abstract class ModelWearable extends ModelBiped
 
     public abstract void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5, ItemStack stack);
 
-    public void renderFluidInTank(FluidTank tank, Vector3 minCoords, Vector3 maxCoords, Vector3 offset, ModelRenderer parent)
+    public void renderFluidInTank(FluidTank tank, Vec3d minCoords, Vec3d maxCoords, Vec3d offset, ModelRenderer parent)
     {
+        /**
         if (tank != null && tank.getFluid() != null && tank.getFluid().getFluid().getIcon() != null)
         {
-            Vector3 victor = new Vector3(
+            Vec3d victor = new Vec3d(
                     (parent.rotationPointX * 0.1f + parent.offsetX * 0.1 + offset.x) , //
                     (parent.rotationPointY * 0.1f + parent.offsetY * 0.1 + offset.y),
                     (parent.rotationPointZ * 0.1f + parent.offsetZ * 0.1 + offset.z));
@@ -65,6 +66,7 @@ public abstract class ModelWearable extends ModelBiped
             //Thanks Chickenbones!
             RenderUtils.renderFluidCuboid(tank.getFluid(), cat.add(victor),((1.0F * tank.getFluidAmount()) / (1.0F * tank.getCapacity())), 0.8);
         }
+        */
     }
 
 }

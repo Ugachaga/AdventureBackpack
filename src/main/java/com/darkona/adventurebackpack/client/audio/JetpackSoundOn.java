@@ -7,6 +7,8 @@ import com.darkona.adventurebackpack.util.Wearing;
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundCategory;
 
 /**
  * Created on 16/01/2015
@@ -24,7 +26,7 @@ public class JetpackSoundOn extends MovingSound
 
     public JetpackSoundOn(EntityPlayer player)
     {
-        super(new ResourceLocation(ModInfo.MOD_ID, "s_jetpackon"));
+        super(new SoundEvent(new ResourceLocation(ModInfo.MOD_ID, ModInfo.MOD_ID + ":s_jetpackon")), SoundCategory.BLOCKS);
         volume = 0.9f;
         pitch = 1.0F;
         thePlayer = player;
@@ -56,7 +58,7 @@ public class JetpackSoundOn extends MovingSound
     @Override
     public void update()
     {
-        if (thePlayer == null || thePlayer.isDead || thePlayer.worldObj == null || !Wearing.isWearingJetpack(thePlayer))
+        if (thePlayer == null || thePlayer.isDead || thePlayer.world == null || !Wearing.isWearingJetpack(thePlayer))
         {
             setDonePlaying();
             return;

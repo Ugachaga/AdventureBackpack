@@ -1,6 +1,6 @@
 package com.darkona.adventurebackpack.client.gui;
 
-import net.minecraft.util.IIcon;
+//import net.minecraft.util.IIcon;
 
 /**
  * Created on 12/10/2014
@@ -10,7 +10,7 @@ import net.minecraft.util.IIcon;
 public interface IBackpackGui
 {
 
-    public void drawTexturedModelRectFromIcon(int i, int j, IIcon icon, int h, int w);
+//    public void drawTexturedModelRectFromIcon(int i, int j, IIcon icon, int h, int w);
 
     public int getLeft();
 

@@ -22,7 +22,6 @@ import org.lwjgl.opengl.GL12;
 public class RendererAdventureBackpackBlock extends TileEntitySpecialRenderer
 {
 
-    //    private ModelAdventureBackpackBlock model;
     private ModelBackpackBlock model;
 
     public RendererAdventureBackpackBlock()
@@ -31,7 +30,7 @@ public class RendererAdventureBackpackBlock extends TileEntitySpecialRenderer
     }
 
     @Override
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float par8)
+    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage)
     {
         int dir = te.getBlockMetadata();
         if ((dir & 8) >= 8)

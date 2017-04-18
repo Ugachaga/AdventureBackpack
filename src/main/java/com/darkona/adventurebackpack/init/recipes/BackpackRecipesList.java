@@ -23,33 +23,33 @@ public class BackpackRecipesList
         String[] covered = {"XXX", "XaX", "XXX"};
         ItemStack backpack = BackpackNames.setBackpackColorNameFromDamage(new ItemStack(ModItems.adventureBackpack), 0);
 
-        ItemStack woolWhite = new ItemStack(Blocks.wool, 1, 0);
-        ItemStack woolOrange = new ItemStack(Blocks.wool, 1, 1);
-        ItemStack woolMagenta = new ItemStack(Blocks.wool, 1, 2);
-        ItemStack woolLightBlue = new ItemStack(Blocks.wool, 1, 3);
-        ItemStack woolYellow = new ItemStack(Blocks.wool, 1, 4);
-        ItemStack woolLime = new ItemStack(Blocks.wool, 1, 5);
-        ItemStack woolPink = new ItemStack(Blocks.wool, 1, 6);
-        ItemStack woolGray = new ItemStack(Blocks.wool, 1, 7);
-        ItemStack woolLightGray = new ItemStack(Blocks.wool, 1, 8);
-        ItemStack woolCyan = new ItemStack(Blocks.wool, 1, 9);
-        ItemStack woolPurple = new ItemStack(Blocks.wool, 1, 10);
-        ItemStack woolBlue = new ItemStack(Blocks.wool, 1, 11);
-        ItemStack woolBrown = new ItemStack(Blocks.wool, 1, 12);
-        ItemStack woolGreen = new ItemStack(Blocks.wool, 1, 13);
-        ItemStack woolRed = new ItemStack(Blocks.wool, 1, 14);
-        ItemStack woolBlack = new ItemStack(Blocks.wool, 1, 15);
+        ItemStack woolWhite = new ItemStack(Blocks.WOOL, 1, 0);
+        ItemStack woolOrange = new ItemStack(Blocks.WOOL, 1, 1);
+        ItemStack woolMagenta = new ItemStack(Blocks.WOOL, 1, 2);
+        ItemStack woolLightBlue = new ItemStack(Blocks.WOOL, 1, 3);
+        ItemStack woolYellow = new ItemStack(Blocks.WOOL, 1, 4);
+        ItemStack woolLime = new ItemStack(Blocks.WOOL, 1, 5);
+        ItemStack woolPink = new ItemStack(Blocks.WOOL, 1, 6);
+        ItemStack woolGray = new ItemStack(Blocks.WOOL, 1, 7);
+        ItemStack woolLightGray = new ItemStack(Blocks.WOOL, 1, 8);
+        ItemStack woolCyan = new ItemStack(Blocks.WOOL, 1, 9);
+        ItemStack woolPurple = new ItemStack(Blocks.WOOL, 1, 10);
+        ItemStack woolBlue = new ItemStack(Blocks.WOOL, 1, 11);
+        ItemStack woolBrown = new ItemStack(Blocks.WOOL, 1, 12);
+        ItemStack woolGreen = new ItemStack(Blocks.WOOL, 1, 13);
+        ItemStack woolRed = new ItemStack(Blocks.WOOL, 1, 14);
+        ItemStack woolBlack = new ItemStack(Blocks.WOOL, 1, 15);
 
 
         Standard = reviewRecipe(
                 "LGL",
                 "TCT",
                 "LSL",
-                'L', Items.leather,
+                'L', Items.LEATHER,
                 'G', "ingotGold",
                 'T', new ItemStack(ModItems.component, 1, 2),
                 'S', new ItemStack(ModItems.component, 1, 1),
-                'C', Blocks.chest
+                'C', Blocks.CHEST
         );
 
         Black = reviewRecipe(covered,
@@ -61,11 +61,11 @@ public class BackpackRecipesList
                 "BFB",
                 "BaB",
                 "PLP",
-                'B', Items.blaze_rod,
-                'F', Items.fire_charge,
+                'B', Items.BLAZE_ROD,
+                'F', Items.FIRE_CHARGE,
                 'a', backpack,
-                'P', Items.blaze_powder,
-                'L', Items.lava_bucket
+                'P', Items.BLAZE_POWDER,
+                'L', Items.LAVA_BUCKET
         );
 
         Blue = reviewRecipe(covered,
@@ -77,9 +77,9 @@ public class BackpackRecipesList
                 "BDB",
                 "BaB",
                 "bbb",
-                'B', Blocks.bookshelf,
+                'B', Blocks.BOOKSHELF,
                 'a', backpack,
-                'b', Items.book
+                'b', Items.BOOK
         );
 
         Brown = reviewRecipe(covered,
@@ -88,7 +88,7 @@ public class BackpackRecipesList
         );
 
         BrownMushroom = reviewRecipe(covered,
-                'X', Blocks.brown_mushroom,
+                'X', Blocks.BROWN_MUSHROOM,
                 'a', backpack
         );
 
@@ -96,10 +96,10 @@ public class BackpackRecipesList
                 "CGC",
                 "CaC",
                 "SSS",
-                'C', Blocks.cactus,
-                'G', new ItemStack(Items.dye, 1, 2),
+                'C', Blocks.CACTUS,
+                'G', new ItemStack(Items.DYE, 1, 2),
                 'a', backpack,
-                'S', Blocks.sand
+                'S', Blocks.SAND
         );
 
         Cake = reviewRecipe(
@@ -107,11 +107,11 @@ public class BackpackRecipesList
                 "WaW",
                 "SmS",
                 'a', backpack,
-                'E', Items.egg,
-                'C', Items.cake,
-                'W', Items.wheat,
-                'S', Items.sugar,
-                'm', Items.milk_bucket
+                'E', Items.EGG,
+                'C', Items.CAKE,
+                'W', Items.WHEAT,
+                'S', Items.SUGAR,
+                'm', Items.MILK_BUCKET
         );
 
         ModdedNetwork = reviewRecipe(
@@ -119,15 +119,15 @@ public class BackpackRecipesList
                 "DaD",
                 "DDD",
                 'a', backpack,
-                'E', Items.emerald,
-                'D', Items.diamond
+                'E', Items.EMERALD,
+                'D', Items.DIAMOND
         );
-        
+
         Chest = reviewRecipe(
                 "CWC",
                 "WaW",
                 "CWC",
-                'C', Blocks.chest,
+                'C', Blocks.CHEST,
                 'W', "plankWood",
                 'a', backpack
         );
@@ -136,17 +136,17 @@ public class BackpackRecipesList
                 "FnF",
                 "FaF",
                 "nEn",
-                'F', Items.feather,
-                'n', Items.gold_nugget,
+                'F', Items.FEATHER,
+                'n', Items.GOLD_NUGGET,
                 'a', backpack,
-                'E', Items.egg
+                'E', Items.EGG
         );
 
         Coal = reviewRecipe(
                 "cCc",
                 "CaC",
                 "ccc",
-                'c', Items.coal,
+                'c', Items.COAL,
                 'C', "blockCoal",
                 'a', backpack
         );
@@ -155,9 +155,9 @@ public class BackpackRecipesList
                 "cCc",
                 "WaW",
                 "ccc",
-                'c', Items.cookie,
-                'C', new ItemStack(Items.dye, 1, 3),//Chocolate
-                'W', Items.wheat,
+                'c', Items.COOKIE,
+                'C', new ItemStack(Items.DYE, 1, 3),//Chocolate
+                'W', Items.WHEAT,
                 'a', backpack
         );
 
@@ -165,21 +165,21 @@ public class BackpackRecipesList
                 "BLB",
                 "BaB",
                 "LML",
-                'B', Items.beef,
+                'B', Items.BEEF,
                 'a', backpack,
-                'L', Items.leather,
-                'M', Items.milk_bucket
+                'L', Items.LEATHER,
+                'M', Items.MILK_BUCKET
         );
 
         Creeper = reviewRecipe(
                 "GHG",
                 "GaG",
                 "TNT",//see what I did there? ;D
-                'G', Items.gunpowder,
-                'H', new ItemStack(Items.skull, 1, 4), //Creeper Skull
+                'G', Items.GUNPOWDER,
+                'H', new ItemStack(Items.SKULL, 1, 4), //Creeper Skull
                 'a', backpack,
-                'T', Blocks.tnt,
-                'N', Blocks.tnt
+                'T', Blocks.TNT,
+                'N', Blocks.TNT
         );
 
         Cyan = reviewRecipe(covered,
@@ -201,15 +201,15 @@ public class BackpackRecipesList
                 "EDE",
                 "OaO",
                 "POP",
-                'E', Blocks.end_stone,
-                'D', new ItemStack(Blocks.dragon_egg, 1),
-                'O', Blocks.obsidian,
+                'E', Blocks.END_STONE,
+                'D', new ItemStack(Blocks.DRAGON_EGG, 1),
+                'O', Blocks.OBSIDIAN,
                 'a', backpack,
-                'P', Items.ender_pearl
+                'P', Items.ENDER_PEARL
         );
 
         Egg = reviewRecipe(covered,
-                'X', Items.egg,
+                'X', Items.EGG,
                 'a', backpack
         );
 
@@ -217,18 +217,18 @@ public class BackpackRecipesList
                 "GEG",
                 "GaG",
                 "eGe",
-                'G', Blocks.glass,
-                'E', Blocks.emerald_block,
+                'G', Blocks.GLASS,
+                'E', Blocks.EMERALD_BLOCK,
                 'a', backpack,
-                'e', Items.emerald
+                'e', Items.EMERALD
         );
 
         End = reviewRecipe(
                 "eEe",
                 "EaE",
                 "eEe",
-                'E', Blocks.end_stone,
-                'e', Items.ender_eye,
+                'E', Blocks.END_STONE,
+                'e', Items.ENDER_EYE,
                 'a', backpack
         );
 
@@ -237,7 +237,7 @@ public class BackpackRecipesList
                 "XaX",
                 "PXP",
                 'X', woolBlack,
-                'P', Items.ender_pearl,
+                'P', Items.ENDER_PEARL,
                 'a', backpack
         );
 
@@ -245,9 +245,9 @@ public class BackpackRecipesList
                 "GFG",
                 "TaT",
                 "GTG",
-                'G', Items.ghast_tear,
-                'F', Items.fire_charge,
-                'T', Items.gunpowder,
+                'G', Items.GHAST_TEAR,
+                'F', Items.FIRE_CHARGE,
+                'T', Items.GUNPOWDER,
                 'a', backpack
         );
 
@@ -255,8 +255,8 @@ public class BackpackRecipesList
                 "GgG",
                 "GaG",
                 "GgG",
-                'G', Blocks.glowstone,
-                'g', "dustGlowstone",
+                'G', Blocks.GLOWSTONE,
+                'g', Items.GLOWSTONE_DUST,
                 'a', backpack
         );
 
@@ -264,10 +264,10 @@ public class BackpackRecipesList
                 "FGF",
                 "FaF",
                 "gFg",
-                'F', "blockGlass",
-                'G', "blockGold",
+                'F', Blocks.GLASS,
+                'G', Blocks.GOLD_BLOCK,
                 'a', backpack,
-                'g', "ingotGold"
+                'g', Items.GOLD_INGOT
         );
 
         Gray = reviewRecipe(covered,
@@ -281,7 +281,7 @@ public class BackpackRecipesList
         );
 
         Haybale = reviewRecipe(covered,
-                'X', Blocks.hay_block,
+                'X', Blocks.HAY_BLOCK,
                 'a', backpack
         );
 
@@ -292,7 +292,7 @@ public class BackpackRecipesList
                 'G', "blockGlass",
                 'I', "blockIron",
                 'a', backpack,
-                'i', Items.iron_ingot
+                'i', Items.IRON_INGOT
         );
 
         Lapis = reviewRecipe(
@@ -301,12 +301,12 @@ public class BackpackRecipesList
                 "lGl",
                 'G', "blockGlass",
                 'L', "blockLapis",
-                'l', new ItemStack(Items.dye, 1, 4),
+                'l', new ItemStack(Items.DYE, 1, 4),
                 'a', backpack
         );
 
         Leather = reviewRecipe(covered,
-                'X', Items.leather,
+                'X', Items.LEATHER,
                 'a', backpack
         );
 
@@ -334,46 +334,46 @@ public class BackpackRecipesList
                 "MLM",
                 "MaM",
                 "MLM",
-                'M', Items.magma_cream,
+                'M', Items.MAGMA_CREAM,
                 'a', backpack,
-                'L', Items.lava_bucket
+                'L', Items.LAVA_BUCKET
         );
 
         Melon = reviewRecipe(
                 "mMm",
                 "mam",
                 "msm",
-                'm', Items.melon,
-                'M', Blocks.melon_block,
+                'm', Items.MELON,
+                'M', Blocks.MELON_BLOCK,
                 'a', backpack,
-                's', Items.melon_seeds
+                's', Items.MELON_SEEDS
         );
 
         Mooshroom = reviewRecipe(
                 "SRL",
                 "BaB",
                 "LRS",
-                'R', Blocks.red_mushroom,
-                'B', Blocks.brown_mushroom,
+                'R', Blocks.RED_MUSHROOM,
+                'B', Blocks.BROWN_MUSHROOM,
                 'a', backpack,
-                'S', Items.mushroom_stew,
-                'L', Blocks.mycelium
+                'S', Items.MUSHROOM_STEW,
+                'L', Blocks.MYCELIUM
         );
 
         Nether = reviewRecipe(
                 "QwQ",
                 "NaN",
                 "QLQ",
-                'Q', Items.quartz,
-                'N', Blocks.netherrack,
-                'w', Items.nether_wart,
-                'L', Items.lava_bucket,
+                'Q', Items.QUARTZ,
+                'N', Blocks.NETHERRACK,
+                'w', Items.NETHER_WART,
+                'L', Items.LAVA_BUCKET,
                 'a', backpack
         );
 
         Obsidian = reviewRecipe(
                 covered,
-                'X', Blocks.obsidian,
+                'X', Blocks.OBSIDIAN,
                 'a', backpack
         );
 
@@ -381,8 +381,8 @@ public class BackpackRecipesList
                 "FYF",
                 "YaY",
                 "FYF",
-                'F', Items.fish,
-                'Y', new ItemStack(Blocks.wool, 1, 4),
+                'F', Items.FISH,
+                'Y', new ItemStack(Blocks.WOOL, 1, 4),
                 'a', backpack
         );
 
@@ -392,12 +392,12 @@ public class BackpackRecipesList
         );
 
         Pig = reviewRecipe(covered,
-                'X', Items.porkchop,
+                'X', Items.PORKCHOP,
                 'a', backpack
         );
 
         Pink = reviewRecipe(covered,
-                'X', new ItemStack(Blocks.wool, 1, 6),
+                'X', new ItemStack(Blocks.WOOL, 1, 6),
                 'a', backpack
         );
 
@@ -405,9 +405,9 @@ public class BackpackRecipesList
                 "PPP",
                 "PaP",
                 "PsP",
-                'P', Blocks.pumpkin,
+                'P', Blocks.PUMPKIN,
                 'a', backpack,
-                's', Items.pumpkin_seeds
+                's', Items.PUMPKIN_SEEDS
         );
 
         Purple = reviewRecipe(covered,
@@ -419,8 +419,8 @@ public class BackpackRecipesList
                 "QqQ",
                 "qaq",
                 "QqQ",
-                'Q', Blocks.quartz_block,
-                'q', Items.quartz,
+                'Q', Blocks.QUARTZ_BLOCK,
+                'q', Items.QUARTZ,
                 'a', backpack
         );
 
@@ -435,7 +435,7 @@ public class BackpackRecipesList
                 'F', "dyeCyan",//CYAN
                 'B', "dyeBlue",//BLUE
                 'P', "dyePurple",//PURPLE
-                'C', Items.record_cat,
+                'C', Items.RECORD_CAT,
                 'a', backpack
         );
 
@@ -445,7 +445,7 @@ public class BackpackRecipesList
         );
 
         RedMushroom = reviewRecipe(covered,
-                'X', Blocks.red_mushroom,
+                'X', Blocks.RED_MUSHROOM,
                 'a', backpack
         );
 
@@ -454,7 +454,7 @@ public class BackpackRecipesList
                 "RaR",
                 "rRr",
                 'R', "blockRedstone",
-                'r', Items.redstone,
+                'r', Items.REDSTONE,
                 'a', backpack
         );
 
@@ -462,8 +462,8 @@ public class BackpackRecipesList
                 "CSC",
                 "SaS",
                 "CSC",
-                'S', new ItemStack(Blocks.sandstone, 1, 0),
-                'C', new ItemStack(Blocks.sandstone, 1, 1),
+                'S', new ItemStack(Blocks.SANDSTONE, 1, 0),
+                'C', new ItemStack(Blocks.SANDSTONE, 1, 1),
                 'a', backpack
         );
 
@@ -480,10 +480,10 @@ public class BackpackRecipesList
                 "BSB",
                 "bab",
                 "BAB",
-                'B', Items.bone,
-                'S', new ItemStack(Items.skull, 1, 0),//Skeleton skull
-                'b', Items.bow,
-                'A', Items.arrow,
+                'B', Items.BONE,
+                'S', new ItemStack(Items.SKULL, 1, 0),//Skeleton skull
+                'b', Items.BOW,
+                'A', Items.ARROW,
                 'a', backpack
         );
 
@@ -496,9 +496,9 @@ public class BackpackRecipesList
                 "III",
                 "SaS",
                 "sSs",
-                'I', Blocks.ice,
-                'S', Blocks.snow,
-                's', Items.snowball,
+                'I', Blocks.ICE,
+                'S', Blocks.SNOW,
+                's', Items.SNOWBALL,
                 'a', backpack
         );
 
@@ -506,14 +506,14 @@ public class BackpackRecipesList
                 "ESE",
                 "LaL",
                 "ESE",
-                'E', Items.spider_eye,
-                'S', Items.string,
-                'L', Blocks.ladder,
+                'E', Items.SPIDER_EYE,
+                'S', Items.STRING,
+                'L', Blocks.LADDER,
                 'a', backpack
         );
 
         White = reviewRecipe(covered,
-                'X', new ItemStack(Blocks.wool, 1, 0),
+                'X', new ItemStack(Blocks.WOOL, 1, 0),
                 'a', backpack
         );
 
@@ -521,10 +521,10 @@ public class BackpackRecipesList
                 "SSS",
                 "sas",
                 "NsD",
-                'S', new ItemStack(Items.skull, 1, 1),//WitherSkelleton Skull
-                's', Blocks.soul_sand,
-                'N', Items.nether_star,
-                'D', Items.diamond,
+                'S', new ItemStack(Items.SKULL, 1, 1),//WitherSkelleton Skull
+                's', Blocks.SOUL_SAND,
+                'N', Items.NETHER_STAR,
+                'D', Items.DIAMOND,
                 'a', backpack
         );
 
@@ -532,18 +532,18 @@ public class BackpackRecipesList
                 "BsB",
                 "SaS",
                 "CBC",
-                'B', Items.bone,
-                'S', Items.stone_sword,
+                'B', Items.BONE,
+                'S', Items.STONE_SWORD,
                 'a', backpack,
-                'C', Items.coal,
-                's', new ItemStack(Items.skull, 1, 1)
+                'C', Items.COAL,
+                's', new ItemStack(Items.SKULL, 1, 1)
         );
 
         Wolf = reviewRecipe(
                 "BWB",
                 "WaW",
                 "BWB",
-                'B', Items.bone,
+                'B', Items.BONE,
                 'W', woolWhite,
                 'a', backpack
         );
@@ -557,14 +557,14 @@ public class BackpackRecipesList
                 "FSF",
                 "FaF",
                 "FFF",
-                'F', Items.rotten_flesh,
-                'S', new ItemStack(Items.skull, 1, 2),
+                'F', Items.ROTTEN_FLESH,
+                'S', new ItemStack(Items.SKULL, 1, 2),
                 'a', backpack
         );
 
         Carrot = reviewRecipe(covered,
                 'a', backpack,
-                'X', Items.carrot
+                'X', Items.CARROT
         );
 
         Silverfish = reviewRecipe(
@@ -573,30 +573,30 @@ public class BackpackRecipesList
                 "CGC",
                 'a', backpack,
                 'G', woolLightGray,
-                'C', new ItemStack(Blocks.stonebrick, 1, 2)
+                'C', new ItemStack(Blocks.STONEBRICK, 1, 2)
         );
 
         Sunflower = reviewRecipe(
                 covered,
                 'a', backpack,
-                'X', new ItemStack(Blocks.double_plant, 1, 0)
+                'X', new ItemStack(Blocks.DOUBLE_PLANT, 1, 0)
         );
 
         Horse = reviewRecipe(
                 "LSL",
                 "XaX",
                 "LXL",
-                'L', Items.leather,
-                'S', Items.saddle,
-                'X', Blocks.hay_block,
+                'L', Items.LEATHER,
+                'S', Items.SADDLE,
+                'X', Blocks.HAY_BLOCK,
                 'a', backpack);
 
         Overworld = reviewRecipe(
                 "BBB",
                 "GaG",
                 "CCC",
-                'B', new ItemStack(Blocks.wool, 1, 3),
-                'G', Blocks.grass,
+                'B', new ItemStack(Blocks.WOOL, 1, 3),
+                'G', Blocks.GRASS,
                 'a', backpack,
                 'C', "cobblestone"
 
@@ -608,11 +608,11 @@ public class BackpackRecipesList
                 "BIB",
                 'a', backpack,
                 'B', woolBlue,
-                'I', new ItemStack(Items.dye, 1, 0)
+                'I', new ItemStack(Items.DYE, 1, 0)
         );
 
         Sponge = reviewRecipe(covered,
-                'X', Blocks.sponge,
+                'X', Blocks.SPONGE,
                 'a', backpack
         );
     }
