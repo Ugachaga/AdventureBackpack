@@ -13,23 +13,23 @@ public class BackpacksCapabilities {
     public static final Capability<PlayerWearingBackpackCapabilities> WEARING_BACKPACK_CAPABILITY = null;
 
     //Get capabilities
-    public static BackpacksCapabilities getWearingBackpackCapability(EntityPlayer player) {
+    public static PlayerWearingBackpackCapabilities getWearingBackpackCapability(EntityPlayer player) {
         return player.getCapability(WEARING_BACKPACK_CAPABILITY, null);
     }
 
-    public static BackpacksCapabilities getDeathBackpackCapability(EntityPlayer player) {
-        return player.getCapability(DEATH_BACKPACK_CAPABILITY, null);
-    }
+    //public static BackpacksCapabilities getDeathBackpackCapability(EntityPlayer player) {
+    //    return player.getCapability(DEATH_BACKPACK_CAPABILITY, null);
+    //}
 
     //Registration
     public static void registerAllCapabilities(){
-        //PlayerWearingBackpackCapabilities.register();
+        PlayerWearingBackpackCapabilities.register();
         //PlayerDeathBackpackCapabilities.register();
     }
 
     //Useful methods for other classes
     public static ItemStack getWornBackpack(EntityPlayer player) {
-        //PlayerWearingBackpackCapabilities cap = getWearingBackpackCapability(player);
+        PlayerWearingBackpackCapabilities cap = getWearingBackpackCapability(player);
         if (cap != null)
             return cap.getEquippedBackpack();
         return null;

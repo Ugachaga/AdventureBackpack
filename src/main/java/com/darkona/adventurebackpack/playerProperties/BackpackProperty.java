@@ -86,8 +86,8 @@ public class BackpackProperty //implements IExtendedEntityProperties
     {
         //TODO: update to capabilities
         //TODO: NPE
-        return (BackpackProperty) player.getExtendedProperties(PROPERTY_NAME);
-        //return new BackpackProperty(player);
+        //return (BackpackProperty) player.getExtendedProperties(PROPERTY_NAME);
+        return new BackpackProperty((EntityPlayer)player);
     }
 
     /**
