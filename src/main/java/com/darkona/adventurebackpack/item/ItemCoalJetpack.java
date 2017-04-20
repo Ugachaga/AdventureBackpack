@@ -6,7 +6,7 @@ import com.darkona.adventurebackpack.network.GUIPacket;
 import com.darkona.adventurebackpack.network.PlayerActionPacket;
 import com.darkona.adventurebackpack.network.messages.EntityParticlePacket;
 import com.darkona.adventurebackpack.network.messages.EntitySoundPacket;
-import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
+import com.darkona.adventurebackpack.capablities.BackpacksCapabilities;
 import com.darkona.adventurebackpack.proxy.ClientProxy;
 import com.darkona.adventurebackpack.util.Resources;
 import com.darkona.adventurebackpack.util.Utils;
@@ -271,7 +271,10 @@ public class ItemCoalJetpack extends ItemAB implements IBackWearableItem
     public void onPlayerDeath(World world, EntityPlayer player, ItemStack stack)
     {
         onUnequipped(world, player, stack);
-        if (!Utils.isSoulBounded(stack)) BackpackProperty.get(player).setWearable(null);
+        if (!Utils.isSoulBounded(stack))
+        {
+            BackpacksCapabilities.getEquippedBackpack(player).setCurrentBackpack(null);
+        }
     }
 
     @Override

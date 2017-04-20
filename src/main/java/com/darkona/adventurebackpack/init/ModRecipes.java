@@ -20,10 +20,6 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
  */
 public class ModRecipes
 {
-    private static ItemStack bc(int damage)
-    {
-        return BackpackNames.setBackpackColorNameFromDamage(new ItemStack(ModItems.adventureBackpack), damage);
-    }
 
     public static void init()
     {

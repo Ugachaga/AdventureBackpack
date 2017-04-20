@@ -13,7 +13,7 @@ import com.darkona.adventurebackpack.init.ModBlocks;
 import com.darkona.adventurebackpack.init.ModItems;
 import com.darkona.adventurebackpack.init.ModNetwork;
 import com.darkona.adventurebackpack.network.GUIPacket;
-import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
+import com.darkona.adventurebackpack.capablities.BackpacksCapabilities;
 import com.darkona.adventurebackpack.proxy.ClientProxy;
 import com.darkona.adventurebackpack.reference.BackpackNames;
 import com.darkona.adventurebackpack.reference.ModInfo;
@@ -192,7 +192,7 @@ public class ItemAdventureBackpack extends ItemAB implements IBackWearableItem
                         player.inventory.decrStackSize(player.inventory.currentItem, 1);
                     } else
                     {
-                        BackpackProperty.get(player).setWearable(null);
+                        BackpacksCapabilities.getEquippedBackpack(player).setCurrentBackpack(null);
                     }
                     WearableEvent event = new WearableEvent(player, stack);
                     MinecraftForge.EVENT_BUS.post(event);
@@ -316,7 +316,7 @@ public class ItemAdventureBackpack extends ItemAB implements IBackWearableItem
             }
         }
 
-        BackpackProperty.get(player).setWearable(null);
+        BackpacksCapabilities.getEquippedBackpack(player).setCurrentBackpack(null);
     }
 
     private boolean tryPlace(World world, EntityPlayer player, ItemStack backpack)

@@ -6,7 +6,6 @@ import com.darkona.adventurebackpack.CreativeTabAB;
 import com.darkona.adventurebackpack.init.ModMaterials;
 import com.google.common.collect.Sets;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;

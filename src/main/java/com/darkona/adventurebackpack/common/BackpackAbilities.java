@@ -534,7 +534,6 @@ public class BackpackAbilities
      * @param backpack
      * @see com.darkona.adventurebackpack.handlers.PlayerEventHandler
      */
-    @SuppressWarnings("unchecked")
     public void itemCreeper(EntityPlayer player, World world, ItemStack backpack)
     {
         //lastTime is in seconds for this ability
@@ -718,7 +717,6 @@ public class BackpackAbilities
      * @param world    the world
      * @param backpack the backpack
      */
-    @SuppressWarnings("unchecked")
     public void itemWolf(EntityPlayer player, World world, ItemStack backpack)
     {
         //lastTime is in Ticks for this backpack
@@ -778,7 +776,6 @@ public class BackpackAbilities
      * @param world
      * @param backpack
      */
-    @SuppressWarnings("unchecked")
     public void itemOcelot(EntityPlayer player, World world, ItemStack backpack)
     {
         //lastTime in this backpack is in Ticks.

@@ -6,13 +6,9 @@ import com.darkona.adventurebackpack.common.ServerActions;
 import com.darkona.adventurebackpack.fluids.FluidEffectRegistry;
 import com.darkona.adventurebackpack.init.ModFluids;
 import com.darkona.adventurebackpack.inventory.InventoryBackpack;
-import com.darkona.adventurebackpack.util.Resources;
 import com.darkona.adventurebackpack.util.Utils;
 import com.darkona.adventurebackpack.util.Wearing;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;

@@ -1,24 +1,11 @@
 package com.darkona.adventurebackpack.handlers;
 
 import com.darkona.adventurebackpack.common.Constants;
-import com.darkona.adventurebackpack.common.ServerActions;
-import com.darkona.adventurebackpack.config.ConfigHandler;
-import com.darkona.adventurebackpack.init.ModNetwork;
-import com.darkona.adventurebackpack.inventory.SlotTool;
 import com.darkona.adventurebackpack.item.ItemAdventureBackpack;
-import com.darkona.adventurebackpack.item.ItemHose;
-import com.darkona.adventurebackpack.network.CycleToolPacket;
-import com.darkona.adventurebackpack.reference.BackpackNames;
-import com.darkona.adventurebackpack.util.Wearing;
 
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.MouseEvent;
@@ -74,7 +61,7 @@ public class ClientEventHandler
     public void mouseWheelDetect(MouseEvent event)
     {
         /*Special thanks go to MachineMuse, both for inspiration and the event. God bless you girl.*/
-        Minecraft mc = Minecraft.getMinecraft();
+        //Minecraft mc = Minecraft.getMinecraft();
         int dWheel = event.getDwheel();
         if (dWheel != 0)
         {

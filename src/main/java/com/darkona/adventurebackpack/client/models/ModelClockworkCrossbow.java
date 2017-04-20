@@ -1,6 +1,5 @@
 package com.darkona.adventurebackpack.client.models;
 
-import com.darkona.adventurebackpack.client.render.RendererStack;
 import com.darkona.adventurebackpack.util.Utils;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
@@ -46,7 +45,6 @@ public class ModelClockworkCrossbow extends ModelBase
     public ModelRenderer hookTooth2;
     public ModelRenderer hookTooth3;
     public ModelRenderer hookTooth4;
-    public RendererStack arrow;
     private ItemStack xbow;
 
     public ModelClockworkCrossbow()
@@ -98,8 +96,6 @@ public class ModelClockworkCrossbow extends ModelBase
         this.sniperLeg1_1.setRotationPoint(2.0F, 3.0F, -12.0F);
         this.sniperLeg1_1.addBox(-0.5F, 0.0F, -0.5F, 1, 7, 1, 0.0F);
         this.setRotateAngle(sniperLeg1_1, 0.0F, 0.0F, -0.4363323129985824F);
-
-
 
         this.hookTooth2 = new ModelRenderer(this, 0, 0);
         this.hookTooth2.setRotationPoint(0.0F, -1.0F, -1.0F);
@@ -155,7 +151,6 @@ public class ModelClockworkCrossbow extends ModelBase
         this.leftArc3.addBox(0.0F, 0.0F, 0.0F, 8, 2, 2, 0.0F);
         this.setRotateAngle(leftArc3, 0.0F, -0.7853981633974483F, 0.0F);
 
-
         this.reloader2 = new ModelRenderer(this, 0, 44);
         this.reloader2.setRotationPoint(6.0F, 1.0F, 0.0F);
         this.reloader2.addBox(0.0F, -0.5F, -0.5F, 1, 4, 1, 0.0F);
@@ -172,7 +167,6 @@ public class ModelClockworkCrossbow extends ModelBase
         this.hookTooth3 = new ModelRenderer(this, 0, 0);
         this.hookTooth3.setRotationPoint(0.0F, 3.0F, 3.0F);
         this.hookTooth3.addBox(0.0F, 0.0F, 0.0F, 3, 1, 1, 0.0F);
-
 
         this.hookHead.addChild(this.hookTooth1);
         this.reloader2.addChild(this.reloader3);
@@ -193,8 +187,6 @@ public class ModelClockworkCrossbow extends ModelBase
         this.reloader1.addChild(this.reloader2);
         this.hookHead.addChild(this.hookTooth3);
 
-        arrow = new RendererStack(this, true);
-        arrow.stack = new ItemStack(Items.ARROW, 1);
     }
 
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5, ItemStack xbow)
@@ -213,7 +205,7 @@ public class ModelClockworkCrossbow extends ModelBase
 
         this.sniperLeg1_1.render(f5);
         this.xbowBody.render(f5);
-        //this.hookBolt.render(f5);
+
         this.point.render(f5);
 
         this.handle2.render(f5);
@@ -223,16 +215,6 @@ public class ModelClockworkCrossbow extends ModelBase
 
         ModelRenderer[] arrows = {arrow1, arrow2, arrow3};
 
-
-        setRotateAngle(arrow, Utils.degreesToRadians(-90), Utils.degreesToRadians(0), Utils.degreesToRadians(0));
-        for (ModelRenderer model : arrows)
-        {
-            arrow.setRotationPoint(model.rotationPointX, model.rotationPointY, model.rotationPointZ);
-            setOffset(arrow, -.25f, .1f, -.2f);
-            arrow.render(f5);
-            setOffset(arrow, -.75f, .1f, -.2f);
-            arrow.render(f5);
-        }
         if(xbow != null && xbow.hasTagCompound() && xbow.getTagCompound().hasKey("Shot"))
         {
             if((xbow.getTagCompound().getByte("Shot")>0))
@@ -254,12 +236,8 @@ public class ModelClockworkCrossbow extends ModelBase
     {
         setRotateAngle(stringLeft, 1.5707963267948966F, 0.0F, 0.0F);
         setRotateAngle(stringRight, -1.5707963267948966F, 0.0F, 0.0F);
-        setOffset(arrow, -.0f, -.0f, -.2f);
-        setRotateAngle(arrow, Utils.degreesToRadians(-90), Utils.degreesToRadians(0), Utils.degreesToRadians(90));
-        arrow.setRotationPoint(xbowBody.rotationPointX, xbowBody.rotationPointY, xbowBody.rotationPointZ);
         GL11.glPushMatrix();
         GL11.glScalef(1.0f,1.0f,2f);
-        arrow.render(1 / 14);
         GL11.glPopMatrix();
     }
 

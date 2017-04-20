@@ -7,7 +7,7 @@ import com.darkona.adventurebackpack.init.ModNetwork;
 import com.darkona.adventurebackpack.inventory.InventoryCopterPack;
 import com.darkona.adventurebackpack.network.GUIPacket;
 import com.darkona.adventurebackpack.network.messages.EntityParticlePacket;
-import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
+import com.darkona.adventurebackpack.capablities.BackpacksCapabilities;
 import com.darkona.adventurebackpack.proxy.ClientProxy;
 import com.darkona.adventurebackpack.reference.GeneralReference;
 import com.darkona.adventurebackpack.util.Resources;
@@ -279,7 +279,10 @@ public class ItemCopterPack extends ItemAB implements IBackWearableItem
     public void onPlayerDeath(World world, EntityPlayer player, ItemStack stack)
     {
         onUnequipped(world, player, stack);
-        if (!Utils.isSoulBounded(stack)) BackpackProperty.get(player).setWearable(null);
+        if (!Utils.isSoulBounded(stack))
+        {
+            BackpacksCapabilities.getEquippedBackpack(player).setCurrentBackpack(null);
+        }
     }
 
     @Override

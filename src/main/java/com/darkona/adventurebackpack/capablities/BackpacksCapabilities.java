@@ -1,4 +1,4 @@
-package com.darkona.adventurebackpack.capabilities;
+package com.darkona.adventurebackpack.capablities;
 
 import com.darkona.adventurebackpack.capablities.player.PlayerWearingBackpackCapabilities;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,7 +13,7 @@ public class BackpacksCapabilities {
     public static final Capability<PlayerWearingBackpackCapabilities> WEARING_BACKPACK_CAPABILITY = null;
 
     //Get capabilities
-    public static PlayerWearingBackpackCapabilities getWearingBackpackCapability(EntityPlayer player) {
+    public static PlayerWearingBackpackCapabilities getEquippedBackpack(EntityPlayer player) {
         return player.getCapability(WEARING_BACKPACK_CAPABILITY, null);
     }
 
@@ -29,7 +29,7 @@ public class BackpacksCapabilities {
 
     //Useful methods for other classes
     public static ItemStack getWornBackpack(EntityPlayer player) {
-        PlayerWearingBackpackCapabilities cap = getWearingBackpackCapability(player);
+        PlayerWearingBackpackCapabilities cap = getEquippedBackpack(player);
         if (cap != null)
             return cap.getEquippedBackpack();
         return null;

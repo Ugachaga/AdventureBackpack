@@ -1,8 +1,5 @@
 package com.darkona.adventurebackpack.client.models;
 
-import com.darkona.adventurebackpack.client.render.RendererStack;
-import com.darkona.adventurebackpack.common.Constants;
-import com.darkona.adventurebackpack.config.ConfigHandler;
 import com.darkona.adventurebackpack.inventory.InventoryBackpack;
 
 import net.minecraft.client.model.ModelRenderer;
@@ -51,8 +48,6 @@ public class ModelBackpackArmor extends ModelWearable
     public ModelRenderer bedStrapRightMid;
     public ModelRenderer bedStrapRightTop;
     public ModelRenderer bedStrapLeftTop;
-    RendererStack lowerTool;
-    RendererStack upperTool;
     public ItemStack backpack;
 
     private void init()
@@ -203,9 +198,6 @@ public class ModelBackpackArmor extends ModelWearable
         pigNose.setRotationPoint(-2.0F, 4.0F, 4.0F);
         pigNose.addBox(0.0F, 0.0F, 0.0F, 4, 3, 1);
 
-        lowerTool = new RendererStack(this, true);
-        upperTool = new RendererStack(this, false);
-
 
         bipedBody.addChild(mainBody);
         bipedBody.addChild(bed);
@@ -214,8 +206,7 @@ public class ModelBackpackArmor extends ModelWearable
         bipedBody.addChild(villagerNose);
         bipedBody.addChild(ocelotNose);
         bipedBody.addChild(pigNose);
-        mainBody.addChild(lowerTool);
-        mainBody.addChild(upperTool);
+
 
 
         float offsetZ = 0.4F;
@@ -253,16 +244,6 @@ public class ModelBackpackArmor extends ModelWearable
         for (ModelRenderer model : (List<ModelRenderer>) bipedBody.childModels)
         {
             model.mirror = false;
-        }
-
-        lowerTool.setRotationPoint(-.5F, .10F, .3F);
-        setOffset(lowerTool, -.28F, 0.8F, -.1F);
-        setOffset(upperTool, 0.0f, 0.04f, 0.25f);
-
-        if (ConfigHandler.enableToolsRender)
-        {
-	    lowerTool.stack = backpack.getStackInSlot(Constants.lowerTool);
-	    upperTool.stack = backpack.getStackInSlot(Constants.upperTool);
         }
 
         if (color.equals("Quartz") || color.equals("Slime") || color.equals("Snow"))

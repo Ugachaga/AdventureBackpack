@@ -26,6 +26,7 @@ public class GuiTank
     private int offsetY = 0;
     private int resolution;
     private int liquidPerPixel;
+    @SuppressWarnings("unused")
     private float zLevel;
     private FluidTank tank;
 

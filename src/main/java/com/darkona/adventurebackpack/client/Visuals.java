@@ -1,9 +1,5 @@
 package com.darkona.adventurebackpack.client;
 
-import com.darkona.adventurebackpack.entity.fx.SteamFX;
-
-import net.minecraft.client.Minecraft;
-// /import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
@@ -77,45 +73,4 @@ public class Visuals
         }
     }
 
-    private static Minecraft mc = Minecraft.getMinecraft();
-    private static World theWorld = mc.world;
-
-    /**
-     * TODO: rendering
-    public static EntityFX spawnParticle(String particleName, double x, double y, double z, double motionX, double motionY, double motionZ)
-    {
-        if (mc != null && mc.renderViewEntity != null && mc.effectRenderer != null)
-        {
-            int particleSetting = mc.gameSettings.particleSetting;
-
-            if (particleSetting == 1 && theWorld.rand.nextInt(3) == 0)
-            {
-                particleSetting = 2;
-            }
-
-            double renderX = mc.renderViewEntity.posX - x;
-            double renderY = mc.renderViewEntity.posY - y;
-            double renderZ = mc.renderViewEntity.posZ - z;
-            EntityFX entityFX = null;
-            double var22 = 16.0D;
-
-            if (renderX * renderX + renderY * renderY + renderZ * renderZ > var22 * var22)
-            {
-                return null;
-            } else if (particleSetting > 1)
-            {
-                return null;
-            } else
-            {
-                if (particleName.equals("steam"))
-                {
-                    entityFX = new SteamFX(theWorld, x, y, z, (float) motionX, (float) motionY, (float) motionZ);
-                }
-                mc.effectRenderer.addEffect(entityFX);
-                return entityFX;
-            }
-        }
-        return null;
-    }
-    */
 }

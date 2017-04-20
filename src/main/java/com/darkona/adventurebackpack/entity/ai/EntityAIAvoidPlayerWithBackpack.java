@@ -1,26 +1,17 @@
 package com.darkona.adventurebackpack.entity.ai;
 
-import com.darkona.adventurebackpack.reference.BackpackNames;
-import com.darkona.adventurebackpack.util.Wearing;
-import net.minecraft.command.EntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.entity.player.EntityPlayer;
-//import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.pathfinding.PathNavigate;
-import net.minecraft.util.math.Vec3d;
 
-import java.util.List;
 
 /**
  * Created by Darkona on 12/10/2014.
  */
 public class EntityAIAvoidPlayerWithBackpack extends EntityAIBase
 {
-    private String backpackName;
+    //private String backpackName;
 
     //public final IEntitySelector field_98218_a = new AvoidEntitySelector(this);
 
@@ -31,7 +22,7 @@ public class EntityAIAvoidPlayerWithBackpack extends EntityAIBase
     private double farSpeed;
     private double nearSpeed;
     private Entity closestLivingEntity;
-    private float distanceFromEntity;
+    //private float distanceFromEntity;
 
     /**
      * The PathEntity of our com.darkona.adventurebackpack.entity
@@ -46,19 +37,19 @@ public class EntityAIAvoidPlayerWithBackpack extends EntityAIBase
     /**
      * The class of the com.darkona.adventurebackpack.entity we should avoid
      */
-    @SuppressWarnings("rawtypes")
-	private Class targetEntityClass;
+    //@SuppressWarnings("rawtypes")
+	//private Class targetEntityClass;
 
     public EntityAIAvoidPlayerWithBackpack(EntityCreature par1EntityCreature, @SuppressWarnings("rawtypes") Class par2Class, float par3, double par4, double par6, String colorName)
     {
         this.theEntity = par1EntityCreature;
-        this.targetEntityClass = par2Class;
-        this.distanceFromEntity = par3;
+        //this.targetEntityClass = par2Class;
+        //this.distanceFromEntity = par3;
         this.farSpeed = par4;
         this.nearSpeed = par6;
         this.entityPathNavigate = par1EntityCreature.getNavigator();
         this.setMutexBits(1);
-        this.backpackName = colorName;
+        //this.backpackName = colorName;
     }
 
     /**

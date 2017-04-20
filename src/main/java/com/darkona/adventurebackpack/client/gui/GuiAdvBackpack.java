@@ -9,7 +9,6 @@ import com.darkona.adventurebackpack.config.Keybindings;
 import com.darkona.adventurebackpack.init.ModNetwork;
 import com.darkona.adventurebackpack.inventory.ContainerBackpack;
 import com.darkona.adventurebackpack.inventory.InventoryBackpack;
-import com.darkona.adventurebackpack.network.EquipUnequipBackWearablePacket;
 import com.darkona.adventurebackpack.network.SleepingBagPacket;
 import com.darkona.adventurebackpack.util.Resources;
 
@@ -219,15 +218,14 @@ public class GuiAdvBackpack extends GuiWithTanks
             {
                 if (unequipButton.inButton(this, mouseX, mouseY))
                 {
-                    //ModNetwork.net.sendToServer(new EquipUnequipBackWearablePacket.Message(EquipUnequipBackWearablePacket.UNEQUIP_WEARABLE, false));
+                    //BackpacksCapabilities.getEquippedBackpack(player).setCurrentBackpack(player.getHeldItemMainhand());
                     player.closeScreen();
                 }
             } else
             {
                 if (equipButton.inButton(this, mouseX, mouseY))
                 {
-                    //ModNetwork.net.sendToServer(new EquipUnequipBackWearablePacket.Message(EquipUnequipBackWearablePacket.EQUIP_WEARABLE, false));
-                    //ModNetwork.net.sendToServer(new EquipUnequipBackWearablePacket.Message(EquipUnequipBackWearablePacket.EQUIP_WEARABLE, Keyboard.isKeyDown(sneakKey)));
+                    //BackpacksCapabilities.getEquippedBackpack(player).setCurrentBackpack(player.getHeldItemMainhand());
                     player.closeScreen();
                 }
 

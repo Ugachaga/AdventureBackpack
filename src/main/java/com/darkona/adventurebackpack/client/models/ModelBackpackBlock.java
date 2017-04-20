@@ -272,8 +272,8 @@ public class ModelBackpackBlock extends ModelBase
         //scale*=0.9;
         @SuppressWarnings("unused")
 		boolean sleepingbag = backpack.isSBDeployed();
-        FluidTank tankLeft = backpack.getLeftTank();
-        FluidTank tankRight = backpack.getRightTank();
+        //FluidTank tankLeft = backpack.getLeftTank();
+        //FluidTank tankRight = backpack.getRightTank();
         setRotationAngles(f, f1, f2, f3, f4, scale, entity);
 
         GL11.glPushMatrix();

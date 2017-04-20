@@ -1,6 +1,5 @@
 package com.darkona.adventurebackpack.item;
 
-import java.util.HashMap;
 import java.util.List;
 
 import com.darkona.adventurebackpack.entity.EntityInflatableBoat;
@@ -9,7 +8,6 @@ import com.darkona.adventurebackpack.init.ModBlocks;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-//import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;

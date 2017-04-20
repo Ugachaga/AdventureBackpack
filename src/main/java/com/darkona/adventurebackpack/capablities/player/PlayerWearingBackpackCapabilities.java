@@ -13,7 +13,7 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
 import java.util.concurrent.Callable;
 
-import com.darkona.adventurebackpack.capabilities.BackpacksCapabilities;
+import com.darkona.adventurebackpack.capablities.BackpacksCapabilities;
 import com.darkona.adventurebackpack.reference.ModInfo;
 
 public class PlayerWearingBackpackCapabilities implements ICapabilitySerializable<NBTTagCompound> {
@@ -152,7 +152,7 @@ public class PlayerWearingBackpackCapabilities implements ICapabilitySerializabl
     //Static methods
 
     public static ItemStack getEquippedBackpack(EntityLivingBase livingBase) {
-        PlayerWearingBackpackCapabilities cap = BackpacksCapabilities.getWearingBackpackCapability((EntityPlayer)livingBase);
+        PlayerWearingBackpackCapabilities cap = BackpacksCapabilities.getEquippedBackpack((EntityPlayer)livingBase);
         if (cap != null) //can this ever be null?
             return cap.getEquippedBackpack();
         else
@@ -160,13 +160,13 @@ public class PlayerWearingBackpackCapabilities implements ICapabilitySerializabl
     }
 
     public static void setEquippedBackpack(EntityLivingBase livingBase, ItemStack stack) {
-        PlayerWearingBackpackCapabilities cap = BackpacksCapabilities.getWearingBackpackCapability((EntityPlayer)livingBase);
+        PlayerWearingBackpackCapabilities cap = BackpacksCapabilities.getEquippedBackpack((EntityPlayer)livingBase);
         if (cap != null)
             cap.setEquippedBackpack(stack);
     }
 
     public static ItemStack getCurrentBackpack(EntityLivingBase livingBase) {
-        PlayerWearingBackpackCapabilities cap = BackpacksCapabilities.getWearingBackpackCapability((EntityPlayer)livingBase);
+        PlayerWearingBackpackCapabilities cap = BackpacksCapabilities.getEquippedBackpack((EntityPlayer)livingBase);
         if (cap != null)
             return cap.getCurrentBackpack();
         else
@@ -174,7 +174,7 @@ public class PlayerWearingBackpackCapabilities implements ICapabilitySerializabl
     }
 
     public static void setCurrentBackpack(EntityLivingBase livingBase, ItemStack stack) {
-        PlayerWearingBackpackCapabilities cap = BackpacksCapabilities.getWearingBackpackCapability((EntityPlayer)livingBase);
+        PlayerWearingBackpackCapabilities cap = BackpacksCapabilities.getEquippedBackpack((EntityPlayer)livingBase);
         if (cap != null)
             cap.setCurrentBackpack(stack);
     }

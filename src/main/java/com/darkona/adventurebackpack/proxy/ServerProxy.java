@@ -5,7 +5,8 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.darkona.adventurebackpack.develop.DeveloperJoining;
-import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
+import com.darkona.adventurebackpack.capablities.BackpacksCapabilities;
+import com.darkona.adventurebackpack.capablities.player.PlayerWearingBackpackCapabilities;
 import com.darkona.adventurebackpack.util.LogHelper;
 
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -52,8 +53,8 @@ public class ServerProxy implements IProxy
         if (playerData != null)
         {
             LogHelper.info("Stored properties retrieved");
-            BackpackProperty.get(player).loadNBTData(playerData);
-            BackpackProperty.syncToNear(player);
+            PlayerWearingBackpackCapabilities.getCurrentBackpack(player).deserializeNBT(playerData);
+            //BackpackProperty.syncToNear(player);
         } else
         {
             LogHelper.info("Data is null! WTF!");
@@ -70,7 +71,7 @@ public class ServerProxy implements IProxy
     {
         try
         {
-            NBTTagCompound data = BackpackProperty.get(player).getData();
+            NBTTagCompound data = PlayerWearingBackpackCapabilities.getCurrentBackpack(player).getTagCompound();
             if (data.hasKey("wearable"))
             {
                 LogHelper.info("Storing wearable: " + ItemStack.loadItemStackFromNBT(data.getCompoundTag("wearable")).getDisplayName());

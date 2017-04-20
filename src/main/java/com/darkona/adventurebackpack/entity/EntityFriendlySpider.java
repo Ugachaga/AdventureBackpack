@@ -9,7 +9,6 @@ import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.init.PotionTypes;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionType;
 import net.minecraft.potion.PotionEffect;
@@ -30,13 +29,13 @@ import java.util.Random;
 public class EntityFriendlySpider extends EntityCreature
 {
 
-    private float prevRearingAmount;
-    private int jumpTicks;
+    //private float prevRearingAmount;
+    //private int jumpTicks;
     @SuppressWarnings("unused")
 	private EntityPlayer owner;
     @SuppressWarnings("unused")
 	private boolean tamed = false;
-    @SuppressWarnings("unused")
+//    @SuppressWarnings("unused")
 //	private final EntityAIControlledByPlayer aiControlledByPlayer;
 
     @Override

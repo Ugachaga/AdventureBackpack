@@ -4,9 +4,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.darkona.adventurebackpack.events.WearableEvent;
-import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
+import com.darkona.adventurebackpack.capablities.BackpacksCapabilities;
+import com.darkona.adventurebackpack.capablities.player.PlayerWearingBackpackCapabilities;
 
-import ibxm.Player;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -30,16 +30,14 @@ public class BackpackUtils
 
     public static reasons equipWearable(ItemStack backpack, EntityPlayer player)
     {
-        BackpackProperty prop = BackpackProperty.get(player);
-        if (prop.getWearable() == null && player != null)
+        PlayerWearingBackpackCapabilities prop = BackpacksCapabilities.getEquippedBackpack(player);
+        if (prop.getCurrentBackpack() == null && player != null)
         {
             player.openContainer.onContainerClosed(player);
-            prop.setWearable(backpack.copy());
-            BackpackProperty.get(player).executeWearableEquipProtocol();
+            prop.setCurrentBackpack(backpack.copy());
             backpack.stackSize--;
-            WearableEvent event = new WearableEvent.EquipWearableEvent(player, prop.getWearable());
+            WearableEvent event = new WearableEvent.EquipWearableEvent(player, prop.getCurrentBackpack());
             MinecraftForge.EVENT_BUS.post(event);
-            BackpackProperty.sync(player);
             return reasons.SUCCESFUL;
         } else
         {
@@ -80,20 +78,18 @@ public class BackpackUtils
         @Override
         public void run()
         {
-            BackpackProperty prop = BackpackProperty.get(player);
-            if (prop.getWearable() != null)
+            PlayerWearingBackpackCapabilities prop = BackpacksCapabilities.getEquippedBackpack(player);
+            if (prop.getEquippedBackpack() != null)
             {
                 player.openContainer.onContainerClosed(player);
-                ItemStack gimme = prop.getWearable().copy();
-                BackpackProperty.get(player).executeWearableUnequipProtocol();
-                prop.setWearable(null);
+                ItemStack gimme = prop.getEquippedBackpack().copy();
+                BackpacksCapabilities.getEquippedBackpack(player).setEquippedBackpack(null);
                 if (!player.inventory.addItemStackToInventory(gimme))
                 {
                     player.dropItem(gimme, false);
                 }
                 WearableEvent event = new WearableEvent.UnequipWearableEvent(player, gimme);
                 MinecraftForge.EVENT_BUS.post(event);
-                BackpackProperty.sync(player);
             } else
             {
                 player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.already.impossibru"));

@@ -10,7 +10,6 @@ import com.darkona.adventurebackpack.network.SyncPropertiesPacket;
 import com.darkona.adventurebackpack.network.WearableModePacket;
 import com.darkona.adventurebackpack.network.messages.EntityParticlePacket;
 import com.darkona.adventurebackpack.network.messages.EntitySoundPacket;
-import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
 import com.darkona.adventurebackpack.reference.ModInfo;
 
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -76,9 +75,4 @@ public class ModNetwork
         }
     }
 
-    public static void sendToDimension(IMessage message, EntityPlayer player)
-    {
-        net.sendToDimension(message, player.dimension);
-        BackpackProperty.sync(player);
-    }
 }

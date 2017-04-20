@@ -2,9 +2,6 @@ package com.darkona.adventurebackpack.entity.fx;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-// /import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.world.World;
 
 /**
  * Created on 19/01/2015

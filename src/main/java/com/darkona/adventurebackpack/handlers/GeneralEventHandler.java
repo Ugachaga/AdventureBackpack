@@ -1,34 +1,19 @@
 package com.darkona.adventurebackpack.handlers;
 
-import java.util.UUID;
-
 import com.darkona.adventurebackpack.common.ServerActions;
 import com.darkona.adventurebackpack.config.ConfigHandler;
-import com.darkona.adventurebackpack.entity.ai.EntityAIHorseFollowOwner;
 import com.darkona.adventurebackpack.events.WearableEvent;
-import com.darkona.adventurebackpack.fluids.FluidEffectRegistry;
-import com.darkona.adventurebackpack.init.ModNetwork;
 import com.darkona.adventurebackpack.inventory.InventoryBackpack;
-import com.darkona.adventurebackpack.network.messages.EntitySoundPacket;
-import com.darkona.adventurebackpack.util.Utils;
 import com.darkona.adventurebackpack.util.Wearing;
 
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemAppleGold;
-import net.minecraft.item.ItemPotion;
-//import net.minecraft.util.ChatComponentText;
-//import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
-//import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
-import net.minecraftforge.fluids.FluidRegistry;
 
 /**
  * Created on 17/10/2014
@@ -138,7 +123,7 @@ public class GeneralEventHandler
                 String ownerUUIDstring = horse.getOwnerUniqueId().toString();
                 if (ownerUUIDstring != null && !ownerUUIDstring.isEmpty())
                 {
-                    boolean set = true;
+                    //boolean set = true;
                     /**
                     if (horse.worldObj.func_152378_a(UUID.fromString(ownerUUIDstring)) != null)
                     {

@@ -5,11 +5,8 @@ import com.darkona.adventurebackpack.config.ConfigHandler;
 import com.darkona.adventurebackpack.develop.msg;
 import com.darkona.adventurebackpack.develop.texturemsg;
 import com.darkona.adventurebackpack.entity.EntityFriendlySpider;
-import com.darkona.adventurebackpack.entity.ai.EntityAIHorseFollowOwner;
-import com.darkona.adventurebackpack.init.ModBlocks;
 import com.darkona.adventurebackpack.init.ModItems;
-import com.darkona.adventurebackpack.item.IBackWearableItem;
-import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
+import com.darkona.adventurebackpack.capablities.player.PlayerWearingBackpackCapabilities;
 import com.darkona.adventurebackpack.proxy.ServerProxy;
 import com.darkona.adventurebackpack.reference.BackpackNames;
 import com.darkona.adventurebackpack.util.LogHelper;
@@ -20,29 +17,19 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.EntitySpider;
-import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemNameTag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
-import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 
 /**
  * Created on 11/10/2014 Handle ALL the events!
@@ -56,20 +43,6 @@ public class PlayerEventHandler
     private static int tickCounter = 0;
 
     @SubscribeEvent
-    public void registerBackpackProperty(EntityEvent.EntityConstructing event)
-    {
-        if (event.getEntity() instanceof EntityPlayer && BackpackProperty.get((EntityPlayer) event.getEntity()) == null)
-        {
-            BackpackProperty.register((EntityPlayer) event.getEntity());
-            /*if (!event.entity.worldObj.isRemote)
-            {
-                AdventureBackpack.proxy.joinPlayer((EntityPlayer)event.entity);
-            }*/
-        }
-
-    }
-
-    @SubscribeEvent
     public void joinPlayer(EntityJoinWorldEvent event)
     {
         if (!event.getWorld().isRemote)
@@ -81,31 +54,12 @@ public class PlayerEventHandler
                 NBTTagCompound playerData = ServerProxy.extractPlayerProps(player.getUniqueID());
                 if (playerData != null)
                 {
-                    BackpackProperty.get(player).loadNBTData(playerData);
-                    BackpackProperty.sync(player);
+                    PlayerWearingBackpackCapabilities.getEquippedBackpack(player).deserializeNBT(playerData);
                     LogHelper.info("Stored properties retrieved");
                 }
                 msg.handleJoin(player);
                 texturemsg.handleJoin(player);
             }
-        }
-    }
-
-    @SubscribeEvent
-    public void playerLogsIn(PlayerEvent.PlayerLoggedInEvent event)
-    {
-        if (event.player instanceof EntityPlayerMP)
-        {
-            BackpackProperty.sync(event.player);
-        }
-    }
-
-    @SubscribeEvent
-    public void playerTravelsAcrossDimensions(PlayerEvent.PlayerChangedDimensionEvent event)
-    {
-        if (event.player instanceof EntityPlayerMP)
-        {
-            BackpackProperty.sync(event.player);
         }
     }
 
@@ -209,17 +163,6 @@ public class PlayerEventHandler
             {
                 if (ConfigHandler.backpackDeathPlace)
                 {
-                    BackpackProperty props = BackpackProperty.get(player);
-                    ((IBackWearableItem) props.getWearable().getItem()).onPlayerDeath(player.world, player, props.getWearable());
-                    if (props.isForcedCampFire())
-                    {
-                        BlockPos lastCampFire = BackpackProperty.get(player).getCampFire();
-                        if (lastCampFire != null)
-                        {
-                            player.setSpawnChunk(lastCampFire, false, player.dimension);
-                        }
-                        //Set the forced spawn coordinates on the campfire. False, because the player must respawn at spawn point if there's no campfire.
-                    }
                     ServerProxy.storePlayerProps(player);
                 } else
                 {
@@ -256,15 +199,6 @@ public class PlayerEventHandler
             }
         }
         event.setResult(Event.Result.ALLOW);
-    }
-
-    @SubscribeEvent
-    public void playerRespawn(PlayerEvent.PlayerRespawnEvent event)
-    {
-        if (event.player instanceof EntityPlayerMP)
-        {
-            BackpackProperty.sync(event.player);
-        }
     }
 
     @SubscribeEvent
@@ -320,35 +254,5 @@ public class PlayerEventHandler
         event.setResult(Event.Result.ALLOW);
     }
     */
-
-
-    @SubscribeEvent
-    public void playerWokeUp(PlayerWakeUpEvent event)
-    {
-        if (event.getEntity().world.isRemote) return;
-        BlockPos bedLocation = event.getEntityPlayer().getBedLocation(event.getEntityPlayer().dimension);
-        if (event.getEntityPlayer().world.getBlockState(bedLocation).getBlock() == ModBlocks.blockSleepingBag)
-        {
-            //If the player wakes up in one of those super confortable SleepingBags (tm) (Patent Pending)
-            BackpackProperty.get(event.getEntityPlayer()).setForceCampFire(true);
-            LogHelper.info("Player just woke up in a sleeping bag, forcing respawn in the last lighted campfire, if there's any");
-        } else
-        {
-            //If it's a regular bed or whatever
-            BackpackProperty.get(event.getEntityPlayer()).setForceCampFire(false);
-        }
-    }
-
-    @SubscribeEvent
-    public void tickPlayer(TickEvent.PlayerTickEvent event)
-    {
-        if (event.player != null && !event.player.isDead && Wearing.isWearingWearable(event.player))
-        {
-            if (event.phase == TickEvent.Phase.START)
-            {
-                BackpackProperty.get(event.player).executeWearableUpdateProtocol();
-            }
-        }
-    }
 
 }

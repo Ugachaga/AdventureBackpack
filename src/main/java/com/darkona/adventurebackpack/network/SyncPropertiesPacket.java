@@ -2,7 +2,6 @@ package com.darkona.adventurebackpack.network;
 
 import com.darkona.adventurebackpack.AdventureBackpack;
 import com.darkona.adventurebackpack.init.ModNetwork;
-import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -34,10 +33,6 @@ public class SyncPropertiesPacket implements IMessageHandler<SyncPropertiesPacke
             } else {
                 AdventureBackpack.proxy.synchronizePlayer(message.ID, message.properties);
             }
-        }
-        if (ctx.side.isServer())
-        {
-            BackpackProperty.sync(ctx.getServerHandler().playerEntity);
         }
         return null;
     }

@@ -3,6 +3,7 @@ package com.darkona.adventurebackpack;
 import java.util.Calendar;
 
 import com.darkona.adventurebackpack.AdventureBackpack;
+import com.darkona.adventurebackpack.capablities.BackpacksCapabilities;
 import com.darkona.adventurebackpack.config.ConfigHandler;
 import com.darkona.adventurebackpack.fluids.FluidEffectRegistry;
 import com.darkona.adventurebackpack.handlers.ClientEventHandler;
@@ -15,7 +16,6 @@ import com.darkona.adventurebackpack.init.ModFluids;
 import com.darkona.adventurebackpack.init.ModItems;
 import com.darkona.adventurebackpack.init.ModNetwork;
 import com.darkona.adventurebackpack.init.ModRecipes;
-import com.darkona.adventurebackpack.init.ModWorldGen;
 import com.darkona.adventurebackpack.proxy.IProxy;
 import com.darkona.adventurebackpack.reference.ModInfo;
 import com.darkona.adventurebackpack.util.LogHelper;
@@ -70,6 +70,8 @@ public class AdventureBackpack
         //hannukah = JewishCalendar.isHannukah(year, month, day);
         Holiday = Utils.getHoliday();
 
+        BackpacksCapabilities.registerAllCapabilities();
+
         //ModStuff
         ModItems.init();
         ModBlocks.init();
@@ -98,7 +100,6 @@ public class AdventureBackpack
         proxy.init();
         ModRecipes.init();
 
-        ModWorldGen.init();
         //GUIs
         guiHandler = new GuiHandler();
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);

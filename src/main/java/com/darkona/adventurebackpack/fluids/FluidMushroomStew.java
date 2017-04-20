@@ -1,7 +1,5 @@
 package com.darkona.adventurebackpack.fluids;
 
-import com.darkona.adventurebackpack.client.Icons;
-
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.util.math.BlockPos;
