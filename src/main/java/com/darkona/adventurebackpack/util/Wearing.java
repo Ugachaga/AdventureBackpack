@@ -87,22 +87,25 @@ public class Wearing
 
     public static boolean isWearingBoots(EntityPlayer player)
     {
-        return player.inventory.armorInventory[0] != null && player.inventory.armorInventory[0].getItem() instanceof ItemPistonBoots;
+        return player.inventory.armorInventory[0] != null
+            && player.inventory.armorInventory[0].getItem() instanceof ItemPistonBoots;
     }
 
     public static boolean isWearingHat(EntityPlayer player)
     {
-        return player.inventory.armorInventory[3] != null && player.inventory.armorInventory[3].getItem() instanceof ItemAdventureHat;
+        return player.inventory.armorInventory[3] != null
+            && player.inventory.armorInventory[3].getItem() instanceof ItemAdventureHat;
     }
 
     public static boolean isWearingBackpack(EntityPlayer player)
     {
-        return BackpacksCapabilities.getEquippedBackpack(player).getCurrentBackpack() != null && BackpacksCapabilities.getEquippedBackpack(player).getCurrentBackpack().getItem() instanceof ItemAdventureBackpack;
+        return BackpacksCapabilities.getEquippedBackpack(player).getCurrentBackpack() != null;
     }
 
     public static boolean isHoldingBackpack(EntityPlayer player)
     {
-        return player.inventory.getCurrentItem() != null && player.inventory.getCurrentItem().getItem() instanceof ItemAdventureBackpack;
+        return player.inventory.getCurrentItem() != null
+            && player.inventory.getCurrentItem().getItem() instanceof ItemAdventureBackpack;
     }
 
     public static ItemStack getWearingHat(EntityPlayer player)

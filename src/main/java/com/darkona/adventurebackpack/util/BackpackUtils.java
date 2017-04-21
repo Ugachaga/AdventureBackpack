@@ -4,6 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.darkona.adventurebackpack.events.WearableEvent;
+import com.darkona.adventurebackpack.inventory.IWearableContainer;
 import com.darkona.adventurebackpack.capablities.BackpacksCapabilities;
 import com.darkona.adventurebackpack.capablities.player.PlayerWearingBackpackCapabilities;
 
@@ -31,11 +32,15 @@ public class BackpackUtils
     public static reasons equipWearable(ItemStack backpack, EntityPlayer player)
     {
         PlayerWearingBackpackCapabilities prop = BackpacksCapabilities.getEquippedBackpack(player);
-        if (prop.getCurrentBackpack() == null && player != null)
+
+        if(player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() instanceof IWearableContainer)
         {
+
+            PlayerWearingBackpackCapabilities.setEquippedBackpack(player, player.getHeldItemMainhand());
+
+
             player.openContainer.onContainerClosed(player);
-            prop.setCurrentBackpack(backpack.copy());
-            backpack.stackSize--;
+
             WearableEvent event = new WearableEvent.EquipWearableEvent(player, prop.getCurrentBackpack());
             MinecraftForge.EVENT_BUS.post(event);
             return reasons.SUCCESFUL;

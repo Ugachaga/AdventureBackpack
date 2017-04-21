@@ -36,7 +36,6 @@ public class ModNetwork
         registerMessage(SyncPropertiesPacket.class, SyncPropertiesPacket.Message.class);
         registerMessage(EntityParticlePacket.class, EntityParticlePacket.Message.class);
         registerMessage(EntitySoundPacket.class, EntitySoundPacket.Message.class);
-
         registerMessage(WearableModePacket.class, WearableModePacket.Message.class);
         registerMessage(CycleToolPacket.class, CycleToolPacket.CycleToolMessage.class);
         registerMessage(GUIPacket.class, GUIPacket.GUImessage.class);

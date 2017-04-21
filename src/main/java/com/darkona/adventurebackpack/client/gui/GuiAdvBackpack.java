@@ -3,12 +3,14 @@ package com.darkona.adventurebackpack.client.gui;
 import org.lwjgl.opengl.GL11;
 
 import com.darkona.adventurebackpack.block.TileAdventureBackpack;
+import com.darkona.adventurebackpack.capablities.BackpacksCapabilities;
 import com.darkona.adventurebackpack.common.IInventoryAdventureBackpack;
 import com.darkona.adventurebackpack.config.ConfigHandler;
 import com.darkona.adventurebackpack.config.Keybindings;
 import com.darkona.adventurebackpack.init.ModNetwork;
 import com.darkona.adventurebackpack.inventory.ContainerBackpack;
 import com.darkona.adventurebackpack.inventory.InventoryBackpack;
+import com.darkona.adventurebackpack.network.EquipUnequipBackWearablePacket;
 import com.darkona.adventurebackpack.network.SleepingBagPacket;
 import com.darkona.adventurebackpack.util.Resources;
 
@@ -218,15 +220,18 @@ public class GuiAdvBackpack extends GuiWithTanks
             {
                 if (unequipButton.inButton(this, mouseX, mouseY))
                 {
-                    //BackpacksCapabilities.getEquippedBackpack(player).setCurrentBackpack(player.getHeldItemMainhand());
+                    ModNetwork.net.sendToServer(new EquipUnequipBackWearablePacket.Message(EquipUnequipBackWearablePacket.UNEQUIP_WEARABLE, false));
                     player.closeScreen();
                 }
             } else
             {
                 if (equipButton.inButton(this, mouseX, mouseY))
                 {
-                    //BackpacksCapabilities.getEquippedBackpack(player).setCurrentBackpack(player.getHeldItemMainhand());
-                    player.closeScreen();
+                    if(player != null && player.getHeldItemMainhand() != null)
+                    {
+                        ModNetwork.net.sendToServer(new EquipUnequipBackWearablePacket.Message(EquipUnequipBackWearablePacket.EQUIP_WEARABLE, false));
+                        player.closeScreen();
+                    }
                 }
 
             }
