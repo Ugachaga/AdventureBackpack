@@ -1,15 +1,20 @@
 package com.darkona.adventurebackpack.handlers;
 
+import com.darkona.adventurebackpack.capablities.BackpacksCapabilities;
+import com.darkona.adventurebackpack.capablities.player.PlayerWearingBackpackCapabilities;
 import com.darkona.adventurebackpack.common.ServerActions;
 import com.darkona.adventurebackpack.config.ConfigHandler;
 import com.darkona.adventurebackpack.events.WearableEvent;
 import com.darkona.adventurebackpack.inventory.InventoryBackpack;
+import com.darkona.adventurebackpack.reference.ModInfo;
 import com.darkona.adventurebackpack.util.Wearing;
 
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
@@ -22,50 +27,24 @@ import net.minecraftforge.event.entity.player.ArrowNockEvent;
  */
 public class GeneralEventHandler
 {
+
+
     /**
-     * @param event
+     * Attaches a capability to the entity. Works on both the client and server players.
+     * @param event - attach capability event
      */
-    /**
     @SubscribeEvent
-    public void eatGoldenApple(PlayerUseItemEvent.Finish event)
-    {
-        EntityPlayer player = event.entityPlayer;
-        if (ConfigHandler.backpackAbilities)
+    public void onAttachCapability(AttachCapabilitiesEvent.Entity event) {
+        if (!event.getEntity().hasCapability(BackpacksCapabilities.WEARING_BACKPACK_CAPABILITY, null)) 
         {
-            if (event.item.getItem() instanceof ItemAppleGold &&
-            //((ItemAppleGold) event.item.getItem()).getRarity(event.item) == EnumRarity.epic &&
-                    Wearing.isWearingTheRightBackpack(player, "Rainbow"))
-            {
-
-                InventoryBackpack inv = new InventoryBackpack(Wearing.getWearingBackpack(player));
-                if (inv.getLastTime() > 0) return;
-                inv.setLastTime(Utils.secondsToTicks(150));
-                inv.dirtyTime();
-                if (!player.worldObj.isRemote)
-                {
-                    String nyanString = EnumChatFormatting.RED +
-                            "N" + EnumChatFormatting.GOLD +
-                            "Y" + EnumChatFormatting.YELLOW +
-                            "A" + EnumChatFormatting.GREEN +
-                            "N" + EnumChatFormatting.AQUA +
-                            "C" + EnumChatFormatting.BLUE +
-                            "A" + EnumChatFormatting.DARK_PURPLE +
-                            "T";
-                    player.addChatComponentMessage(new ChatComponentText(nyanString));
-                    ModNetwork.sendToNearby(new EntitySoundPacket.Message(EntitySoundPacket.NYAN_SOUND, player), player);
-                }
+            if (event.getEntity() instanceof EntityPlayer) {
+                event.addCapability(new ResourceLocation(ModInfo.MOD_ID + "." + ModInfo.WEARING_BACKPACK_CAPABILITY_STRING), new PlayerWearingBackpackCapabilities());
             }
-        }
-
-        if (event.item.getItem() instanceof ItemPotion && (event.item.getItem()).getDamage(event.item) == 0)
-        {
-            if (!player.worldObj.isRemote)
-            {
-                FluidEffectRegistry.executeFluidEffectsForFluid(FluidRegistry.WATER, player, player.getEntityWorld());
-            }
+            //if (!event.getEntity().hasCapability(IronBackpacksCapabilities.DEATH_BACKPACK_CAPABILITY, null)) {
+            //    event.addCapability(new ResourceLocation(ModInfo.MOD_ID + "." + Constants.DEATH_BACKPACK_CAPABILITY_STRING), new PlayerDeathBackpackCapabilities());
+            //}
         }
     }
-    */
 
     @SubscribeEvent
     public void detectBow(ArrowNockEvent event)

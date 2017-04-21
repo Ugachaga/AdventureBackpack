@@ -99,7 +99,13 @@ public class Wearing
 
     public static boolean isWearingBackpack(EntityPlayer player)
     {
-        return BackpacksCapabilities.getEquippedBackpack(player).getCurrentBackpack() != null;
+        if (BackpacksCapabilities.getEquippedBackpack(player) != null)
+        {
+            return BackpacksCapabilities.getEquippedBackpack(player).getCurrentBackpack() != null;
+        } else
+        {
+            return false;
+        }
     }
 
     public static boolean isHoldingBackpack(EntityPlayer player)
