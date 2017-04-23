@@ -33,8 +33,8 @@ public class ModelCoalJetpack extends ModelWearable
 
     public ModelCoalJetpack()
     {
-        this.textureWidth = 64;
-        this.textureHeight = 32;
+        textureWidth = 64;
+        textureHeight = 32;
 
         this.tubeStraightRight = new ModelRenderer(this, 0, 14);
         this.tubeStraightRight.setRotationPoint(-3.0F, 1.0F, 8.3F);

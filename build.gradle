@@ -11,7 +11,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: "idea"
 
-version = "1.10.1-alpha1"
+version = "1.10.1-alpha5"
 group = "com.darkona.adventurebackpack" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "adventurebackpack"
 

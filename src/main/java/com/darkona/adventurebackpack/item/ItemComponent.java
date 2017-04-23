@@ -3,6 +3,7 @@ package com.darkona.adventurebackpack.item;
 import java.util.List;
 
 import com.darkona.adventurebackpack.entity.EntityInflatableBoat;
+import com.darkona.adventurebackpack.AdventureBackpack;
 import com.darkona.adventurebackpack.block.BlockSleepingBag;
 import com.darkona.adventurebackpack.init.ModBlocks;
 
@@ -59,7 +60,7 @@ public class ItemComponent extends ItemAB
     public String getUnlocalizedName(ItemStack stack)
     {
 
-        int meta = stack.getMetadata();
+        int meta = stack.getMetadata() - 1;
     
         if (meta < 0 || meta >= 10)
         {
@@ -242,5 +243,15 @@ public class ItemComponent extends ItemAB
         if (stack.getItemDamage() == 7) return new ActionResult(EnumActionResult.PASS, placeBoat(stack, world, player, false));
         if (stack.getItemDamage() == 8) return new ActionResult(EnumActionResult.PASS, placeBoat(stack, world, player, true));
         return new ActionResult(EnumActionResult.PASS, stack);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerItemModel()
+    {
+        for (int i = 0; i < names.length; i++)
+        {
+            AdventureBackpack.proxy.registerItemRenderer(this, i +1, getUnwrappedUnlocalizedName(names[i]));
+    	}
     }
 }

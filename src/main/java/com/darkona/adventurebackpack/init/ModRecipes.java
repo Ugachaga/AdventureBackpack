@@ -52,7 +52,7 @@ public class ModRecipes
         //CoalJetpack
         if (ConfigHandler.recipeCoalJetpack)
         {
-            GameRegistry.addRecipe(new ItemStack(ModItems.CoalJetpack),
+            GameRegistry.addRecipe(new ItemStack(ModItems.coalJetpack),
                     "SWT",
                     "GIG",
                     "FWS",

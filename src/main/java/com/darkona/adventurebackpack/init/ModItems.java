@@ -31,7 +31,7 @@ public class ModItems
     public static final ArmorAB adventurePants = new ItemAdventurePants();
     public static final ArmorAB pistonBoots = new ItemPistonBoots();
     public static final ItemCopterPack copterPack = new ItemCopterPack();
-    public static final ItemCoalJetpack CoalJetpack = new ItemCoalJetpack();
+    public static final ItemCoalJetpack coalJetpack = new ItemCoalJetpack();
     public static final ItemAdventureBackpack adventureBackpack = new ItemAdventureBackpack();
     public static final ItemComponent component = new ItemComponent();
     public static final ItemHose hose = new ItemHose();
@@ -46,7 +46,7 @@ public class ModItems
         GameRegistry.registerItem(component, "backpackComponent");
         GameRegistry.registerItem(hose, "backpackHose");
         GameRegistry.registerItem(cwxbow, "clockworkCrossbow");
-        GameRegistry.registerItem(CoalJetpack, "CoalJetpack");
+        GameRegistry.registerItem(coalJetpack, "CoalJetpack");
         GameRegistry.registerItem(copterPack, "copterPack");
         GameRegistry.registerItem(machete, "machete");
         GameRegistry.registerItem(pistonBoots, "pistonBoots");
@@ -60,7 +60,7 @@ public class ModItems
         adventurePants.registerItemModel();
         pistonBoots.registerItemModel();
         copterPack.registerItemModel();
-        CoalJetpack.registerItemModel();
+        coalJetpack.registerItemModel();
         adventureBackpack.registerItemModel();
         component.registerItemModel();
         hose.registerItemModel();
