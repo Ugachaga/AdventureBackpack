@@ -46,11 +46,11 @@ public class ItemComponent extends ItemAB
             "adventureBackpack",
     };
 
-
     public ItemComponent()
     {
         setNoRepair();
         setHasSubtypes(true);
+        setMaxDamage(0);
         setMaxStackSize(16);
         this.setUnlocalizedName("backpackComponent");
     }
@@ -58,7 +58,15 @@ public class ItemComponent extends ItemAB
     @Override
     public String getUnlocalizedName(ItemStack stack)
     {
-        return super.getUnlocalizedName(names[0]);
+
+        int meta = stack.getMetadata();
+    
+        if (meta < 0 || meta >= 10)
+        {
+            meta = 0;
+        }
+
+        return super.getUnlocalizedName(names[meta]);
     }
 
 
