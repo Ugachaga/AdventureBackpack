@@ -4,10 +4,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.darkona.adventurebackpack.events.WearableEvent;
-import com.darkona.adventurebackpack.inventory.IWearableContainer;
 import com.darkona.adventurebackpack.capablities.BackpacksCapabilities;
 import com.darkona.adventurebackpack.capablities.player.PlayerWearingBackpackCapabilities;
 
+import com.darkona.adventurebackpack.item.IBackWearableItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -33,11 +33,9 @@ public class BackpackUtils
     {
         PlayerWearingBackpackCapabilities prop = BackpacksCapabilities.getEquippedBackpack(player);
 
-        if(player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() instanceof IWearableContainer)
+        if(player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() instanceof IBackWearableItem)
         {
-
             PlayerWearingBackpackCapabilities.setEquippedBackpack(player, player.getHeldItemMainhand());
-
 
             player.openContainer.onContainerClosed(player);
 

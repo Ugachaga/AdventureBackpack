@@ -246,7 +246,7 @@ public class ItemAdventureBackpack extends ItemAB implements IBackWearableItem
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type)
     {
-            return ModInfo.MOD_ID + ":"  +"textures/backpack/Standard.png";
+            return ModInfo.MOD_ID + ":"  +"textures/backpack/" + stack.getTagCompound().getString("colorName") + ".png";
 
     }
 

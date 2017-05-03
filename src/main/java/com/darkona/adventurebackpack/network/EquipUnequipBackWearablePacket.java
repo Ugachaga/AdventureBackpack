@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentTranslation;
 
@@ -27,35 +28,35 @@ public class EquipUnequipBackWearablePacket implements IMessageHandler<EquipUneq
 
         if (ctx.side.isServer())
         {
-            EntityPlayer player = ctx.getServerHandler().playerEntity;
-            if (message.action == EQUIP_WEARABLE)
-            {
-
-                if (Wearing.isHoldingWearable(player) && !Wearing.isWearingWearable(player))
+            Minecraft.getMinecraft().addScheduledTask(() -> {
+                EntityPlayer player = ctx.getServerHandler().playerEntity;
+                if (message.action == EQUIP_WEARABLE)
                 {
-                    if (BackpackUtils.equipWearable(player.getHeldItemMainhand(), player) == BackpackUtils.reasons.SUCCESFUL)
+                    if (Wearing.isHoldingWearable(player) && !Wearing.isWearingWearable(player))
                     {
-                        player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
-                        player.inventoryContainer.detectAndSendChanges();
-                    }
-                } else if (Wearing.isWearingWearable(player))
-                {
-                    if (Wearing.isWearingBackpack(player))
+                        if (BackpackUtils.equipWearable(player.getHeldItemMainhand(), player) == BackpackUtils.reasons.SUCCESFUL)
+                        {
+                            player.inventoryContainer.detectAndSendChanges();
+                        }
+                    } else if (Wearing.isWearingWearable(player))
                     {
-                        player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.already.equipped.backpack"));
-                    } else if (Wearing.isWearingCopter(player))
-                    {
-                        player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.already.equipped.copterpack"));
-                    } else if (Wearing.isWearingJetpack(player))
-                    {
-                        player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.already.equipped.jetpack"));
+                        if (Wearing.isWearingBackpack(player))
+                        {
+                            player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.already.equipped.backpack"));
+                        } else if (Wearing.isWearingCopter(player))
+                        {
+                            player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.already.equipped.copterpack"));
+                        } else if (Wearing.isWearingJetpack(player))
+                        {
+                            player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.already.equipped.jetpack"));
+                        }
                     }
                 }
-            }
-            if (message.action == UNEQUIP_WEARABLE)
-            {
-                BackpackUtils.unequipWearable(player);
-            }
+                if (message.action == UNEQUIP_WEARABLE)
+                {
+                    BackpackUtils.unequipWearable(player);
+                }
+            });
         }
         return null;
     }

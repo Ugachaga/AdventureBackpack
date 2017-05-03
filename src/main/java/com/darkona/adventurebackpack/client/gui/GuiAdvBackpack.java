@@ -153,29 +153,6 @@ public class GuiAdvBackpack extends GuiWithTanks
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_BLEND);
 
-        /*if (!ConfigHandler.HOVERING_TEXT_TANKS)
-        {
-            GL11.glPushMatrix();
-            //GL11.glTranslatef(8f,64f,0f);
-            GL11.glScalef(0.6f, 0.6f, 0.6f);
-            String name = (lft.getFluid() != null) ? lft.getFluid().getLocalizedName() : "None";
-            String amount = (lft.getFluid() != null ? lft.getFluid().amount : "Empty").toString();
-            String capacity = Integer.toString(inventory.getLeftTank().getCapacity());
-            int offsetY = 32;
-            int offsetX = 8;
-            fontRendererObj.drawString(Utils.getFirstWord(name), 1 + offsetX, 64 + offsetY, 0x373737, false);
-            fontRendererObj.drawString(amount, 1 + offsetX, 79 + offsetY, 0x373737, false);
-            fontRendererObj.drawString(capacity, 1 + offsetX, 94 + offsetY, 0x373737, false);
-
-            name = (rgt.getFluid() != null) ? rgt.getFluid().getLocalizedName() : "None";
-            amount = (rgt.getFluid() != null ? rgt.getFluid().amount : "Empty").toString();
-            fontRendererObj.drawString(Utils.getFirstWord(name), 369 + offsetX, 64 + offsetY, 0x373737, false);
-            fontRendererObj.drawString(amount, 369 + offsetX, 79 + offsetY, 0x373737, false);
-            fontRendererObj.drawString(capacity, 369 + offsetX, 94 + offsetY, 0x373737, false);
-
-            GL11.glPopMatrix();
-        }*/
-
     }
 
     @Override
@@ -206,7 +183,6 @@ public class GuiAdvBackpack extends GuiWithTanks
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int button)
     {
-        //int sneakKey = Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode();
         if (isTile)
         {
             if (bedButton.inButton(this, mouseX, mouseY))

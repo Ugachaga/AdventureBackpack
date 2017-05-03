@@ -25,14 +25,8 @@ public class Wearing
 {
     public static boolean isWearingWearable(EntityPlayer player)
     {
-        //if (player != null)
-        //{
-        //    return BackpacksCapabilities.getEquippedBackpack(player).getCurrentBackpack() != null
-        //        && BackpacksCapabilities.getEquippedBackpack(player).getCurrentBackpack().getItem() instanceof IBackWearableItem;
-        //}else
-        //{
-            return false;
-        //}
+            return BackpacksCapabilities.getEquippedBackpack(player).getCurrentBackpack() != null
+                && BackpacksCapabilities.getEquippedBackpack(player).getCurrentBackpack().getItem() instanceof IBackWearableItem;
     }
 
     public static ItemStack getWearingWearable(EntityPlayer player)
@@ -99,13 +93,7 @@ public class Wearing
 
     public static boolean isWearingBackpack(EntityPlayer player)
     {
-        if (BackpacksCapabilities.getEquippedBackpack(player) != null)
-        {
             return BackpacksCapabilities.getEquippedBackpack(player).getCurrentBackpack() != null;
-        } else
-        {
-            return false;
-        }
     }
 
     public static boolean isHoldingBackpack(EntityPlayer player)
