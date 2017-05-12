@@ -29,6 +29,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 
 /**
@@ -62,6 +63,8 @@ public class AdventureBackpack
     public void preInit(FMLPreInitializationEvent event)
     {
         int year = Calendar.getInstance().get(Calendar.YEAR), month = Calendar.getInstance().get(Calendar.MONTH) + 1, day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+
+        OBJLoader.INSTANCE.addDomain(ModInfo.MOD_ID);
 
         //Configuration
         MinecraftForge.EVENT_BUS.register(new ConfigHandler());

@@ -14,11 +14,13 @@ import com.darkona.adventurebackpack.util.Utils;
 
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureType;
@@ -26,6 +28,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -56,6 +59,8 @@ public class BlockAdventureBackpack extends BlockContainer
     public BlockAdventureBackpack()
     {
         super(new BackpackMaterial());
+        setUnlocalizedName("blockBackpack");
+        //setRegistryName("blockBackpack");
         setHardness(1.0f);
         setResistance(2000f);
     }
@@ -264,7 +269,20 @@ public class BlockAdventureBackpack extends BlockContainer
         //DO NOTHING
     }
 
-    public void registerItemModel(ItemBlock itemBlock) {
-		AdventureBackpack.proxy.registerItemRenderer(itemBlock, 0, name);
-	}
+    @SideOnly(Side.CLIENT)
+    public void initModel() {
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(ModInfo.MOD_ID + ":blockBackpack", "inventory"));
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
+        return false;
+    }
+
+    @Override
+    public boolean isBlockNormalCube(IBlockState blockState) {
+        return false;
+    }
+
 }
