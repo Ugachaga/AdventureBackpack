@@ -269,11 +269,6 @@ public class BlockAdventureBackpack extends BlockContainer
         //DO NOTHING
     }
 
-    @SideOnly(Side.CLIENT)
-    public void initModel() {
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(ModInfo.MOD_ID + ":blockBackpack", "inventory"));
-    }
-
     @Override
     @SideOnly(Side.CLIENT)
     public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {

@@ -1,0 +1,15 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"custom": { "flip-v": true },
+		"model": "adventurebackpack:block/adventureBackpacks.obj",
+		"textures": {
+			"#None": "adventurebackpack:backpack/Standard",
+			"#None_NONE": "adventurebackpack:backpack/Standard"
+		}
+	},
+	"variants": {
+		"normal": [{}],
+		"inventory": [{}]
+  	}
+}

@@ -352,6 +352,16 @@ public class ItemAdventureBackpack extends ItemAB implements IBackWearableItem
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
+    public void registerItemModel()
+    {
+        for (int i = 0; i < BackpackNames.backpackNames.length; i++)
+        {
+            AdventureBackpack.proxy.registerItemRenderer(this, i + 1, getUnwrappedUnlocalizedName("blockAdventureBackpack"));
+    	}
+    }
+
+    @Override
     public void onUnequipped(World world, EntityPlayer player, ItemStack stack)
     {
         if (BackpackAbilities.hasRemoval(BackpackNames.getBackpackColorName(stack)))

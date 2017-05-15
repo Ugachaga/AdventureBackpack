@@ -1,6 +1,0 @@
-{
-	"parent": "adventurebackpack:block/adventureBackpack.obj",
-	"textures": {
-		"layer0": "adventurebackpack:backpack/Standard"
-	}
-}

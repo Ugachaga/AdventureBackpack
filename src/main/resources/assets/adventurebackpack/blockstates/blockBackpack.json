@@ -7,10 +7,10 @@
 	},
 	"variants": {
 			"normal": {
-				"model": "adventurebackpack:adventureBackpack.obj"
+				"model": "adventurebackpack:adventureBackpacks.obj"
 			},
 			"inventory": {
-				"model": "adventurebackpack:adventureBackpack.obj",
+				"model": "adventurebackpack:adventureBackpacks.obj",
 				"transform": "forge:default-block"
 			}
 	}

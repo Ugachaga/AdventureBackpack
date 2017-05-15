@@ -1,20 +1,6 @@
 {
-	"forge_marker": 1,
-	"defaults": {
-		"custom": { "flip-v": true },
-		"model": "adventurebackpack:block/adventureBackpacks.obj",
-		"textures": {
-			"#None": "adventurebackpack:backpack/Standard",
-			"#Material": "adventurebackpack:backpack/Standard"
-		}
-	},
-	"variants": {
-		"normal": {
-			"model": "adventurebackpack:block/adventureBackpacks.obj"
-		},
-		"inventory": {
-			"model": "adventurebackpack:block/adventureBackpacks.obj",
-			"transform": "forge:default-block"
-		}
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "adventurebackpack:items/adventureBackpack"
 	}
 }
