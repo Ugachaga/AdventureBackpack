@@ -1,24 +1,20 @@
 package com.darkona.adventurebackpack.common;
 
-import java.util.Random;
-
 import net.minecraft.block.Block;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.init.Items;
+import net.minecraft.init.Biomes;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 
 import com.darkona.adventurebackpack.block.BlockSleepingBag;
-import com.darkona.adventurebackpack.block.TileAdventureBackpack;
+import com.darkona.adventurebackpack.block.TileBackpack;
 import com.darkona.adventurebackpack.config.ConfigHandler;
 import com.darkona.adventurebackpack.fluids.FluidEffectRegistry;
 import com.darkona.adventurebackpack.init.ModNetwork;
@@ -65,13 +61,14 @@ public class ServerActions
         if (!GeneralReference.isDimensionAllowed(player))
             return;
 
-        ItemStack current = player.getCurrentEquippedItem();
+        //TODO we should get from playerSlot instead, in case slot were changed already
+        ItemStack current = player.getHeldItemMainhand();
         if (SlotTool.isValidTool(current))
         {
             int backpackSlot = isWheelUp ? TOOL_UPPER : TOOL_LOWER;
             InventoryBackpack backpack = Wearing.getWearingBackpackInv(player);
-            backpack.openInventory();
-            player.inventory.mainInventory[playerSlot] = backpack.getStackInSlot(backpackSlot);
+            backpack.openInventory(player);
+            player.inventory.mainInventory.set(playerSlot, backpack.getStackInSlot(backpackSlot));
             backpack.setInventorySlotContentsNoSave(backpackSlot, current);
             backpack.dirtyInventory();
         }
@@ -107,7 +104,7 @@ public class ServerActions
         if (Wearing.isHoldingHose(player))
         {
             ItemStack hose = player.inventory.getCurrentItem();
-            NBTTagCompound tag = hose.hasTagCompound() ? hose.stackTagCompound : new NBTTagCompound();
+            NBTTagCompound tag = hose.hasTagCompound() ? hose.getTagCompound() : new NBTTagCompound();
 
             if (!action)
             {
@@ -157,97 +154,24 @@ public class ServerActions
         }
     }
 
-    public static void leakArrow(EntityPlayer player, ItemStack bow, int charge)
+    public static void toggleSleepingBag(EntityPlayer player, boolean isTile, int x, int y, int z)
     {
-        World world = player.worldObj;
-        Random itemRand = new Random();
-        InventoryBackpack backpack = new InventoryBackpack(Wearing.getWearingBackpack(player));
+        World world = player.world;
+        BlockPos pos = new BlockPos(x, y, z);
 
-        //this is all vanilla code for the bow
-        boolean flag = player.capabilities.isCreativeMode
-                || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, bow) > 0;
-
-        if (flag || backpack.hasItem(Items.arrow))
+        if (!world.provider.canRespawnHere() || world.getBiome(pos) == Biomes.HELL)
         {
-            float f = (float) charge / 20.0F;
-            f = (f * f + f * 2.0F) / 3.0F;
-            if ((double) f < 0.1D)
-            {
-                return;
-            }
-            if (f > 1.0F)
-            {
-                f = 1.0F;
-            }
-            EntityArrow entityarrow = new EntityArrow(world, player, f * 2.0F);
-            if (f == 1.0F)
-            {
-                entityarrow.setIsCritical(true);
-            }
-            int power = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, bow);
-            if (power > 0)
-            {
-                entityarrow.setDamage(entityarrow.getDamage() + (double) power * 0.5D + 0.5D);
-            }
-            int punch = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, bow);
-            if (punch > 0)
-            {
-                entityarrow.setKnockbackStrength(punch);
-            }
-            if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, bow) > 0)
-            {
-                entityarrow.setFire(100);
-            }
-
-            bow.damageItem(1, player);
-            world.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
-
-            if (flag)
-            {
-                entityarrow.canBePickedUp = 2;
-            }
-            else
-            {
-                /*
-                * From here, instead of leaking an arrow to the player inventory, which may be full and then it would be
-                * pointless, leak an arrow straight from the backpack ^_^
-                *
-                * It could be possible to switch a whole stack with the player inventory, fire the arrow, and then
-                * switch back, but that's stupid.
-                *
-                * That's how you make a quiver (for vanilla bows at least, or anything that uses the events and vanilla
-                * arrows) Until we have an event that fires when a player consumes items in his/her inventory.
-                *
-                * I should make a pull request. Too lazy, though.
-                * */
-                backpack.consumeInventoryItem(Items.arrow);
-                backpack.dirtyInventory();
-            }
-
-            if (!world.isRemote)
-            {
-                world.spawnEntityInWorld(entityarrow);
-            }
-        }
-    }
-
-    public static void toggleSleepingBag(EntityPlayer player, boolean isTile, int cX, int cY, int cZ)
-    {
-        World world = player.worldObj;
-
-        if (!world.provider.canRespawnHere() || world.getBiomeGenForCoords(cX, cZ) == BiomeGenBase.hell)
-        {
-            player.addChatComponentMessage(new ChatComponentTranslation("adventurebackpack:messages.cant.sleep.here"));
+            player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.cant.sleep.here"));
             player.closeScreen();
             return;
         }
 
-        if (isTile && world.getTileEntity(cX, cY, cZ) instanceof TileAdventureBackpack)
+        if (isTile && world.getTileEntity(pos) instanceof TileBackpack)
         {
-            TileAdventureBackpack te = (TileAdventureBackpack) world.getTileEntity(cX, cY, cZ);
+            TileBackpack te = (TileBackpack) world.getTileEntity(pos);
             if (!te.isSleepingBagDeployed())
             {
-                int can[] = CoordsUtils.canDeploySleepingBag(world, player, cX, cY, cZ, true);
+                int can[] = CoordsUtils.canDeploySleepingBag(world, player, x, y, z, true);
                 if (can[0] > -1)
                 {
                     if (te.deploySleepingBag(player, world, can[0], can[1], can[2], can[3]))
@@ -257,7 +181,7 @@ public class ServerActions
                 }
                 else if (!world.isRemote)
                 {
-                    player.addChatComponentMessage(new ChatComponentTranslation("adventurebackpack:messages.backpack.cant.bag"));
+                    player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.backpack.cant.bag"));
                 }
             }
             else
@@ -268,23 +192,23 @@ public class ServerActions
         }
         else if (!isTile && Wearing.isWearingBackpack(player))
         {
-            int can[] = CoordsUtils.canDeploySleepingBag(world, player, cX, cY, cZ, false);
+            int can[] = CoordsUtils.canDeploySleepingBag(world, player, x, y, z, false);
             if (can[0] > -1)
             {
                 InventoryBackpack inv = Wearing.getWearingBackpackInv(player);
                 if (inv.deploySleepingBag(player, world, can[0], can[1], can[2], can[3]))
                 {
-                    Block portableBag = world.getBlock(can[1], can[2], can[3]);
+                    Block portableBag = world.getBlockState(new BlockPos(can[1], can[2], can[3])).getBlock();
                     if (portableBag instanceof BlockSleepingBag)
                     {
                         inv.getExtendedProperties().setBoolean(Constants.TAG_SLEEPING_IN_BAG, true);
-                        ((BlockSleepingBag) portableBag).onPortableBlockActivated(world, player, can[1], can[2], can[3]);
+                        ((BlockSleepingBag) portableBag).onPortableBlockActivated(world, player, new BlockPos(can[1], can[2], can[3]));
                     }
                 }
             }
             else if (!world.isRemote)
             {
-                player.addChatComponentMessage(new ChatComponentTranslation("adventurebackpack:messages.backpack.cant.bag"));
+                player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.backpack.cant.bag"));
             }
             player.closeScreen();
         }
@@ -301,7 +225,7 @@ public class ServerActions
     {
         if (ConfigHandler.allowSoundPiston)
         {
-            player.playSound("tile.piston.out", 0.5F, player.getRNG().nextFloat() * 0.25F + 0.6F);
+            player.playSound(SoundEvents.BLOCK_PISTON_EXTEND, 0.5F, player.getRNG().nextFloat() * 0.25F + 0.6F);
         }
         player.motionY += ConfigHandler.pistonBootsJumpHeight / 10.0F;
         player.jumpMovementFactor += 0.3;
@@ -311,7 +235,7 @@ public class ServerActions
     {
         byte status = BackpackUtils.getWearableCompound(BackpackProperty.get(player).getWearable()).getByte(TAG_STATUS);
 
-        if (!player.worldObj.isRemote && status != ItemCopterPack.OFF_MODE)
+        if (!player.world.isRemote && status != ItemCopterPack.OFF_MODE)
         {
             ModNetwork.sendToNearby(new EntitySoundPacket.Message(EntitySoundPacket.COPTER_SOUND, player), player);
         }
@@ -321,7 +245,7 @@ public class ServerActions
     {
         boolean isBoiling = BackpackUtils.getWearableCompound(BackpackProperty.get(player).getWearable()).getBoolean("boiling");
 
-        if (!player.worldObj.isRemote && isBoiling)
+        if (!player.world.isRemote && isBoiling)
         {
             //ModNetwork.sendToNearby(new EntitySoundPacket.Message(EntitySoundPacket.BOILING_BUBBLES, player), player); //TODO difference?
             ModNetwork.net.sendTo(new EntitySoundPacket.Message(EntitySoundPacket.BOILING_BUBBLES, player), (EntityPlayerMP) player);
@@ -342,7 +266,7 @@ public class ServerActions
                 newMode = ItemCopterPack.NORMAL_MODE;
                 message = "adventurebackpack:messages.copterpack.normal";
                 actionPerformed = true;
-                if (!player.worldObj.isRemote)
+                if (!player.world.isRemote)
                 {
                     ModNetwork.sendToNearby(new EntitySoundPacket.Message(EntitySoundPacket.COPTER_SOUND, player), player);
                 }
@@ -374,9 +298,9 @@ public class ServerActions
         if (actionPerformed)
         {
             BackpackUtils.getWearableCompound(copter).setByte(TAG_STATUS, newMode);
-            if (player.worldObj.isRemote)
+            if (player.world.isRemote)
             {
-                player.addChatComponentMessage(new ChatComponentTranslation(message));
+                player.sendMessage(new TextComponentTranslation(message));
             }
         }
     }
@@ -390,18 +314,18 @@ public class ServerActions
             {
                 inv.setDisableCycling(false);
                 inv.markDirty();
-                if (player.worldObj.isRemote)
+                if (player.world.isRemote)
                 {
-                    player.addChatComponentMessage(new ChatComponentTranslation("adventurebackpack:messages.cycling.on"));
+                    player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.cycling.on"));
                 }
             }
             else
             {
                 inv.setDisableCycling(true);
                 inv.markDirty();
-                if (player.worldObj.isRemote)
+                if (player.world.isRemote)
                 {
-                    player.addChatComponentMessage(new ChatComponentTranslation("adventurebackpack:messages.cycling.off"));
+                    player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.cycling.off"));
                 }
             }
         }
@@ -414,20 +338,20 @@ public class ServerActions
         {
             inv.setDisableNVision(false);
             inv.markDirty();
-            if (player.worldObj.isRemote)
+            if (player.world.isRemote)
             {
-                player.playSound("mob.bat.idle", 0.2F, 1.0F);
-                player.addChatComponentMessage(new ChatComponentTranslation("adventurebackpack:messages.nightvision.on"));
+                player.playSound(SoundEvents.ENTITY_BAT_AMBIENT, 0.2F, 1.0F);
+                player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.nightvision.on"));
             }
         }
         else
         {
             inv.setDisableNVision(true);
             inv.markDirty();
-            if (player.worldObj.isRemote)
+            if (player.world.isRemote)
             {
-                player.playSound("mob.bat.death", 0.2F, 2.0F);
-                player.addChatComponentMessage(new ChatComponentTranslation("adventurebackpack:messages.nightvision.off"));
+                player.playSound(SoundEvents.ENTITY_BAT_DEATH, 0.2F, 2.0F);
+                player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.nightvision.off"));
             }
         }
     }
@@ -439,18 +363,18 @@ public class ServerActions
         {
             inv.setStatus(false);
             inv.markDirty();
-            if (player.worldObj.isRemote)
+            if (player.world.isRemote)
             {
-                player.addChatComponentMessage(new ChatComponentTranslation("adventurebackpack:messages.jetpack.off"));
+                player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.jetpack.off"));
             }
         }
         else
         {
             inv.setStatus(true);
             inv.markDirty();
-            if (player.worldObj.isRemote)
+            if (player.world.isRemote)
             {
-                player.addChatComponentMessage(new ChatComponentTranslation("adventurebackpack:messages.jetpack.on"));
+                player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.jetpack.on"));
             }
         }
     }

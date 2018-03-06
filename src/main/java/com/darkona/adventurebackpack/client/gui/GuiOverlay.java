@@ -11,23 +11,18 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.entity.boss.BossStatus;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.GuiIngameForge;
-import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import codechicken.lib.render.TextureUtils;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.config.ConfigHandler;
@@ -36,10 +31,8 @@ import com.darkona.adventurebackpack.item.ItemHose;
 import com.darkona.adventurebackpack.reference.LoadedMods;
 import com.darkona.adventurebackpack.reference.ModInfo;
 import com.darkona.adventurebackpack.reference.ToolHandler;
-import com.darkona.adventurebackpack.util.GregtechUtils;
 import com.darkona.adventurebackpack.util.LogHelper;
 import com.darkona.adventurebackpack.util.ThaumcraftUtils;
-import com.darkona.adventurebackpack.util.TinkersUtils;
 import com.darkona.adventurebackpack.util.Wearing;
 
 /**
@@ -58,9 +51,8 @@ public class GuiOverlay extends Gui
     private static final int BUFF_ICON_BASE_V_OFFSET = 198;
     private static final int BUFF_ICONS_PER_ROW = 8;
 
-    private static RenderItem itemRender = new RenderItem();
-
     private Minecraft mc;
+    private RenderItem itemRender;
     private FontRenderer fontRenderer;
 
     private int screenWidth;
@@ -69,21 +61,19 @@ public class GuiOverlay extends Gui
     public GuiOverlay(Minecraft mc)
     {
         super();
-
-        // We need this to invoke the render engine.
         this.mc = mc;
         this.fontRenderer = mc.fontRenderer;
-        itemRender.renderWithColor = false;
+        this.itemRender = mc.getRenderItem();
     }
 
     @SubscribeEvent(priority = EventPriority.NORMAL)
     public void onRenderExperienceBar(RenderGameOverlayEvent.Post event)
     {
-        if (event.type != RenderGameOverlayEvent.ElementType.EXPERIENCE)
+        if (event.getType() != RenderGameOverlayEvent.ElementType.EXPERIENCE)
             return;
 
-        EntityPlayer player = mc.thePlayer;
-        ScaledResolution resolution = new ScaledResolution(this.mc, this.mc.displayWidth, this.mc.displayHeight);
+        EntityPlayer player = mc.player;
+        ScaledResolution resolution = new ScaledResolution(mc);
         screenWidth = resolution.getScaledWidth();
         screenHeight = resolution.getScaledHeight();
 
@@ -117,7 +107,7 @@ public class GuiOverlay extends Gui
                 xPos += 50; // do not overlap thaumcraft GUI
             }
 
-            Collection activePotionEffects = this.mc.thePlayer.getActivePotionEffects();
+            Collection activePotionEffects = this.mc.player.getActivePotionEffects();
             if (!activePotionEffects.isEmpty())
             {
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -127,11 +117,9 @@ public class GuiOverlay extends Gui
                 for (Iterator activeEffect = activePotionEffects.iterator(); activeEffect.hasNext(); xPos += xStep)
                 {
                     PotionEffect potionEffect = (PotionEffect) activeEffect.next();
-                    Potion potion = Potion.potionTypes[potionEffect.getPotionID()];
+                    Potion potion = potionEffect.getPotion();
 
-                    // yes potion should not be null here, but it sometimes does
-                    // let the vanilla crash itself, no need to report this to us
-                    if (potion != null && potion.hasStatusIcon())
+                    if (potion.hasStatusIcon())
                     {
                         int iconIndex = potion.getStatusIconIndex();
                         this.drawTexturedModalRect(
@@ -150,7 +138,7 @@ public class GuiOverlay extends Gui
             {
                 IInventoryTanks inv = Wearing.getWearingWearableInv(player);
                 assert inv != null;
-                inv.openInventory();
+                inv.openInventory(player);
 
                 int textureHeight = 23;
                 int textureWidth = 10;
@@ -189,7 +177,7 @@ public class GuiOverlay extends Gui
                     short tank = -1;
                     if (Wearing.isHoldingHose(player))
                     {
-                        tank = (short) (ItemHose.getHoseTank(player.getHeldItem()));
+                        tank = (short) (ItemHose.getHoseTank(player.getHeldItemMainhand()));
                     }
                     if (tank > -1)
                     {
@@ -228,8 +216,9 @@ public class GuiOverlay extends Gui
         {
             try
             {
-                IIcon icon = fluid.getFluid().getStillIcon();
-                TextureUtils.bindAtlas(fluid.getFluid().getSpriteNumber());
+                //TODO overlay icons
+//                IIcon icon = fluid.getFluid().getStillIcon();
+//                TextureUtils.bindAtlas(fluid.getFluid().getSpriteNumber());
                 int top = startY + height - (fluid.amount / liquidPerPixel);
                 for (int j = startY + height - 1; j >= top; j--)
                 {
@@ -244,7 +233,7 @@ public class GuiOverlay extends Gui
                         {
                             GL11.glColor4f(1, 1, 1, 1);
                         }
-                        GuiTank.drawFluidPixelFromIcon(i, j, icon, 1, 1, 0, 0, 0, 0, 1);
+//                        GuiTank.drawFluidPixelFromIcon(i, j, icon, 1, 1, 0, 0, 0, 0, 1);
                         GL11.glPopMatrix();
                     }
                 }
@@ -267,35 +256,35 @@ public class GuiOverlay extends Gui
         switch (toolHandler)
         {
             case GREGTECH:
-                GL11.glTranslatef(x, y, 32.0F);
-                GregtechUtils.renderTool(stack, IItemRenderer.ItemRenderType.INVENTORY);
-                break;
+//                GL11.glTranslatef(x, y, 32.0F);
+//                GregtechUtils.renderTool(stack, IItemRenderer.ItemRenderType.INVENTORY);
+//                break;
             case TCONSTRUCT:
-                TextureManager tm = mc.getTextureManager();
-                tm.bindTexture(tm.getResourceLocation(stack.getItemSpriteNumber()));
-                GL11.glTranslatef(x, y, 32.0F);
-                TinkersUtils.renderTool(stack, IItemRenderer.ItemRenderType.INVENTORY);
-                break;
+//                TextureManager tm = mc.getTextureManager();
+//                tm.bindTexture(tm.getResourceLocation(stack.getItemSpriteNumber()));
+//                GL11.glTranslatef(x, y, 32.0F);
+//                TinkersUtils.renderTool(stack, IItemRenderer.ItemRenderType.INVENTORY);
+//                break;
             case THAUMCRAFT:
-                // Forge PreRender: net.minecraftforge.client.ForgeHooksClient.renderInventoryItem
-                GL11.glPushMatrix();
-                GL11.glTranslatef(x - 2, y + 3, -3.0F + zLevel);
-                GL11.glScalef(10F, 10F, 10F);
-                GL11.glTranslatef(1.0F, 0.5F, 1.0F);
-                GL11.glScalef(1.0F, 1.0F, -1F);
-                GL11.glRotatef(210F, 1.0F, 0.0F, 0.0F);
-                GL11.glRotatef(-135F, 0.0F, 1.0F, 0.0F);
-                // Thaumcraft Render
-                ThaumcraftUtils.renderTool(stack, IItemRenderer.ItemRenderType.INVENTORY);
-                GL11.glPopMatrix();
-                break;
+//                // Forge PreRender: net.minecraftforge.client.ForgeHooksClient.renderInventoryItem
+//                GL11.glPushMatrix();
+//                GL11.glTranslatef(x - 2, y + 3, -3.0F + zLevel);
+//                GL11.glScalef(10F, 10F, 10F);
+//                GL11.glTranslatef(1.0F, 0.5F, 1.0F);
+//                GL11.glScalef(1.0F, 1.0F, -1F);
+//                GL11.glRotatef(210F, 1.0F, 0.0F, 0.0F);
+//                GL11.glRotatef(-135F, 0.0F, 1.0F, 0.0F);
+//                // Thaumcraft Render
+//                ThaumcraftUtils.renderTool(stack, IItemRenderer.ItemRenderType.INVENTORY);
+//                GL11.glPopMatrix();
+//                break;
             case VANILLA:
             default:
                 GL11.glTranslatef(0F, 0F, 32.0F);
                 FontRenderer font = null;
                 font = stack.getItem().getFontRenderer(stack);
                 if (font == null) font = fontRenderer;
-                itemRender.renderItemIntoGUI(font, mc.getTextureManager(), stack, x, y);
+                itemRender.renderItemIntoGUI(stack, x, y);
                 break;
         }
 
@@ -304,25 +293,25 @@ public class GuiOverlay extends Gui
     }
 
     private void drawBossBar()
-    {
-        if (BossStatus.bossName != null && BossStatus.statusBarTime > 0)
-        {
-            --BossStatus.statusBarTime;
-            GL11.glEnable(GL11.GL_BLEND);
-            int barWidth = 182;
-            int posX = screenWidth / 2 - barWidth / 2;
-            int posY = ConfigHandler.bossBarIndent;
-            int bossHealthWidth = (int) (BossStatus.healthScale * (barWidth + 1));
-            this.mc.getTextureManager().bindTexture(GUI_ICONS);
-            this.drawTexturedModalRect(posX, posY, 0, 74, barWidth, 5);
-            this.drawTexturedModalRect(posX, posY, 0, 74, barWidth, 5);
-            if (bossHealthWidth > 0)
-                this.drawTexturedModalRect(posX, posY, 0, 79, bossHealthWidth, 5);
-            String s = BossStatus.bossName;
-            fontRenderer.drawStringWithShadow(s, screenWidth / 2 - fontRenderer.getStringWidth(s) / 2, posY - 10, 16777215);
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            GL11.glDisable(GL11.GL_BLEND);
-        }
+    { //TODO see GuiBossOverlay#renderBossHealth() and GuiIngameForge#renderBossHealth()
+//        if (BossStatus.bossName != null && BossStatus.statusBarTime > 0)
+//        {
+//            --BossStatus.statusBarTime;
+//            GL11.glEnable(GL11.GL_BLEND);
+//            int barWidth = 182;
+//            int posX = screenWidth / 2 - barWidth / 2;
+//            int posY = ConfigHandler.bossBarIndent;
+//            int bossHealthWidth = (int) (BossStatus.healthScale * (barWidth + 1));
+//            this.mc.getTextureManager().bindTexture(GUI_ICONS);
+//            this.drawTexturedModalRect(posX, posY, 0, 74, barWidth, 5);
+//            this.drawTexturedModalRect(posX, posY, 0, 74, barWidth, 5);
+//            if (bossHealthWidth > 0)
+//                this.drawTexturedModalRect(posX, posY, 0, 79, bossHealthWidth, 5);
+//            String s = BossStatus.bossName;
+//            fontRenderer.drawStringWithShadow(s, screenWidth / 2 - fontRenderer.getStringWidth(s) / 2, posY - 10, 16777215);
+//            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+//            GL11.glDisable(GL11.GL_BLEND);
+//        }
     }
 
 }

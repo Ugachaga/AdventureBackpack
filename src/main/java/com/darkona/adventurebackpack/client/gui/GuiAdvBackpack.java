@@ -5,13 +5,13 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidTank;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.darkona.adventurebackpack.block.TileAdventureBackpack;
+import com.darkona.adventurebackpack.block.TileBackpack;
 import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.common.Constants.Source;
 import com.darkona.adventurebackpack.config.ConfigHandler;
@@ -46,7 +46,7 @@ public class GuiAdvBackpack extends GuiWithTanks
 
     private boolean isHoldingSpace;
 
-    public GuiAdvBackpack(EntityPlayer player, TileAdventureBackpack tileBackpack, Source source)
+    public GuiAdvBackpack(EntityPlayer player, TileBackpack tileBackpack, Source source)
     {
         super(new ContainerBackpack(player, tileBackpack, source));
         this.player = player;
@@ -104,10 +104,10 @@ public class GuiAdvBackpack extends GuiWithTanks
         if (ConfigHandler.tanksHoveringText)
         {
             if (tankLeft.inTank(this, mouseX, mouseY))
-                drawHoveringText(tankLeft.getTankTooltip(), mouseX, mouseY, fontRendererObj);
+                drawHoveringText(tankLeft.getTankTooltip(), mouseX, mouseY, fontRenderer);
 
             if (tankRight.inTank(this, mouseX, mouseY))
-                drawHoveringText(tankRight.getTankTooltip(), mouseX, mouseY, fontRendererObj);
+                drawHoveringText(tankRight.getTankTooltip(), mouseX, mouseY, fontRenderer);
         }
 
         if (LoadedMods.TCONSTRUCT && ConfigHandler.tinkerToolsMaintenance)
@@ -123,7 +123,7 @@ public class GuiAdvBackpack extends GuiWithTanks
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
-        inventory.openInventory();
+        inventory.openInventory(player);
         FluidTank lft = inventory.getLeftTank();
         FluidTank rgt = inventory.getRightTank();
         tankLeft.draw(this, lft);
@@ -151,14 +151,14 @@ public class GuiAdvBackpack extends GuiWithTanks
         {
             if (source == Source.TILE)
             {
-                TileAdventureBackpack te = (TileAdventureBackpack) inventory;
-                ModNetwork.net.sendToServer(new SleepingBagPacket.SleepingBagMessage(true, te.xCoord, te.yCoord, te.zCoord));
+                TileBackpack te = (TileBackpack) inventory;
+                ModNetwork.net.sendToServer(new SleepingBagPacket.SleepingBagMessage(true, te.getPos().getX(), te.getPos().getY(), te.getPos().getZ()));
             }
             else
             {
-                int posX = MathHelper.floor_double(player.posX);
-                int posY = MathHelper.floor_double(player.posY) - 1;
-                int posZ = MathHelper.floor_double(player.posZ);
+                int posX = MathHelper.floor(player.posX);
+                int posY = MathHelper.floor(player.posY) - 1;
+                int posZ = MathHelper.floor(player.posZ);
                 ModNetwork.net.sendToServer(new SleepingBagPacket.SleepingBagMessage(false, posX, posY, posZ));
             }
         }

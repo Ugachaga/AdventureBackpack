@@ -1,16 +1,13 @@
 package com.darkona.adventurebackpack.item;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.Entity;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
+import com.darkona.adventurebackpack.AdventureBackpack;
 import com.darkona.adventurebackpack.CreativeTabAB;
 import com.darkona.adventurebackpack.init.ModMaterials;
 import com.darkona.adventurebackpack.reference.ModInfo;
-import com.darkona.adventurebackpack.util.Resources;
 
 /**
  * Created on 11/10/2014.
@@ -19,13 +16,9 @@ import com.darkona.adventurebackpack.util.Resources;
  */
 public class ArmorAB extends ItemArmor
 {
-    /**
-     * @param type        2 Chain
-     * @param renderIndex 0 Helmet, 1 Plate, 2 Pants, 3 Boots
-     */
-    ArmorAB(int renderIndex, int type)
+    ArmorAB(int renderIndex, EntityEquipmentSlot slot)
     {
-        super(ModMaterials.ruggedLeather, renderIndex, type);
+        super(ModMaterials.ruggedLeather, renderIndex, slot);
         setCreativeTab(CreativeTabAB.TAB_AB);
     }
 
@@ -46,20 +39,14 @@ public class ArmorAB extends ItemArmor
         return String.format("item.%s%s", ModInfo.MOD_ID + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegister)
+    public void registerItemModel()
     {
-        itemIcon = iconRegister.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf(".") + 1));
+        AdventureBackpack.proxy.registerItemRenderer(this, 0, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type)
+    public void setCustomModelResourceLocation()
     {
-        String uName = this.getUnlocalizedName();
-        return Resources.modelTextureResourceString(uName.substring(uName.indexOf(":") + 1)) + "_texture.png";
-        //return Textures.modelTextureName(getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+        AdventureBackpack.proxy.setCustomModelResourceLocation(this, 0, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
     }
 
 }

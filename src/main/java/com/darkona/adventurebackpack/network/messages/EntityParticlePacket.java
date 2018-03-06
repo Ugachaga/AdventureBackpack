@@ -4,9 +4,9 @@ import io.netty.buffer.ByteBuf;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import com.darkona.adventurebackpack.client.ClientActions;
 import com.darkona.adventurebackpack.init.ModNetwork;
@@ -28,12 +28,12 @@ public class EntityParticlePacket implements IMessageHandler<EntityParticlePacke
     {
         if (ctx.side.isClient())
         {
-            Entity entity = Minecraft.getMinecraft().theWorld.getEntityByID(message.entityID);
+            Entity entity = Minecraft.getMinecraft().world.getEntityByID(message.entityID);
             ClientActions.showParticlesAtEntity(entity, message.particleCode);
         }
         else
         {
-            ModNetwork.sendToNearby(message, ctx.getServerHandler().playerEntity);
+            ModNetwork.sendToNearby(message, ctx.getServerHandler().player);
         }
         return null;
     }

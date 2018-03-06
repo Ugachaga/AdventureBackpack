@@ -14,6 +14,7 @@ import org.apache.commons.lang3.text.WordUtils;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.text.translation.I18n;
 
 import com.darkona.adventurebackpack.util.BackpackUtils;
 
@@ -76,7 +77,6 @@ public enum BackpackTypes
     MAGENTA         ( 40),
     MAGMA_CUBE      ( 41),
     MELON           ( 42, SPECIAL, TILE),
-    MODDED_NETWORK  ( 76),
     MOOSHROOM       ( 45, SPECIAL),
     NETHER          ( 46),
     OBSIDIAN        ( 48),
@@ -190,6 +190,11 @@ public enum BackpackTypes
     public static String getSkinName(ItemStack backpack)
     {
         return getSkinName(getType(backpack));
+    }
+
+    public static String getLocalizedName(BackpackTypes type)
+    {
+        return I18n.translateToLocal("adventurebackpack:skin.name." + type.name().toLowerCase());
     }
 
     public static byte getMeta(BackpackTypes type)

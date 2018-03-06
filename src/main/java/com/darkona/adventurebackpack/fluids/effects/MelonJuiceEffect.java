@@ -2,7 +2,7 @@ package com.darkona.adventurebackpack.fluids.effects;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.potion.Potion;
+import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
@@ -26,8 +26,8 @@ public class MelonJuiceEffect extends FluidEffect
         if (entity instanceof EntityPlayer)
         {
             EntityPlayer player = (EntityPlayer) entity;
-            player.addPotionEffect(new PotionEffect(Potion.digSpeed.getId(), timeInTicks, 0));
-            player.addPotionEffect(new PotionEffect(Potion.regeneration.id, Utils.secondsToTicks(timeInSeconds), 0));
+            player.addPotionEffect(new PotionEffect(MobEffects.HASTE, timeInTicks, 0));
+            player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, Utils.secondsToTicks(timeInSeconds), 0));
         }
     }
 }

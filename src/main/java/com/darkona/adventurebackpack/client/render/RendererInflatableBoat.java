@@ -3,9 +3,10 @@ package com.darkona.adventurebackpack.client.render;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 
 import com.darkona.adventurebackpack.client.models.ModelInflatableBoat;
 import com.darkona.adventurebackpack.entity.EntityInflatableBoat;
@@ -21,10 +22,13 @@ public class RendererInflatableBoat extends Render
     private ResourceLocation boatTexture = Resources.modelTextures("inflatableBoat");
     private ModelInflatableBoat boatModel = new ModelInflatableBoat();
 
-    public RendererInflatableBoat()
+    public RendererInflatableBoat(RenderManager renderManagerIn)
     {
+        super(renderManagerIn);
         this.shadowSize = 0.5F;
     }
+
+    //TODO this code is outdated, see vanilla RenderBoat, rework to 1.12
 
     public void doRender(EntityInflatableBoat entity, double x, double y, double z, float var1, float var2)
     {

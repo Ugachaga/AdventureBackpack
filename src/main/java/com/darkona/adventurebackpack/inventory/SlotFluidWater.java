@@ -2,7 +2,6 @@ package com.darkona.adventurebackpack.inventory;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 
 import com.darkona.adventurebackpack.common.Constants;
@@ -28,7 +27,9 @@ public class SlotFluidWater extends SlotFluid
 
     private static boolean isContainerWithWater(ItemStack stack)
     {
-        return isFilled(stack) && FluidContainerRegistry.getFluidForFilledItem(stack).getFluid().getName().contains("water");
+        //TODO fluid containers
+        return false;
+        //return isFilled(stack) && FluidContainerRegistry.getFluidForFilledItem(stack).getFluid().getName().contains("water");
     }
 
     private static boolean isValidContainer(ItemStack stack)

@@ -3,6 +3,8 @@ package com.darkona.adventurebackpack.client.audio;
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 
 import com.darkona.adventurebackpack.inventory.InventoryCoalJetpack;
 import com.darkona.adventurebackpack.reference.ModInfo;
@@ -22,7 +24,7 @@ public class LeakingBoilerSound extends MovingSound
 
     public LeakingBoilerSound(EntityPlayer player)
     {
-        super(new ResourceLocation(ModInfo.MOD_ID, "s_background2"));
+        super(new SoundEvent(new ResourceLocation(ModInfo.MOD_ID, "s_background2")), SoundCategory.BLOCKS);
         volume = 0.2f;
         pitch = 1.2F;
         thePlayer = player;
@@ -44,7 +46,7 @@ public class LeakingBoilerSound extends MovingSound
     @Override
     public void update()
     {
-        if (thePlayer == null || thePlayer.isDead || thePlayer.worldObj == null || !Wearing.isWearingJetpack(thePlayer))
+        if (thePlayer == null || thePlayer.isDead || thePlayer.world == null || !Wearing.isWearingJetpack(thePlayer))
         {
             setDonePlaying();
             return;

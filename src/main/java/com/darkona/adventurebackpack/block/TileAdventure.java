@@ -1,12 +1,13 @@
 package com.darkona.adventurebackpack.block;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 
 import com.darkona.adventurebackpack.inventory.IInventoryTanks;
 
@@ -21,6 +22,25 @@ import static com.darkona.adventurebackpack.common.Constants.TAG_SLOT;
 abstract class TileAdventure extends TileEntity implements IInventoryTanks
 {
     // when porting to java 8+ most this methods should move to IInventoryTanks
+
+    @Override
+    public String getName()
+    {
+        return "";
+    }
+
+    @Override
+    public boolean hasCustomName()
+    {
+        return getName().isEmpty();
+    }
+
+    @Override
+    public ITextComponent getDisplayName()
+    {
+        return new TextComponentString(this.getName());
+    }
+
 
     protected final ItemStack[] inventory;
 
@@ -41,16 +61,15 @@ abstract class TileAdventure extends TileEntity implements IInventoryTanks
         return inventory[slot];
     }
 
-    @Nullable
     @Override
     public ItemStack decrStackSize(int slot, int quantity)
     {
         ItemStack stack = getStackInSlot(slot);
-        if (stack != null)
+        if (stack != ItemStack.EMPTY)
         {
-            if (stack.stackSize <= quantity)
+            if (stack.getCount() <= quantity)
             {
-                setInventorySlotContents(slot, null);
+                setInventorySlotContents(slot, ItemStack.EMPTY);
             }
             else
             {
@@ -61,34 +80,21 @@ abstract class TileAdventure extends TileEntity implements IInventoryTanks
         return stack;
     }
 
-    @Nullable
     @Override
-    public ItemStack getStackInSlotOnClosing(int slot)
+    public ItemStack removeStackFromSlot(int slot)
     {
         for (int s : getSlotsOnClosing())
             if (slot == s)
                 return inventory[slot];
 
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
-    public void setInventorySlotContents(int slot, @Nullable ItemStack stack)
+    public void setInventorySlotContents(int slot, ItemStack stack)
     {
         setInventorySlotContentsNoSave(slot, stack);
         dirtyInventory();
-    }
-
-    @Override
-    public String getInventoryName()
-    {
-        return "";
-    }
-
-    @Override
-    public boolean hasCustomInventoryName()
-    {
-        return getInventoryName() != null && !getInventoryName().isEmpty();
     }
 
     @Override
@@ -100,20 +106,20 @@ abstract class TileAdventure extends TileEntity implements IInventoryTanks
     // we have to inherit markDirty() implemented in TileEntity.class
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player)
+    public boolean isUsableByPlayer(EntityPlayer player)
     {
-        return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this
-                && player.getDistanceSq(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5) <= 64;
+        return world.getTileEntity(pos) == this
+                && player.getDistanceSq(new BlockPos(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5)) <= 64;
     }
 
     @Override
-    public void openInventory()
+    public void openInventory(EntityPlayer player)
     {
         //
     }
 
     @Override
-    public void closeInventory()
+    public void closeInventory(EntityPlayer player)
     {
         dirtyInventory();
     }
@@ -124,15 +130,44 @@ abstract class TileAdventure extends TileEntity implements IInventoryTanks
         return false; // override when automation is allowed
     }
 
-    @Nullable
+    @Override
+    public boolean isEmpty()
+    {
+        return false; //TODO
+    }
+
+    @Override
+    public int getField(int id)
+    {
+        return 0; //TODO
+    }
+
+    @Override
+    public void setField(int id, int value)
+    {
+        //TODO
+    }
+
+    @Override
+    public int getFieldCount()
+    {
+        return 0; //TODO
+    }
+
+    @Override
+    public void clear()
+    {
+        //TODO
+    }
+
     @Override
     public ItemStack decrStackSizeNoSave(int slot, int quantity)
     {
         ItemStack stack = getStackInSlot(slot);
-        if (stack != null)
+        if (stack != ItemStack.EMPTY)
         {
-            if (stack.stackSize <= quantity)
-                setInventorySlotContentsNoSave(slot, null);
+            if (stack.getCount() <= quantity)
+                setInventorySlotContentsNoSave(slot, ItemStack.EMPTY);
             else
                 stack = stack.splitStack(quantity);
         }
@@ -140,18 +175,18 @@ abstract class TileAdventure extends TileEntity implements IInventoryTanks
     }
 
     @Override
-    public void setInventorySlotContentsNoSave(int slot, @Nullable ItemStack stack)
+    public void setInventorySlotContentsNoSave(int slot, ItemStack stack)
     {
         if (slot >= getSizeInventory())
             return;
 
-        if (stack != null)
+        if (stack != ItemStack.EMPTY)
         {
-            if (stack.stackSize > getInventoryStackLimit())
-                stack.stackSize = getInventoryStackLimit();
+            if (stack.getCount() > getInventoryStackLimit())
+                stack.setCount(getInventoryStackLimit());
 
-            if (stack.stackSize == 0)
-                stack = null;
+            if (stack.getCount() == 0)
+                stack = ItemStack.EMPTY;
         }
 
         inventory[slot] = stack;
@@ -168,7 +203,6 @@ abstract class TileAdventure extends TileEntity implements IInventoryTanks
     @Override
     public void dirtyTanks()
     {
-        // for now none is calling this for tile.backpack
         // if we really want to use it, we have to re-implement it, more efficient way
         dirtyInventory();
     }
@@ -181,7 +215,7 @@ abstract class TileAdventure extends TileEntity implements IInventoryTanks
             byte slot = item.getByte(TAG_SLOT);
             if (slot >= 0 && slot < getSizeInventory())
             {
-                inventory[slot] = ItemStack.loadItemStackFromNBT(item);
+                inventory[slot] = new ItemStack(item);
             }
         }
     }
@@ -192,7 +226,7 @@ abstract class TileAdventure extends TileEntity implements IInventoryTanks
         for (int i = 0; i < getSizeInventory(); i++)
         {
             ItemStack stack = inventory[i];
-            if (stack != null)
+            if (stack != ItemStack.EMPTY)
             {
                 NBTTagCompound item = new NBTTagCompound();
                 item.setByte(TAG_SLOT, (byte) i);

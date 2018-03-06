@@ -4,10 +4,10 @@ import io.netty.buffer.ByteBuf;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import com.darkona.adventurebackpack.AdventureBackpack;
 import com.darkona.adventurebackpack.init.ModNetwork;
@@ -30,7 +30,7 @@ public class SyncPropertiesPacket implements IMessageHandler<SyncPropertiesPacke
     {
         if (ctx.side.isClient() && message.properties != null)
         {
-            if (Minecraft.getMinecraft().theWorld == null)
+            if (Minecraft.getMinecraft().world == null)
             {
                 ModNetwork.net.sendToServer(new SyncPropertiesPacket.Message());
             }
@@ -41,7 +41,7 @@ public class SyncPropertiesPacket implements IMessageHandler<SyncPropertiesPacke
         }
         if (ctx.side.isServer())
         {
-            BackpackProperty.sync(ctx.getServerHandler().playerEntity);
+            BackpackProperty.sync(ctx.getServerHandler().player);
         }
         return null;
     }

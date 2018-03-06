@@ -9,7 +9,7 @@ import net.minecraftforge.fluids.FluidTank;
  *
  * @author Darkona
  */
-public class TankWrapper extends FluidTank
+public class TankWrapper extends FluidTank //TODO any use of this?
 {
     public TankWrapper(int capacity)
     {

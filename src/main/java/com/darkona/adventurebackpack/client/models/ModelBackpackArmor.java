@@ -246,9 +246,9 @@ public class ModelBackpackArmor extends ModelWearable
     @SuppressWarnings("unchecked")
     private void renderBackpack(Float scale)
     {
-        InventoryBackpack backpack = new InventoryBackpack(this.backpack);
-        backpack.openInventory();
-        BackpackTypes type = backpack.getType();
+        InventoryBackpack inv = new InventoryBackpack(this.backpack);
+        inv.loadFromNBT(backpack.getTagCompound());
+        BackpackTypes type = inv.getType();
         for (ModelRenderer model : (List<ModelRenderer>) bipedBody.childModels)
         {
             model.mirror = false;
@@ -260,8 +260,8 @@ public class ModelBackpackArmor extends ModelWearable
 
         if (ConfigHandler.enableToolsRender)
         {
-            ItemStack upperStack = backpack.getStackInSlot(Constants.TOOL_UPPER);
-            ItemStack lowerStack = backpack.getStackInSlot(Constants.TOOL_LOWER);
+            ItemStack upperStack = inv.getStackInSlot(Constants.TOOL_UPPER);
+            ItemStack lowerStack = inv.getStackInSlot(Constants.TOOL_LOWER);
             upperTool.setStack(upperStack, ToolHandler.getToolHandler(upperStack));
             lowerTool.setStack(lowerStack, ToolHandler.getToolHandler(lowerStack));
         }
@@ -300,9 +300,9 @@ public class ModelBackpackArmor extends ModelWearable
         GL11.glPushMatrix();
         GL11.glTranslatef(bipedBody.offsetX + 0, bipedBody.offsetY + 0.2F, bipedBody.offsetZ + 0.3f);
 
-        renderFluidInTank(backpack.getLeftTank(), new Vector3(0f, .5f, 0f), new Vector3(.17f, 0, .17f), new Vector3(-.17f, .05f, .2f), tankLeftTop);
+        renderFluidInTank(inv.getLeftTank(), new Vector3(0f, .5f, 0f), new Vector3(.17f, 0, .17f), new Vector3(-.17f, .05f, .2f), tankLeftTop);
 
-        renderFluidInTank(backpack.getRightTank(), new Vector3(0f, .5f, 0f), new Vector3(.17f, 0, .17f), new Vector3(.41f, .05f, .2f), tankRightTop);
+        renderFluidInTank(inv.getRightTank(), new Vector3(0f, .5f, 0f), new Vector3(.17f, 0, .17f), new Vector3(.41f, .05f, .2f), tankRightTop);
         GL11.glPopMatrix();
     }
 

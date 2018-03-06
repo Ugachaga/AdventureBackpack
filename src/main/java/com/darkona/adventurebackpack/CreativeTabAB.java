@@ -1,7 +1,7 @@
 package com.darkona.adventurebackpack;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 import com.darkona.adventurebackpack.init.ModItems;
 import com.darkona.adventurebackpack.reference.ModInfo;
@@ -16,9 +16,9 @@ public class CreativeTabAB
     public static final CreativeTabs TAB_AB = new CreativeTabs(ModInfo.MOD_ID)
     {
         @Override
-        public Item getTabIconItem()
+        public ItemStack getTabIconItem()
         {
-            return ModItems.machete;
+            return new ItemStack(ModItems.MACHETE, 1, 0);
         }
 
         @Override

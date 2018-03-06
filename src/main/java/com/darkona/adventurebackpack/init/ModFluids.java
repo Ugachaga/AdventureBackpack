@@ -1,10 +1,5 @@
 package com.darkona.adventurebackpack.init;
 
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidRegistry;
-
 import com.darkona.adventurebackpack.fluids.FluidMelonJuice;
 import com.darkona.adventurebackpack.fluids.FluidMilk;
 import com.darkona.adventurebackpack.fluids.FluidMushroomStew;
@@ -26,13 +21,14 @@ public class ModFluids
         melonJuice = new FluidMelonJuice();
         mushroomStew = new FluidMushroomStew();
 
-        FluidRegistry.registerFluid(milk);
-        FluidContainerRegistry.registerFluidContainer(milk, new ItemStack(Items.milk_bucket), FluidContainerRegistry.EMPTY_BUCKET);
-
-        FluidRegistry.registerFluid(melonJuice);
-        FluidContainerRegistry.registerFluidContainer(melonJuice, new ItemStack(ModItems.melonJuiceBottle), FluidContainerRegistry.EMPTY_BOTTLE);
-
-        FluidRegistry.registerFluid(mushroomStew);
-        FluidContainerRegistry.registerFluidContainer(mushroomStew, new ItemStack(Items.mushroom_stew), new ItemStack(Items.bowl));
+        //TODO FluidContainerRegistry removed. Create an item like {@link net.minecraftforge.fluids.capability.ItemFluidContainer}
+//        FluidRegistry.registerFluid(milk);
+//        FluidContainerRegistry.registerFluidContainer(milk, new ItemStack(Items.MILK_BUCKET), FluidContainerRegistry.EMPTY_BUCKET);
+//
+//        FluidRegistry.registerFluid(melonJuice);
+//        FluidContainerRegistry.registerFluidContainer(melonJuice, new ItemStack(ModItems.MELON_JUICE_BOTTLE), FluidContainerRegistry.EMPTY_BOTTLE);
+//
+//        FluidRegistry.registerFluid(mushroomStew);
+//        FluidContainerRegistry.registerFluidContainer(mushroomStew, new ItemStack(Items.MUSHROOM_STEW), new ItemStack(Items.BOWL));
     }
 }

@@ -54,10 +54,10 @@ public abstract class ModelWearable extends ModelBiped
 
     public void renderFluidInTank(FluidTank tank, Vector3 minCoords, Vector3 maxCoords, Vector3 offset, ModelRenderer parent)
     {
-        if (tank != null && tank.getFluid() != null && tank.getFluid().getFluid().getIcon() != null)
+        if (tank != null && tank.getFluid() != null /*&& tank.getFluid().getFluid().getIcon() != null*/)
         {
             Vector3 victor = new Vector3(
-                    (parent.rotationPointX * 0.1f + parent.offsetX * 0.1 + offset.x), //
+                    (parent.rotationPointX * 0.1f + parent.offsetX * 0.1 + offset.x),
                     (parent.rotationPointY * 0.1f + parent.offsetY * 0.1 + offset.y),
                     (parent.rotationPointZ * 0.1f + parent.offsetZ * 0.1 + offset.z));
 

@@ -1,9 +1,9 @@
 package com.darkona.adventurebackpack.util;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.EnumChatFormatting;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 
 import com.darkona.adventurebackpack.reference.BackpackTypes;
 
@@ -49,74 +49,92 @@ public class Utils
         return slots;
     }
 
-    private static final EnumChatFormatting[] RAINBOW_SEQUENCE = {EnumChatFormatting.RED, EnumChatFormatting.GOLD,
-            EnumChatFormatting.YELLOW, EnumChatFormatting.GREEN, EnumChatFormatting.AQUA, EnumChatFormatting.BLUE,
-            EnumChatFormatting.DARK_PURPLE};
+    private static final TextFormatting[] RAINBOW_SEQUENCE = {TextFormatting.RED, TextFormatting.GOLD,
+            TextFormatting.YELLOW, TextFormatting.GREEN, TextFormatting.AQUA, TextFormatting.BLUE,
+            TextFormatting.DARK_PURPLE};
 
-    public static String makeItRainbow(String theString)
+    public static String makeItRainbow(String stringIn)
     {
-        StringBuilder rainbowed = new StringBuilder(theString.length() * 3); // special characters = length * 2
-        for (int i = 0; i < theString.length(); i++)
+        StringBuilder rainbowed = new StringBuilder(stringIn.length() * 3); // special characters = length * 2
+        for (int i = 0; i < stringIn.length(); i++)
         {
-            rainbowed.append(RAINBOW_SEQUENCE[i % RAINBOW_SEQUENCE.length]).append(theString.charAt(i));
+            rainbowed.append(RAINBOW_SEQUENCE[i % RAINBOW_SEQUENCE.length]).append(stringIn.charAt(i));
         }
         return rainbowed.toString();
     }
 
     public static String getColoredSkinName(BackpackTypes type)
     {
-        String result = "";
-        String skinName = BackpackTypes.getSkinName(type);
+        String result;
+        String name = BackpackTypes.getLocalizedName(type);
         switch (type)
         {
             case BAT:
-                result += EnumChatFormatting.DARK_PURPLE + skinName;
+                result = TextFormatting.DARK_PURPLE + name;
+                break;
+            case EMERALD:
+                result = animateString(name, TextFormatting.GREEN);
+                break;
+            case DIAMOND:
+                result = animateString(name, TextFormatting.AQUA);
                 break;
             case DRAGON:
-                result += EnumChatFormatting.LIGHT_PURPLE + skinName;
+                result = TextFormatting.LIGHT_PURPLE + name;
+                break;
+            case GOLD:
+                result = animateString(name, TextFormatting.YELLOW);
+                break;
+            case IRON_GOLEM:
+                result = TextFormatting.WHITE + name;
+                break;
+            case OBSIDIAN:
+                result = animateString(name, TextFormatting.DARK_PURPLE);
                 break;
             case PIGMAN:
-                result += EnumChatFormatting.RED + skinName;
+                result = TextFormatting.RED + name;
                 break;
             case QUARTZ:
-                result += makeWhiteAnimation(skinName);
+                result = animateString(name, TextFormatting.WHITE);
                 break;
             case RAINBOW:
-                result += makeItRainbow(skinName);
+                result = makeItRainbow(name);
                 break;
             case SQUID:
-                result += EnumChatFormatting.DARK_AQUA + skinName;
+                result = TextFormatting.DARK_AQUA + name;
                 break;
             default:
-                result += skinName;
+                result = name;
                 break;
         }
         return result;
     }
 
-    private static String makeWhiteAnimation(String string)
+    private static String animateString(String stringIn, TextFormatting bold)
     {
-        return animateString(string, EnumChatFormatting.GRAY, EnumChatFormatting.WHITE);
+        if (Minecraft.getMinecraft().world == null) return stringIn;
+        return animateString(stringIn, TextFormatting.GRAY, bold);
     }
 
-    private static String animateString(String stringIn, EnumChatFormatting regular, EnumChatFormatting bold)
+    private static String animateString(String stringIn, TextFormatting regular, TextFormatting bold)
     {
         int len = stringIn.length();
-        int time = Math.abs((int) Minecraft.getMinecraft().theWorld.getWorldTime());
-        int charID = time % len;
+        int time = Math.abs((int) Minecraft.getMinecraft().world.getWorldTime());
 
-        int n = 10;
-        int phaseFactor = time % (n * len); // makes n phases with len length
+        int k = 1; // animation slowness coefficient, changes charID every k ticks, k = 1 for max speed
+        int charID = (time / k) % len ;
+
+        int n = 100 / len; // makes n phases with len length
+        int phaseFactor = (time / k) % (len * n);
         int phase = 1 + phaseFactor / len;
 
-        if (phase < 3)
+        if (phase == 1)
         {
             return decorateCharInString(stringIn, charID, regular, bold, phase % 2 != 0);
         }
         return stringIn;
     }
 
-    private static String decorateCharInString(String stringIn, int charID, EnumChatFormatting regular, EnumChatFormatting bold, boolean dir)
+    private static String decorateCharInString(String stringIn, int charID, TextFormatting regular, TextFormatting bold, boolean dir)
     {
         int len = stringIn.length();
         StringBuilder decorated = new StringBuilder();
@@ -129,5 +147,11 @@ public class Utils
             decorated.append(stringIn.charAt(dir ? i : len - 1 - i));
         }
         return decorated.toString();
+    }
+
+    @SuppressWarnings({"ConstantConditions", "SameReturnValue"})
+    public static <T> T Null()
+    {
+        return null;
     }
 }

@@ -5,23 +5,33 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIControlledByPlayer;
+import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 import com.darkona.adventurebackpack.reference.BackpackTypes;
@@ -35,25 +45,25 @@ import com.darkona.adventurebackpack.util.Wearing;
 public class EntityFriendlySpider extends EntityCreature
 {
     private float prevRearingAmount;
+    private static final DataParameter<Byte> CLIMBING = EntityDataManager.<Byte>createKey(EntitySpider.class, DataSerializers.BYTE);
     private int jumpTicks;
-    private EntityPlayer owner;
-    private boolean tamed = false;
-    private final EntityAIControlledByPlayer aiControlledByPlayer;
+    //private final EntityAIControlledByPlayer aiControlledByPlayer;
 
+    //TODO see EntitySpider
     @Override
     protected void entityInit()
     {
         super.entityInit();
-        this.dataWatcher.addObject(16, (byte) 0);
+        this.dataManager.register(CLIMBING, (byte) 0);
     }
 
     @Override
     protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(20.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.15D);
-        this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(40.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.15D);
+        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(40.0D);
     }
 
     public EntityFriendlySpider(World world)
@@ -61,16 +71,11 @@ public class EntityFriendlySpider extends EntityCreature
         super(world);
         this.setSize(1.4F, 0.9F);
         this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(2, this.aiControlledByPlayer = new EntityAIControlledByPlayer(this, 0.3F));
+        //TODO ai
+        //this.tasks.addTask(2, this.aiControlledByPlayer = new EntityAIControlledByPlayer(this, 0.3F));
         this.tasks.addTask(6, new EntityAIWander(this, 0.7D));
         this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
         this.tasks.addTask(8, new EntityAILookIdle(this));
-    }
-
-    @Override
-    protected boolean isAIEnabled()
-    {
-        return true;
     }
 
     @Override
@@ -80,76 +85,52 @@ public class EntityFriendlySpider extends EntityCreature
     }
 
     @Override
-    protected String getLivingSound()
+    protected SoundEvent getAmbientSound()
     {
-        return "mob.spider.say";
+        return SoundEvents.ENTITY_SPIDER_AMBIENT;
     }
 
     @Override
-    protected String getHurtSound()
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn)
     {
-        return "mob.spider.say";
+        return SoundEvents.ENTITY_SPIDER_HURT;
     }
 
     @Override
-    protected String getDeathSound()
+    protected SoundEvent getDeathSound()
     {
-        return "mob.spider.death";
+        return SoundEvents.ENTITY_SPIDER_DEATH;
     }
 
     @Override
-    protected void func_145780_a(int x, int y, int z, Block block)
+    protected void playStepSound(BlockPos pos, Block blockIn)
     {
-        this.playSound("mob.spider.step", 0.15F, 1.0F);
-    }
-
-    @Override
-    protected String getSwimSound()
-    {
-        return "game.hostile.swim";
-    }
-
-    @Override
-    protected String getSplashSound()
-    {
-        return "game.hostile.swim.splash";
+        this.playSound(SoundEvents.ENTITY_SPIDER_STEP, 0.15F, 1.0F);
     }
 
     @Override
     public boolean attackEntityFrom(DamageSource damageSource, float amount)
     {
-        if (this.isEntityInvulnerable())
-        {
+        if (this.isEntityInvulnerable(damageSource))
             return false;
-        }
-        else if (super.attackEntityFrom(damageSource, amount))
-        {
-            Entity entity = damageSource.getEntity();
 
-            if (this.riddenByEntity != entity && this.ridingEntity != entity)
-            {
-                if (entity != this)
-                {
-                    this.entityToAttack = entity;
-                }
-
-                return true;
-            }
-            else
-            {
-                return true;
-            }
-        }
-        else
+        if (super.attackEntityFrom(damageSource, amount))
         {
-            return false;
+            EntityLivingBase entity = (EntityLivingBase) damageSource.getTrueSource();
+
+            if (this.isRiding() && this.getRidingEntity() != entity && entity != this)
+            {
+                this.setAttackTarget(entity);
+            }
+            return true;
         }
+        return false;
     }
 
     @Override
-    public float getBlockPathWeight(int p_70783_1_, int p_70783_2_, int p_70783_3_)
+    public float getBlockPathWeight(BlockPos pos)
     {
-        return 0.5F - this.worldObj.getLightBrightness(p_70783_1_, p_70783_2_, p_70783_3_);
+        return 0.5F - this.world.getLightBrightness(pos);
     }
 
     @Override
@@ -159,49 +140,13 @@ public class EntityFriendlySpider extends EntityCreature
     }
 
     @Override
-    protected boolean func_146066_aG()
-    {
-        return true;
-    }
-
-    @Override
-    public ItemStack getHeldItem()
-    {
-        return null;
-    }
-
-    @Override
-    public ItemStack getEquipmentInSlot(int slot)
-    {
-        return null;
-    }
-
-    @Override
-    public void setCurrentItemOrArmor(int slot, ItemStack stack)
-    {
-
-    }
-
-    @Override
-    public ItemStack[] getLastActiveItems()
-    {
-        return new ItemStack[0];
-    }
-
-    @Override
-    public boolean canRiderInteract()
-    {
-        return false;
-    }
-
-    @Override
-    protected boolean interact(EntityPlayer player)
+    public boolean processInteract(EntityPlayer player, EnumHand hand)
     {
         try
         {
-            if (!this.worldObj.isRemote && Wearing.isWearingTheRightBackpack(player, BackpackTypes.SPIDER))
+            if (!this.world.isRemote && Wearing.isWearingTheRightBackpack(player, BackpackTypes.SPIDER))
             {
-                player.mountEntity(this);
+                player.startRiding(this);
                 return true;
             }
         }
@@ -219,25 +164,6 @@ public class EntityFriendlySpider extends EntityCreature
     }
 
     @Override
-    protected Entity findPlayerToAttack()
-    {
-        if (this.riddenByEntity != null)
-            return null;
-
-        float f = this.getBrightness(1.0F);
-
-        if (f < 0.5F)
-        {
-            double d0 = 16.0D;
-            return this.worldObj.getClosestVulnerablePlayerToEntity(this, d0);
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    @Override
     public boolean canBeCollidedWith()
     {
         return !isDead;
@@ -249,152 +175,155 @@ public class EntityFriendlySpider extends EntityCreature
         return true;
     }
 
+    /**
+     * Returns true if the WatchableObject (Byte) is 0x01 otherwise returns false. The WatchableObject is updated using
+     * setBesideClimableBlock.
+     */
     public boolean isBesideClimbableBlock()
     {
-        return (this.dataWatcher.getWatchableObjectByte(16) & 1) != 0;
+        return (dataManager.get(CLIMBING) & 1) != 0;
     }
 
     /**
      * Updates the WatchableObject (Byte) created in entityInit(), setting it to 0x01 if par1 is true or 0x00 if it is
      * false.
      */
-    public void setBesideClimbableBlock(boolean p_70839_1_)
+    public void setBesideClimbableBlock(boolean climbing)
     {
-        byte b0 = this.dataWatcher.getWatchableObjectByte(16);
+        byte b0 = dataManager.get(CLIMBING);
 
-        if (p_70839_1_)
-        {
-            b0 = (byte) (b0 | 1);
-        }
+        if (climbing)
+            b0 = (byte)(b0 | 1);
         else
-        {
-            b0 &= -2;
-        }
+            b0 = (byte)(b0 & -2);
 
-        this.dataWatcher.updateObject(16, Byte.valueOf(b0));
+        this.dataManager.set(CLIMBING, b0);
     }
 
     @Override
     public void onUpdate()
     {
         super.onUpdate();
-        if (this.worldObj.isRemote && this.dataWatcher.hasChanges())
-        {
-            this.dataWatcher.func_111144_e();
-        }
-        if (this.riddenByEntity instanceof EntityPlayer)
-        {
 
-        }
-        if (this.riddenByEntity != null && this.riddenByEntity.isDead)
+        if (this.world.isRemote && this.dataManager.isDirty())
         {
-            this.riddenByEntity = null;
+            this.dataManager.getDirty(); //TODO are we really need to do it manually?
         }
-        if (!this.worldObj.isRemote)
+        if (this.getRidingEntity() instanceof EntityPlayer)
         {
-            this.setBesideClimbableBlock(this.isCollidedHorizontally);
+            // ???
+        }
+        if (this.getRidingEntity() != null && this.getRidingEntity().isDead)
+        {
+            this.dismountRidingEntity();
+        }
+
+        if (!this.world.isRemote)
+        {
+            setBesideClimbableBlock(collidedHorizontally);
         }
     }
 
+    //TODO ok.. this peace of code from 1.7.10 vanilla EntityLivingBase#onLivingUpdate, with little changes
     private void normalLivingUpdateWithNoAI()
     {
-        if (this.jumpTicks > 0)
-        {
-            --this.jumpTicks;
-        }
-
-        if (this.newPosRotationIncrements > 0)
-        {
-            double d0 = this.posX + (this.newPosX - this.posX) / (double) this.newPosRotationIncrements;
-            double d1 = this.posY + (this.newPosY - this.posY) / (double) this.newPosRotationIncrements;
-            double d2 = this.posZ + (this.newPosZ - this.posZ) / (double) this.newPosRotationIncrements;
-            double d3 = MathHelper.wrapAngleTo180_double(this.newRotationYaw - (double) this.rotationYaw);
-            this.rotationYaw = (float) ((double) this.rotationYaw + d3 / (double) this.newPosRotationIncrements);
-            this.rotationPitch = (float) ((double) this.rotationPitch + (this.newRotationPitch - (double) this.rotationPitch) / (double) this.newPosRotationIncrements);
-            --this.newPosRotationIncrements;
-            this.setPosition(d0, d1, d2);
-            this.setRotation(this.rotationYaw, this.rotationPitch);
-        }
-        else if (!this.isClientWorld())
-        {
-            this.motionX *= 0.98D;
-            this.motionY *= 0.98D;
-            this.motionZ *= 0.98D;
-        }
-
-        if (Math.abs(this.motionX) < 0.005D)
-        {
-            this.motionX = 0.0D;
-        }
-
-        if (Math.abs(this.motionY) < 0.005D)
-        {
-            this.motionY = 0.0D;
-        }
-
-        if (Math.abs(this.motionZ) < 0.005D)
-        {
-            this.motionZ = 0.0D;
-        }
-
-        this.worldObj.theProfiler.startSection("ai");
-
-        if (this.isMovementBlocked())
-        {
-            this.isJumping = false;
-            this.moveStrafing = 0.0F;
-            this.moveForward = 0.0F;
-            this.randomYawVelocity = 0.0F;
-        }
-        else if (this.isClientWorld())
-        {
-
-        }
-
-        this.worldObj.theProfiler.endSection();
-        this.worldObj.theProfiler.startSection("jump");
-
-        if (this.isJumping)
-        {
-            if (!this.isInWater() && !this.handleLavaMovement())
-            {
-                if (this.onGround && this.jumpTicks == 0)
-                {
-                    this.jump();
-                    this.jumpTicks = 10;
-                }
-            }
-            else
-            {
-                this.motionY += 0.03999999910593033D;
-            }
-        }
-        else
-        {
-            this.jumpTicks = 0;
-        }
-        this.setJumping(false);
-        this.worldObj.theProfiler.endSection();
-        this.worldObj.theProfiler.startSection("travel");
-        this.moveStrafing *= 0.98F;
-        this.moveForward *= 0.98F;
-        this.randomYawVelocity *= 0.9F;
-        this.moveEntityWithHeading(this.moveStrafing, this.moveForward);
-        this.worldObj.theProfiler.endSection();
-        this.worldObj.theProfiler.startSection("push");
-
-        if (!this.worldObj.isRemote)
-        {
-            this.collideWithNearbyEntities();
-        }
-
-        this.worldObj.theProfiler.endSection();
+//        if (this.jumpTicks > 0)
+//        {
+//            --this.jumpTicks;
+//        }
+//
+//        if (this.newPosRotationIncrements > 0)
+//        {
+//            double d0 = this.posX + (this.newPosX - this.posX) / (double) this.newPosRotationIncrements;
+//            double d1 = this.posY + (this.newPosY - this.posY) / (double) this.newPosRotationIncrements;
+//            double d2 = this.posZ + (this.newPosZ - this.posZ) / (double) this.newPosRotationIncrements;
+//            double d3 = MathHelper.wrapAngleTo180_double(this.newRotationYaw - (double) this.rotationYaw);
+//            this.rotationYaw = (float) ((double) this.rotationYaw + d3 / (double) this.newPosRotationIncrements);
+//            this.rotationPitch = (float) ((double) this.rotationPitch + (this.newRotationPitch - (double) this.rotationPitch) / (double) this.newPosRotationIncrements);
+//            --this.newPosRotationIncrements;
+//            this.setPosition(d0, d1, d2);
+//            this.setRotation(this.rotationYaw, this.rotationPitch);
+//        }
+//        else if (!this.isClientWorld())
+//        {
+//            this.motionX *= 0.98D;
+//            this.motionY *= 0.98D;
+//            this.motionZ *= 0.98D;
+//        }
+//
+//        if (Math.abs(this.motionX) < 0.005D)
+//        {
+//            this.motionX = 0.0D;
+//        }
+//
+//        if (Math.abs(this.motionY) < 0.005D)
+//        {
+//            this.motionY = 0.0D;
+//        }
+//
+//        if (Math.abs(this.motionZ) < 0.005D)
+//        {
+//            this.motionZ = 0.0D;
+//        }
+//
+//        this.worldObj.theProfiler.startSection("ai");
+//
+//        if (this.isMovementBlocked())
+//        {
+//            this.isJumping = false;
+//            this.moveStrafing = 0.0F;
+//            this.moveForward = 0.0F;
+//            this.randomYawVelocity = 0.0F;
+//        }
+//        else if (this.isClientWorld())
+//        {
+//
+//        }
+//
+//        this.worldObj.theProfiler.endSection();
+//        this.worldObj.theProfiler.startSection("jump");
+//
+//        if (this.isJumping)
+//        {
+//            if (!this.isInWater() && !this.handleLavaMovement())
+//            {
+//                if (this.onGround && this.jumpTicks == 0)
+//                {
+//                    this.jump();
+//                    this.jumpTicks = 10;
+//                }
+//            }
+//            else
+//            {
+//                this.motionY += 0.03999999910593033D;
+//            }
+//        }
+//        else
+//        {
+//            this.jumpTicks = 0;
+//        }
+//        this.setJumping(false);
+//        this.worldObj.theProfiler.endSection();
+//        this.worldObj.theProfiler.startSection("travel");
+//        this.moveStrafing *= 0.98F;
+//        this.moveForward *= 0.98F;
+//        this.randomYawVelocity *= 0.9F;
+//        this.moveEntityWithHeading(this.moveStrafing, this.moveForward);
+//        this.worldObj.theProfiler.endSection();
+//        this.worldObj.theProfiler.startSection("push");
+//
+//        if (!this.worldObj.isRemote)
+//        {
+//            this.collideWithNearbyEntities();
+//        }
+//
+//        this.worldObj.theProfiler.endSection();
     }
 
     @Override
     public void onLivingUpdate()
     {
-        if (this.riddenByEntity != null)
+        if (this.getRidingEntity() != null)
         {
             normalLivingUpdateWithNoAI();
         }
@@ -412,16 +341,16 @@ public class EntityFriendlySpider extends EntityCreature
     }
 
     @Override
-    public void moveEntityWithHeading(float strafe, float forward)
+    public void travel(float strafe, float vertical, float forward)
     {
-        if (this.riddenByEntity != null)
+        if (this.getRidingEntity() != null)
         {
-            this.prevRotationYaw = this.rotationYaw = this.riddenByEntity.rotationYaw;
-            this.rotationPitch = this.riddenByEntity.rotationPitch * 0.5F;
+            this.prevRotationYaw = this.rotationYaw = this.getRidingEntity().rotationYaw;
+            this.rotationPitch = this.getRidingEntity().rotationPitch * 0.5F;
             this.setRotation(this.rotationYaw, this.rotationPitch);
             this.rotationYawHead = this.renderYawOffset = this.rotationYaw;
-            strafe = ((EntityLivingBase) this.riddenByEntity).moveStrafing * 0.5F;
-            forward = ((EntityLivingBase) this.riddenByEntity).moveForward;
+            strafe = ((EntityLivingBase) this.getRidingEntity()).moveStrafing * 0.5F;
+            forward = ((EntityLivingBase) this.getRidingEntity()).moveForward;
 
             if (forward <= 0.0F)
             {
@@ -430,16 +359,16 @@ public class EntityFriendlySpider extends EntityCreature
             this.stepHeight = 1.0F;
             this.jumpMovementFactor = this.getAIMoveSpeed() * 0.2F;
 
-            if (!this.worldObj.isRemote)
+            if (!this.world.isRemote)
             {
-                this.setAIMoveSpeed((float) this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getAttributeValue());
-                super.moveEntityWithHeading(strafe, forward);
+                this.setAIMoveSpeed((float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+                super.travel(strafe, 0f, forward); //TODO 0F is ok?
             }
 
             this.prevLimbSwingAmount = this.limbSwingAmount;
             double d0 = this.posX - this.prevPosX;
             double d1 = this.posZ - this.prevPosZ;
-            float f4 = MathHelper.sqrt_double(d0 * d0 + d1 * d1) * 4.0F;
+            float f4 = MathHelper.sqrt(d0 * d0 + d1 * d1) * 4.0F;
 
             if (f4 > 1.0F)
             {
@@ -453,92 +382,32 @@ public class EntityFriendlySpider extends EntityCreature
         {
             this.stepHeight = 0.5F;
             this.jumpMovementFactor = 0.02F;
-            super.moveEntityWithHeading(strafe, forward);
+            super.travel(strafe, 0f, forward); //TODO 0F is ok?
         }
     }
 
     @Override
-    public void updateRiderPosition()
+    public void updatePassenger(Entity passenger)
     {
-        super.updateRiderPosition();
+        super.updatePassenger(passenger);
 
-        if (this.prevRearingAmount > 0.0F)
+        if (passenger instanceof EntityLiving)
         {
-            float f = MathHelper.sin(this.renderYawOffset * (float) Math.PI / 180.0F);
-            float f1 = MathHelper.cos(this.renderYawOffset * (float) Math.PI / 180.0F);
-            float f2 = 0.7F * this.prevRearingAmount;
-            float f3 = 0.15F * this.prevRearingAmount;
-            this.riddenByEntity.setPosition(this.posX + (f2 * f), this.posY + this.getMountedYOffset() + this.riddenByEntity.getYOffset()
-                    + f3, this.posZ - (f2 * f1));
-
-            if (this.riddenByEntity instanceof EntityLivingBase)
-            {
-                ((EntityLivingBase) this.riddenByEntity).renderYawOffset = this.renderYawOffset;
-            }
+            EntityLiving entityliving = (EntityLiving)passenger;
+            this.renderYawOffset = entityliving.renderYawOffset;
         }
-    }
 
-
-    public void spiderJump() //TODO
-    {
-        this.getJumpHelper().setJumping();
-        //this.getJumpHelper().doJump();
-    }
-
-    public static class GroupData implements IEntityLivingData
-    {
-        public int field_111105_a;
-        private static final String __OBFID = "CL_00001700";
-
-        public void func_111104_a(Random p_111104_1_)
+        if (this.prevRearingAmount > 0.0F) //TODO set prevRearingAmount, see AbstractHorse implementation
         {
-            int i = p_111104_1_.nextInt(5);
+            float f3 = MathHelper.sin(this.renderYawOffset * 0.017453292F);
+            float f = MathHelper.cos(this.renderYawOffset * 0.017453292F);
+            float f1 = 0.7F * this.prevRearingAmount;
+            float f2 = 0.15F * this.prevRearingAmount;
+            passenger.setPosition(this.posX + (double)(f1 * f3), this.posY + this.getMountedYOffset() + passenger.getYOffset() + (double)f2, this.posZ - (double)(f1 * f));
 
-            if (i <= 1)
+            if (passenger instanceof EntityLivingBase)
             {
-                this.field_111105_a = Potion.moveSpeed.id;
-            }
-            else if (i <= 2)
-            {
-                this.field_111105_a = Potion.damageBoost.id;
-            }
-            else if (i <= 3)
-            {
-                this.field_111105_a = Potion.regeneration.id;
-            }
-            else if (i <= 4)
-            {
-                this.field_111105_a = Potion.invisibility.id;
-            }
-        }
-    }
-
-    @Override
-    protected void attackEntity(Entity p_70785_1_, float p_70785_2_)
-    {
-        float f1 = this.getBrightness(1.0F);
-
-        if (f1 > 0.5F && this.rand.nextInt(100) == 0)
-        {
-            this.entityToAttack = null;
-        }
-        else
-        {
-            if (p_70785_2_ > 2.0F && p_70785_2_ < 6.0F && this.rand.nextInt(10) == 0)
-            {
-                if (this.onGround)
-                {
-                    double d0 = p_70785_1_.posX - this.posX;
-                    double d1 = p_70785_1_.posZ - this.posZ;
-                    float f2 = MathHelper.sqrt_double(d0 * d0 + d1 * d1);
-                    this.motionX = d0 / (double) f2 * 0.5D * 0.800000011920929D + this.motionX * 0.20000000298023224D;
-                    this.motionZ = d1 / (double) f2 * 0.5D * 0.800000011920929D + this.motionZ * 0.20000000298023224D;
-                    this.motionY = 0.4000000059604645D;
-                }
-            }
-            else
-            {
-                super.attackEntity(p_70785_1_, p_70785_2_);
+                ((EntityLivingBase)passenger).renderYawOffset = this.renderYawOffset;
             }
         }
     }
@@ -546,17 +415,17 @@ public class EntityFriendlySpider extends EntityCreature
     @Override
     protected Item getDropItem()
     {
-        return Items.string;
+        return Items.STRING;
     }
 
     @Override
-    protected void dropFewItems(boolean p_70628_1_, int p_70628_2_)
+    protected void dropFewItems(boolean wasRecentlyHit, int lootingModifier)
     {
-        super.dropFewItems(p_70628_1_, p_70628_2_);
+        super.dropFewItems(wasRecentlyHit, lootingModifier);
 
-        if (p_70628_1_ && (this.rand.nextInt(3) == 0 || this.rand.nextInt(1 + p_70628_2_) > 0))
+        if (wasRecentlyHit && (this.rand.nextInt(3) == 0 || this.rand.nextInt(1 + lootingModifier) > 0))
         {
-            this.dropItem(Items.spider_eye, 1);
+            this.dropItem(Items.SPIDER_EYE, 1);
         }
     }
 
@@ -569,7 +438,7 @@ public class EntityFriendlySpider extends EntityCreature
     @Override
     public void setInWeb()
     {
-
+        // MUAHAHAH!
     }
 
     @Override
@@ -579,9 +448,87 @@ public class EntityFriendlySpider extends EntityCreature
     }
 
     @Override
-    public boolean isPotionApplicable(PotionEffect p_70687_1_)
+    public boolean isPotionApplicable(PotionEffect effect)
     {
-        return p_70687_1_.getPotionID() == Potion.poison.id ? false : super.isPotionApplicable(p_70687_1_);
+        return effect.getPotion() != MobEffects.POISON && super.isPotionApplicable(effect);
+    }
+
+
+
+    //TODO implement other stuff from EntitySpider, or maybe just extends from it
+    static class AISpiderAttack extends EntityAIAttackMelee
+    {
+        public AISpiderAttack(EntitySpider spider)
+        {
+            super(spider, 1.0D, true);
+        }
+
+        /**
+         * Returns whether an in-progress EntityAIBase should continue executing
+         */
+        public boolean shouldContinueExecuting()
+        {
+            float f = this.attacker.getBrightness();
+
+            if (f >= 0.5F && this.attacker.getRNG().nextInt(100) == 0)
+            {
+                this.attacker.setAttackTarget((EntityLivingBase)null);
+                return false;
+            }
+            else
+            {
+                return super.shouldContinueExecuting();
+            }
+        }
+
+        protected double getAttackReachSqr(EntityLivingBase attackTarget)
+        {
+            return (double)(4.0F + attackTarget.width);
+        }
+    }
+
+    static class AISpiderTarget<T extends EntityLivingBase> extends EntityAINearestAttackableTarget<T>
+    {
+        public AISpiderTarget(EntitySpider spider, Class<T> classTarget)
+        {
+            super(spider, classTarget, true);
+        }
+
+        /**
+         * Returns whether the EntityAIBase should begin execution.
+         */
+        public boolean shouldExecute()
+        {
+            float f = this.taskOwner.getBrightness();
+            return f >= 0.5F ? false : super.shouldExecute();
+        }
+    }
+
+    public static class GroupData implements IEntityLivingData
+    {
+        public Potion effect;
+
+        public void setRandomEffect(Random rand)
+        {
+            int i = rand.nextInt(5);
+
+            if (i <= 1)
+            {
+                this.effect = MobEffects.SPEED;
+            }
+            else if (i <= 2)
+            {
+                this.effect = MobEffects.STRENGTH;
+            }
+            else if (i <= 3)
+            {
+                this.effect = MobEffects.REGENERATION;
+            }
+            else if (i <= 4)
+            {
+                this.effect = MobEffects.INVISIBILITY;
+            }
+        }
     }
 }
 

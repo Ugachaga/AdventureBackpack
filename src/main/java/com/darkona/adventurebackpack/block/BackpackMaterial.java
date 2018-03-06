@@ -12,13 +12,8 @@ public class BackpackMaterial extends Material
 {
     public BackpackMaterial()
     {
-        super(MapColor.brownColor);
-    }
-
-    @Override
-    public boolean getCanBlockGrass()
-    {
-        return false;
+        super(MapColor.BROWN);
+        setImmovableMobility();
     }
 
     @Override
@@ -46,8 +41,8 @@ public class BackpackMaterial extends Material
     }
 
     @Override
-    public boolean isAdventureModeExempt()
+    public Material setAdventureModeExempt()
     {
-        return true;
+        return super.setAdventureModeExempt();
     }
 }

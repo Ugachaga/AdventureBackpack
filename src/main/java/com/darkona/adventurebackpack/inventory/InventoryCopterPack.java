@@ -1,5 +1,6 @@
 package com.darkona.adventurebackpack.inventory;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants.NBT;
@@ -27,11 +28,15 @@ public class InventoryCopterPack extends InventoryAdventure
     private byte status = ItemCopterPack.OFF_MODE;
     private int tickCounter = 0;
 
-    public InventoryCopterPack(ItemStack copterPack)
+    public InventoryCopterPack(ItemStack copter)
     {
-        super(copterPack, Constants.Copter.INVENTORY_SIZE);
-        detectAndConvertFromOldNBTFormat(containerStack.stackTagCompound);
-        openInventory();
+        super(copter, Constants.Copter.INVENTORY_SIZE);
+    }
+
+    public InventoryCopterPack(ItemStack copter, EntityPlayer player)
+    {
+        this(copter);
+        openInventory(player);
     }
 
     @Override
@@ -128,24 +133,5 @@ public class InventoryCopterPack extends InventoryAdventure
     public void setTickCounter(int ticks)
     {
         this.tickCounter = ticks;
-    }
-
-    private void detectAndConvertFromOldNBTFormat(NBTTagCompound compound) // backwards compatibility
-    {
-        if (compound == null || compound.hasKey(TAG_WEARABLE_COMPOUND))
-            return;
-
-        if (compound.hasKey("status"))
-            compound.removeTag("status");
-        if (compound.hasKey("tickCounter"))
-            compound.removeTag("tickCounter");
-
-        fuelTank.readFromNBT(compound.getCompoundTag("fuelTank"));
-
-        NBTTagCompound newCopterTag = new NBTTagCompound();
-        newCopterTag.setTag(TAG_FUEL_TANK, fuelTank.writeToNBT(new NBTTagCompound()));
-
-        compound.setTag(TAG_WEARABLE_COMPOUND, newCopterTag);
-        compound.removeTag("fuelTank");
     }
 }

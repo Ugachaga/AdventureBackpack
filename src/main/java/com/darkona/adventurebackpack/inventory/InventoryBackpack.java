@@ -4,7 +4,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fluids.FluidTank;
@@ -56,8 +57,12 @@ public class InventoryBackpack extends InventoryAdventure implements IInventoryB
     public InventoryBackpack(ItemStack backpack)
     {
         super(backpack, Constants.INVENTORY_SIZE);
-        detectAndConvertFromOldNBTFormat(containerStack.stackTagCompound);
-        openInventory();
+    }
+
+    public InventoryBackpack(ItemStack backpack, EntityPlayer player)
+    {
+        this(backpack);
+        openInventory(player);
     }
 
     @Override
@@ -271,31 +276,11 @@ public class InventoryBackpack extends InventoryAdventure implements IInventoryB
     {
         if (this.sleepingBagDeployed)
         {
-            if (world.getBlock(sleepingBagX, sleepingBagY, sleepingBagZ) == ModBlocks.blockSleepingBag)
-                world.func_147480_a(sleepingBagX, sleepingBagY, sleepingBagZ, false);
+            BlockPos pos = new BlockPos(sleepingBagX, sleepingBagY, sleepingBagZ);
+            if (world.getBlockState(pos) == ModBlocks.BLOCK_SLEEPING_BAG)
+                world.destroyBlock(pos, false);
         }
         this.sleepingBagDeployed = false;
         markDirty();
-    }
-
-    private void detectAndConvertFromOldNBTFormat(NBTTagCompound compound) // backwards compatibility
-    {
-        if (compound == null || !compound.hasKey("backpackData"))
-            return;
-
-        NBTTagCompound oldBackpackTag = compound.getCompoundTag("backpackData");
-        NBTTagList oldItems = oldBackpackTag.getTagList("ABPItems", NBT.TAG_COMPOUND);
-        leftTank.readFromNBT(oldBackpackTag.getCompoundTag("leftTank"));
-        rightTank.readFromNBT(oldBackpackTag.getCompoundTag("rightTank"));
-        type = BackpackTypes.getType(oldBackpackTag.getString("colorName"));
-
-        NBTTagCompound newBackpackTag = new NBTTagCompound();
-        newBackpackTag.setTag(TAG_INVENTORY, oldItems);
-        newBackpackTag.setTag(TAG_RIGHT_TANK, rightTank.writeToNBT(new NBTTagCompound()));
-        newBackpackTag.setTag(TAG_LEFT_TANK, leftTank.writeToNBT(new NBTTagCompound()));
-        newBackpackTag.setByte(TAG_TYPE, BackpackTypes.getMeta(type));
-
-        compound.setTag(TAG_WEARABLE_COMPOUND, newBackpackTag);
-        compound.removeTag("backpackData");
     }
 }

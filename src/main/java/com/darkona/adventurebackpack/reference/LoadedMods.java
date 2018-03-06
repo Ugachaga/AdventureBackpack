@@ -1,8 +1,8 @@
 package com.darkona.adventurebackpack.reference;
 
 import net.minecraft.launchwrapper.Launch;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModContainer;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 
 import com.darkona.adventurebackpack.util.LogHelper;
 

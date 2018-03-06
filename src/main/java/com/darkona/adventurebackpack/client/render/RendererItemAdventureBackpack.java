@@ -5,7 +5,6 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
 
 import com.darkona.adventurebackpack.client.models.ModelBackpackBlock;
 import com.darkona.adventurebackpack.inventory.InventoryBackpack;
@@ -18,7 +17,7 @@ import com.darkona.adventurebackpack.util.Resources;
  * @author Darkona
  */
 
-public class RendererItemAdventureBackpack implements IItemRenderer
+public class RendererItemAdventureBackpack
 {
     private final ModelBackpackBlock model;
 
@@ -27,53 +26,17 @@ public class RendererItemAdventureBackpack implements IItemRenderer
         model = new ModelBackpackBlock();
     }
 
-    @Override
-    public boolean handleRenderType(ItemStack item, IItemRenderer.ItemRenderType type)
-    {
-        switch (type)
-        {
-            case INVENTORY:
-                return true;
-            case ENTITY:
-                return true;
-            case EQUIPPED:
-                return true;
-            case EQUIPPED_FIRST_PERSON:
-                return true;
-            case FIRST_PERSON_MAP:
-                return false;
-        }
-        return false;
-    }
 
-    @Override
-    public boolean shouldUseRenderHelper(IItemRenderer.ItemRenderType type, ItemStack item, IItemRenderer.ItemRendererHelper helper)
-    {
-        switch (type)
-        {
-            case INVENTORY:
-                return true;
-            case ENTITY:
-                return true;
-            case EQUIPPED:
-                return false;
-            case EQUIPPED_FIRST_PERSON:
-                return false;
-            case FIRST_PERSON_MAP:
-                return false;
-        }
-        return false;
-    }
+    //TODO see ForgeHooksClient.registerTESRItemStack as temporary solution for item render
 
-    @Override
-    public void renderItem(IItemRenderer.ItemRenderType renderType, ItemStack backpack, Object... data)
+    public void renderItem(/*IItemRenderer.ItemRenderType renderType,*/ ItemStack backpack, Object... data)
     {
         InventoryBackpack inv = new InventoryBackpack(backpack);
         ResourceLocation modelTexture = Resources.getBackpackTexture(BackpackTypes.getType(backpack));
 
-        switch (renderType)
+        //switch (renderType)
         {
-            case INVENTORY:
+            //case INVENTORY:
                 Minecraft.getMinecraft().renderEngine.bindTexture(modelTexture);
             {
                 GL11.glPushMatrix();
@@ -95,9 +58,8 @@ public class RendererItemAdventureBackpack implements IItemRenderer
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
             }
-            break;
 
-            case ENTITY:
+            //case ENTITY:
                 Minecraft.getMinecraft().renderEngine.bindTexture(modelTexture);
             {
                 GL11.glPushMatrix();
@@ -119,9 +81,8 @@ public class RendererItemAdventureBackpack implements IItemRenderer
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
             }
-            break;
 
-            case EQUIPPED:
+            //case EQUIPPED:
                 Minecraft.getMinecraft().renderEngine.bindTexture(modelTexture);
 
                 GL11.glPushMatrix();
@@ -146,9 +107,8 @@ public class RendererItemAdventureBackpack implements IItemRenderer
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
-                break;
 
-            case EQUIPPED_FIRST_PERSON:
+            //case EQUIPPED_FIRST_PERSON:
                 Minecraft.getMinecraft().renderEngine.bindTexture(modelTexture);
 
                 GL11.glPushMatrix();
@@ -172,10 +132,8 @@ public class RendererItemAdventureBackpack implements IItemRenderer
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
-                break;
 
-            case FIRST_PERSON_MAP:
-                break;
+            //case FIRST_PERSON_MAP:
         }
     }
 

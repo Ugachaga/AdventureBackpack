@@ -3,8 +3,8 @@ package com.darkona.adventurebackpack.inventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.item.ItemHose;
@@ -24,12 +24,15 @@ public class SlotFluid extends SlotAdventure
 
     static boolean isContainer(ItemStack stack)
     {
-        return FluidContainerRegistry.isContainer(stack);
+        return stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
     }
 
+
+    //TODO fluid container utils
     static boolean isEmpty(ItemStack stack)
     {
-        return FluidContainerRegistry.isEmptyContainer(stack);
+        return false;
+        //return FluidContainerRegistry.isEmptyContainer(stack);
     }
 
     static boolean isEmpty(FluidTank tank)
@@ -39,22 +42,26 @@ public class SlotFluid extends SlotAdventure
 
     static boolean isFilled(ItemStack stack)
     {
-        return FluidContainerRegistry.isFilledContainer(stack);
+        return false;
+        //return FluidContainerRegistry.isFilledContainer(stack);
     }
 
     static boolean isBucket(ItemStack stack)
     {
-        return FluidContainerRegistry.isBucket(stack);
+        return false;
+        //return FluidContainerRegistry.isBucket(stack);
     }
 
     static boolean isEmptyBucket(ItemStack stack)
     {
-        return FluidContainerRegistry.isBucket(stack) && isEmpty(stack);
+        return false;
+        //return FluidContainerRegistry.isBucket(stack) && isEmpty(stack);
     }
 
     static boolean isFilledBucket(ItemStack stack)
     {
-        return FluidContainerRegistry.isBucket(stack) && isFilled(stack);
+        return false;
+        //return FluidContainerRegistry.isBucket(stack) && isFilled(stack);
     }
 
     static boolean isEqualFluid(ItemStack container, FluidTank tank)
@@ -66,7 +73,8 @@ public class SlotFluid extends SlotAdventure
     {
         if (stack == null || isEmpty(stack))
             return "";
-        return FluidContainerRegistry.getFluidForFilledItem(stack).getFluid().getName();
+        return "name";
+        //return FluidContainerRegistry.getFluidForFilledItem(stack).getFluid().getName();
     }
 
     static String getFluidName(FluidTank tank)
@@ -80,26 +88,30 @@ public class SlotFluid extends SlotAdventure
     {
         if (stack == null || isEmpty(stack))
             return -1;
-        return FluidContainerRegistry.getFluidForFilledItem(stack).getFluid().getID();
+        return -1;
+        //return FluidContainerRegistry.getFluidForFilledItem(stack).getFluid().getID();
     }
 
     static int getFluidID(FluidTank tank)
     {
         if (tank == null || tank.getFluidAmount() <= 0)
             return -1;
-        return tank.getFluid().getFluid().getID();
+        return -1;
+        //return tank.getFluid().getFluid().getID();
     }
 
     static Fluid getFluid(ItemStack stack)
     {
         if (stack == null || isEmpty(stack))
             return null;
-        return FluidContainerRegistry.getFluidForFilledItem(stack).getFluid();
+        return null;
+        //return FluidContainerRegistry.getFluidForFilledItem(stack).getFluid();
     }
 
     static int getCapacity(ItemStack stack)
     {
-        return FluidContainerRegistry.getContainerCapacity(stack);
+        return -1;
+        //return FluidContainerRegistry.getContainerCapacity(stack);
     }
 
     static boolean canFitToTank(ItemStack container, FluidTank tank)
@@ -114,7 +126,8 @@ public class SlotFluid extends SlotAdventure
 
     static ItemStack getEmptyContainer(ItemStack container)
     {
-        return FluidContainerRegistry.drainFluidContainer(container);
+        return ItemStack.EMPTY;
+        //return FluidContainerRegistry.drainFluidContainer(container);
     }
 
     @Override

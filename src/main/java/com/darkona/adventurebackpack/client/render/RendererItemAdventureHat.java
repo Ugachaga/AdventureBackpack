@@ -6,7 +6,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
 
 import com.darkona.adventurebackpack.client.models.ModelAdventureHat;
 import com.darkona.adventurebackpack.util.Resources;
@@ -14,7 +13,7 @@ import com.darkona.adventurebackpack.util.Resources;
 /**
  * Created by Darkona on 11/10/2014.
  */
-public class RendererItemAdventureHat implements IItemRenderer
+public class RendererItemAdventureHat
 {
     private final ModelAdventureHat model;
 
@@ -22,54 +21,13 @@ public class RendererItemAdventureHat implements IItemRenderer
     {
         model = ModelAdventureHat.instance;
     }
-
-    @Override
-    public boolean handleRenderType(ItemStack item, IItemRenderer.ItemRenderType type)
-    {
-        switch (type)
-        {
-            case INVENTORY:
-                return true;
-            case ENTITY:
-                return true;
-            case EQUIPPED:
-                return true;
-            case EQUIPPED_FIRST_PERSON:
-                return true;
-            case FIRST_PERSON_MAP:
-                return false;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean shouldUseRenderHelper(IItemRenderer.ItemRenderType type, ItemStack item, IItemRenderer.ItemRendererHelper helper)
-    {
-        switch (type)
-        {
-            case INVENTORY:
-                return true;
-            case ENTITY:
-                return true;
-            case EQUIPPED:
-                return true;
-            case EQUIPPED_FIRST_PERSON:
-                return true;
-            case FIRST_PERSON_MAP:
-                return false;
-        }
-        return false;
-    }
-
-    @Override
-    public void renderItem(IItemRenderer.ItemRenderType type, ItemStack item, Object... data)
+    public void renderItem(/*IItemRenderer.ItemRenderType type,*/ ItemStack item, Object... data)
     {
         ResourceLocation modelTexture = Resources.modelTextures("adventureHat_texture");
         Minecraft.getMinecraft().renderEngine.bindTexture(modelTexture);
-        switch (type)
+        //switch (type)
         {
-            case INVENTORY:
-
+            //case INVENTORY:
             {
                 GL11.glPushMatrix();
                 GL11.glColor4f(1, 1, 1, 128);
@@ -90,8 +48,8 @@ public class RendererItemAdventureHat implements IItemRenderer
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
             }
-            break;
-            case ENTITY:
+
+            //case ENTITY:
                 Minecraft.getMinecraft().renderEngine.bindTexture(modelTexture);
             {
                 GL11.glPushMatrix();
@@ -113,8 +71,8 @@ public class RendererItemAdventureHat implements IItemRenderer
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
             }
-            break;
-            case EQUIPPED:
+
+            //case EQUIPPED:
                 Minecraft.getMinecraft().renderEngine.bindTexture(modelTexture);
 
                 GL11.glPushMatrix();
@@ -142,8 +100,8 @@ public class RendererItemAdventureHat implements IItemRenderer
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
-                break;
-            case EQUIPPED_FIRST_PERSON:
+
+            //case EQUIPPED_FIRST_PERSON:
                 Minecraft.getMinecraft().renderEngine.bindTexture(modelTexture);
 
                 GL11.glPushMatrix();
@@ -167,9 +125,8 @@ public class RendererItemAdventureHat implements IItemRenderer
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
-                break;
-            case FIRST_PERSON_MAP:
-                break;
+
+            //case FIRST_PERSON_MAP:
         }
     }
 }

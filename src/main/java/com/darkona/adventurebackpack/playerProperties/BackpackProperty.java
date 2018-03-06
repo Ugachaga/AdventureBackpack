@@ -5,9 +5,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IExtendedEntityProperties;
 
 import com.darkona.adventurebackpack.init.ModNetwork;
 import com.darkona.adventurebackpack.item.IBackWearableItem;
@@ -18,13 +17,18 @@ import com.darkona.adventurebackpack.network.SyncPropertiesPacket;
  *
  * @author Darkona
  */
-public class BackpackProperty implements IExtendedEntityProperties
+public class BackpackProperty //implements IExtendedEntityProperties
 {
+
+    //TODO rework to capabilities
+
+    private static BackpackProperty instance = new BackpackProperty(null);
+
     private static final String PROPERTY_NAME = "abp.property";
 
     private EntityPlayer player;
     private ItemStack wearable = null;
-    private ChunkCoordinates campFire = null;
+    private BlockPos campFire = null;
     private boolean forceCampFire = false;
     private int dimension = 0;
 
@@ -53,8 +57,8 @@ public class BackpackProperty implements IExtendedEntityProperties
         //Thanks diesieben07!!!
         try
         {
-            player.getServerForPlayer().getEntityTracker()
-                    .func_151248_b(player, ModNetwork.net.getPacketFrom(new SyncPropertiesPacket
+            player.getServerWorld().getEntityTracker()
+                    .sendToTrackingAndSelf(player, ModNetwork.net.getPacketFrom(new SyncPropertiesPacket
                             .Message(player.getEntityId(), get(player).getData())));
         }
         catch (Exception ex)
@@ -78,41 +82,39 @@ public class BackpackProperty implements IExtendedEntityProperties
 
     public static void register(EntityPlayer player)
     {
-        player.registerExtendedProperties(PROPERTY_NAME, new BackpackProperty(player));
+        //player.registerExtendedProperties(PROPERTY_NAME, new BackpackProperty(player));
     }
 
     public static BackpackProperty get(EntityPlayer player)
     {
-        return (BackpackProperty) player.getExtendedProperties(PROPERTY_NAME);
+        return instance;
+        //return (BackpackProperty) player.getExtendedProperties(PROPERTY_NAME);
     }
 
-    @Override
     public void saveNBTData(NBTTagCompound compound)
     {
         if (wearable != null) compound.setTag("wearable", wearable.writeToNBT(new NBTTagCompound()));
         if (campFire != null)
         {
-            compound.setInteger("campFireX", campFire.posX);
-            compound.setInteger("campFireY", campFire.posY);
-            compound.setInteger("campFireZ", campFire.posZ);
+            compound.setInteger("campFireX", campFire.getX());
+            compound.setInteger("campFireY", campFire.getY());
+            compound.setInteger("campFireZ", campFire.getZ());
             compound.setInteger("campFireDim", dimension); //TODO use it for check dim
         }
         compound.setBoolean("forceCampFire", forceCampFire);
     }
 
-    @Override
     public void loadNBTData(NBTTagCompound compound)
     {
         if (compound != null)
         {
-            setWearable(compound.hasKey("wearable") ? ItemStack.loadItemStackFromNBT(compound.getCompoundTag("wearable")) : null);
-            setCampFire(new ChunkCoordinates(compound.getInteger("campFireX"), compound.getInteger("campFireY"), compound.getInteger("campFireZ")));
+            setWearable(compound.hasKey("wearable") ? new  ItemStack(compound.getCompoundTag("wearable")) : ItemStack.EMPTY);
+            setCampFire(new BlockPos(compound.getInteger("campFireX"), compound.getInteger("campFireY"), compound.getInteger("campFireZ")));
             dimension = compound.getInteger("campFireDim");
             forceCampFire = compound.getBoolean("forceCampFire");
         }
     }
 
-    @Override
     public void init(Entity entity, World world)
     {
         this.player = (EntityPlayer) entity;
@@ -128,12 +130,12 @@ public class BackpackProperty implements IExtendedEntityProperties
         return wearable;
     }
 
-    public void setCampFire(ChunkCoordinates cf)
+    public void setCampFire(BlockPos cf)
     {
         campFire = cf;
     }
 
-    public ChunkCoordinates getCampFire()
+    public BlockPos getCampFire()
     {
         return campFire;
     }

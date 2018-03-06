@@ -1,23 +1,19 @@
 package com.darkona.adventurebackpack.reference;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.world.World;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fluids.FluidTank;
-import cpw.mods.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 
-import com.darkona.adventurebackpack.block.TileAdventureBackpack;
+import com.darkona.adventurebackpack.block.TileBackpack;
 import com.darkona.adventurebackpack.common.Constants;
-import com.darkona.adventurebackpack.util.TipUtils;
 import com.darkona.adventurebackpack.util.BackpackUtils;
+import com.darkona.adventurebackpack.util.TipUtils;
 import com.darkona.adventurebackpack.util.Utils;
 
 import mcp.mobius.waila.api.IWailaConfigHandler;
@@ -40,15 +36,15 @@ public class WailaTileAdventureBackpack implements IWailaDataProvider
 {
     public static void init()
     {
-        FMLInterModComms.sendMessage("Waila", "register", "com.darkona.adventurebackpack.reference.WailaTileAdventureBackpack.callbackRegister");
+        FMLInterModComms.sendMessage("waila", "register", "com.darkona.adventurebackpack.reference.WailaTileAdventureBackpack.callbackRegister");
     }
 
     @SuppressWarnings("unused")
     public static void callbackRegister(IWailaRegistrar registrar)
     {
-        registrar.registerStackProvider(new WailaTileAdventureBackpack(), TileAdventureBackpack.class);
-        registrar.registerHeadProvider(new WailaTileAdventureBackpack(), TileAdventureBackpack.class);
-        registrar.registerBodyProvider(new WailaTileAdventureBackpack(), TileAdventureBackpack.class);
+        registrar.registerStackProvider(new WailaTileAdventureBackpack(), TileBackpack.class);
+        registrar.registerHeadProvider(new WailaTileAdventureBackpack(), TileBackpack.class);
+        registrar.registerBodyProvider(new WailaTileAdventureBackpack(), TileBackpack.class);
     }
 
     @Override
@@ -90,8 +86,8 @@ public class WailaTileAdventureBackpack implements IWailaDataProvider
         BackpackTypes type = BackpackTypes.getType(backpackTag.getByte(TAG_TYPE));
         String skin = "";
         if (type != BackpackTypes.STANDARD)
-            skin = EnumChatFormatting.GRAY + " \"" + Utils.getColoredSkinName(type) + EnumChatFormatting.GRAY + "\"";
-        currenttip.add(EnumChatFormatting.WHITE + "Adventure Backpack" + skin);
+            skin = TextFormatting.GRAY + " \"" + Utils.getColoredSkinName(type) + TextFormatting.GRAY + "\"";
+        currenttip.add(TextFormatting.WHITE + "Adventure Backpack" + skin);
     }
 
     @Override
@@ -118,25 +114,12 @@ public class WailaTileAdventureBackpack implements IWailaDataProvider
         FluidTank tank = new FluidTank(Constants.BASIC_TANK_CAPACITY);
 
         tank.readFromNBT(backpackTag.getCompoundTag(TAG_LEFT_TANK));
-        currenttip.add(EnumChatFormatting.RESET + TipUtils.l10n("backpack.tank.left")
+        currenttip.add(TextFormatting.RESET + TipUtils.l10n("backpack.tank.left")
                 + ": " + TipUtils.tankTooltip(tank));
 
         tank.readFromNBT(backpackTag.getCompoundTag(TAG_RIGHT_TANK));
-        currenttip.add(EnumChatFormatting.RESET + TipUtils.l10n("backpack.tank.right")
+        currenttip.add(TextFormatting.RESET + TipUtils.l10n("backpack.tank.right")
                 + ": " + TipUtils.tankTooltip(tank));
     }
 
-    @Nullable
-    @Override
-    public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
-    {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity te, NBTTagCompound tag, World world, int x, int y, int z)
-    {
-        return null;
-    }
 }

@@ -1,10 +1,11 @@
 package com.darkona.adventurebackpack.handlers;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.common.network.IGuiHandler;
 
-import com.darkona.adventurebackpack.block.TileAdventureBackpack;
+import com.darkona.adventurebackpack.block.TileBackpack;
 import com.darkona.adventurebackpack.client.gui.GuiAdvBackpack;
 import com.darkona.adventurebackpack.client.gui.GuiCoalJetpack;
 import com.darkona.adventurebackpack.client.gui.GuiCopterPack;
@@ -43,9 +44,10 @@ public class GuiHandler implements IGuiHandler
         switch (ID)
         {
             case BACKPACK_TILE:
-                if (world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileAdventureBackpack)
+                BlockPos pos = new BlockPos(x, y, z);
+                if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileBackpack)
                 {
-                    return new ContainerBackpack(player, (TileAdventureBackpack) world.getTileEntity(x, y, z), Source.TILE);
+                    return new ContainerBackpack(player, (TileBackpack) world.getTileEntity(pos), Source.TILE);
                 }
                 break;
             case BACKPACK_HOLDING:
@@ -98,9 +100,10 @@ public class GuiHandler implements IGuiHandler
         switch (ID)
         {
             case BACKPACK_TILE:
-                if (world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileAdventureBackpack)
+                BlockPos pos = new BlockPos(x, y, z);
+                if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileBackpack)
                 {
-                    return new GuiAdvBackpack(player, (TileAdventureBackpack) world.getTileEntity(x, y, z), Source.TILE);
+                    return new GuiAdvBackpack(player, (TileBackpack) world.getTileEntity(pos), Source.TILE);
                 }
                 break;
             case BACKPACK_HOLDING:

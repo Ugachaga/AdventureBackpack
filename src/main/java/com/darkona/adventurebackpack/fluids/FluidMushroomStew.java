@@ -1,11 +1,10 @@
 package com.darkona.adventurebackpack.fluids;
 
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.darkona.adventurebackpack.client.Icons;
+import com.darkona.adventurebackpack.reference.ModInfo;
 
 /**
  * Created on 11/01/2015
@@ -16,40 +15,34 @@ public class FluidMushroomStew extends Fluid
 {
     public FluidMushroomStew()
     {
-        super("mushroomStew");
+        super("mushroomStew", new ResourceLocation(ModInfo.MOD_ID, "fluid.melonJuiceStill.png"), new ResourceLocation(ModInfo.MOD_ID, "fluid.melonJuiceFlowing.png"));
         setDensity(1200);
         setViscosity(1200);
-        setLuminosity(0);
     }
 
-    @Override
-    public IIcon getStillIcon()
-    {
-        return Icons.mushRoomStewStill;
-    }
-
-    @Override
-    public IIcon getIcon()
-    {
-        return Icons.mushRoomStewStill;
-    }
-
-    @Override
-    public IIcon getFlowingIcon()
-    {
-        return Icons.mushRoomStewFlowing;
-    }
+    //TODO fluid rendering
+//    @Override
+//    public IIcon getStillIcon()
+//    {
+//        return Icons.mushRoomStewStill;
+//    }
+//
+//    @Override
+//    public IIcon getIcon()
+//    {
+//        return Icons.mushRoomStewStill;
+//    }
+//
+//    @Override
+//    public IIcon getFlowingIcon()
+//    {
+//        return Icons.mushRoomStewFlowing;
+//    }
 
     @Override
     public int getColor(FluidStack stack)
     {
         //Color color1 = new Color(205,140,111);
         return 0xcd8c6f;
-    }
-
-    @Override
-    public boolean isGaseous(World world, int x, int y, int z)
-    {
-        return false;
     }
 }

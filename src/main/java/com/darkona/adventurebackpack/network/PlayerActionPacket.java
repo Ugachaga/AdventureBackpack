@@ -3,9 +3,9 @@ package com.darkona.adventurebackpack.network;
 import io.netty.buffer.ByteBuf;
 
 import net.minecraft.entity.player.EntityPlayerMP;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.entity.EntityFriendlySpider;
@@ -30,15 +30,15 @@ public class PlayerActionPacket implements IMessageHandler<PlayerActionPacket.Ac
     {
         if (ctx.side.isServer())
         {
-            EntityPlayerMP player = ctx.getServerHandler().playerEntity;
+            EntityPlayerMP player = ctx.getServerHandler().player;
 
             if (player != null)
             {
                 if (message.type == SPIDER_JUMP)
                 {
-                    if (player.ridingEntity != null && player.ridingEntity instanceof EntityFriendlySpider)
+                    if (player.getRidingEntity() != null && player.getRidingEntity() instanceof EntityFriendlySpider)
                     {
-                        ((EntityFriendlySpider) player.ridingEntity).setJumping(true);
+                        ((EntityFriendlySpider) player.getRidingEntity()).setJumping(true);
                     }
                 }
 

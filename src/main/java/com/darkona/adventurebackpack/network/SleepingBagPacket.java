@@ -2,9 +2,9 @@ package com.darkona.adventurebackpack.network;
 
 import io.netty.buffer.ByteBuf;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import com.darkona.adventurebackpack.common.ServerActions;
 import com.darkona.adventurebackpack.config.ConfigHandler;
@@ -23,7 +23,7 @@ public class SleepingBagPacket implements IMessageHandler<SleepingBagPacket.Slee
         {
             if (message.isTile || ConfigHandler.portableSleepingBag) // serverside check
             {
-                ServerActions.toggleSleepingBag(ctx.getServerHandler().playerEntity, message.isTile, message.cX, message.cY, message.cZ);
+                ServerActions.toggleSleepingBag(ctx.getServerHandler().player, message.isTile, message.cX, message.cY, message.cZ);
             }
         }
         return null;

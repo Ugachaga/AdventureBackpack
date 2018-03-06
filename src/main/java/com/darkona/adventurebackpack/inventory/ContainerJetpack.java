@@ -27,7 +27,7 @@ public class ContainerJetpack extends ContainerAdventure
     {
         super(player, jetpack, source);
         makeSlots(player.inventory);
-        inventory.openInventory();
+        inventory.openInventory(player);
     }
 
     private void makeSlots(InventoryPlayer invPlayer)

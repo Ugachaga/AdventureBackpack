@@ -44,7 +44,7 @@ public class SlotTool extends SlotAdventure
 
         Item item = stack.getItem();
         String clazzName = item.getClass().getName();
-        String objectName = Item.itemRegistry.getNameForObject(item);
+        String objectName = Item.REGISTRY.getNameForObject(item).toString(); //TODO check
         String itemName = item.getUnlocalizedName().toLowerCase();
 
         // Vanilla

@@ -1,27 +1,34 @@
 package com.darkona.adventurebackpack.item;
 
+import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.config.ConfigHandler;
@@ -32,6 +39,7 @@ import com.darkona.adventurebackpack.network.PlayerActionPacket;
 import com.darkona.adventurebackpack.network.messages.EntityParticlePacket;
 import com.darkona.adventurebackpack.network.messages.EntitySoundPacket;
 import com.darkona.adventurebackpack.proxy.ClientProxy;
+import com.darkona.adventurebackpack.reference.ModInfo;
 import com.darkona.adventurebackpack.util.BackpackUtils;
 import com.darkona.adventurebackpack.util.Resources;
 import com.darkona.adventurebackpack.util.TipUtils;
@@ -43,25 +51,26 @@ import static com.darkona.adventurebackpack.util.TipUtils.l10n;
  *
  * @author Darkona
  */
-public class ItemCoalJetpack extends ItemAdventure
+public class ItemSteamJetpack extends ItemAdventure
 {
-    public ItemCoalJetpack()
+    public ItemSteamJetpack()
     {
         super();
-        setUnlocalizedName("coalJetpack");
+        setUnlocalizedName("steamJetpack");
+        this.setRegistryName(ModInfo.MOD_ID, "steam_jetpack");
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public void getSubItems(Item item, CreativeTabs tab, List list)
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
     {
-        list.add(BackpackUtils.createJetpackStack());
+        items.add(BackpackUtils.createJetpackStack());
     }
 
     @Override
     @SuppressWarnings({"unchecked"})
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List tooltips, boolean advanced)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
     {
         FluidTank waterTank = new FluidTank(Constants.Jetpack.WATER_CAPACITY);
         FluidTank steamTank = new FluidTank(Constants.Jetpack.STEAM_CAPACITY);
@@ -70,39 +79,39 @@ public class ItemCoalJetpack extends ItemAdventure
         if (GuiScreen.isShiftKeyDown())
         {
             NBTTagList itemList = jetpackTag.getTagList(Constants.TAG_INVENTORY, NBT.TAG_COMPOUND);
-            tooltips.add(l10n("jetpack.fuel") + ": " + TipUtils.slotStackTooltip(itemList, Constants.Jetpack.FUEL_SLOT));
+            tooltip.add(l10n("jetpack.fuel") + ": " + TipUtils.slotStackTooltip(itemList, Constants.Jetpack.FUEL_SLOT));
 
             waterTank.readFromNBT(jetpackTag.getCompoundTag(Constants.Jetpack.TAG_WATER_TANK));
-            tooltips.add(l10n("jetpack.tank.water") + ": " + TipUtils.tankTooltip(waterTank));
+            tooltip.add(l10n("jetpack.tank.water") + ": " + TipUtils.tankTooltip(waterTank));
 
             steamTank.readFromNBT(jetpackTag.getCompoundTag(Constants.Jetpack.TAG_STEAM_TANK));
             // special case for steam, have to set displayed fluid name manually, cuz technically it's water
-            String theSteam = steamTank.getFluidAmount() > 0 ? EnumChatFormatting.AQUA + l10n("steam") : "";
-            tooltips.add(l10n("jetpack.tank.steam") + ": " + TipUtils.tankTooltip(steamTank, false) + theSteam);
+            String theSteam = steamTank.getFluidAmount() > 0 ? TextFormatting.AQUA + l10n("steam") : "";
+            tooltip.add(l10n("jetpack.tank.steam") + ": " + TipUtils.tankTooltip(steamTank, false) + theSteam);
 
-            TipUtils.shiftFooter(tooltips);
+            TipUtils.shiftFooter(tooltip);
         }
         else if (!GuiScreen.isCtrlKeyDown())
         {
-            tooltips.add(TipUtils.holdShift());
+            tooltip.add(TipUtils.holdShift());
         }
 
         if (GuiScreen.isCtrlKeyDown())
         {
-            tooltips.add(l10n("max.altitude") + ": " + TipUtils.whiteFormat("185 ") + l10n("meters"));
-            tooltips.add(TipUtils.pressShiftKeyFormat(TipUtils.actionKeyFormat()) + l10n("jetpack.key.onoff1"));
-            tooltips.add(l10n("jetpack.key.onoff2") + " " + l10n("on"));
+            tooltip.add(l10n("max.altitude") + ": " + TipUtils.whiteFormat("185 ") + l10n("meters"));
+            tooltip.add(TipUtils.pressShiftKeyFormat(TipUtils.actionKeyFormat()) + l10n("jetpack.key.onoff1"));
+            tooltip.add(l10n("jetpack.key.onoff2") + " " + l10n("on"));
         }
     }
 
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand)
     {
         if (world.isRemote)
         {
             ModNetwork.net.sendToServer(new GUIPacket.GUImessage(GUIPacket.JETPACK_GUI, GUIPacket.FROM_HOLDING));
         }
-        return stack;
+        return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));
     }
 
     @Override
@@ -116,7 +125,7 @@ public class ItemCoalJetpack extends ItemAdventure
     public void onEquippedUpdate(World world, EntityPlayer player, ItemStack stack) //TODO extract behavior to separate class
     {
         InventoryCoalJetpack inv = new InventoryCoalJetpack(stack);
-        inv.openInventory();
+        inv.openInventory(player);
         boolean mustFizzz = !inv.isInUse();
         int CoalConsumed = 13;
         boolean canUse = inv.getSteamTank().drain(CoalConsumed, false) != null;
@@ -138,7 +147,7 @@ public class ItemCoalJetpack extends ItemAdventure
         //Elevation
         if (world.isRemote)
         {
-            if (inv.getStatus() && canUse && Minecraft.getMinecraft().gameSettings.keyBindJump.getIsKeyPressed())
+            if (inv.getStatus() && canUse && Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown())
             {
                 inv.setInUse(true);
                 ModNetwork.net.sendToServer(new PlayerActionPacket.ActionMessage(PlayerActionPacket.JETPACK_IN_USE));
@@ -162,7 +171,7 @@ public class ItemCoalJetpack extends ItemAdventure
             {
                 inv.setInUse(false);
             }
-            player.moveFlying(player.moveStrafing, player.moveForward, 0.02f);
+            player.travel(player.moveStrafing * 0.02f,  0f, player.moveForward * 0.02f); //TODO usage of factor (0.02f)?
             if (player.fallDistance > 1)
             {
                 player.fallDistance -= 1;
@@ -174,7 +183,7 @@ public class ItemCoalJetpack extends ItemAdventure
             if (!world.isRemote)
                 ModNetwork.sendToNearby(new EntityParticlePacket.Message(EntityParticlePacket.JETPACK_PARTICLE, player), player);
         }
-        inv.closeInventory();
+        inv.closeInventory(player);
     }
 
     private static void elevate(EntityPlayer player)
@@ -327,7 +336,7 @@ public class ItemCoalJetpack extends ItemAdventure
 
     private int getBiomeMinTemp(EntityPlayer player, World world)
     {
-        BiomeDictionary.Type[] thisBiomeTypes = BiomeDictionary.getTypesForBiome(world.getBiomeGenForCoords((int) player.posX, (int) player.posZ));
+        Set<BiomeDictionary.Type> thisBiomeTypes = BiomeDictionary.getTypes(world.getBiome(new BlockPos(player.posX, player.posY, player.posZ)));
         for (BiomeDictionary.Type type : thisBiomeTypes)
         {
             if (type == BiomeDictionary.Type.COLD || type == BiomeDictionary.Type.SNOWY)
@@ -357,7 +366,7 @@ public class ItemCoalJetpack extends ItemAdventure
     @SideOnly(Side.CLIENT)
     public ResourceLocation getWearableTexture(ItemStack wearable)
     {
-        return Resources.modelTextures("coalJetpack");
+        return Resources.modelTextures("steamJetpack");
     }
 
 }

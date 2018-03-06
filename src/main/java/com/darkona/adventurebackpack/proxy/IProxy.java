@@ -1,5 +1,6 @@
 package com.darkona.adventurebackpack.proxy;
 
+import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
@@ -16,4 +17,8 @@ public interface IProxy
     void initNetwork();
 
     void synchronizePlayer(int id, NBTTagCompound compound);
+
+    void registerItemRenderer(Item item, int meta, String id);
+
+    void setCustomModelResourceLocation(Item item, int meta, String id);
 }

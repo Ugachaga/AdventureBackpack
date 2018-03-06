@@ -3,7 +3,7 @@ package com.darkona.adventurebackpack.init.recipes;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.oredict.RecipeSorter;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import com.darkona.adventurebackpack.init.ModItems;
@@ -21,15 +21,9 @@ import static com.darkona.adventurebackpack.common.Constants.TAG_INVENTORY;
  */
 public class ShapedBackpackRecipe extends ShapedOreRecipe
 {
-    static
-    {
-        RecipeSorter.register(ModInfo.MOD_ID + ":shapedbackpackrecipe", ShapedBackpackRecipe.class,
-                RecipeSorter.Category.SHAPED,"after:forge:shapedore before:minecraft:shapeless");
-    }
-
     public ShapedBackpackRecipe(ItemStack result, Object... recipe)
     {
-        super(result, recipe);
+        super(new ResourceLocation(ModInfo.MOD_ID), result, recipe); //TODO is group correct?
     }
 
     @Override
@@ -37,13 +31,13 @@ public class ShapedBackpackRecipe extends ShapedOreRecipe
     {
         ItemStack craftResult = super.getCraftingResult(craftMatrix);
 
-        if (!(craftResult.getItem() == ModItems.adventureBackpack))
+        if (!(craftResult.getItem() == ModItems.ADVENTURE_BACKPACK))
             return craftResult; // in case recipe is using backpack only as ingredient
 
         for (int i = 0; i < craftMatrix.getSizeInventory(); i++)
         {
             ItemStack matrixStack = craftMatrix.getStackInSlot(i);
-            if (matrixStack != null && matrixStack.getItem() == ModItems.adventureBackpack
+            if (matrixStack != null && matrixStack.getItem() == ModItems.ADVENTURE_BACKPACK
                     && BackpackUtils.getWearableCompound(matrixStack).hasKey(TAG_INVENTORY))
             {
                 NBTTagList itemList = BackpackUtils.getWearableInventory(matrixStack);

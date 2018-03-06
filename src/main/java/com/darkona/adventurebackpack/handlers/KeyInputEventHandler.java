@@ -2,8 +2,8 @@ package com.darkona.adventurebackpack.handlers;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 
 import com.darkona.adventurebackpack.common.ServerActions;
 import com.darkona.adventurebackpack.config.Keybindings;
@@ -33,7 +33,7 @@ public class KeyInputEventHandler
     {
         Key pressedKey = getPressedKeyBinding();
         Minecraft mc = Minecraft.getMinecraft();
-        EntityPlayer player = mc.thePlayer;
+        EntityPlayer player = mc.player;
 
         if (pressedKey == Key.UNKNOWN || player == null)
             return;
@@ -120,10 +120,10 @@ public class KeyInputEventHandler
 
         if (pressedKey == Key.JUMP)
         {
-            if (player.ridingEntity != null && player.ridingEntity instanceof EntityFriendlySpider)
+            if (player.getRidingEntity() != null && player.getRidingEntity() instanceof EntityFriendlySpider)
             {
                 sendPlayerActionPacket(PlayerActionPacket.SPIDER_JUMP);
-                ((EntityFriendlySpider) player.ridingEntity).setJumping(true);
+                ((EntityFriendlySpider) player.getRidingEntity()).setJumping(true);
             }
         }
     }

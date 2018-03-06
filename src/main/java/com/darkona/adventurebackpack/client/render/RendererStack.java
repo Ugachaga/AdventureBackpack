@@ -5,11 +5,9 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.IItemRenderer;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.darkona.adventurebackpack.reference.ToolHandler;
 import com.darkona.adventurebackpack.util.GregtechUtils;
@@ -69,21 +67,21 @@ public class RendererStack extends ModelRenderer
             switch (toolHandler)
             {
                 case GREGTECH:
-                    GregtechUtils.renderTool(stack, IItemRenderer.ItemRenderType.ENTITY);
-                    break;
+//                    GregtechUtils.renderTool(stack, IItemRenderer.ItemRenderType.ENTITY);
+//                    break;
                 case TCONSTRUCT:
-                    TextureManager tm = MC.getTextureManager();
-                    tm.bindTexture(tm.getResourceLocation(stack.getItemSpriteNumber()));
-                    GL11.glTranslatef(-0.06F, -0.1F, 0F);
-                    TinkersUtils.renderTool(stack, IItemRenderer.ItemRenderType.ENTITY);
-                    break;
+//                    TextureManager tm = MC.getTextureManager();
+//                    tm.bindTexture(tm.getResourceLocation(stack.getItemSpriteNumber()));
+//                    GL11.glTranslatef(-0.06F, -0.1F, 0F);
+//                    TinkersUtils.renderTool(stack, IItemRenderer.ItemRenderType.ENTITY);
+//                    break;
                 case THAUMCRAFT:
-                    GL11.glTranslatef(0F, -0.375F, 0F);
-                    ThaumcraftUtils.renderTool(stack, IItemRenderer.ItemRenderType.ENTITY);
-                    break;
+//                    GL11.glTranslatef(0F, -0.375F, 0F);
+//                    ThaumcraftUtils.renderTool(stack, IItemRenderer.ItemRenderType.ENTITY);
+//                    break;
                 case VANILLA:
                 default:
-                    CopygirlRenderUtils.renderItemIn3d(stack);
+//                    CopygirlRenderUtils.renderItemIn3d(stack);
                     break;
             }
 

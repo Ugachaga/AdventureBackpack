@@ -11,20 +11,22 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemNameTag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
-import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import com.darkona.adventurebackpack.block.BlockSleepingBag;
 import com.darkona.adventurebackpack.common.ServerActions;
@@ -54,19 +56,19 @@ public class PlayerEventHandler
     @SubscribeEvent
     public void registerBackpackProperty(EntityEvent.EntityConstructing event)
     {
-        if (event.entity instanceof EntityPlayer && BackpackProperty.get((EntityPlayer) event.entity) == null)
+        if (event.getEntity() instanceof EntityPlayer && BackpackProperty.get((EntityPlayer) event.getEntity()) == null)
         {
-            BackpackProperty.register((EntityPlayer) event.entity);
+            BackpackProperty.register((EntityPlayer) event.getEntity());
         }
     }
 
     @SubscribeEvent
     public void joinPlayer(EntityJoinWorldEvent event)
     {
-        if (!event.world.isRemote && event.entity instanceof EntityPlayer)
+        if (!event.getWorld().isRemote && event.getEntity() instanceof EntityPlayer)
         {
-            EntityPlayer player = (EntityPlayer) event.entity;
-            LogHelper.info("Joined EntityPlayer of name: " + event.entity.getCommandSenderName());
+            EntityPlayer player = (EntityPlayer) event.getEntity();
+            LogHelper.info("Joined EntityPlayer of name: " + player.getName());
             NBTTagCompound playerData = ServerProxy.extractPlayerProps(player.getUniqueID());
             if (playerData != null)
             {
@@ -112,9 +114,9 @@ public class PlayerEventHandler
     @SubscribeEvent
     public void onPlayerJump(LivingEvent.LivingJumpEvent event)
     {
-        if (event.entity != null && event.entityLiving instanceof EntityPlayer)
+        if (event.getEntity() != null && event.getEntity() instanceof EntityPlayer)
         {
-            EntityPlayer player = (EntityPlayer) event.entity;
+            EntityPlayer player = (EntityPlayer) event.getEntity();
 
             if (Wearing.isWearingBoots(player) && player.onGround)
             {
@@ -128,9 +130,9 @@ public class PlayerEventHandler
     @SubscribeEvent
     public void pistonBootsUnequipped(LivingEvent.LivingUpdateEvent event)
     {
-        if (event.entityLiving instanceof EntityPlayer)
+        if (event.getEntity() instanceof EntityPlayer)
         {
-            EntityPlayer player = (EntityPlayer) event.entityLiving;
+            EntityPlayer player = (EntityPlayer) event.getEntity();
             if (Wearing.isWearingBoots(player))
             {
                 if (!pistonBootsStepHeight)
@@ -155,14 +157,14 @@ public class PlayerEventHandler
     @SubscribeEvent
     public void onFall(LivingFallEvent event)
     {
-        if (event.entity != null)
+        if (event.getEntity() != null)
         {
-            if (event.entityLiving instanceof EntityCreature && ConfigHandler.fixLead)
+            if (event.getEntity() instanceof EntityCreature && ConfigHandler.fixLead)
             {
-                EntityCreature creature = (EntityCreature) event.entityLiving;
-                if (creature.getLeashed() && creature.getLeashedToEntity() != null && creature.getLeashedToEntity() instanceof EntityPlayer)
+                EntityCreature creature = (EntityCreature) event.getEntity();
+                if (creature.getLeashed() && creature.getLeashHolder() instanceof EntityPlayer)
                 {
-                    EntityPlayer player = (EntityPlayer) creature.getLeashedToEntity();
+                    EntityPlayer player = (EntityPlayer) creature.getLeashHolder();
                     if (creature.motionY > -2.0f && player.motionY > -2.0f)
                     {
                         event.setCanceled(true);
@@ -170,23 +172,23 @@ public class PlayerEventHandler
                 }
             }
 
-            if (event.entityLiving instanceof EntityFriendlySpider)
+            if (event.getEntity() instanceof EntityFriendlySpider)
             {
-                if (((EntityFriendlySpider) event.entityLiving).riddenByEntity != null
-                        && ((EntityFriendlySpider) event.entityLiving).riddenByEntity instanceof EntityPlayer
-                        && event.distance < 5)
+                if ((event.getEntity()).isBeingRidden()
+                        && event.getEntity().getPassengers().get(0) instanceof EntityPlayer
+                        && event.getDistance() < 5)
                 {
                     event.setCanceled(true);
                 }
             }
 
-            if (event.entityLiving instanceof EntityPlayer)
+            if (event.getEntity() instanceof EntityPlayer)
             {
-                if (Wearing.isWearingBoots(((EntityPlayer) event.entityLiving)) && event.distance < 8)
+                if (Wearing.isWearingBoots(((EntityPlayer) event.getEntity())) && event.getDistance() < 8)
                 {
                     event.setCanceled(true);
                 }
-                if (Wearing.isWearingTheRightBackpack((EntityPlayer) event.entityLiving, BackpackTypes.IRON_GOLEM) && ConfigHandler.backpackAbilities)
+                if (Wearing.isWearingTheRightBackpack((EntityPlayer) event.getEntity(), BackpackTypes.IRON_GOLEM) && ConfigHandler.backpackAbilities)
                 {
                     event.setCanceled(true);
                 }
@@ -197,17 +199,17 @@ public class PlayerEventHandler
     @SubscribeEvent(priority = EventPriority.LOW)
     public void playerDies(LivingDeathEvent event)
     {
-        if (event.entity instanceof EntityPlayer)
+        if (event.getEntity() instanceof EntityPlayer)
         {
-            EntityPlayer player = (EntityPlayer) event.entity;
+            EntityPlayer player = (EntityPlayer) event.getEntity();
 
-            if (!player.worldObj.isRemote)
+            if (!player.world.isRemote)
             {
                 BackpackProperty props = BackpackProperty.get(player);
 
                 if (ConfigHandler.enableCampfireSpawn && props.isForcedCampFire())
                 {
-                    ChunkCoordinates lastCampFire = props.getCampFire();
+                    BlockPos lastCampFire = props.getCampFire();
                     if (lastCampFire != null)
                     {
                         player.setSpawnChunk(lastCampFire, false, player.dimension);
@@ -219,12 +221,12 @@ public class PlayerEventHandler
                 {
                     if (Wearing.isWearingTheRightBackpack(player, BackpackTypes.CREEPER))
                     {
-                        player.worldObj.createExplosion(player, player.posX, player.posY, player.posZ, 4.0F, false);
+                        player.world.createExplosion(player, player.posX, player.posY, player.posZ, 4.0F, false);
                     }
 
-                    if (player.getEntityWorld().getGameRules().getGameRuleBooleanValue("keepInventory"))
+                    if (player.getEntityWorld().getGameRules().getBoolean("keepInventory"))
                     {
-                        ((IBackWearableItem) props.getWearable().getItem()).onPlayerDeath(player.worldObj, player, props.getWearable());
+                        ((IBackWearableItem) props.getWearable().getItem()).onPlayerDeath(player.world, player, props.getWearable());
                         ServerProxy.storePlayerProps(player);
                     }
                 }
@@ -236,7 +238,10 @@ public class PlayerEventHandler
     @SubscribeEvent
     public void playerDeathDrop(PlayerDropsEvent event)
     {
-        EntityPlayer player = event.entityPlayer;
+        if (!(event.getEntity() instanceof  EntityPlayer))
+            return;
+
+        EntityPlayer player = (EntityPlayer) event.getEntity();
 
         if (Wearing.isWearingWearable(player))
         {
@@ -246,12 +251,12 @@ public class PlayerEventHandler
             if (EnchUtils.isSoulBounded(pack)
                     || (ConfigHandler.backpackDeathPlace && pack.getItem() instanceof ItemAdventureBackpack))
             {
-                ((IBackWearableItem) props.getWearable().getItem()).onPlayerDeath(player.worldObj, player, props.getWearable());
+                ((IBackWearableItem) props.getWearable().getItem()).onPlayerDeath(player.world, player, props.getWearable());
                 ServerProxy.storePlayerProps(player);
             }
             else
             {
-                event.drops.add(new EntityItem(player.worldObj, player.posX, player.posY, player.posZ, pack));
+                event.getDrops().add(new EntityItem(player.world, player.posX, player.posY, player.posZ, pack));
                 props.setWearable(null);
             }
         }
@@ -269,54 +274,51 @@ public class PlayerEventHandler
     @SubscribeEvent
     public void playerCraftsBackpack(PlayerEvent.ItemCraftedEvent event)
     {
-        if (event.crafting.getItem() == ModItems.adventureBackpack)
+        if (event.crafting.getItem() == ModItems.ADVENTURE_BACKPACK)
         {
             LogHelper.info("Player crafted a backpack, and that backpack's appearance is: "
                     + BackpackTypes.getSkinName(event.crafting));
 
             if (!ConfigHandler.consumeDragonEgg && BackpackTypes.getType(event.crafting) == BackpackTypes.DRAGON)
             {
-                event.player.dropPlayerItemWithRandomChoice(new ItemStack(Blocks.dragon_egg, 1), false);
-                event.player.playSound("mob.enderdragon.growl", 1.0f, 5.0f);
+                event.player.dropItem(new ItemStack(Blocks.DRAGON_EGG, 1), false);
+                event.player.playSound(new SoundEvent(new ResourceLocation("entity.enderdragon.growl")), 1.0f, 5.0f);
             }
         }
     }
 
     @SubscribeEvent
-    public void interactWithCreatures(EntityInteractEvent event)
+    public void interactWithCreatures(PlayerInteractEvent.EntityInteract event)
     {
-        EntityPlayer player = event.entityPlayer;
+        EntityPlayer player = event.getEntityPlayer();
 
-        if (!player.worldObj.isRemote)
+        if (!player.world.isRemote)
         {
-            if (event.target instanceof EntitySpider)
+            if (event.getTarget() instanceof EntitySpider)
             {
                 if (Wearing.isWearingTheRightBackpack(player, BackpackTypes.SPIDER))
                 {
-                    EntityFriendlySpider pet = new EntityFriendlySpider(event.target.worldObj);
-                    pet.setLocationAndAngles(event.target.posX, event.target.posY, event.target.posZ, event.target.rotationYaw, event.target.rotationPitch);
-                    event.target.setDead();
-                    event.entityPlayer.worldObj.spawnEntityInWorld(pet);
-                    event.entityPlayer.mountEntity(pet);
+                    EntityFriendlySpider pet = new EntityFriendlySpider(event.getTarget().world);
+                    pet.setLocationAndAngles(event.getTarget().posX, event.getTarget().posY, event.getTarget().posZ, event.getTarget().rotationYaw, event.getTarget().rotationPitch);
+                    event.getTarget().setDead();
+                    player.world.spawnEntity(pet);
+                    player.startRiding(pet);
                 }
             }
-            if (event.target instanceof EntityHorse)
-            {
-                EntityHorse horse = (EntityHorse) event.target;
-                ItemStack stack = player.getCurrentEquippedItem();
 
-                if (stack != null && stack.getItem() != null && stack.getItem() instanceof ItemNameTag && stack.hasDisplayName())
+            if (event.getTarget() instanceof EntityHorse)
+            {
+                EntityHorse horse = (EntityHorse) event.getTarget();
+                ItemStack stack = player.getHeldItemMainhand();
+
+                if (stack != ItemStack.EMPTY && stack.getItem() instanceof ItemNameTag && stack.hasDisplayName())
                 {
-                    if (horse.getCustomNameTag() == null || horse.getCustomNameTag().equals("") && horse.isTame())
+                    if (horse.getCustomNameTag().isEmpty() && horse.isTame())
                     {
                         horse.setTamedBy(player);
                         horse.tasks.addTask(4, new EntityAIHorseFollowOwner(horse, 1.5d, 2.0f, 20.0f));
-
-                        if (horse.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.followRange) != null)
-                        {
-                            horse.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.followRange).setBaseValue(100.0D);
-                            LogHelper.info("The horse follow range is now: " + horse.getEntityAttribute(SharedMonsterAttributes.followRange).getBaseValue());
-                        }
+                        horse.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(100.0D);
+                        LogHelper.info("The horse follow range is now: " + horse.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).getBaseValue());
                     }
                 }
             }
@@ -327,12 +329,12 @@ public class PlayerEventHandler
     @SubscribeEvent
     public void playerWokeUp(PlayerWakeUpEvent event)
     {
-        if (event.entity.worldObj.isRemote)
+        if (event.getEntity().world.isRemote)
             return;
 
-        EntityPlayer player = event.entityPlayer;
-        ChunkCoordinates bedLocation = player.getBedLocation(player.dimension);
-        if (bedLocation != null && player.worldObj.getBlock(bedLocation.posX, bedLocation.posY, bedLocation.posZ) == ModBlocks.blockSleepingBag)
+        EntityPlayer player = event.getEntityPlayer();
+        BlockPos bedLocation = player.getBedLocation(player.dimension);
+        if (player.world.getBlockState(bedLocation) == ModBlocks.BLOCK_SLEEPING_BAG)
         {
             //If the player wakes up in one of those super confortable SleepingBags (tm) (Patent Pending)
             if (BlockSleepingBag.isSleepingInPortableBag(player))
@@ -366,7 +368,7 @@ public class PlayerEventHandler
             }
             if (event.phase == TickEvent.Phase.END)
             {
-                if (!player.worldObj.isRemote)
+                if (!player.world.isRemote)
                 {
                     if (BackpackProperty.get(player).isWakingUpInPortableBag() && Wearing.isWearingBackpack(player))
                     {

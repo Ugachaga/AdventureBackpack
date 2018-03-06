@@ -2,10 +2,10 @@ package com.darkona.adventurebackpack.init;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.WorldServer;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.relauncher.Side;
 
 import com.darkona.adventurebackpack.network.CowAbilityPacket;
 import com.darkona.adventurebackpack.network.CycleToolPacket;
@@ -64,11 +64,11 @@ public class ModNetwork
 
     public static void sendToNearby(IMessage message, EntityPlayer player)
     {
-        if (player != null && player.worldObj instanceof WorldServer)
+        if (player != null && player.world instanceof WorldServer)
         {
             try
             {
-                ((WorldServer) player.worldObj).getEntityTracker().func_151248_b(player, ModNetwork.net.getPacketFrom(message));
+                ((WorldServer) player.world).getEntityTracker().sendToTracking(player, ModNetwork.net.getPacketFrom(message));
             }
             catch (Exception ex)
             {

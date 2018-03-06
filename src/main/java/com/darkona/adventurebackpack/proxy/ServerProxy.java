@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -44,6 +45,18 @@ public class ServerProxy implements IProxy
 
     }
 
+    @Override
+    public void registerItemRenderer(Item item, int meta, String id)
+    {
+
+    }
+
+    @Override
+    public void setCustomModelResourceLocation(Item item, int meta, String id)
+    {
+
+    }
+
     public static void storePlayerProps(EntityPlayer player)
     {
         try
@@ -51,7 +64,8 @@ public class ServerProxy implements IProxy
             NBTTagCompound data = BackpackProperty.get(player).getData();
             if (data.hasKey("wearable"))
             {
-                LogHelper.info("Storing wearable: " + ItemStack.loadItemStackFromNBT(data.getCompoundTag("wearable")).getDisplayName());
+                ItemStack stack = new ItemStack(data.getCompoundTag("wearable"));
+                LogHelper.info("Storing wearable: " + stack.getDisplayName());
             }
             extendedEntityData.put(player.getUniqueID(), data);
             LogHelper.info("Stored player properties for dead player");

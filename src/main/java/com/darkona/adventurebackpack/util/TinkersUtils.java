@@ -11,10 +11,9 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.common.FMLCommonHandler;
 
 import com.darkona.adventurebackpack.reference.LoadedMods;
 
@@ -53,7 +52,7 @@ public final class TinkersUtils
         if (LoadedMods.TCONSTRUCT)
         {
             createCraftingStationInstance();
-            createToolRendererInstance();
+            //createToolRendererInstance();
         }
     }
 
@@ -81,14 +80,14 @@ public final class TinkersUtils
         InventoryPlayer invPlayer;
         if (Utils.inServer())
         {
-            WorldServer world = FMLCommonHandler.instance().getMinecraftServerInstance().worldServers[0];
+            WorldServer world = FMLCommonHandler.instance().getMinecraftServerInstance().worlds[0];
             UUID fakeUuid = UUID.fromString("521e749d-2ac0-3459-af7a-160b4be5c62b");
             GameProfile fakeProfile = new GameProfile(fakeUuid, "[Adventurer]");
             invPlayer = new InventoryPlayer(new FakePlayer(world, fakeProfile));
         }
         else
         {
-            invPlayer = Minecraft.getMinecraft().thePlayer.inventory;
+            invPlayer = Minecraft.getMinecraft().player.inventory;
         }
         return invPlayer;
     }
@@ -163,8 +162,8 @@ public final class TinkersUtils
         return isLowerSlot ? -45F : 45F;
     }
 
-    public static void renderTool(ItemStack stack, IItemRenderer.ItemRenderType renderType)
-    {
-        ToolRenderHelper.render(stack, renderType, toolRenderer, toolRendererInstance);
-    }
+//    public static void renderTool(ItemStack stack, IItemRenderer.ItemRenderType renderType)
+//    {
+//        ToolRenderHelper.render(stack, renderType, toolRenderer, toolRendererInstance);
+//    }
 }

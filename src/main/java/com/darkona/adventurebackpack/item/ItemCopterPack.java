@@ -1,24 +1,29 @@
 package com.darkona.adventurebackpack.item;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidTank;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.darkona.adventurebackpack.init.ModNetwork;
 import com.darkona.adventurebackpack.inventory.InventoryCopterPack;
@@ -26,6 +31,7 @@ import com.darkona.adventurebackpack.network.GUIPacket;
 import com.darkona.adventurebackpack.network.messages.EntityParticlePacket;
 import com.darkona.adventurebackpack.proxy.ClientProxy;
 import com.darkona.adventurebackpack.reference.GeneralReference;
+import com.darkona.adventurebackpack.reference.ModInfo;
 import com.darkona.adventurebackpack.util.BackpackUtils;
 import com.darkona.adventurebackpack.util.Resources;
 import com.darkona.adventurebackpack.util.TipUtils;
@@ -53,19 +59,20 @@ public class ItemCopterPack extends ItemAdventure
     {
         super();
         setUnlocalizedName("copterPack");
+        this.setRegistryName(ModInfo.MOD_ID, "copter_pack");
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public void getSubItems(Item item, CreativeTabs tab, List list)
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
     {
-        list.add(BackpackUtils.createCopterStack());
+        items.add(BackpackUtils.createCopterStack());
     }
 
     @Override
     @SuppressWarnings({"unchecked"})
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List tooltips, boolean advanced)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
     {
         FluidTank fuelTank = new FluidTank(FUEL_CAPACITY);
         NBTTagCompound copterTag = BackpackUtils.getWearableCompound(stack);
@@ -73,24 +80,24 @@ public class ItemCopterPack extends ItemAdventure
         if (GuiScreen.isShiftKeyDown())
         {
             fuelTank.readFromNBT(copterTag.getCompoundTag(TAG_FUEL_TANK));
-            tooltips.add(l10n("copter.tank.fuel") + ": " + TipUtils.tankTooltip(fuelTank));
-            tooltips.add(l10n("copter.rate.fuel") + ": " + TipUtils.fuelConsumptionTooltip(fuelTank));
+            tooltip.add(l10n("copter.tank.fuel") + ": " + TipUtils.tankTooltip(fuelTank));
+            tooltip.add(l10n("copter.rate.fuel") + ": " + TipUtils.fuelConsumptionTooltip(fuelTank));
 
-            TipUtils.shiftFooter(tooltips);
+            TipUtils.shiftFooter(tooltip);
         }
         else if (!GuiScreen.isCtrlKeyDown())
         {
-            tooltips.add(TipUtils.holdShift());
+            tooltip.add(TipUtils.holdShift());
         }
 
         if (GuiScreen.isCtrlKeyDown())
         {
-            tooltips.add(l10n("max.altitude") + ": " + TipUtils.whiteFormat("250 ") + l10n("meters"));
-            tooltips.add(TipUtils.pressShiftKeyFormat(TipUtils.actionKeyFormat()) + l10n("copter.key.onoff1"));
-            tooltips.add(l10n("copter.key.onoff2") + " " + l10n("on"));
+            tooltip.add(l10n("max.altitude") + ": " + TipUtils.whiteFormat("250 ") + l10n("meters"));
+            tooltip.add(TipUtils.pressShiftKeyFormat(TipUtils.actionKeyFormat()) + l10n("copter.key.onoff1"));
+            tooltip.add(l10n("copter.key.onoff2") + " " + l10n("on"));
 
-            tooltips.add(TipUtils.pressKeyFormat(TipUtils.actionKeyFormat()) + l10n("copter.key.hover1"));
-            tooltips.add(l10n("copter.key.hover2"));
+            tooltip.add(TipUtils.pressKeyFormat(TipUtils.actionKeyFormat()) + l10n("copter.key.hover1"));
+            tooltip.add(l10n("copter.key.hover2"));
         }
     }
 
@@ -101,13 +108,13 @@ public class ItemCopterPack extends ItemAdventure
     }
 
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand)
     {
         if (world.isRemote)
         {
             ModNetwork.net.sendToServer(new GUIPacket.GUImessage(GUIPacket.COPTER_GUI, GUIPacket.FROM_HOLDING));
         }
-        return stack;
+        return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));
     }
 
     @Override
@@ -120,7 +127,7 @@ public class ItemCopterPack extends ItemAdventure
     public void onEquippedUpdate(World world, EntityPlayer player, ItemStack stack) //TODO extract behavior to separate class
     {
         InventoryCopterPack inv = new InventoryCopterPack(Wearing.getWearingCopter(player));
-        inv.openInventory();
+        inv.openInventory(player);
         boolean canElevate = true;
         float fuelConsumption = 0.0f;
         if (inv.getStatus() != OFF_MODE)
@@ -131,7 +138,7 @@ public class ItemCopterPack extends ItemAdventure
                 inv.dirtyStatus();
                 if (!world.isRemote)
                 {
-                    player.addChatComponentMessage(new ChatComponentTranslation("adventurebackpack:messages.copterpack.cantwater"));
+                    player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.copterpack.cantwater"));
                 }
                 return;
             }
@@ -144,7 +151,7 @@ public class ItemCopterPack extends ItemAdventure
                     inv.dirtyStatus();
                     if (!world.isRemote)
                     {
-                        player.addChatComponentMessage(new ChatComponentTranslation("adventurebackpack:messages.copterpack.off"));
+                        player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.copterpack.off"));
                     }
                     return;
                     //TODO play "backpackOff" sound
@@ -155,7 +162,7 @@ public class ItemCopterPack extends ItemAdventure
                     inv.dirtyStatus();
                     if (!world.isRemote)
                     {
-                        player.addChatComponentMessage(new ChatComponentTranslation("adventurebackpack:messages.copterpack.outoffuel"));
+                        player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.copterpack.outoffuel"));
                     }
                     return;
                     //TODO play "outofFuel" sound
@@ -205,7 +212,8 @@ public class ItemCopterPack extends ItemAdventure
                 //Airwave
                 pushEntities(world, player, 0.2f);
                 //movement boost
-                player.moveFlying(player.moveStrafing, player.moveForward, factor);
+                player.travel(player.moveStrafing * factor, 0f, player.moveForward * factor); //TODO usage of factor?
+                //player.moveFlying(player.moveStrafing, player.moveForward, factor);
             }
             else
             {
@@ -215,7 +223,7 @@ public class ItemCopterPack extends ItemAdventure
             //Elevation clientside
             if (world.isRemote)
             {
-                if (Minecraft.getMinecraft().gameSettings.keyBindJump.getIsKeyPressed())
+                if (Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown())
                 {
                     if (inv.canConsumeFuel((int) Math.ceil(fuelConsumption * 2)) && canElevate)
                     {
@@ -246,7 +254,7 @@ public class ItemCopterPack extends ItemAdventure
                 inv.setTickCounter(ticks);
             }
         }
-        inv.closeInventory();
+        inv.closeInventory(player);
     }
 
     private int getFuelSpent(float f)
@@ -273,7 +281,7 @@ public class ItemCopterPack extends ItemAdventure
         double posY = player.posY;
         double posZ = player.posZ;
         List<EntityItem> groundItems = world.getEntitiesWithinAABB(
-                EntityItem.class, AxisAlignedBB.getBoundingBox(
+                EntityItem.class, new AxisAlignedBB(
                         posX, posY, posZ, posX + 1.0D, posY + 1.0D, posZ + 1.0D).expand(4.0D, 4.0D, 4.0D));
 
         for (EntityItem groundItem : groundItems)

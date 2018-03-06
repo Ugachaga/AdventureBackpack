@@ -3,13 +3,13 @@ package com.darkona.adventurebackpack.util;
 import java.util.List;
 
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
-import cpw.mods.fml.common.registry.GameData;
 
 import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.config.Keybindings;
@@ -26,7 +26,7 @@ public final class TipUtils
 
     public static String l10n(String tip)
     {
-        return StatCollector.translateToLocal("adventurebackpack:tooltips." + tip);
+        return I18n.translateToLocal("adventurebackpack:tooltips." + tip); //TODO deprecated, see http://www.minecraftforge.net/forum/topic/60206-whats-the-1102-equivalent-of-statcollectortranslatetolocal/
     }
 
     public static void shiftFooter(List<String> eventTips)
@@ -49,13 +49,13 @@ public final class TipUtils
 
     private static String holdThe(boolean button)
     {
-        return whiteFormat(EnumChatFormatting.ITALIC + "<" + (button ? l10n("hold.shift")
+        return whiteFormat(TextFormatting.ITALIC + "<" + (button ? l10n("hold.shift")
                                                                      : l10n("hold.ctrl")) + ">");
     }
 
-    public static String whiteFormat(String theString)
+    public static String whiteFormat(String stringIn)
     {
-        return EnumChatFormatting.WHITE + theString + EnumChatFormatting.GRAY;
+        return TextFormatting.WHITE + stringIn + TextFormatting.GRAY;
     }
 
     public static String actionKeyFormat()
@@ -96,18 +96,18 @@ public final class TipUtils
 
     private static String toolSlotFormat(boolean isTool)
     {
-        return (isTool ? EnumChatFormatting.WHITE : EnumChatFormatting.DARK_GRAY) + "[]";
+        return (isTool ? TextFormatting.WHITE : TextFormatting.DARK_GRAY) + "[]";
     }
 
     private static String mainSlotsFormat(int slotsUsed)
     {
         String slotsFormatted = Integer.toString(slotsUsed);
         if (slotsUsed == 0)
-            slotsFormatted = EnumChatFormatting.DARK_GRAY + slotsFormatted;
+            slotsFormatted = TextFormatting.DARK_GRAY + slotsFormatted;
         else if (slotsUsed == Constants.INVENTORY_MAIN_SIZE)
-            slotsFormatted = EnumChatFormatting.WHITE + slotsFormatted;
+            slotsFormatted = TextFormatting.WHITE + slotsFormatted;
         else
-            slotsFormatted = EnumChatFormatting.GRAY + slotsFormatted;
+            slotsFormatted = TextFormatting.GRAY + slotsFormatted;
         return slotsFormatted + "/" + Constants.INVENTORY_MAIN_SIZE;
     }
 
@@ -127,7 +127,7 @@ public final class TipUtils
     {
         String amountFormatted = Integer.toString(fluidAmount);
         if (fluidAmount == tankCapacity)
-            amountFormatted = EnumChatFormatting.WHITE + amountFormatted;
+            amountFormatted = TextFormatting.WHITE + amountFormatted;
         else if (fluidAmount == 0)
             amountFormatted = emptyFormat();
         return amountFormatted;
@@ -138,19 +138,19 @@ public final class TipUtils
         String nameUnlocalized = fluid.getUnlocalizedName().toLowerCase();
         String nameFormatted = " ";
         if (nameUnlocalized.contains("lava") || nameUnlocalized.contains("fire"))
-            nameFormatted += EnumChatFormatting.RED;
+            nameFormatted += TextFormatting.RED;
         else if (nameUnlocalized.contains("water"))
-            nameFormatted += EnumChatFormatting.BLUE;
+            nameFormatted += TextFormatting.BLUE;
         else if (nameUnlocalized.contains("oil"))
-            nameFormatted += EnumChatFormatting.DARK_GRAY;
+            nameFormatted += TextFormatting.DARK_GRAY;
         else if (nameUnlocalized.contains("fuel") || nameUnlocalized.contains("creosote"))
-            nameFormatted += EnumChatFormatting.YELLOW;
+            nameFormatted += TextFormatting.YELLOW;
         else if (nameUnlocalized.contains("milk"))
-            nameFormatted += EnumChatFormatting.WHITE;
+            nameFormatted += TextFormatting.WHITE;
         else if (nameUnlocalized.contains("xpjuice"))
-            nameFormatted += EnumChatFormatting.GREEN;
+            nameFormatted += TextFormatting.GREEN;
         else
-            nameFormatted += EnumChatFormatting.GRAY;
+            nameFormatted += TextFormatting.GRAY;
         return nameFormatted + fluid.getLocalizedName();
     }
 
@@ -161,9 +161,9 @@ public final class TipUtils
 
     private static String switchFormat(boolean status)
     {
-        String switchFormatted = status ? EnumChatFormatting.WHITE + l10n("on")
-                                        : EnumChatFormatting.DARK_GRAY + l10n("off");
-        return "[" + switchFormatted + EnumChatFormatting.GRAY + "]";
+        String switchFormatted = status ? TextFormatting.WHITE + l10n("on")
+                                        : TextFormatting.DARK_GRAY + l10n("off");
+        return "[" + switchFormatted + TextFormatting.GRAY + "]";
     }
 
     public static String slotStackTooltip(NBTTagList itemList, int slot)
@@ -191,12 +191,12 @@ public final class TipUtils
         String dataFormatted;
         try
         {
-            ItemStack iStack = new ItemStack(GameData.getItemRegistry().getObjectById(id), 0, meta);
+            ItemStack iStack = new ItemStack(Item.REGISTRY.getObjectById(id), 0, meta);
             dataFormatted = iStack.getDisplayName() + " (" + stackSizeFormat(iStack, count) + ")";
         }
         catch (Exception e)
         {
-            dataFormatted = EnumChatFormatting.RED + l10n("error");
+            dataFormatted = TextFormatting.RED + l10n("error");
         }
         return dataFormatted;
     }
@@ -210,12 +210,12 @@ public final class TipUtils
     {
         return (tank.getFluid() != null)
                ? String.format("x%.2f", GeneralReference.getFuelRate(tank.getFluid().getFluid().getName()))
-               : EnumChatFormatting.DARK_GRAY + "-" ;
+               : TextFormatting.DARK_GRAY + "-" ;
     }
 
     private static String emptyFormat()
     {
-        return EnumChatFormatting.DARK_GRAY.toString() + EnumChatFormatting.ITALIC + l10n("empty");
+        return TextFormatting.DARK_GRAY.toString() + TextFormatting.ITALIC + l10n("empty");
     }
 
 }

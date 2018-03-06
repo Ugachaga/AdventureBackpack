@@ -7,10 +7,10 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import com.darkona.adventurebackpack.inventory.ContainerBackpack;
 import com.darkona.adventurebackpack.inventory.IInventoryBackpack;
@@ -29,7 +29,7 @@ public class CowAbilityPacket implements IMessageHandler<CowAbilityPacket.CowAbi
     {
         if (ctx.side.isClient())
         {
-            EntityPlayer player = Minecraft.getMinecraft().theWorld.func_152378_a(UUID.fromString(message.playerID));
+            EntityPlayer player = Minecraft.getMinecraft().world.getPlayerEntityByUUID(UUID.fromString(message.playerID));
 
             if (player.openContainer instanceof ContainerBackpack)
             {
@@ -39,7 +39,7 @@ public class CowAbilityPacket implements IMessageHandler<CowAbilityPacket.CowAbi
                 switch (message.action)
                 {
                     case CONSUME_WHEAT:
-                        inv.consumeInventoryItem(Items.wheat);
+                        inv.consumeInventoryItem(Items.WHEAT);
                 }
             }
         }

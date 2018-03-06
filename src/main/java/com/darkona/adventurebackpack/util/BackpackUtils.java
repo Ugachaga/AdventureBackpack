@@ -7,7 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
 
@@ -42,7 +42,7 @@ public class BackpackUtils
             player.openContainer.onContainerClosed(player);
             prop.setWearable(backpack.copy());
             BackpackProperty.get(player).executeWearableEquipProtocol();
-            backpack.stackSize--;
+            backpack.setCount(0);
             WearableEvent event = new WearableEvent.EquipWearableEvent(player, prop.getWearable());
             MinecraftForge.EVENT_BUS.post(event);
             BackpackProperty.sync(player);
@@ -81,7 +81,7 @@ public class BackpackUtils
                 prop.setWearable(null);
                 if (!player.inventory.addItemStackToInventory(gimme))
                 {
-                    player.dropPlayerItemWithRandomChoice(gimme, false);
+                    player.dropItem(gimme, false);
                 }
                 WearableEvent event = new WearableEvent.UnequipWearableEvent(player, gimme);
                 MinecraftForge.EVENT_BUS.post(event);
@@ -89,7 +89,7 @@ public class BackpackUtils
             }
             else
             {
-                player.addChatComponentMessage(new ChatComponentTranslation("adventurebackpack:messages.already.impossibru"));
+                player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.already.impossibru"));
             }
         }
     }
@@ -97,18 +97,18 @@ public class BackpackUtils
     public static NBTTagCompound getWearableCompound(ItemStack stack)
     {
         // it also creates wearable compound if stack has no own, so maybe worth to rename the method
-        if (!stack.hasTagCompound() || !stack.stackTagCompound.hasKey(TAG_WEARABLE_COMPOUND))
+        if (!stack.hasTagCompound() || !stack.getTagCompound().hasKey(TAG_WEARABLE_COMPOUND))
             createWearableCompound(stack);
 
-        return stack.stackTagCompound.getCompoundTag(TAG_WEARABLE_COMPOUND);
+        return stack.getTagCompound().getCompoundTag(TAG_WEARABLE_COMPOUND);
     }
 
     private static void createWearableCompound(ItemStack stack)
     {
         if (!stack.hasTagCompound())
-            stack.stackTagCompound = new NBTTagCompound();
+            stack.setTagCompound(new NBTTagCompound());
 
-        stack.stackTagCompound.setTag(TAG_WEARABLE_COMPOUND, new NBTTagCompound());
+        stack.getTagCompound().setTag(TAG_WEARABLE_COMPOUND, new NBTTagCompound());
     }
 
     public static NBTTagList getWearableInventory(ItemStack stack)
@@ -125,9 +125,14 @@ public class BackpackUtils
         getWearableCompound(stack).setTag(TAG_INVENTORY, new NBTTagList());
     }
 
+    public static ItemStack createBackpackStack()
+    {
+        return createBackpackStack(BackpackTypes.STANDARD);
+    }
+
     public static ItemStack createBackpackStack(BackpackTypes type)
     {
-        ItemStack backpackStack = new ItemStack(ModItems.adventureBackpack, 1, BackpackTypes.getMeta(type));
+        ItemStack backpackStack = new ItemStack(ModItems.ADVENTURE_BACKPACK, 1, BackpackTypes.getMeta(type));
         setBackpackType(backpackStack, type);
         return backpackStack;
     }
@@ -139,14 +144,14 @@ public class BackpackUtils
 
     public static ItemStack createCopterStack()
     {
-        ItemStack copterStack = new ItemStack(ModItems.copterPack, 1, 0);
+        ItemStack copterStack = new ItemStack(ModItems.COPTER_PACK, 1, 0);
         createWearableCompound(copterStack);
         return copterStack;
     }
 
     public static ItemStack createJetpackStack()
     {
-        ItemStack jetpackStack = new ItemStack(ModItems.coalJetpack, 1, 0);
+        ItemStack jetpackStack = new ItemStack(ModItems.STEAM_JETPACK, 1, 0);
         createWearableCompound(jetpackStack);
         return jetpackStack;
     }

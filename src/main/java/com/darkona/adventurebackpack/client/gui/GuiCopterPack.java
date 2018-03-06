@@ -75,7 +75,7 @@ public class GuiCopterPack extends GuiWithTanks
     {
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_BLEND);
-        inventory.openInventory();
+        inventory.openInventory(player);
         FluidTank tank = inventory.getFuelTank();
         fuelTank.draw(this, tank);
 
@@ -86,15 +86,15 @@ public class GuiCopterPack extends GuiWithTanks
         String capacity = Integer.toString(tank.getCapacity());
         int offsetY = 8;
         int offsetX = 83;
-        fontRendererObj.drawString(name, 1 + offsetX, offsetY, 0x373737, false);
-        fontRendererObj.drawString(amount, 1 + offsetX, 10 + offsetY, 0x373737, false);
-        fontRendererObj.drawString(capacity, 1 + offsetX, 20 + offsetY, 0x373737, false);
+        fontRenderer.drawString(name, 1 + offsetX, offsetY, 0x373737, false);
+        fontRenderer.drawString(amount, 1 + offsetX, 10 + offsetY, 0x373737, false);
+        fontRenderer.drawString(capacity, 1 + offsetX, 20 + offsetY, 0x373737, false);
 
         if (isFilled)
         {
             Float rate = GeneralReference.getFuelRate(name.toLowerCase());
             String conLev = (rate != null) ? rate.toString() : "0";
-            fontRendererObj.drawString("Consumption: " + conLev, 1 + offsetX, 40 + offsetY, 0x373737, false);
+            fontRenderer.drawString("Consumption: " + conLev, 1 + offsetX, 40 + offsetY, 0x373737, false);
         }
         GL11.glPopMatrix();
     }

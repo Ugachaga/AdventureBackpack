@@ -1,6 +1,7 @@
 package com.darkona.adventurebackpack.common;
 
-import net.minecraftforge.fluids.FluidContainerRegistry;
+
+import net.minecraftforge.fluids.Fluid;
 
 /**
  * Created on 11/10/2014.
@@ -15,7 +16,7 @@ public class Constants
     }
 
     // General
-    public static final int BUCKET = FluidContainerRegistry.BUCKET_VOLUME;
+    public static final int BUCKET = Fluid.BUCKET_VOLUME;
 
     // Wearable NBT
     public static final String TAG_WEARABLE_COMPOUND = "wearableData";

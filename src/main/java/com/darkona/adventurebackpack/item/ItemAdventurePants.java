@@ -1,7 +1,10 @@
 package com.darkona.adventurebackpack.item;
 
 import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+
+import com.darkona.adventurebackpack.reference.ModInfo;
 
 /**
  * Created on 11/10/2014
@@ -12,14 +15,15 @@ public class ItemAdventurePants extends ArmorAB
 {
     public ItemAdventurePants()
     {
-        super(2, 2);
-        setMaxDamage(Items.leather_leggings.getMaxDamage() + 75);
+        super(2, EntityEquipmentSlot.LEGS);
+        setMaxDamage(Items.LEATHER_LEGGINGS.getMaxDamage() + 75);
         setUnlocalizedName("adventurePants");
+        this.setRegistryName(ModInfo.MOD_ID, "adventure_pants");
     }
 
     @Override
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair)
     {
-        return repair.isItemEqual(new ItemStack(Items.leather));
+        return repair.isItemEqual(new ItemStack(Items.LEATHER));
     }
 }

@@ -1,5 +1,7 @@
 package com.darkona.adventurebackpack.client.gui;
 
+import java.io.IOException;
+
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -65,7 +67,14 @@ public abstract class GuiWithTanks extends GuiContainer
             }
         }
 
-        super.mouseClicked(mouseX, mouseY, mouseButton);
+        try
+        {
+            super.mouseClicked(mouseX, mouseY, mouseButton);
+        }
+        catch (IOException ioe)
+        {
+            //ioe.printStackTrace();
+        }
     }
 
     @Override
@@ -76,7 +85,14 @@ public abstract class GuiWithTanks extends GuiContainer
             player.closeScreen();
         }
 
-        super.keyTyped(key, keycode);
+        try
+        {
+            super.keyTyped(key, keycode);
+        }
+        catch (IOException ioe)
+        {
+            //ioe.printStackTrace();
+        }
     }
 
     @Override
@@ -100,6 +116,13 @@ public abstract class GuiWithTanks extends GuiContainer
             }
         }
 
-        super.handleMouseInput();
+        try
+        {
+            super.handleMouseInput();
+        }
+        catch (IOException ioe)
+        {
+            ioe.printStackTrace();
+        }
     }
 }

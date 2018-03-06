@@ -4,10 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.client.IItemRenderer;
 
 import com.darkona.adventurebackpack.config.ConfigHandler;
 
@@ -16,32 +13,19 @@ import com.darkona.adventurebackpack.config.ConfigHandler;
  *
  * @author Darkona
  */
-public class RendererHose implements IItemRenderer
+public class RendererHose
 {
-    private static RenderItem renderHose = new RenderItem();
     private FontRenderer fontRenderer;
 
-    @Override
-    public boolean handleRenderType(ItemStack item, ItemRenderType type)
-    {
-        return type == ItemRenderType.INVENTORY;
-    }
+    //TODO see ForgeHooksClient.registerTESRItemStack as temporary solution for item render
 
-    @Override
-    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper)
+    public void renderItem(/*ItemRenderType type,*/ ItemStack hose, Object... data)
     {
-        return false;
-    }
-
-    @Override
-    public void renderItem(ItemRenderType type, ItemStack hose, Object... data)
-    {
-        if (type == ItemRenderType.INVENTORY)
+        //if (type == ItemRenderType.INVENTORY)
         {
-            // ====================Render the item===================== //
             GL11.glColor4f(1, 1, 1, 1);
-            IIcon icon = hose.getItem().getIcon(hose, 0);
-            renderHose.renderIcon(0, 0, icon, 16, 16);
+            //IIcon icon = hose.getItem().getIcon(hose, 0);
+            //renderHose.renderIcon(0, 0, icon, 16, 16);
             fontRenderer = Minecraft.getMinecraft().fontRenderer;
 
             if (hose.hasTagCompound())

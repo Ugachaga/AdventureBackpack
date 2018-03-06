@@ -23,7 +23,7 @@ public class ContainerCopter extends ContainerAdventure
     {
         super(player, copter, source);
         makeSlots(player.inventory);
-        inventory.openInventory();
+        inventory.openInventory(player);
     }
 
     private void makeSlots(InventoryPlayer invPlayer)

@@ -3,8 +3,8 @@ package com.darkona.adventurebackpack.config;
 import java.io.File;
 
 import net.minecraftforge.common.config.Configuration;
-import cpw.mods.fml.client.event.ConfigChangedEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.darkona.adventurebackpack.reference.ModInfo;
 
@@ -50,29 +50,18 @@ public class ConfigHandler
     public static boolean allowSoundJetpack = true;
     public static boolean allowSoundPiston = true;
 
-    public static boolean enableItemFilters = false;
     public static String[] forbiddenDimensions;
     public static String[] copterFuels;
     private static String[] defaultFuels = {"biodiesel, 1.0", "biofuel, 1.0", "bioethanol, 1.5", "creosote, 7.0",
             "fuel, 0.8", "lava, 5.0", "liquid_light_oil, 3.0", "liquid_medium_oil, 3.0", "liquid_heavy_oil, 3.0",
             "liquid_light_fuel, 1.0", "liquid_heavy_fuel, 1.3", "nitrofuel, 0.4", "oil, 3.0", "rocket_fuel, 0.8"};
 
-    public static String[] nameLocalized;
-    public static String[] nameInternalID;
-    public static String[] nameInternalIDs;
-    public static String[] nameUnlocalized;
+    public static String[] blacklistByID;
+    public static String[] blacklistByName;
     private static String[] nameDefault = {};
 
     public static boolean consumeDragonEgg = false;
-    public static boolean recipeAdventuresSet = true;
-    public static boolean recipeInflatableBoat = true;
-    public static boolean recipeInflatableBoatM = false;
-    public static boolean recipeClockCrossbow = true;
-    public static boolean recipeCoalJetpack = true;
-    public static boolean recipeCopterPack = true;
-    public static boolean recipePitonBoots = true;
     public static boolean recipeSaddle = true;
-    public static boolean recipeMachete = true;
 
     public static boolean pistonBootsAutoStep = true;
     public static int pistonBootsJumpHeight = 3;
@@ -141,27 +130,14 @@ public class ConfigHandler
         allowSoundPiston = config.getBoolean("Piston Boots", "sound", true, "Allow playing the PistonBoots sound");
 
         // Items
-        enableItemFilters = config.getBoolean("Enable Item Filters", "items", true, "Enable filters from Disallow category");
         forbiddenDimensions = config.getStringList("Forbidden Dimensions", "items", nameDefault, "Disallow opening backpack inventory for specific dimension ID");
         copterFuels = config.getStringList("Valid Copter Fuels", "items", defaultFuels, "List of valid fuels for Copter. Consumption rate range: 0.05 ~ 20.0. Format: 'fluid, rate', ex.: 'water, 0.0'");
-
-        // Items.Disallowed
-        nameLocalized = config.getStringList("By Displayed Name", "items.disallowed", nameDefault, "Disallow items by displayed (localized) name. Not case sensitive. Worst option, use only when there is no choice. Example: Dirt");
-        nameInternalID = config.getStringList("By Internal ID", "items.disallowed", nameDefault, "Disallow items by internal ID. Case sensitive. Example: minecraft:dirt");
-        nameInternalIDs = config.getStringList("By Internal IDs", "items.disallowed", nameDefault, "Disallow items by internal ID. Case sensitive. Will be disallowed all items containing that word in their IDs. Use with caution. Example: minecraft:di");
-        nameUnlocalized = config.getStringList("By Internal Name", "items.disallowed", nameDefault, "Disallow items by internal (unlocalized) name. Not case sensitive. Example: tile.dirt");
+        blacklistByID = config.getStringList("By Internal ID", "items", nameDefault, "Disallow items by internal ID. Case sensitive. Example: minecraft:dirt");
+        blacklistByName = config.getStringList("By Internal Name", "items", nameDefault, "Disallow items by internal (unlocalized) name. Not case sensitive. Example: tile.dirt");
 
         // Items.Recipes
         consumeDragonEgg = config.getBoolean("Consume Dragon Egg", "items.recipes", false, "Consume Dragon Egg when Dragon backpack crafted?");
-        recipeAdventuresSet = config.getBoolean("Adventures Set", "items.recipes", true, "Enable/Disable recipe for Adventure's Hat, Suit and Pants");
-        recipeInflatableBoat = config.getBoolean("Inflatable Boat", "items.recipes", true, "Enable/Disable recipe for Inflatable Boat");
-        recipeInflatableBoatM = config.getBoolean("Inflatable Boat Motorized", "items.recipes", false, "Enable/Disable recipe for Inflatable Boat (motorized). For aesthetic only, not fully implemented (yet?)");
-        recipeClockCrossbow = config.getBoolean("Clockwork Crossbow", "items.recipes", true, "Enable/Disable Clockwork Crossbow recipe");
-        recipeCopterPack = config.getBoolean("Copter Pack", "items.recipes", true, "Enable/Disable CopterPack recipe");
-        recipeCoalJetpack = config.getBoolean("Coal Jetpack", "items.recipes", true, "Enable/Disable CoalJetpack recipe");
-        recipePitonBoots = config.getBoolean("Piston Boots", "items.recipes", true, "Enable/Disable PistonBoots recipe");
         recipeSaddle = config.getBoolean("Saddle", "items.recipes", true, "Add recipe for saddle?");
-        recipeMachete = config.getBoolean("Machete", "items.recipes", true, "Enable/Disable Machete recipe");
 
         // Items.Settings
         pistonBootsAutoStep = config.getBoolean("Piston Boots Auto Step", "items.settings", true, "Allow Piston Boots auto step blocks");
@@ -191,7 +167,7 @@ public class ConfigHandler
     @SubscribeEvent
     public void onConfigChangeEvent(ConfigChangedEvent.OnConfigChangedEvent event)
     {
-        if (event.modID.equalsIgnoreCase(ModInfo.MOD_ID))
+        if (event.getModID().equalsIgnoreCase(ModInfo.MOD_ID))
         {
             loadConfiguration();
         }

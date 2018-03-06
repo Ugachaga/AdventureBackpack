@@ -1,7 +1,6 @@
 package com.darkona.adventurebackpack.util;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.IItemRenderer;
 
 import com.darkona.adventurebackpack.reference.LoadedMods;
 
@@ -28,7 +27,7 @@ public final class ThaumcraftUtils
     {
         if (LoadedMods.THAUMCRAFT)
         {
-            createToolRendererInstance();
+            //createToolRendererInstance();
         }
     }
 
@@ -83,8 +82,8 @@ public final class ThaumcraftUtils
         return isLowerSlot ? 0F : 90F;
     }
 
-    public static void renderTool(ItemStack stack, IItemRenderer.ItemRenderType renderType)
-    {
-        ToolRenderHelper.render(stack, renderType, toolRenderer, toolRendererInstance);
-    }
+//    public static void renderTool(ItemStack stack, IItemRenderer.ItemRenderType renderType)
+//    {
+//        ToolRenderHelper.render(stack, renderType, toolRenderer, toolRendererInstance);
+//    }
 }

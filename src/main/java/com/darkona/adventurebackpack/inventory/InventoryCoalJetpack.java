@@ -1,8 +1,8 @@
 package com.darkona.adventurebackpack.inventory;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fluids.FluidTank;
@@ -36,11 +36,15 @@ public class InventoryCoalJetpack extends InventoryAdventure
     private int coolTicks = 5000;
     private int currentItemBurnTime = 0;
 
-    public InventoryCoalJetpack(final ItemStack jetpack)
+    public InventoryCoalJetpack(ItemStack jetpack)
     {
         super(jetpack, Constants.Jetpack.INVENTORY_SIZE);
-        detectAndConvertFromOldNBTFormat(containerStack.stackTagCompound);
-        openInventory();
+    }
+
+    public InventoryCoalJetpack(ItemStack jetpack, EntityPlayer palyer)
+    {
+        this(jetpack);
+        openInventory(palyer);
     }
 
     @Override
@@ -148,8 +152,8 @@ public class InventoryCoalJetpack extends InventoryAdventure
         if (isFuel(inventory[FUEL_SLOT]))
         {
             result = TileEntityFurnace.getItemBurnTime(inventory[FUEL_SLOT]);
-            --inventory[FUEL_SLOT].stackSize;
-            if (inventory[FUEL_SLOT].stackSize == 0)
+            inventory[FUEL_SLOT].shrink(1);
+            if (inventory[FUEL_SLOT].getCount() == 0)
             {
                 inventory[FUEL_SLOT] = inventory[FUEL_SLOT].getItem().getContainerItem(inventory[FUEL_SLOT]);
             }
@@ -253,24 +257,5 @@ public class InventoryCoalJetpack extends InventoryAdventure
     public void setCurrentItemBurnTime(int currentItemBurnTime)
     {
         this.currentItemBurnTime = currentItemBurnTime;
-    }
-
-    private void detectAndConvertFromOldNBTFormat(NBTTagCompound compound) // backwards compatibility
-    {
-        if (compound == null || !compound.hasKey("jetpackData"))
-            return;
-
-        NBTTagCompound oldJetpackTag = compound.getCompoundTag("jetpackData");
-        NBTTagList oldItems = oldJetpackTag.getTagList("inventory", NBT.TAG_COMPOUND);
-        waterTank.readFromNBT(oldJetpackTag.getCompoundTag("waterTank"));
-        steamTank.readFromNBT(oldJetpackTag.getCompoundTag("steamTank"));
-
-        NBTTagCompound newJetpackTag = new NBTTagCompound();
-        newJetpackTag.setTag(TAG_INVENTORY, oldItems);
-        newJetpackTag.setTag(TAG_WATER_TANK, waterTank.writeToNBT(new NBTTagCompound()));
-        newJetpackTag.setTag(TAG_STEAM_TANK, steamTank.writeToNBT(new NBTTagCompound()));
-
-        compound.setTag(TAG_WEARABLE_COMPOUND, newJetpackTag);
-        compound.removeTag("jetpackData");
     }
 }

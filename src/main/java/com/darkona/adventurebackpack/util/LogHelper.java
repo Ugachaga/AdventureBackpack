@@ -2,7 +2,7 @@ package com.darkona.adventurebackpack.util;
 
 import org.apache.logging.log4j.Level;
 
-import cpw.mods.fml.common.FMLLog;
+import net.minecraftforge.fml.common.FMLLog;
 
 import com.darkona.adventurebackpack.reference.ModInfo;
 
@@ -11,9 +11,11 @@ import com.darkona.adventurebackpack.reference.ModInfo;
  */
 public class LogHelper
 {
+
+
     public static void log(Level logLevel, Object object)
     {
-        FMLLog.log(ModInfo.MOD_NAME, logLevel, String.valueOf(object));
+        FMLLog.log(ModInfo.MOD_NAME, logLevel, String.valueOf(object)); //TODO deprecated, see see FMLPreInitializationEvent#getModLog()
     }
 
     public static void debug(Object object)

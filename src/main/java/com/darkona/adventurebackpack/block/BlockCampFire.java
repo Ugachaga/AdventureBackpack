@@ -1,19 +1,21 @@
 package com.darkona.adventurebackpack.block;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.darkona.adventurebackpack.CreativeTabAB;
 import com.darkona.adventurebackpack.reference.ModInfo;
@@ -26,20 +28,14 @@ import com.darkona.adventurebackpack.util.CoordsUtils;
  */
 public class BlockCampFire extends BlockContainer
 {
-    private IIcon icon;
+    public static final AxisAlignedBB CAMP_FIRE_AABB = new AxisAlignedBB(0.2D, 0.0D, 0.2D, 0.8D, 0.15D, 0.8D);
 
     public BlockCampFire()
     {
-        super(Material.rock);
+        super(Material.ROCK);
         this.setTickRandomly(true);
         this.setCreativeTab(CreativeTabAB.TAB_AB);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister)
-    {
-        icon = iconRegister.registerIcon(ModInfo.MOD_ID + ":campFire");
+        setRegistryName(ModInfo.MOD_ID, getUnlocalizedName());
     }
 
     @Override
@@ -49,7 +45,19 @@ public class BlockCampFire extends BlockContainer
     }
 
     @Override
-    public TileEntity createNewTileEntity(World world, int p_149915_2_)
+    public boolean hasTileEntity(IBlockState state)
+    {
+        return true;
+    }
+
+    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta)
+    {
+        return new TileCampfire();
+    }
+
+    @Override
+    public TileEntity createTileEntity(World world, IBlockState state)
     {
         return new TileCampfire();
     }
@@ -61,106 +69,54 @@ public class BlockCampFire extends BlockContainer
     }
 
     @Override
-    public boolean isOpaqueCube()
-    {
-        return false;
-    }
-
-    @Override
-    public boolean renderAsNormalBlock()
-    {
-        return false;
-    }
-
-    @Override
-    public int getRenderType()
-    {
-        return -1;
-    }
-
-    @Override
-    public boolean isNormalCube()
-    {
-        return false;
-    }
-
-    @Override
-    public boolean isBlockNormalCube()
-    {
-        return false;
-    }
-
     @SideOnly(Side.CLIENT)
-    @Override
-    public void randomDisplayTick(World world, int posX, int posY, int posZ, Random rnd)
+    public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rnd)
     {
-        float rndX = posX + rnd.nextFloat();
-        float rndY = (posY + 1) - rnd.nextFloat() * 0.1F;
-        float rndZ = posZ + rnd.nextFloat();
-        world.spawnParticle("largesmoke", rndX, rndY, rndZ, 0.0D, 0.0D, 0.0D);
+        float rndX = pos.getX() + rnd.nextFloat();
+        float rndY = (pos.getY() + 1) - rnd.nextFloat() * 0.1F;
+        float rndZ = pos.getZ() + rnd.nextFloat();
+        world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, rndX, rndY, rndZ, 0.0D, 0.0D, 0.0D);
         for (int i = 0; i < 4; i++)
         {
-            rndX = posX + 0.5f - (float) rnd.nextGaussian() * 0.08f;
-            rndY = (float) (posY + 1f - Math.cos((float) rnd.nextGaussian() * 0.1f));
-            rndZ = posZ + 0.5f - (float) rnd.nextGaussian() * 0.08f;
-            //world.spawnParticle("flame", posX+Math.sin(i/4), posY, posZ+Math.cos(i/4), 0.0D, 0.0D, 0.0D);
-            world.spawnParticle("flame", rndX, rndY + 0.16, rndZ, 0.0D, 0.0D, 0.0D);
+            rndX = pos.getX() + 0.5f - (float) rnd.nextGaussian() * 0.08f;
+            rndY = (float) (pos.getY() + 1f - Math.cos((float) rnd.nextGaussian() * 0.1f));
+            rndZ = pos.getZ() + 0.5f - (float) rnd.nextGaussian() * 0.08f;
+            world.spawnParticle(EnumParticleTypes.FLAME, rndX, rndY + 0.16, rndZ, 0.0D, 0.0D, 0.0D);
         }
     }
 
     @Override
-    public TileEntity createTileEntity(World world, int metadata)
-    {
-        return new TileCampfire();
-    }
-
-    @Override
-    public boolean hasTileEntity(int meta)
-    {
-        return true;
-    }
-
-    @Override
-    public int getLightValue(IBlockAccess world, int x, int y, int z)
+    public int getLightValue(IBlockState state)
     {
         return 11;
     }
 
+
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess blockAccess, int x, int y, int z)
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
-        this.setBlockBounds(0.2F, 0.0F, 0.2F, 0.8F, 0.15F, 0.8F);
+        return CAMP_FIRE_AABB;
     }
 
     @Override
-    public IIcon getIcon(IBlockAccess p_149673_1_, int p_149673_2_, int p_149673_3_, int p_149673_4_, int p_149673_5_)
-    {
-        return icon;
-    }
-
-    @Override
-    public IIcon getIcon(int p_149691_1_, int p_149691_2_)
-    {
-        return icon;
-    }
-
-    @Override
-    public boolean isBed(IBlockAccess world, int x, int y, int z, EntityLivingBase player)
+    public boolean isBed(IBlockState state, IBlockAccess world, BlockPos pos, Entity player)
     {
         return true;
     }
 
+    @Nullable
     @Override
-    public ChunkCoordinates getBedSpawnPosition(IBlockAccess world, int x, int y, int z, EntityPlayer player)
+    public BlockPos getBedSpawnPosition(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EntityPlayer player)
     {
+        int x = pos.getX();
+        int y = pos.getY();
+        int z = pos.getZ();
+
         for (int i = y - 5; i <= y + 5; i++)
         {
-            ChunkCoordinates spawn = CoordsUtils.getNearestEmptyChunkCoordinatesSpiral(world, x, z, x, i, z, 8, true, 1, (byte) 0, true);
-
+            BlockPos spawn = CoordsUtils.getNearestEmptyChunkCoordinatesSpiral(world, x, z, x, i, z, 8, true, 1, (byte) 0, true);
             if (spawn != null)
-            {
                 return spawn;
-            }
         }
         return null;
     }

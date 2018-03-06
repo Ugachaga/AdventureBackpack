@@ -114,7 +114,7 @@ public class GeneralReference
 
     public static boolean isDimensionAllowed(@Nonnull EntityPlayer player)
     {
-        return isDimensionAllowed(player.worldObj.provider.dimensionId);
+        return isDimensionAllowed(player.world.provider.getDimension());
     }
 
     public static boolean isDimensionAllowed(int dimID)

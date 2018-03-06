@@ -3,9 +3,9 @@ package com.darkona.adventurebackpack.network;
 import io.netty.buffer.ByteBuf;
 
 import net.minecraft.entity.player.EntityPlayerMP;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import com.darkona.adventurebackpack.common.ServerActions;
 
@@ -25,7 +25,7 @@ public class CycleToolPacket implements IMessageHandler<CycleToolPacket.CycleToo
     {
         if (ctx.side.isServer())
         {
-            EntityPlayerMP player = ctx.getServerHandler().playerEntity;
+            EntityPlayerMP player = ctx.getServerHandler().player;
             switch (message.typeOfAction)
             {
                 case CYCLE_TOOL_ACTION:

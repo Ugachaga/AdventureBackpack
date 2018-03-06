@@ -1,10 +1,9 @@
 package com.darkona.adventurebackpack.inventory;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -60,7 +59,7 @@ public abstract class ContainerAdventure extends Container
         {
             if ((detectItemChanges() | detectFluidChanges()) && player instanceof EntityPlayerMP)
             {
-                ((EntityPlayerMP) player).sendContainerAndContentsToPlayer(this, this.getInventory());
+                ((EntityPlayerMP) player).sendAllContents(this, this.getInventory());
             }
         }
     }
@@ -97,14 +96,13 @@ public abstract class ContainerAdventure extends Container
         return changesDetected;
     }
 
-    @Nullable
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int fromSlot)
     {
         Slot slot = getSlot(fromSlot);
 
-        if (slot == null || slot.getStack() == null)
-            return null;
+        if (slot.getStack() == ItemStack.EMPTY)
+            return ItemStack.EMPTY;
 
         ItemStack stack = slot.getStack();
         ItemStack result = stack.copy();
@@ -112,27 +110,27 @@ public abstract class ContainerAdventure extends Container
         if (fromSlot < PLAYER_INV_LENGTH)
         {
             if (!transferStackToPack(stack))
-                return null;
+                return ItemStack.EMPTY;
         }
         else
         {
             if (!mergePlayerInv(stack))
-                return null;
+                return ItemStack.EMPTY;
         }
 
-        if (stack.stackSize == 0)
+        if (stack.getCount() == 0)
         {
-            slot.putStack(null);
+            slot.putStack(ItemStack.EMPTY);
         }
         else
         {
             slot.onSlotChanged();
         }
 
-        if (stack.stackSize == result.stackSize)
-            return null;
+        if (stack.getCount() == result.getCount())
+            return ItemStack.EMPTY;
 
-        slot.onPickupFromSlot(player, stack);
+        slot.onSlotChanged();
         return result;
     }
 
@@ -143,28 +141,27 @@ public abstract class ContainerAdventure extends Container
 
     protected abstract boolean transferStackToPack(ItemStack stack);
 
-    @Nullable
     @Override
-    public ItemStack slotClick(int slot, int button, int flag, EntityPlayer player)
+    public ItemStack slotClick(int slot, int dragType, ClickType clickType, EntityPlayer player)
     {
         if (source == Source.HOLDING && slot >= 0)
         {
-            if (getSlot(slot) != null && getSlot(slot).getStack() == player.getHeldItem())
+            if (getSlot(slot).getStack() == player.getHeldItemMainhand()) //TODO dupe check
             {
-                return null;
+                return ItemStack.EMPTY;
             }
-            if (flag == 2 && getSlot(button).getStack() == player.getHeldItem())
+            if (clickType == ClickType.SWAP/*QUICK_MOVE*/ && getSlot(dragType).getStack() == player.getHeldItemMainhand()) //TODO dupe check
             {
-                return null;
+                return ItemStack.EMPTY;
             }
         }
-        return super.slotClick(slot, button, flag, player);
+        return super.slotClick(slot, dragType, clickType, player);
     }
 
     @Override
     public boolean canInteractWith(EntityPlayer player)
     {
-        return inventory.isUseableByPlayer(player);
+        return inventory.isUsableByPlayer(player);
     }
 
     @Override
@@ -177,29 +174,29 @@ public abstract class ContainerAdventure extends Container
 
         if (initStack.isStackable())
         {
-            while (initStack.stackSize > 0 && (!backward && activeIndex < maxIndex || backward && activeIndex >= minIndex))
+            while (initStack.getCount() > 0 && (!backward && activeIndex < maxIndex || backward && activeIndex >= minIndex))
             {
                 activeSlot = (Slot) this.inventorySlots.get(activeIndex);
                 activeStack = activeSlot.getStack();
 
-                if (activeStack != null && activeStack.getItem() == initStack.getItem()
+                if (activeStack.getItem() == initStack.getItem()
                         && (!initStack.getHasSubtypes() || initStack.getItemDamage() == activeStack.getItemDamage())
                         && ItemStack.areItemStackTagsEqual(initStack, activeStack))
                 {
-                    int mergedSize = activeStack.stackSize + initStack.stackSize;
+                    int mergedSize = activeStack.getCount() + initStack.getCount();
                     int maxStackSize = Math.min(initStack.getMaxStackSize(), activeSlot.getSlotStackLimit());
 
                     if (mergedSize <= maxStackSize)
                     {
-                        initStack.stackSize = 0;
-                        activeStack.stackSize = mergedSize;
+                        initStack.setCount(0);
+                        activeStack.setCount(mergedSize);
                         activeSlot.onSlotChanged();
                         changesMade = true;
                     }
-                    else if (activeStack.stackSize < maxStackSize && !(activeSlot instanceof SlotFluid))
+                    else if (activeStack.getCount() < maxStackSize && !(activeSlot instanceof SlotFluid))
                     {
-                        initStack.stackSize -= maxStackSize - activeStack.stackSize;
-                        activeStack.stackSize = maxStackSize;
+                        initStack.shrink(maxStackSize - activeStack.getCount());
+                        activeStack.setCount(maxStackSize);
                         activeSlot.onSlotChanged();
                         changesMade = true;
                     }
@@ -208,7 +205,7 @@ public abstract class ContainerAdventure extends Container
             }
         }
 
-        if (initStack.stackSize > 0)
+        if (initStack.getCount() > 0)
         {
             activeIndex = (backward ? maxIndex - 1 : minIndex);
 
@@ -217,19 +214,20 @@ public abstract class ContainerAdventure extends Container
                 activeSlot = (Slot) this.inventorySlots.get(activeIndex);
                 activeStack = activeSlot.getStack();
 
-                if (activeStack == null /*&& activeSlot.isItemValid(initStack)*/)
+                if (activeStack == ItemStack.EMPTY /*&& activeSlot.isItemValid(initStack)*/)
                 {
                     ItemStack copyStack = initStack.copy();
-                    int mergedSize = copyStack.stackSize = Math.min(copyStack.stackSize, activeSlot.getSlotStackLimit());
+                    int mergedSize = Math.min(copyStack.getCount(), activeSlot.getSlotStackLimit());
+                    copyStack.setCount(mergedSize);
 
                     activeSlot.putStack(copyStack);
-                    if (mergedSize >= initStack.stackSize)
+                    if (mergedSize >= initStack.getCount())
                     {
-                        initStack.stackSize = 0;
+                        initStack.setCount(0);
                     }
                     else
                     {
-                        initStack.stackSize -= mergedSize;
+                        initStack.shrink(mergedSize);
                     }
                     changesMade = true;
                     break;
@@ -246,12 +244,7 @@ public abstract class ContainerAdventure extends Container
     {
         super.onContainerClosed(player);
 
-        if (source == Source.WEARING) //TODO no idea why this is here (preventing dupe on closing?), and why only for wearing
-        {
-            this.crafters.remove(player);
-        }
-
-        if (!player.worldObj.isRemote)
+        if (!player.world.isRemote)
         {
             dropContentOnClose();
         }
@@ -261,11 +254,11 @@ public abstract class ContainerAdventure extends Container
     {
         for (int i = 0; i < inventory.getSizeInventory(); i++)
         {
-            ItemStack itemstack = inventory.getStackInSlotOnClosing(i);
-            if (itemstack != null)
+            ItemStack itemstack = inventory.removeStackFromSlot(i);
+            if (itemstack != ItemStack.EMPTY)
             {
-                inventory.setInventorySlotContents(i, null);
-                player.dropPlayerItemWithRandomChoice(itemstack, false);
+                inventory.setInventorySlotContents(i, ItemStack.EMPTY);
+                player.dropItem(itemstack, false);
             }
         }
     }

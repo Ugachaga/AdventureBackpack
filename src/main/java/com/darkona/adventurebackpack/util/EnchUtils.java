@@ -31,9 +31,9 @@ public final class EnchUtils
         if (!LoadedMods.ENDERIO)
             return -2;
 
-        for (Enchantment ench : Enchantment.enchantmentsList)
+        for (Enchantment ench : Enchantment.REGISTRY)
             if (ench != null && ench.getName().equals("enchantment.enderio.soulBound"))
-                return ench.effectId;
+                return Enchantment.REGISTRY.getIDForObject(ench);
 
         return -1;
     }
@@ -41,7 +41,7 @@ public final class EnchUtils
     public static boolean isSoulBounded(ItemStack stack)
     {
         NBTTagList stackEnch = stack.getEnchantmentTagList();
-        if (SOUL_BOUND_ID >= 0 && stackEnch != null)
+        if (SOUL_BOUND_ID >= 0)
         {
             for (int i = 0; i < stackEnch.tagCount(); i++)
             {
@@ -57,7 +57,7 @@ public final class EnchUtils
     {
         if (SOUL_BOUND_ID >= 0 && book.hasTagCompound())
         {
-            NBTTagCompound bookData = book.stackTagCompound;
+            NBTTagCompound bookData = book.getTagCompound();
             if (bookData.hasKey("StoredEnchantments"))
             {
                 NBTTagList bookEnch = bookData.getTagList("StoredEnchantments", NBT.TAG_COMPOUND);

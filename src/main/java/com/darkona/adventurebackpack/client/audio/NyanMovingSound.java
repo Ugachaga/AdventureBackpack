@@ -3,6 +3,8 @@ package com.darkona.adventurebackpack.client.audio;
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 
 import com.darkona.adventurebackpack.reference.BackpackTypes;
 import com.darkona.adventurebackpack.reference.ModInfo;
@@ -22,14 +24,14 @@ public class NyanMovingSound extends MovingSound
 
     public NyanMovingSound(EntityPlayer player)
     {
-        super(new ResourceLocation(ModInfo.MOD_ID, "nyan"));
+        super(new SoundEvent(new ResourceLocation(ModInfo.MOD_ID, "nyan")), SoundCategory.BLOCKS);
         this.volume = 0.8f;
         this.player = player;
     }
 
     public NyanMovingSound()
     {
-        super(new ResourceLocation(ModInfo.MOD_ID, "nyan"));
+        super(new SoundEvent(new ResourceLocation(ModInfo.MOD_ID, "nyan")), SoundCategory.BLOCKS);
     }
 
     public void setDonePlaying()

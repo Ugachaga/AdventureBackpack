@@ -1,10 +1,11 @@
 package com.darkona.adventurebackpack.entity.fx;
 
-import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Created on 19/01/2015
@@ -13,7 +14,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 
 @SideOnly(Side.CLIENT)
-public class SteamFX extends EntityFX
+public class SteamFX extends Particle
 {
     private float smokeParticleScale;
 
@@ -39,13 +40,13 @@ public class SteamFX extends EntityFX
         this.smokeParticleScale = this.particleScale;
         this.particleMaxAge = ((int) (8.0D / (Math.random() * 0.8D + 0.2D)));
         this.particleMaxAge = ((int) (this.particleMaxAge * scale));
-        this.noClip = true;
+        //this.noClip = true; //no longer extends from Entity
     }
 
     @Override
-    public void renderParticle(Tessellator par1Tessellator, float par2, float par3, float par4, float par5, float par6, float par7)
+    public void renderParticle(BufferBuilder buffer, Entity entity, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ)
     {
-        float age = (this.particleAge + par2) / this.particleMaxAge * 32.0F;
+        float age = (this.particleAge + partialTicks) / this.particleMaxAge * 32.0F;
         if (age < 0.0F)
         {
             age = 0.0F;
@@ -55,7 +56,7 @@ public class SteamFX extends EntityFX
             age = 1.0F;
         }
         this.particleScale = (this.smokeParticleScale * age);
-        super.renderParticle(par1Tessellator, par2, par3, par4, par5, par6, par7);
+        super.renderParticle(buffer, entity, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
     }
 
     @Override
@@ -66,11 +67,11 @@ public class SteamFX extends EntityFX
         this.prevPosZ = this.posZ;
         if (this.particleAge++ >= this.particleMaxAge)
         {
-            setDead();
+            this.setExpired();
         }
         setParticleTextureIndex(7 - this.particleAge * 8 / this.particleMaxAge);
         this.motionY += 0.003;
-        moveEntity(this.motionX, this.motionY, this.motionZ);
+        this.move(this.motionX, this.motionY, this.motionZ);
         if (this.posY == this.prevPosY)
         {
             this.motionX *= 1.1D;

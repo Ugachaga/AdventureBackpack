@@ -46,7 +46,7 @@ public class GuiCoalJetpack extends GuiWithTanks
     @Override
     protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int mouseX, int mouseY)
     {
-        inventory.openInventory();
+        inventory.openInventory(player);
         this.mc.renderEngine.bindTexture(TEXTURE);
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
@@ -78,7 +78,7 @@ public class GuiCoalJetpack extends GuiWithTanks
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
         this.mc.renderEngine.bindTexture(TEXTURE);
-        inventory.openInventory();
+        inventory.openInventory(player);
         FluidTank water = inventory.getWaterTank();
         FluidTank steam = inventory.getSteamTank();
         GL11.glPushMatrix();
@@ -118,7 +118,7 @@ public class GuiCoalJetpack extends GuiWithTanks
         GL11.glPushMatrix();
         GL11.glTranslatef(70, 10, 0);
         GL11.glScalef(factor, factor, factor);
-        fontRendererObj.drawString(show, 0, 0, 0x373737, false);
+        fontRenderer.drawString(show, 0, 0, 0x373737, false);
         GL11.glScalef(1, 1, 1);
         GL11.glPopMatrix();
 
@@ -127,14 +127,14 @@ public class GuiCoalJetpack extends GuiWithTanks
         GL11.glPushMatrix();
         GL11.glTranslatef(70, 20, 0);
         GL11.glScalef(factor, factor, factor);
-        fontRendererObj.drawString(show, 0, 0, 0x373737, false);
+        fontRenderer.drawString(show, 0, 0, 0x373737, false);
         GL11.glScalef(1, 1, 1);
         GL11.glPopMatrix();
 
         GL11.glPushMatrix();
         GL11.glTranslatef(145, 8, 0);
         GL11.glScalef(0.9f, 0.9f, 0.9f);
-        fontRendererObj.drawString((inventory.getTemperature()) + " C", 0, 0, 0x373737, false);
+        fontRenderer.drawString((inventory.getTemperature()) + " C", 0, 0, 0x373737, false);
         GL11.glScalef(1, 1, 1);
         GL11.glPopMatrix();
     }

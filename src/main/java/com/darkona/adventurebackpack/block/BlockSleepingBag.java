@@ -1,90 +1,55 @@
 package com.darkona.adventurebackpack.block;
 
-import java.util.Iterator;
+import javax.annotation.Nullable;
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockDirectional;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.BlockBed;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIcon;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.init.ModBlocks;
 import com.darkona.adventurebackpack.inventory.InventoryBackpack;
 import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
+import com.darkona.adventurebackpack.reference.ModInfo;
 import com.darkona.adventurebackpack.util.CoordsUtils;
 import com.darkona.adventurebackpack.util.LogHelper;
-import com.darkona.adventurebackpack.util.Resources;
 import com.darkona.adventurebackpack.util.Wearing;
 
 /**
- * Created on 14/10/2014
+ * Created on 06.03.2018
  *
- * @author Darkona
+ * @author Ugachaga
  */
-public class BlockSleepingBag extends BlockDirectional
+public class BlockSleepingBag extends BlockBed
 {
-    private static final int[][] footBlockToHeadBlockMap = new int[][]{{0, 1}, {-1, 0}, {0, -1}, {1, 0}};
+    private static final AxisAlignedBB SLEEPING_BAG_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.1D, 1.0D);
 
     private static final String TAG_STORED_SPAWN = "storedSpawn";
     private static final String TAG_SPAWN_POS_X = "posX";
     private static final String TAG_SPAWN_POS_Y = "posY";
     private static final String TAG_SPAWN_POS_Z = "posZ";
 
-    @SideOnly(Side.CLIENT)
-    private IIcon[] endIcons;
-    @SideOnly(Side.CLIENT)
-    private IIcon[] sideIcons;
-    @SideOnly(Side.CLIENT)
-    private IIcon[] topIcons;
-
     public BlockSleepingBag()
     {
-        super(Material.cloth);
-        this.func_149978_e();
-        setBlockName(getUnlocalizedName());
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    protected String getTextureName()
-    {
-        return this.textureName == null ? "MISSING_ICON_BLOCK_" + getIdFromBlock(this) + "_" + getUnlocalizedName() : this.textureName;
-    }
-
-    @Override
-    public String getUnlocalizedName()
-    {
-        return "blockSleepingBag";
-    }
-
-    private void func_149978_e()
-    {
-        this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.1F, 1.0F);
-    }
-
-    /**
-     * Returns whether or not this bed block is the head of the bed.
-     */
-    private static boolean isBlockHeadOfBed(int meta)
-    {
-        return (meta & 8) != 0;
+        setRegistryName(ModInfo.MOD_ID, "blockSlepingBag");
     }
 
     public static boolean isSleepingInPortableBag(EntityPlayer player)
@@ -98,28 +63,21 @@ public class BlockSleepingBag extends BlockDirectional
         if (isSleepingInPortableBag(player))
         {
             InventoryBackpack inv = Wearing.getWearingBackpackInv(player);
-            inv.removeSleepingBag(player.worldObj);
+            inv.removeSleepingBag(player.world);
             inv.getExtendedProperties().removeTag(Constants.TAG_SLEEPING_IN_BAG);
         }
     }
 
     public static void storeOriginalSpawn(EntityPlayer player, NBTTagCompound tag)
     {
-        ChunkCoordinates spawn = player.getBedLocation(player.worldObj.provider.dimensionId);
-        if (spawn != null)
-        {
-            NBTTagCompound storedSpawn = new NBTTagCompound();
-            storedSpawn.setInteger(TAG_SPAWN_POS_X, spawn.posX);
-            storedSpawn.setInteger(TAG_SPAWN_POS_Y, spawn.posY);
-            storedSpawn.setInteger(TAG_SPAWN_POS_Z, spawn.posZ);
-            tag.setTag(TAG_STORED_SPAWN, storedSpawn);
-            LogHelper.info("Stored spawn data for " + player.getDisplayName() + ": " + spawn.toString()
-                    + " dimID: " + player.worldObj.provider.dimensionId);
-        }
-        else
-        {
-            LogHelper.warn("Cannot store spawn data for " + player.getDisplayName());
-        }
+        BlockPos spawn = player.getBedLocation(player.world.provider.getDimension());
+        NBTTagCompound storedSpawn = new NBTTagCompound();
+        storedSpawn.setInteger(TAG_SPAWN_POS_X, spawn.getX());
+        storedSpawn.setInteger(TAG_SPAWN_POS_Y, spawn.getY());
+        storedSpawn.setInteger(TAG_SPAWN_POS_Z, spawn.getZ());
+        tag.setTag(TAG_STORED_SPAWN, storedSpawn);
+        LogHelper.info("Stored spawn data for " + player.getDisplayName() + ": " + spawn.toString()
+                + " dimID: " + player.world.provider.getDimension());
     }
 
     public static void restoreOriginalSpawn(EntityPlayer player, NBTTagCompound tag)
@@ -127,14 +85,14 @@ public class BlockSleepingBag extends BlockDirectional
         if (tag.hasKey(TAG_STORED_SPAWN))
         {
             NBTTagCompound storedSpawn = tag.getCompoundTag(TAG_STORED_SPAWN);
-            ChunkCoordinates coords = new ChunkCoordinates(
+            BlockPos coords = new BlockPos(
                     storedSpawn.getInteger(TAG_SPAWN_POS_X),
                     storedSpawn.getInteger(TAG_SPAWN_POS_Y),
                     storedSpawn.getInteger(TAG_SPAWN_POS_Z));
-            player.setSpawnChunk(coords, false, player.worldObj.provider.dimensionId);
+            player.setSpawnChunk(coords, false, player.world.provider.getDimension());
             tag.removeTag(TAG_STORED_SPAWN);
             LogHelper.info("Restored spawn data for " + player.getDisplayName() + ": " + coords.toString()
-                    + " dimID: " + player.worldObj.provider.dimensionId);
+                    + " dimID: " + player.world.provider.getDimension());
         }
         else
         {
@@ -142,19 +100,19 @@ public class BlockSleepingBag extends BlockDirectional
         }
     }
 
-    public void onPortableBlockActivated(World world, EntityPlayer player, int cX, int cY, int cZ)
+    public void onPortableBlockActivated(World world, EntityPlayer player, BlockPos pos)
     {
         if (world.isRemote)
             return;
         if (!isSleepingInPortableBag(player))
             return;
 
-        if (!onBlockActivated(world, cX, cY, cZ, player, 1, 0f, 0f, 0f))
+        if (!onBlockActivated(world, pos, this.getDefaultState(), player, EnumHand.MAIN_HAND, EnumFacing.DOWN, 0f, 0f, 0f))
             packPortableSleepingBag(player);
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int id, float f1, float f2, float f3)
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
         if (world.isRemote)
         {
@@ -162,302 +120,177 @@ public class BlockSleepingBag extends BlockDirectional
         }
         else
         {
-            int meta = world.getBlockMetadata(x, y, z);
-
-            if (!isBlockHeadOfBed(meta))
+            if (state.getValue(PART) != EnumPartType.HEAD)
             {
-                int dir = getDirection(meta);
-                x += footBlockToHeadBlockMap[dir][0];
-                z += footBlockToHeadBlockMap[dir][1];
+                pos = pos.offset(state.getValue(FACING));
+                state = world.getBlockState(pos);
 
-                if (world.getBlock(x, y, z) != this)
+                if (state.getBlock() != this)
                 {
                     return false;
                 }
-
-                meta = world.getBlockMetadata(x, y, z);
             }
 
-            if (world.provider.canRespawnHere() && world.getBiomeGenForCoords(x, z) != BiomeGenBase.hell)
+            if (world.provider.canRespawnHere() && world.getBiome(pos) != Biomes.HELL)
             {
-                if (isBedOccupied(meta))
+                if (state.getValue(OCCUPIED))
                 {
-                    EntityPlayer entityplayer1 = null;
-                    Iterator iterator = world.playerEntities.iterator();
+                    EntityPlayer entityplayer = this.getPlayerInBed(world, pos);
 
-                    while (iterator.hasNext())
+                    if (entityplayer != null)
                     {
-                        EntityPlayer entityplayer2 = (EntityPlayer) iterator.next();
-
-                        if (entityplayer2.isPlayerSleeping())
-                        {
-                            ChunkCoordinates chunkcoordinates = entityplayer2.playerLocation;
-
-                            if (chunkcoordinates.posX == x && chunkcoordinates.posY == y && chunkcoordinates.posZ == z)
-                            {
-                                entityplayer1 = entityplayer2;
-                            }
-                        }
-                    }
-
-                    if (entityplayer1 != null)
-                    {
-                        player.addChatComponentMessage(new ChatComponentTranslation("tile.bed.occupied", new Object[0]));
+                        player.sendStatusMessage(new TextComponentTranslation("tile.bed.occupied"), true);
                         return false;
                     }
 
-                    setBedOccupied(world, x, y, z, false);
+                    state = state.withProperty(OCCUPIED, Boolean.FALSE);
+                    world.setBlockState(pos, state, 4);
                 }
 
-                EntityPlayer.EnumStatus enumstatus = player.sleepInBedAt(x, y, z);
+                EntityPlayer.SleepResult entityplayer$sleepresult = player.trySleep(pos);
 
-                if (enumstatus == EntityPlayer.EnumStatus.OK)
+                if (entityplayer$sleepresult == EntityPlayer.SleepResult.OK)
                 {
-                    setBedOccupied(world, x, y, z, true);
-                    //This is so the wake up event can detect it. It fires before the player wakes up.
-                    //and the bed location isn't set until then, normally.
+                    state = state.withProperty(OCCUPIED, Boolean.TRUE);
+                    world.setBlockState(pos, state, 4);
 
                     if (isSleepingInPortableBag(player))
                     {
                         storeOriginalSpawn(player, Wearing.getWearingBackpackInv(player).getExtendedProperties());
-                        player.setSpawnChunk(new ChunkCoordinates(x, y, z), true, player.dimension);
+                        player.setSpawnChunk(pos, true, player.dimension);
                     }
-                    else
+                    else //TODO campfire logic could be buggy, not checking dimension and so on
                     {
-                        player.setSpawnChunk(new ChunkCoordinates(x, y, z), true, player.dimension);
+                        player.setSpawnChunk(pos, true, player.dimension);
                         LogHelper.info("Looking for a campfire nearby...");
-                        ChunkCoordinates campfire = CoordsUtils.findBlock3D(world, x, y, z, ModBlocks.blockCampFire, 8, 2);
+                        BlockPos campfire = CoordsUtils.findBlock3D(world, pos.getX(), pos.getY(), pos.getZ(), ModBlocks.BLOCK_CAMP_FIRE, 8, 2);
                         if (campfire != null)
                         {
                             LogHelper.info("Campfire Found, saving coordinates. " + campfire.toString());
                             BackpackProperty.get(player).setCampFire(campfire);
                         }
                     }
+
                     return true;
                 }
                 else
                 {
-                    if (enumstatus == EntityPlayer.EnumStatus.NOT_POSSIBLE_NOW)
-                    {
-                        player.addChatComponentMessage(new ChatComponentTranslation("tile.bed.noSleep", new Object[0]));
-                    }
-                    else if (enumstatus == EntityPlayer.EnumStatus.NOT_SAFE)
-                    {
-                        player.addChatComponentMessage(new ChatComponentTranslation("tile.bed.notSafe", new Object[0]));
-                    }
+                    if (entityplayer$sleepresult == EntityPlayer.SleepResult.NOT_POSSIBLE_NOW)
+                        player.sendStatusMessage(new TextComponentTranslation("tile.bed.noSleep"), true);
+                    else if (entityplayer$sleepresult == EntityPlayer.SleepResult.NOT_SAFE)
+                        player.sendStatusMessage(new TextComponentTranslation("tile.bed.notSafe"), true);
+                    else if (entityplayer$sleepresult == EntityPlayer.SleepResult.TOO_FAR_AWAY)
+                        player.sendStatusMessage(new TextComponentTranslation("tile.bed.tooFarAway"), true);
 
                     return false;
                 }
             }
             else
             {
-                double d2 = (double) x + 0.5D;
-                double d0 = (double) y + 0.5D;
-                double d1 = (double) z + 0.5D;
-                world.setBlockToAir(x, y, z);
-                int k1 = getDirection(meta);
-                x += footBlockToHeadBlockMap[k1][0];
-                z += footBlockToHeadBlockMap[k1][1];
+                world.setBlockToAir(pos);
+                BlockPos blockpos = pos.offset(state.getValue(FACING).getOpposite());
 
-                if (world.getBlock(x, y, z) == this)
-                {
-                    world.setBlockToAir(x, y, z);
-                    d2 = (d2 + (double) x + 0.5D) / 2.0D;
-                    d0 = (d0 + (double) y + 0.5D) / 2.0D;
-                    d1 = (d1 + (double) z + 0.5D) / 2.0D;
-                }
+                if (world.getBlockState(blockpos).getBlock() == this)
+                    world.setBlockToAir(blockpos);
 
-                world.newExplosion((Entity) null, (double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F), 5.0F, true, true);
-
+                world.newExplosion(null, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, 5.0F, true, true);
                 return false;
             }
         }
     }
 
-    private static void setBedOccupied(World world, int x, int y, int z, boolean flag)
+    @Nullable
+    private EntityPlayer getPlayerInBed(World world, BlockPos pos)
     {
-        int l = world.getBlockMetadata(x, y, z);
-
-        if (flag)
+        for (EntityPlayer entityplayer : world.playerEntities)
         {
-            l |= 4;
+            if (entityplayer.isPlayerSleeping() && entityplayer.bedLocation.equals(pos))
+                return entityplayer;
         }
-        else
-        {
-            l &= -5;
-        }
-
-        world.setBlockMetadataWithNotify(x, y, z, l, 4);
-    }
-
-    private static boolean isBedOccupied(int meta)
-    {
-        return (meta & 4) != 0;
-    }
-
-    @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block block)
-    {
-        int meta = world.getBlockMetadata(x, y, z);
-        int dir = getDirection(meta);
-
-        if (isBlockHeadOfBed(meta))
-        {
-            if (world.getBlock(x - footBlockToHeadBlockMap[dir][0], y, z - footBlockToHeadBlockMap[dir][1]) != this)
-            {
-                world.setBlockToAir(x, y, z);
-            }
-        }
-        else if (world.getBlock(x + footBlockToHeadBlockMap[dir][0], y, z + footBlockToHeadBlockMap[dir][1]) != this)
-        {
-            world.setBlockToAir(x, y, z);
-
-            if (!world.isRemote)
-            {
-                this.dropBlockAsItem(world, x, y, z, meta, 0);
-            }
-        }
-    }
-
-    @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z)
-    {
-        this.blockBoundsForRender();
-    }
-
-    private void blockBoundsForRender()
-    {
-        this.func_149978_e();
-    }
-
-    @Override
-    public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_)
-    {
         return null;
     }
 
     @Override
-    public void onBlockHarvested(World world, int x, int y, int z, int meta, EntityPlayer player)
+    public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
-        int direction = getDirection(meta);
-        if (player.capabilities.isCreativeMode && isBlockHeadOfBed(meta))
-        {
-            x -= footBlockToHeadBlockMap[direction][0];
-            z -= footBlockToHeadBlockMap[direction][1];
+        return Item.getItemFromBlock(Blocks.AIR);
+    }
 
-            if (world.getBlock(x, y, z) == this)
-            {
-                world.setBlockToAir(x, y, z);
-            }
-        }
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+    {
+        return SLEEPING_BAG_AABB;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public boolean hasCustomBreakingProgress(IBlockState state)
+    {
+        return false;
     }
 
     @Override
-    public void onBlockDestroyedByExplosion(World world, int x, int y, int z, Explosion boom)
+    public void dropBlockAsItemWithChance(World world, BlockPos pos, IBlockState state, float chance, int fortune)
     {
-        this.onBlockDestroyedByPlayer(world, x, y, z, world.getBlockMetadata(x, y, z));
+        // nope
     }
 
     @Override
-    public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int meta)
+    public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state)
+    {
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack)
+    {
+        super.harvestBlock(world, player, pos, state, null, stack);
+    }
+
+    @Override
+    public void onBlockDestroyedByExplosion(World world, BlockPos pos, Explosion explosionIn)
+    {
+        onBlockDestroyedByPlayer(world, pos, world.getBlockState(pos));
+    }
+
+    @Override
+    public void onBlockDestroyedByPlayer(World world, BlockPos pos, IBlockState state)
     {
         //TODO make it work if player destroyed head block of sleeping bag (so backpack 1 more tile away)
-        //LogHelper.info("onBlockDestroyedByPlayer() : BlockSleepingBag");
-        int direction = getDirection(meta);
-        int tileZ = z;
-        int tileX = x;
-        switch (meta)
+        EnumFacing facing = state.getValue(FACING);
+        switch (facing)
         {
-            case 0:
-                tileZ--;
+            case NORTH:
+                pos.north(); //TODO check directions and pos methods
                 break;
-            case 1:
-                tileX++;
+            case EAST:
+                pos.east();
                 break;
-            case 2:
-                tileZ++;
+            case SOUTH:
+                pos.south();
                 break;
-            case 3:
-                tileX--;
+            case WEST:
+                pos.west();
                 break;
         }
-        //LogHelper.info("onBlockDestroyedByPlayer() Looking for tile entity in x=" +tileX+" y="+y+" z="+tileZ+" while breaking the block in x= "+x+" y="+y+" z="+z);
-        if (world.getTileEntity(tileX, y, tileZ) != null && world.getTileEntity(tileX, y, tileZ) instanceof TileAdventureBackpack)
+        if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileBackpack)
         {
-            // LogHelper.info("onBlockDestroyedByPlayer() Found the tile entity in x=" +tileX+" y="+y+" z="+z+" while breaking the block in x= "+x+" y="+y+" z="+z+" ...removing.");
-            ((TileAdventureBackpack) world.getTileEntity(tileX, y, tileZ)).setSleepingBagDeployed(false);
+            ((TileBackpack) world.getTileEntity(pos)).setSleepingBagDeployed(false);
         }
     }
 
     @Override
-    public boolean isBed(IBlockAccess world, int x, int y, int z, EntityLivingBase player)
+    public boolean isBed(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable Entity player)
     {
         return true;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta)
-    {
-        if (side == 0)
-        {
-            return Blocks.planks.getBlockTextureFromSide(side);
-        }
-        else
-        {
-            int k = getDirection(meta);
-            int l = Direction.bedDirection[k][side];
-            int isHead = isBlockHeadOfBed(meta) ? 1 : 0;
-            return (isHead != 1 || l != 2) && (isHead != 0 || l != 3) ? (l != 5 && l != 4 ? this.topIcons[isHead] : this.sideIcons[isHead]) : this.endIcons[isHead];
-        }
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister)
-    {
-        this.topIcons = new IIcon[]{
-                iconRegister.registerIcon(Resources.blockTextures("sleepingBag_feet_top").toString()),
-                iconRegister.registerIcon(Resources.blockTextures("sleepingBag_head_top").toString())
-        };
-
-        this.endIcons = new IIcon[]{
-                iconRegister.registerIcon(Resources.blockTextures("sleepingBag_feet_end").toString()),
-                iconRegister.registerIcon(Resources.blockTextures("sleepingBag_head_end").toString())
-        };
-
-        this.sideIcons = new IIcon[]{
-                iconRegister.registerIcon(Resources.blockTextures("sleepingBag_feet_side").toString()),
-                iconRegister.registerIcon(Resources.blockTextures("sleepingBag_head_side").toString())
-        };
-    }
-
-    @Override
-    public int getRenderType()
-    {
-        return 14;
-    }
-
-    @Override
-    public boolean isNormalCube()
+    public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) //TODO del?
     {
         return false;
     }
 
     @Override
-    public boolean isBlockNormalCube()
-    {
-        return false;
-    }
-
-    @Override
-    public boolean renderAsNormalBlock()
-    {
-        return false;
-    }
-
-    @Override
-    public boolean isOpaqueCube()
+    public boolean isBlockNormalCube(IBlockState state) //TODO del?
     {
         return false;
     }

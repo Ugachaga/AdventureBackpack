@@ -1,11 +1,9 @@
 package com.darkona.adventurebackpack.handlers;
 
 import net.minecraftforge.client.event.RenderPlayerEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import com.darkona.adventurebackpack.proxy.ClientProxy;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Created on 25/12/2014
@@ -18,19 +16,20 @@ public class RenderHandler
     @SideOnly(Side.CLIENT)
     public void playerSpecialsRendering(RenderPlayerEvent.Specials.Pre event)
     {
+        float rotationY = event.getRenderer().getMainModel().bipedBody.rotateAngleY;
+        float rotationX = event.getRenderer().getMainModel().bipedBody.rotateAngleX;
+        float rotationZ = event.getRenderer().getMainModel().bipedBody.rotateAngleZ;
 
-        float rotationY = event.renderer.modelBipedMain.bipedBody.rotateAngleY;
-        float rotationX = event.renderer.modelBipedMain.bipedBody.rotateAngleX;
-        float rotationZ = event.renderer.modelBipedMain.bipedBody.rotateAngleZ;
+        double x = event.getEntity().posX;
+        double y = event.getEntity().posY;
+        double z = event.getEntity().posZ;
 
-        double x = event.entity.posX;
-        double y = event.entity.posY;
-        double z = event.entity.posZ;
+        float pitch = event.getEntity().rotationPitch;
+        float yaw = event.getEntity().rotationYaw;
 
-        float pitch = event.entity.rotationPitch;
-        float yaw = event.entity.rotationYaw;
-        ClientProxy.rendererWearableEquipped.render(event.entity, x, y, z, rotationX, rotationY, rotationZ, pitch, yaw);
+        //TODO render
+        //ClientProxy.rendererWearableEquipped.render(event.getEntity(), x, y, z, rotationX, rotationY, rotationZ, pitch, yaw);
 
-        event.renderCape = false;
+        event.setRenderCape(false);
     }
 }

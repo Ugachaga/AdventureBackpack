@@ -189,8 +189,8 @@ public class ModelCopterPack extends ModelWearable
 
     private void renderCopterPack(Entity entity, float scale)
     {
-        InventoryCopterPack copterInv = new InventoryCopterPack(this.copterPack);
-        copterInv.openInventory();
+        InventoryCopterPack inv = new InventoryCopterPack(this.copterPack);
+        inv.loadFromNBT(copterPack.getTagCompound());
         Axis.isHidden = true;
         if (BackpackUtils.getWearableCompound(copterPack).getByte(TAG_STATUS) != ItemCopterPack.OFF_MODE)
         {
@@ -209,7 +209,7 @@ public class ModelCopterPack extends ModelWearable
         }
         this.Base.render(scale);
         this.Axis.render(scale);
-        renderFluidInTank(copterInv.getFuelTank(), new Vector3(0, .25f, 0), new Vector3(.25f, 0, .25f), new Vector3(0f, 0.0625f, 0.0f), TankTop);
+        renderFluidInTank(inv.getFuelTank(), new Vector3(0, .25f, 0), new Vector3(.25f, 0, .25f), new Vector3(0f, 0.0625f, 0.0f), TankTop);
     }
 
     @Override

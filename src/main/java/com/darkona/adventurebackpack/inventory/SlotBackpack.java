@@ -10,8 +10,8 @@ import com.darkona.adventurebackpack.config.ConfigHandler;
  */
 public class SlotBackpack extends SlotAdventure
 {
-    private static final String[] FORBIDDEN_CLASSES = {
-            // Adventure Backpack 2
+    private static final String[] FORBIDDEN_CLASSES = { //TODO need update
+            // Adventure Backpack
             "com.darkona.adventurebackpack.item.ItemAdventureBackpack",
             // Backpack Mod
             "de.eydamos.backpack.item.ItemBackpack",
@@ -36,32 +36,23 @@ public class SlotBackpack extends SlotAdventure
 
     public static boolean isValidItem(ItemStack stack)
     {
-        if (stack == null) return false;
+        if (stack == ItemStack.EMPTY)
+            return false;
+
         Item itemCurrent = stack.getItem();
 
         for (String classDisallowed : FORBIDDEN_CLASSES)
         {
             if (itemCurrent.getClass().getName().equals(classDisallowed)) return false;
         }
-
-        if (ConfigHandler.enableItemFilters)
+        for (String itemDisallowed : ConfigHandler.blacklistByID)
         {
-            for (String itemDisallowed : ConfigHandler.nameLocalized)
-            {
-                if (stack.getDisplayName().equalsIgnoreCase(itemDisallowed)) return false;
-            }
-            for (String itemDisallowed : ConfigHandler.nameInternalID)
-            {
-                if (Item.itemRegistry.getNameForObject(itemCurrent).equals(itemDisallowed)) return false;
-            }
-            for (String itemDisallowed : ConfigHandler.nameInternalIDs)
-            {
-                if (Item.itemRegistry.getNameForObject(itemCurrent).contains(itemDisallowed)) return false;
-            }
-            for (String itemDisallowed : ConfigHandler.nameUnlocalized)
-            {
-                if (itemCurrent.getUnlocalizedName().equalsIgnoreCase(itemDisallowed)) return false;
-            }
+            //if (Item.itemRegistry.getNameForObject(itemCurrent).equals(itemDisallowed)) return false;
+            if (Item.REGISTRY.getNameForObject(itemCurrent).toString().equals(itemDisallowed)) return false;
+        }
+        for (String itemDisallowed : ConfigHandler.blacklistByName)
+        {
+            if (itemCurrent.getUnlocalizedName().equalsIgnoreCase(itemDisallowed)) return false;
         }
         return true;
     }

@@ -6,8 +6,8 @@ import org.lwjgl.opengl.GL12;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,15 +22,14 @@ import com.darkona.adventurebackpack.util.Wearing;
  *
  * @author Darkona
  */
-public class RendererWearableEquipped extends RendererLivingEntity
+public class RendererWearableEquipped extends RenderLivingBase
 {
     public ResourceLocation texture;
     public ModelBiped modelBipedMain;
 
-    public RendererWearableEquipped()
+    public RendererWearableEquipped(RenderManager renderManager)
     {
-        super(new ModelBiped(0.0F), 0.0F);
-        renderManager = RenderManager.instance;
+        super(renderManager, new ModelBiped(0.0F), 0.0F);
     }
 
     @Override
@@ -80,7 +79,7 @@ public class RendererWearableEquipped extends RendererLivingEntity
         {
             modelBipedMain.render(entity, limbSwing1, limbswing2, z, yaw, whatever, scale);
         }
-        else if (!entity.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer))
+        else if (!entity.isInvisibleToPlayer(Minecraft.getMinecraft().player))
         {
             GL11.glPushMatrix();
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.15F);

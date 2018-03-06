@@ -3,7 +3,6 @@ package com.darkona.adventurebackpack.util;
 import javax.annotation.Nonnull;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.IItemRenderer;
 
 import com.darkona.adventurebackpack.reference.LoadedMods;
 
@@ -29,7 +28,7 @@ public final class GregtechUtils
     {
         if (LoadedMods.GREGTECH)
         {
-            createToolRendererInstance();
+            //createToolRendererInstance();
         }
     }
 
@@ -74,8 +73,8 @@ public final class GregtechUtils
         return isLowerSlot ? -45F : 45F;
     }
 
-    public static void renderTool(ItemStack stack, IItemRenderer.ItemRenderType renderType)
-    {
-        ToolRenderHelper.render(stack, renderType, toolRenderer, toolRendererInstance);
-    }
+//    public static void renderTool(ItemStack stack, IItemRenderer.ItemRenderType renderType)
+//    {
+//        ToolRenderHelper.render(stack, renderType, toolRenderer, toolRendererInstance);
+//    }
 }

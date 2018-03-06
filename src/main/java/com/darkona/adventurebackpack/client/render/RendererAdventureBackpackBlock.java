@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
-import com.darkona.adventurebackpack.block.TileAdventureBackpack;
+import com.darkona.adventurebackpack.block.TileBackpack;
 import com.darkona.adventurebackpack.client.models.ModelBackpackBlock;
 import com.darkona.adventurebackpack.util.Resources;
 
@@ -27,9 +27,9 @@ public class RendererAdventureBackpackBlock extends TileEntitySpecialRenderer
     }
 
     @Override
-    public void renderTileEntityAt(TileEntity te, double x, double y, double z, float par8)
+    public void render(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
     {
-        TileAdventureBackpack tileBackpack = (TileAdventureBackpack) te;
+        TileBackpack tileBackpack = (TileBackpack) te;
         int dir = te.getBlockMetadata();
         if ((dir & 8) >= 8)
         {

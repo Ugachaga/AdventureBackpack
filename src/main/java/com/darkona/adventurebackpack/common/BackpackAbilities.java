@@ -11,16 +11,20 @@ import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.darkona.adventurebackpack.block.TileAdventureBackpack;
+import com.darkona.adventurebackpack.block.BlockBackpack;
+import com.darkona.adventurebackpack.block.TileBackpack;
 import com.darkona.adventurebackpack.config.ConfigHandler;
 import com.darkona.adventurebackpack.entity.ai.EntityAIAvoidPlayerWithBackpack;
 import com.darkona.adventurebackpack.init.ModFluids;
@@ -36,9 +40,9 @@ import com.darkona.adventurebackpack.util.Wearing;
  * Created on 12/10/2014
  *
  * @author Darkona
- * @see com.darkona.adventurebackpack.block.TileAdventureBackpack
+ * @see TileBackpack
  * @see com.darkona.adventurebackpack.item.ItemAdventureBackpack
- * @see com.darkona.adventurebackpack.block.BlockAdventureBackpack
+ * @see BlockBackpack
  */
 @SuppressWarnings("unused")
 public class BackpackAbilities
@@ -65,7 +69,7 @@ public class BackpackAbilities
         }
     }
 
-    public void executeTileAbility(World world, TileAdventureBackpack backpack)
+    public void executeTileAbility(World world, TileBackpack backpack)
     {
         String skinName = BackpackTypes.getSkinName(backpack.getType());
         try
@@ -79,7 +83,7 @@ public class BackpackAbilities
             be very careful with "getMethod".
             */
             this.getClass()
-                    .getMethod("tile" + skinName, World.class, TileAdventureBackpack.class)
+                    .getMethod("tile" + skinName, World.class, TileBackpack.class)
                     .invoke(backpackAbilities, world, backpack);
         }
         catch (Exception oops)
@@ -114,8 +118,9 @@ public class BackpackAbilities
      */
     private boolean isUnderRain(EntityPlayer player)
     {
-        return player.worldObj.canLightningStrikeAt(MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY), MathHelper.floor_double(player.posZ))
-                || player.worldObj.canLightningStrikeAt(MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY + player.height), MathHelper.floor_double(player.posZ));
+        return player.world.isRaining()
+                && (player.world.canSeeSky(new BlockPos(MathHelper.floor(player.posX), MathHelper.floor(player.posY), MathHelper.floor(player.posZ)))
+                    || player.world.canSeeSky(new BlockPos(MathHelper.floor(player.posX), MathHelper.floor(player.posY + player.height), MathHelper.floor(player.posZ))));
     }
 
     /**
@@ -127,9 +132,8 @@ public class BackpackAbilities
 
         if (inv.getLastTime() <= 0)
         {
-            if (world.isDaytime() &&
-                    /*!world.isRemote &&*/
-                    world.canBlockSeeTheSky(MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY + 1), MathHelper.floor_double(player.posZ)))
+            if (world.isDaytime()
+                    && world.canSeeSky(new BlockPos(MathHelper.floor(player.posX), MathHelper.floor(player.posY + 1), MathHelper.floor(player.posZ))))
             {
                 player.getFoodStats().addStats(2, 0.2f);
                 //LogHelper.info("OMNOMNOMNOM");
@@ -148,18 +152,15 @@ public class BackpackAbilities
      */
     public void itemBat(EntityPlayer player, World world, ItemStack backpack)
     {
-        //Shameless rip-off from Machinemuse. Thanks Claire, I don't have to reinvent the wheel thanks to you.
-        //I will use a different potion id to avoid conflicting with her modular suits
-
         PotionEffect nightVision = null;
 
-        if (player.isPotionActive(Potion.nightVision.id))
+        if (player.isPotionActive(MobEffects.NIGHT_VISION))
         {
-            nightVision = player.getActivePotionEffect(Potion.nightVision);
+            nightVision = player.getActivePotionEffect(MobEffects.NIGHT_VISION);
         }
         if ((nightVision == null || nightVision.getDuration() < 222) && !Wearing.getWearingBackpackInv(player).getDisableNVision())
         {
-            player.addPotionEffect(new PotionEffect(Potion.nightVision.id, 239, -1, true));
+            player.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 239, -1, false, false));
         }
         else if (nightVision != null && Wearing.getWearingBackpackInv(player).getDisableNVision())
         {
@@ -169,12 +170,12 @@ public class BackpackAbilities
 
     public void itemSquid(EntityPlayer player, World world, ItemStack backpack)
     {
-        if (player.isInsideOfMaterial(Material.water))
+        if (player.isInsideOfMaterial(Material.WATER))
         {
-            player.addPotionEffect(new PotionEffect(Potion.waterBreathing.getId(), 19, -1, true));
+            player.addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 19, -1, false, false));
             itemBat(player, world, backpack);
         }
-        else if (player.isPotionActive(Potion.waterBreathing.id) && player.getActivePotionEffect(Potion.waterBreathing).getAmplifier() == -1)
+        else if (player.isPotionActive(MobEffects.WATER_BREATHING) && player.getActivePotionEffect(MobEffects.WATER_BREATHING).getAmplifier() == -1)
         {
             backpackRemovals.itemSquid(player, world, backpack);
         }
@@ -184,13 +185,13 @@ public class BackpackAbilities
     {
         PotionEffect potion = null;
 
-        if (player.isPotionActive(Potion.fireResistance.id))
+        if (player.isPotionActive(MobEffects.FIRE_RESISTANCE))
         {
-            potion = player.getActivePotionEffect(Potion.fireResistance);
+            potion = player.getActivePotionEffect(MobEffects.FIRE_RESISTANCE);
         }
         if (potion == null || potion.getDuration() < 222)
         {
-            player.addPotionEffect(new PotionEffect(Potion.fireResistance.id, 239, -1, true));
+            player.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 239, -1, false, false));
         }
     }
 
@@ -206,39 +207,32 @@ public class BackpackAbilities
 
         if (ConfigHandler.dragonBackpackRegen != 0)
         {
-            if (player.isPotionActive(Potion.regeneration.id))
+            if (player.isPotionActive(MobEffects.REGENERATION))
             {
-                potion = player.getActivePotionEffect(Potion.regeneration);
+                potion = player.getActivePotionEffect(MobEffects.REGENERATION);
             }
             if (player.getHealth() < player.getMaxHealth())
             {
                 if (potion == null || potion.getDuration() < 20)
                 {
-                    player.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), 900, ConfigHandler.dragonBackpackRegen - 1, true));
+                    player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 900, ConfigHandler.dragonBackpackRegen - 1, false, false));
                 }
             }
             else if (potion != null && potion.getAmplifier() == ConfigHandler.dragonBackpackRegen - 1)
             {
-                if (player.worldObj.isRemote)
-                {
-                    player.removePotionEffectClient(Potion.regeneration.id);
-                }
-                else
-                {
-                    player.removePotionEffect(Potion.regeneration.id);
-                }
+                player.removePotionEffect(MobEffects.REGENERATION);
             }
         }
 
         if (ConfigHandler.dragonBackpackDamage != 0)
         {
-            if (player.isPotionActive(Potion.damageBoost.id))
+            if (player.isPotionActive(MobEffects.STRENGTH))
             {
-                potion = player.getActivePotionEffect(Potion.damageBoost);
+                potion = player.getActivePotionEffect(MobEffects.STRENGTH);
             }
             if (potion == null || potion.getDuration() < 222)
             {
-                player.addPotionEffect(new PotionEffect(Potion.damageBoost.getId(), 239, ConfigHandler.dragonBackpackDamage - 1, true));
+                player.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 239, ConfigHandler.dragonBackpackDamage - 1, false, false));
             }
         }
     }
@@ -253,11 +247,11 @@ public class BackpackAbilities
             //player.setSprinting(true);
             if (ConfigHandler.rainbowBackpackSSpeed != 0)
             {
-                player.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), 60, ConfigHandler.rainbowBackpackSSpeed - 1, true));
+                player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 60, ConfigHandler.rainbowBackpackSSpeed - 1, false, false));
             }
             if (ConfigHandler.rainbowBackpackSJump != 0)
             {
-                player.addPotionEffect(new PotionEffect(Potion.jump.getId(), 60, ConfigHandler.rainbowBackpackSJump - 1, true));
+                player.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 60, ConfigHandler.rainbowBackpackSJump - 1, false, false));
             }
             if (noteTime % 2 == 0)
             {
@@ -271,13 +265,13 @@ public class BackpackAbilities
 
         PotionEffect moveSpeed = null;
 
-        if (player.isPotionActive(Potion.moveSpeed.id))
+        if (player.isPotionActive(MobEffects.SPEED))
         {
-            moveSpeed = player.getActivePotionEffect(Potion.moveSpeed);
+            moveSpeed = player.getActivePotionEffect(MobEffects.SPEED);
         }
         if (ConfigHandler.rainbowBackpackSpeed != 0 && (moveSpeed == null || moveSpeed.getDuration() < 222))
         {
-            player.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), 239, ConfigHandler.rainbowBackpackSpeed - 1, true));
+            player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 239, ConfigHandler.rainbowBackpackSpeed - 1, false, false));
         }
         inv.setLastTime(noteTime);
         inv.markDirty();
@@ -346,7 +340,7 @@ public class BackpackAbilities
         int oinkTime = inv.getLastTime() - 1;
         if (oinkTime <= 0)
         {
-            world.playSoundAtEntity(player, "mob.pig.say", 0.8f, 1f);
+            world.playSound(player, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PIG_AMBIENT, SoundCategory.BLOCKS, 0.8f, 1f);
             oinkTime = Utils.secondsToTicks(world.rand.nextInt(61));
         }
         inv.setLastTime(oinkTime);
@@ -364,7 +358,7 @@ public class BackpackAbilities
         // 4 is New Moon, 5 is Waxing Crescent, 6 is First Quarter and 7 is Waxing Gibbous
         if (world.getMoonPhase() == 0 && !world.isDaytime())
         {
-            player.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), 100, 0, true));
+            player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 100, 0, false, false));
         }
         if (player.onGround)
         {
@@ -383,7 +377,7 @@ public class BackpackAbilities
                     {
                         ModNetwork.sendToNearby(new EntityParticlePacket.Message(EntityParticlePacket.SLIME_PARTICLE, player), player);
                     }
-                    world.playSoundAtEntity(player, "mob.slime.small", 0.6F, (world.rand.nextFloat() - world.rand.nextFloat()) * 1F);
+                    world.playSound(player, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.BLOCKS, 0.6F, (world.rand.nextFloat() - world.rand.nextFloat()) * 1F);
                     slimeTime = 5;
                 }
                 inv.setLastTime(slimeTime);
@@ -401,8 +395,8 @@ public class BackpackAbilities
         int eggTime = inv.getLastTime() - 1;
         if (eggTime <= 0)
         {
-            player.playSound("mob.chicken.plop", 1.0F, (world.rand.nextFloat() - world.rand.nextFloat()) * 0.3F + 1.0F);
-            if (!world.isRemote) player.dropItem(Items.egg, 1);
+            player.playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (world.rand.nextFloat() - world.rand.nextFloat()) * 0.3F + 1.0F);
+            if (!world.isRemote) player.dropItem(Items.EGG, 1);
             eggTime = Utils.secondsToTicks(200 + 10 * world.rand.nextInt(10));
         }
         inv.setLastTime(eggTime);
@@ -462,8 +456,11 @@ public class BackpackAbilities
             pssstTime = 20;
             if (player.isSneaking())
             {
-                List<Entity> entities = player.worldObj.getEntitiesWithinAABBExcludingEntity
-                        (player, AxisAlignedBB.getBoundingBox(player.posX, player.posY, player.posZ, player.posX + 1.0D, player.posY + 1.0D, player.posZ + 1.0D).expand(5.0D, 1.0D, 5.0D));
+                List<Entity> entities = player.world.getEntitiesWithinAABBExcludingEntity(player,
+                        new AxisAlignedBB(player.posX, player.posY, player.posZ,
+                                player.posX + 1.0D,player.posY + 1.0D, player.posZ + 1.0D)
+                                .expand(5.0D, 1.0D, 5.0D));
+
                 if (entities.isEmpty())
                 {
                     pssstTime -= 1;
@@ -474,9 +471,9 @@ public class BackpackAbilities
                 {
                     if (entity instanceof EntityPlayer)
                     {
-                        if (player.getDistanceToEntity(entity) <= 3)
+                        if (player.getDistance(entity) <= 3)
                         {
-                            world.playSoundAtEntity(player, "creeper.primed", 1.2F, 0.5F);
+                            world.playSound(player, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_CREEPER_PRIMED, SoundCategory.HOSTILE, 1.2F, 0.5F);
                             pssstTime = Utils.secondsToTicks(120);
                         }
                     }
@@ -500,7 +497,7 @@ public class BackpackAbilities
     {
         if (world.isRemote) return; //TODO not syncing properly with client if GUI is open
         InventoryBackpack inv = new InventoryBackpack(backpack);
-        inv.openInventory();
+        inv.openInventory(player);
 
         if (inv.getLeftTank().fill(milkStack, false) <= 0 && inv.getRightTank().fill(milkStack, false) <= 0)
         {
@@ -519,11 +516,11 @@ public class BackpackAbilities
         }
 
         int eatTime = (inv.getLastTime() - 1 >= 0) ? inv.getLastTime() - 1 : 0;
-        if (inv.hasItem(Items.wheat) && eatTime <= 0 && milkTime <= 0)
+        if (inv.hasItem(Items.WHEAT) && eatTime <= 0 && milkTime <= 0)
         {
             eatTime = 20;
             //LogHelper.info("Consuming Wheat in " + ((world.isRemote) ? "Client" : "Server"));
-            inv.consumeInventoryItem(Items.wheat);
+            inv.consumeInventoryItem(Items.WHEAT);
             wheatConsumed++;
             inv.dirtyInventory();
         }
@@ -533,7 +530,7 @@ public class BackpackAbilities
         {
             wheatConsumed = 0;
             milkTime = (1000 * factor) - factor;
-            world.playSoundAtEntity(player, "mob.cow.say", 1f, 1f);
+            world.playSound(player, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_COW_AMBIENT, SoundCategory.NEUTRAL, 1F, 1F);
         }
 
         if (milkTime >= 0 && (milkTime % factor == 0))
@@ -561,7 +558,7 @@ public class BackpackAbilities
     {
         if (world.isRemote) return;
         InventoryBackpack inv = new InventoryBackpack(backpack);
-        inv.openInventory();
+        inv.openInventory(player);
 
         if (inv.getLeftTank().fill(soupStack, false) <= 0 && inv.getRightTank().fill(soupStack, false) <= 0)
         {
@@ -580,11 +577,11 @@ public class BackpackAbilities
         }
 
         int eatTime = (inv.getLastTime() - 1 >= 0) ? inv.getLastTime() - 1 : 0;
-        if (inv.hasItem(Items.wheat) && eatTime <= 0 && milkTime <= 0)
+        if (inv.hasItem(Items.WHEAT) && eatTime <= 0 && milkTime <= 0)
         {
             eatTime = 20;
             //LogHelper.info("Consuming Wheat in " + ((world.isRemote) ? "Client" : "Server"));
-            inv.consumeInventoryItem(Items.wheat);
+            inv.consumeInventoryItem(Items.WHEAT);
             wheatConsumed++;
             inv.dirtyInventory();
         }
@@ -594,7 +591,7 @@ public class BackpackAbilities
         {
             wheatConsumed = 0;
             milkTime = (1000 * factor) - factor;
-            world.playSoundAtEntity(player, "mob.cow.say", 1f, 1f);
+            world.playSound(player, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_COW_AMBIENT, SoundCategory.NEUTRAL, 1F, 1F);
         }
 
         if (milkTime >= 0 && (milkTime % factor == 0))
@@ -634,8 +631,10 @@ public class BackpackAbilities
         {
             lastCheckTime = 20;
             List<EntityWolf> wolves = world.getEntitiesWithinAABB
-                    (EntityWolf.class, AxisAlignedBB.getBoundingBox
-                            (player.posX, player.posY, player.posZ, player.posX + 1.0D, player.posY + 1.0D, player.posZ + 1.0D).expand(16.0D, 4.0D, 16.0D));
+                    (EntityWolf.class, new AxisAlignedBB(player.posX, player.posY, player.posZ,
+                            player.posX + 1.0D, player.posY + 1.0D, player.posZ + 1.0D)
+                            .expand(16.0D, 4.0D, 16.0D));
+
             if (wolves.isEmpty()) return;
 
             for (EntityWolf wolf : wolves)
@@ -680,9 +679,10 @@ public class BackpackAbilities
         if (lastCheckTime <= 0)
         {
             lastCheckTime = 20;
-            List<EntityCreeper> creepers = player.worldObj.getEntitiesWithinAABB
-                    (EntityCreeper.class, AxisAlignedBB.getBoundingBox
-                            (player.posX, player.posY, player.posZ, player.posX + 1.0D, player.posY + 1.0D, player.posZ + 1.0D).expand(16.0D, 4.0D, 16.0D));
+            List<EntityCreeper> creepers = player.world.getEntitiesWithinAABB
+                    (EntityCreeper.class, new AxisAlignedBB(player.posX, player.posY, player.posZ,
+                            player.posX + 1.0D, player.posY + 1.0D, player.posZ + 1.0D)
+                            .expand(16.0D, 4.0D, 16.0D));
 
             for (EntityCreeper creeper : creepers)
             {
@@ -710,9 +710,9 @@ public class BackpackAbilities
 
     /* ==================================== TILE ABILITIES ==========================================*/
 
-    private void fillWithRain(World world, TileAdventureBackpack backpack, FluidStack fluid, int time)
+    private void fillWithRain(World world, TileBackpack backpack, FluidStack fluid, int time)
     {
-        if (world.isRaining() && world.canBlockSeeTheSky(backpack.xCoord, backpack.yCoord, backpack.zCoord))
+        if (world.isRaining() && world.canSeeSky(new BlockPos(backpack.getPos())))
         {
             int dropTime = backpack.getLastTime() - 1;
             if (dropTime <= 0)
@@ -729,17 +729,17 @@ public class BackpackAbilities
     /**
      * Like real life cactii, this backpack will fill slowly while it's raining with refreshing water.
      */
-    public void tileCactus(World world, TileAdventureBackpack backpack)
+    public void tileCactus(World world, TileBackpack backpack)
     {
         fillWithRain(world, backpack, new FluidStack(FluidRegistry.WATER, 2), 5);
     }
 
-    public void tileMelon(World world, TileAdventureBackpack backpack)
+    public void tileMelon(World world, TileBackpack backpack)
     {
         fillWithRain(world, backpack, new FluidStack(ModFluids.melonJuice, 2), 5);
     }
 
-    /*public void tileCow(World world, TileAdventureBackpack backpack)
+    /*public void tileCow(World world, TileBackpack backpack)
     {
         IInventoryBackpack inv = backpack; //TODO make CowBackpack (and others) working in tile form
     }*/

@@ -2,7 +2,7 @@ package com.darkona.adventurebackpack.fluids.effects;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.potion.Potion;
+import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -26,9 +26,9 @@ public class LavaEffect extends FluidEffect
         {
             EntityPlayer player = (EntityPlayer) entity;
             player.setFire(timeInSeconds);
-            player.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, timeInSeconds * 20 * 6, 2, false));
-            player.addPotionEffect(new PotionEffect(Potion.jump.id, timeInSeconds * 20 * 6, 0, false));
-            player.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, timeInSeconds * 20 * 6, 3, false));
+            player.addPotionEffect(new PotionEffect(MobEffects.SPEED, timeInSeconds * 20 * 6, 2, false, false));
+            player.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, timeInSeconds * 20 * 6, 0, false, false));
+            player.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, timeInSeconds * 20 * 6, 3, false, false));
         }
     }
 }

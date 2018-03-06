@@ -4,13 +4,10 @@ import net.minecraft.block.Block;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 
 import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.item.ItemHose;
-import com.darkona.adventurebackpack.util.FluidUtils;
 
 /**
  * Created on 16/10/2014
@@ -50,71 +47,71 @@ public class InventoryActions
         ItemStack stackIn = inventory.getStackInSlot(slotIn);
         if (stackIn == null) return false;
 
-        //CONTAINER ===========> TANK
-        if (FluidContainerRegistry.isFilledContainer(stackIn))
-        {
-            int fill = tank.fill(FluidContainerRegistry.getFluidForFilledItem(stackIn), false); //See if the tank can accept moar fluid
-
-            if (fill > 0) //If can accept the fluid
-            {
-                if (FluidContainerRegistry.getContainerCapacity(stackIn) + tank.getFluidAmount() <= tank.getCapacity())
-                {
-                    ItemStack stackOut = FluidContainerRegistry.drainFluidContainer(stackIn); //Get the empty container for the input, if there's any
-
-                    if (inventory.getStackInSlot(slotOut) == null || stackOut == null)
-                    {
-                        tank.fill(FluidContainerRegistry.getFluidForFilledItem(stackIn), true);
-                        inventory.decrStackSizeNoSave(slotIn, 1);
-                        inventory.setInventorySlotContentsNoSave(slotOut, stackOut);
-                        return true;
-                    }
-                    else if (inventory.getStackInSlot(slotOut).getItem().equals(stackOut.getItem())
-                            && stackOut.getItemDamage() == inventory.getStackInSlot(slotOut).getItemDamage())
-                    {
-                        int maxStack = inventory.getStackInSlot(slotOut).getMaxStackSize();
-                        if (maxStack > 1 && (inventory.getStackInSlot(slotOut).stackSize + 1) <= maxStack)
-                        {
-                            tank.fill(FluidContainerRegistry.getFluidForFilledItem(stackIn), true);
-                            inventory.decrStackSizeNoSave(slotIn, 1);
-                            inventory.getStackInSlot(slotOut).stackSize++;
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-
-        //TANK =====> CONTAINER
-        else if (tank.getFluid() != null && tank.getFluidAmount() > 0 && FluidUtils.isEmptyContainerForFluid(stackIn, tank.getFluid().getFluid()))
-        {
-            int amount = FluidContainerRegistry.getContainerCapacity(tank.getFluid(), stackIn); //How much fluid can this container hold
-            FluidStack drain = tank.drain(amount, false); //Let's see how much can we drain this tank
-
-            if (amount > 0 && drain.amount == amount)
-            {
-                ItemStack stackOut = FluidContainerRegistry.fillFluidContainer(drain, stackIn);
-
-                if (inventory.getStackInSlot(slotOut) == null || stackOut == null)
-                {
-                    tank.drain(amount, true);
-                    inventory.decrStackSizeNoSave(slotIn, 1);
-                    inventory.setInventorySlotContentsNoSave(slotOut, stackOut);
-                    return true;
-                }
-                else if (stackOut.getItem().equals(inventory.getStackInSlot(slotOut).getItem())
-                        && stackOut.getItemDamage() == inventory.getStackInSlot(slotOut).getItemDamage())
-                {
-                    int maxStack = inventory.getStackInSlot(slotOut).getMaxStackSize();
-                    if (maxStack > 1 && (inventory.getStackInSlot(slotOut).stackSize + 1) <= maxStack)
-                    {
-                        tank.drain(amount, true);
-                        inventory.decrStackSizeNoSave(slotIn, 1);
-                        inventory.getStackInSlot(slotOut).stackSize++;
-                        return true;
-                    }
-                }
-            }
-        }
+        //CONTAINER ===========> TANK //TODO implement fluid transrer to/from tanks
+//        if (FluidContainerRegistry.isFilledContainer(stackIn))
+//        {
+//            int fill = tank.fill(FluidContainerRegistry.getFluidForFilledItem(stackIn), false); //See if the tank can accept moar fluid
+//
+//            if (fill > 0) //If can accept the fluid
+//            {
+//                if (FluidContainerRegistry.getContainerCapacity(stackIn) + tank.getFluidAmount() <= tank.getCapacity())
+//                {
+//                    ItemStack stackOut = FluidContainerRegistry.drainFluidContainer(stackIn); //Get the empty container for the input, if there's any
+//
+//                    if (inventory.getStackInSlot(slotOut) == null || stackOut == null)
+//                    {
+//                        tank.fill(FluidContainerRegistry.getFluidForFilledItem(stackIn), true);
+//                        inventory.decrStackSizeNoSave(slotIn, 1);
+//                        inventory.setInventorySlotContentsNoSave(slotOut, stackOut);
+//                        return true;
+//                    }
+//                    else if (inventory.getStackInSlot(slotOut).getItem().equals(stackOut.getItem())
+//                            && stackOut.getItemDamage() == inventory.getStackInSlot(slotOut).getItemDamage())
+//                    {
+//                        int maxStack = inventory.getStackInSlot(slotOut).getMaxStackSize();
+//                        if (maxStack > 1 && (inventory.getStackInSlot(slotOut).getCount() + 1) <= maxStack)
+//                        {
+//                            tank.fill(FluidContainerRegistry.getFluidForFilledItem(stackIn), true);
+//                            inventory.decrStackSizeNoSave(slotIn, 1);
+//                            inventory.getStackInSlot(slotOut).grow(1);
+//                            return true;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        //TANK =====> CONTAINER
+//        else if (tank.getFluid() != null && tank.getFluidAmount() > 0 && FluidUtils.isEmptyContainerForFluid(stackIn, tank.getFluid().getFluid()))
+//        {
+//            int amount = FluidContainerRegistry.getContainerCapacity(tank.getFluid(), stackIn); //How much fluid can this container hold
+//            FluidStack drain = tank.drain(amount, false); //Let's see how much can we drain this tank
+//
+//            if (amount > 0 && drain.amount == amount)
+//            {
+//                ItemStack stackOut = FluidContainerRegistry.fillFluidContainer(drain, stackIn);
+//
+//                if (inventory.getStackInSlot(slotOut) == ItemStack.EMPTY || stackOut == ItemStack.EMPTY)
+//                {
+//                    tank.drain(amount, true);
+//                    inventory.decrStackSizeNoSave(slotIn, 1);
+//                    inventory.setInventorySlotContentsNoSave(slotOut, stackOut);
+//                    return true;
+//                }
+//                else if (stackOut.getItem().equals(inventory.getStackInSlot(slotOut).getItem())
+//                        && stackOut.getItemDamage() == inventory.getStackInSlot(slotOut).getItemDamage())
+//                {
+//                    int maxStack = inventory.getStackInSlot(slotOut).getMaxStackSize();
+//                    if (maxStack > 1 && (inventory.getStackInSlot(slotOut).getCount() + 1) <= maxStack)
+//                    {
+//                        tank.drain(amount, true);
+//                        inventory.decrStackSizeNoSave(slotIn, 1);
+//                        inventory.getStackInSlot(slotOut).grow(1);
+//                        return true;
+//                    }
+//                }
+//            }
+//        }
         return false;
     }
 

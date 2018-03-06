@@ -3,10 +3,10 @@ package com.darkona.adventurebackpack.network;
 import io.netty.buffer.ByteBuf;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentTranslation;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import com.darkona.adventurebackpack.util.BackpackUtils;
 import com.darkona.adventurebackpack.util.Wearing;
@@ -27,7 +27,7 @@ public class EquipUnequipBackWearablePacket implements IMessageHandler<EquipUneq
 
         if (ctx.side.isServer())
         {
-            EntityPlayer player = ctx.getServerHandler().playerEntity;
+            EntityPlayer player = ctx.getServerHandler().player;
             if (message.action == EQUIP_WEARABLE)
             {
                 if (Wearing.isHoldingWearable(player))
@@ -36,11 +36,11 @@ public class EquipUnequipBackWearablePacket implements IMessageHandler<EquipUneq
                     {
                         Wearing.WearableType wtype = Wearing.getWearingWearableType(player);
                         if (wtype != Wearing.WearableType.UNKNOWN)
-                            player.addChatComponentMessage(new ChatComponentTranslation("adventurebackpack:messages.already.equipped." + wtype.name().toLowerCase()));
+                            player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.already.equipped." + wtype.name().toLowerCase()));
                     }
                     else
                     {
-                        if (BackpackUtils.equipWearable(player.getCurrentEquippedItem(), player) == BackpackUtils.Reasons.SUCCESSFUL)
+                        if (BackpackUtils.equipWearable(player.getHeldItemMainhand(), player) == BackpackUtils.Reasons.SUCCESSFUL)
                         {
                             player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
                             player.inventoryContainer.detectAndSendChanges();

@@ -5,15 +5,13 @@ import java.lang.reflect.Field;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 import com.darkona.adventurebackpack.config.ConfigHandler;
 import com.darkona.adventurebackpack.init.recipes.BackpackRecipesList;
-import com.darkona.adventurebackpack.init.recipes.ShapedBackpackRecipe;
 import com.darkona.adventurebackpack.reference.BackpackTypes;
 import com.darkona.adventurebackpack.util.BackpackUtils;
 import com.darkona.adventurebackpack.util.LogHelper;
+import com.darkona.adventurebackpack.util.RecipeHelper;
 
 /**
  * Created on 20/10/2014
@@ -26,223 +24,182 @@ public class ModRecipes
     {
         if (ConfigHandler.recipeSaddle)
         {
-            //Saddle
-            GameRegistry.addRecipe(new ItemStack(Items.saddle),
+            RecipeHelper.convertToShaped(new ItemStack(Items.SADDLE),
                     "LLL",
                     "L L",
                     "I I",
-                    'L', Items.leather,
-                    'I', Items.iron_ingot);
+                    'L', Items.LEATHER,
+                    'I', Items.IRON_INGOT);
         }
 
-        //CampFire
-        GameRegistry.addRecipe(new ShapedOreRecipe(ModBlocks.blockCampFire,
+        // CampFire
+        RecipeHelper.convertToShaped(ModBlocks.BLOCK_CAMP_FIRE,
                 " S ",
                 "SxS",
                 "ccc",
-                'S', "stickWood",
-                'x', Items.coal,
-                'c', "cobblestone"));
+                'S', Items.STICK,
+                'x', Items.COAL,
+                'c', Blocks.COBBLESTONE);
 
-        if (ConfigHandler.recipeCopterPack)
-        {
-            //Copter Pack
-            GameRegistry.addRecipe(BackpackUtils.createCopterStack(),
-                    "WBW",
-                    "TEI",
-                    "CDI",
-                    'W', Blocks.planks,
-                    'B', new ItemStack(ModItems.component, 1, 6),
-                    'T', new ItemStack(ModItems.component, 1, 2),
-                    'E', new ItemStack(ModItems.component, 1, 5),
-                    'C', new ItemStack(Items.dye, 1, 2),
-                    'D', Items.diamond,
-                    'I', Items.iron_ingot);
-        }
+        // Copter Pack
+        RecipeHelper.convertToShaped(BackpackUtils.createCopterStack(),
+                "WBW",
+                "TEI",
+                "CDI",
+                'W', Blocks.PLANKS,
+                'B', new ItemStack(ModItems.COMPONENT, 1, 6),
+                'T', new ItemStack(ModItems.COMPONENT, 1, 2),
+                'E', new ItemStack(ModItems.COMPONENT, 1, 5),
+                'C', new ItemStack(Items.DYE, 1, 2),
+                'D', Items.DIAMOND,
+                'I', Items.IRON_INGOT);
 
-        if (ConfigHandler.recipeCoalJetpack)
-        {
-            //CoalJetpack
-            GameRegistry.addRecipe(BackpackUtils.createJetpackStack(),
-                    "SWT",
-                    "GIG",
-                    "FWS",
-                    'W', Blocks.planks,
-                    'G', Items.gold_ingot,
-                    'I', Items.iron_ingot,
-                    'S', Blocks.stone,
-                    'F', Blocks.furnace,
-                    'T', new ItemStack(ModItems.component, 1, 2));
-        }
+        // Steam Jetpack
+        RecipeHelper.convertToShaped(BackpackUtils.createJetpackStack(),
+                "SWT",
+                "GIG",
+                "FWS",
+                'W', Blocks.PLANKS,
+                'G', Items.GOLD_INGOT,
+                'I', Items.IRON_INGOT,
+                'S', Blocks.STONE,
+                'F', Blocks.FURNACE,
+                'T', new ItemStack(ModItems.COMPONENT, 1, 2));
 
-        if (ConfigHandler.recipeMachete)
-        {
-            //Machete Handle
-            GameRegistry.addRecipe(new ItemStack(ModItems.component, 1, 4),
-                    "YIY",
-                    "BSB",
-                    "RbR",
-                    'Y', new ItemStack(Items.dye, 1, 11),
-                    'B', new ItemStack(Items.dye, 1, 4),
-                    'R', new ItemStack(Items.dye, 1, 1),
-                    'b', new ItemStack(Items.dye, 1, 0),
-                    'I', Items.iron_ingot,
-                    'S', Items.stick);
+        // Machete Handle
+        RecipeHelper.convertToShaped(new ItemStack(ModItems.COMPONENT, 1, 4),
+                "YIY",
+                "BSB",
+                "RbR",
+                'Y', new ItemStack(Items.DYE, 1, 11),
+                'B', new ItemStack(Items.DYE, 1, 4),
+                'R', new ItemStack(Items.DYE, 1, 1),
+                'b', new ItemStack(Items.DYE, 1, 0),
+                'I', Items.IRON_INGOT,
+                'S', Items.STICK);
 
-            //Machete
-            GameRegistry.addRecipe(new ItemStack(ModItems.machete),
-                    " I ",
-                    " I ",
-                    " H ",
-                    'I', Items.iron_ingot,
-                    'H', new ItemStack(ModItems.component, 1, 4));
-        }
+        // Machete
+        RecipeHelper.convertToShaped(new ItemStack(ModItems.MACHETE),
+                " I ",
+                " I ",
+                " H ",
+                'I', Items.IRON_INGOT,
+                'H', new ItemStack(ModItems.COMPONENT, 1, 4));
 
-        if (ConfigHandler.recipeClockCrossbow)
-        {
-            //Clockwork Crossbow
-            GameRegistry.addRecipe(new ItemStack(ModItems.cwxbow),
-                    "   ",
-                    "BA ",
-                    "SW ",
-                    'B', Items.bow,
-                    'A', Items.arrow,
-                    'S', Items.stick,
-                    'W', Blocks.planks);
-        }
+        // Adventure Hat
+        RecipeHelper.convertToShaped(new ItemStack(ModItems.ADVENTURE_HAT),
+                "   ",
+                "nC ",
+                "LLL",
+                'n', Items.GOLD_NUGGET,
+                'C', Items.LEATHER_HELMET,
+                'L', Items.LEATHER);
 
-        if (ConfigHandler.recipeAdventuresSet)
-        {
-            //Adventure Hat
-            GameRegistry.addRecipe(new ItemStack(ModItems.adventureHat),
-                    "   ",
-                    "nC ",
-                    "LLL",
-                    'n', Items.gold_nugget,
-                    'C', Items.leather_helmet,
-                    'L', Items.leather);
+        // Adventure Suit
+        RecipeHelper.convertToShaped(new ItemStack(ModItems.ADVENTURE_SUIT),
+                "LWL",
+                "LVL",
+                "   ",
+                'V', Items.LEATHER_CHESTPLATE,
+                'W', Blocks.WOOL,
+                'L', Items.LEATHER);
 
-            //Adventure Suit
-            GameRegistry.addRecipe(new ItemStack(ModItems.adventureSuit),
-                    "LWL",
-                    "LVL",
-                    "   ",
-                    'V', Items.leather_chestplate,
-                    'W', Blocks.wool,
-                    'L', Items.leather);
+        // Adventure Pants
+        RecipeHelper.convertToShaped(new ItemStack(ModItems.ADVENTURE_PANTS),
+                "LVL",
+                "LWL",
+                "   ",
+                'V', Items.LEATHER_LEGGINGS,
+                'W', Blocks.WOOL,
+                'L', Items.LEATHER);
 
-            //Adventure Pants
-            GameRegistry.addRecipe(new ItemStack(ModItems.adventurePants),
-                    "LVL",
-                    "LWL",
-                    "   ",
-                    'V', Items.leather_leggings,
-                    'W', Blocks.wool,
-                    'L', Items.leather);
-        }
+        // Piston Boots
+        RecipeHelper.convertToShaped(new ItemStack(ModItems.PISTON_BOOTS),
+                " B ",
+                "PSP",
+                'B', Items.LEATHER_BOOTS,
+                'P', Blocks.PISTON,
+                'S', Items.SLIME_BALL);
 
-        if (ConfigHandler.recipePitonBoots)
-        {
-            //Piston Boots
-            GameRegistry.addRecipe(new ItemStack(ModItems.pistonBoots),
-                    " B ",
-                    "PSP",
-                    'B', Items.leather_boots,
-                    'P', Blocks.piston,
-                    'S', Items.slime_ball);
-        }
+        // Melon Juice Bottle
+        RecipeHelper.addShapeless(new ItemStack(ModItems.MELON_JUICE_BOTTLE), Items.MELON, Items.POTIONITEM);
 
-        //Melon Juice Bottle
-        GameRegistry.addShapelessRecipe(new ItemStack(ModItems.melonJuiceBottle), Items.melon, Items.potionitem);
-
-        //Hose Nozzle
-        GameRegistry.addRecipe(new ItemStack(ModItems.component, 1, 3),
+        // Hose Nozzle
+        RecipeHelper.convertToShaped(new ItemStack(ModItems.COMPONENT, 1, 3),
                 " G ",
                 "ILI",
                 "   ",
-                'G', Items.gold_ingot,
-                'I', Items.iron_ingot,
-                'L', Blocks.lever);
+                'G', Items.GOLD_INGOT,
+                'I', Items.IRON_INGOT,
+                'L', Blocks.LEVER);
 
-        //Hose
-        GameRegistry.addRecipe(new ItemStack(ModItems.hose),
+        // Hose
+        RecipeHelper.convertToShaped(new ItemStack(ModItems.HOSE),
                 "NGG",
                 "  G",
-                'N', new ItemStack(ModItems.component, 1, 3),
-                'G', new ItemStack(Items.dye, 1, 2));
+                'N', new ItemStack(ModItems.COMPONENT, 1, 3),
+                'G', new ItemStack(Items.DYE, 1, 2));
 
-        //Sleeping Bag
-        GameRegistry.addRecipe(new ItemStack(ModItems.component, 1, 1),
+        // Sleeping Bag
+        RecipeHelper.convertToShaped(new ItemStack(ModItems.COMPONENT, 1, 1),
                 "  X",
                 "CCC",
-                'X', Blocks.wool,
-                'C', Blocks.carpet);
+                'X', Blocks.WOOL,
+                'C', Blocks.CARPET);
 
         //Backpack Tank
-        GameRegistry.addRecipe(new ItemStack(ModItems.component, 1, 2),
+        RecipeHelper.convertToShaped(new ItemStack(ModItems.COMPONENT, 1, 2),
                 "GIG",
                 "GGG",
                 "GIG",
-                'G', Blocks.glass,
-                'I', Items.iron_ingot);
+                'G', Blocks.GLASS,
+                'I', Items.IRON_INGOT);
 
-        if (ConfigHandler.recipeCopterPack)
-        {
-            //Copter Engine
-            GameRegistry.addRecipe(new ItemStack(ModItems.component, 1, 5),
-                    "IGI",
-                    "PCP",
-                    "FOF",
-                    'I', Items.iron_ingot,
-                    'G', Items.gold_ingot,
-                    'P', Blocks.piston,
-                    'F', Blocks.furnace,
-                    'C', Items.cauldron,
-                    'O', Blocks.obsidian);
-        }
+        // Copter Engine
+        RecipeHelper.convertToShaped(new ItemStack(ModItems.COMPONENT, 1, 5),
+                "IGI",
+                "PCP",
+                "FOF",
+                'I', Items.IRON_INGOT,
+                'G', Items.GOLD_INGOT,
+                'P', Blocks.PISTON,
+                'F', Blocks.FURNACE,
+                'C', Items.CAULDRON,
+                'O', Blocks.OBSIDIAN);
 
-        if (ConfigHandler.recipeCopterPack || ConfigHandler.recipeInflatableBoatM)
-        {
-            //Copter Blades
-            GameRegistry.addRecipe(new ItemStack(ModItems.component, 1, 6),
-                    "III",
-                    " F ",
-                    " F ",
-                    'I', Items.iron_ingot,
-                    'F', Blocks.fence);
-        }
+        // Copter Blades
+        RecipeHelper.convertToShaped(new ItemStack(ModItems.COMPONENT, 1, 6),
+                "III",
+                " F ",
+                " F ",
+                'I', Items.IRON_INGOT,
+                'F', Blocks.OAK_FENCE); //TODO change to oredict fence
 
 
-        if (ConfigHandler.recipeInflatableBoat)
-        {
-            //Inflatable Boat
-            GameRegistry.addRecipe(new ItemStack(ModItems.component, 1, 7),
-                    "   ",
-                    "w w",
-                    "sws",
-                    'w', Blocks.wool,
-                    's', Blocks.sand);
-
-            if (ConfigHandler.recipeInflatableBoatM)
-            {
-                //Inflatable Boat (Motorized)
-                GameRegistry.addRecipe(new ItemStack(ModItems.component, 1, 8),
-                        " B ",
-                        " E ",
-                        " H ",
-                        'B', new ItemStack(ModItems.component, 1, 7),
-                        'H', new ItemStack(ModItems.component, 1, 9),
-                        'E', new ItemStack(ModItems.component, 1, 5));
-
-                //Hydro Blades
-                GameRegistry.addRecipe(new ItemStack(ModItems.component, 1, 9),
-                        " F ",
-                        " F ",
-                        "III",
-                        'I', Items.iron_ingot,
-                        'F', Blocks.fence);
-            }
-        }
+//        // Inflatable Boat
+//        RecipeHelper.addShaped(new ItemStack(ModItems.COMPONENT, 1, 7),
+//                "   ",
+//                "w w",
+//                "sws",
+//                'w', Blocks.WOOL,
+//                's', Blocks.SAND);
+//
+//        // Inflatable Boat (Motorized)
+//        RecipeHelper.addShaped(new ItemStack(ModItems.COMPONENT, 1, 8),
+//                " B ",
+//                " E ",
+//                " H ",
+//                'B', new ItemStack(ModItems.COMPONENT, 1, 7),
+//                'H', new ItemStack(ModItems.COMPONENT, 1, 9),
+//                'E', new ItemStack(ModItems.COMPONENT, 1, 5));
+//
+//        // Hydro Blades
+//        RecipeHelper.addShaped(new ItemStack(ModItems.COMPONENT, 1, 9),
+//                " F ",
+//                " F ",
+//                "III",
+//                'I', Items.IRON_INGOT,
+//                'F', Blocks.OAK_FENCE);
 
         BackpackRecipesList br = new BackpackRecipesList();
         int counter = 0;
@@ -254,7 +211,8 @@ public class ModRecipes
                 {
                     if (field.getName().equals(BackpackTypes.getSkinName(type)))
                     {
-                        GameRegistry.addRecipe(new ShapedBackpackRecipe(BackpackUtils.createBackpackStack(type), (Object[]) field.get(br)));
+                        //TODO add ShapedBackpackRecipe support
+                        RecipeHelper.convertToShaped(BackpackUtils.createBackpackStack(type), (Object[]) field.get(br));
                         counter++;
                     }
                 }

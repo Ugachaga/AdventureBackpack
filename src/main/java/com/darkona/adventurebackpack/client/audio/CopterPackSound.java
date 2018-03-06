@@ -4,6 +4,8 @@ import net.minecraft.client.audio.MovingSound;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 
 import com.darkona.adventurebackpack.item.ItemCopterPack;
 import com.darkona.adventurebackpack.reference.ModInfo;
@@ -27,7 +29,7 @@ public class CopterPackSound extends MovingSound
 
     public CopterPackSound(EntityPlayer player)
     {
-        super(new ResourceLocation(ModInfo.MOD_ID, "helicopter3"));
+        super(new SoundEvent(new ResourceLocation(ModInfo.MOD_ID, "helicopter")), SoundCategory.BLOCKS);
         volume = 0.6f;
         pitch = 1.0F;
         thePlayer = player;
@@ -57,7 +59,7 @@ public class CopterPackSound extends MovingSound
     {
         ItemStack copter = Wearing.getWearingCopter(thePlayer);
         byte status = 0;
-        if (thePlayer == null || thePlayer.isDead || thePlayer.worldObj == null || copter == null || !(copter.getItem() instanceof ItemCopterPack))
+        if (thePlayer == null || thePlayer.isDead || thePlayer.world == null || copter == null || !(copter.getItem() instanceof ItemCopterPack))
         {
             setDonePlaying();
             return;
