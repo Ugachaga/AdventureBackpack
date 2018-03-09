@@ -2,7 +2,6 @@ package com.darkona.adventurebackpack;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -35,14 +34,14 @@ import com.darkona.adventurebackpack.reference.WailaTileAdventureBackpack;
  *
  * @author Javier Darkona
  */
-@Mod(modid = ModInfo.MOD_ID, name = ModInfo.MOD_NAME, version = ModInfo.MOD_VERSION, guiFactory = ModInfo.GUI_FACTORY_CLASS,
+@Mod(modid = ModInfo.MODID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.GUI_FACTORY_CLASS,
         dependencies = "required-after:codechickenlib@[3.1.5.331,)")
 public class AdventureBackpack
 {
     @SidedProxy(clientSide = ModInfo.MOD_CLIENT_PROXY, serverSide = ModInfo.MOD_SERVER_PROXY)
     public static IProxy proxy;
 
-    @Mod.Instance(ModInfo.MOD_ID)
+    @Mod.Instance(ModInfo.MODID)
     public static AdventureBackpack instance;
 
     static
@@ -54,7 +53,7 @@ public class AdventureBackpack
     public void preInit(FMLPreInitializationEvent event)
     {
         //Configuration
-        FMLCommonHandler.instance().bus().register(new ConfigHandler());
+        MinecraftForge.EVENT_BUS.register(new ConfigHandler());
         ConfigHandler.init(event.getSuggestedConfigurationFile());
 
         //ModStuff
@@ -65,13 +64,11 @@ public class AdventureBackpack
         FluidEffectRegistry.init();
         ModEntities.init();
         ModNetwork.init();
-        proxy.initNetwork();
 
         //Events
         MinecraftForge.EVENT_BUS.register(new GeneralEventHandler());
         MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerEventHandler());
-        FMLCommonHandler.instance().bus().register(new PlayerEventHandler());
     }
 
     @Mod.EventHandler
@@ -84,7 +81,7 @@ public class AdventureBackpack
         WailaTileAdventureBackpack.init();
 
         //GUIs
-        NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
+        NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
     }
 
     @Mod.EventHandler

@@ -1,7 +1,7 @@
 package com.darkona.adventurebackpack.item;
 
-import javax.annotation.Nullable;
 import java.util.List;
+import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -26,8 +26,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.darkona.adventurebackpack.init.ModNetwork;
-import com.darkona.adventurebackpack.inventory.InventoryCopterPack;
-import com.darkona.adventurebackpack.network.GUIPacket;
+import com.darkona.adventurebackpack.inventory.InventoryCopter;
+import com.darkona.adventurebackpack.network.GuiPacket;
 import com.darkona.adventurebackpack.network.messages.EntityParticlePacket;
 import com.darkona.adventurebackpack.proxy.ClientProxy;
 import com.darkona.adventurebackpack.reference.GeneralReference;
@@ -47,19 +47,21 @@ import static com.darkona.adventurebackpack.util.TipUtils.l10n;
  *
  * @author Darkona
  */
-public class ItemCopterPack extends ItemAdventure
+public class ItemCopter extends ItemAdventure
 {
     public static byte OFF_MODE = 0;
     public static byte NORMAL_MODE = 1;
     public static byte HOVER_MODE = 2;
 
+    private static final int MAX_ALTITUDE = 250;
+
     private float fuelSpent;
 
-    public ItemCopterPack()
+    public ItemCopter()
     {
         super();
         setUnlocalizedName("copterPack");
-        this.setRegistryName(ModInfo.MOD_ID, "copter_pack");
+        this.setRegistryName(ModInfo.MODID, "copter_pack");
     }
 
     @Override
@@ -92,7 +94,7 @@ public class ItemCopterPack extends ItemAdventure
 
         if (GuiScreen.isCtrlKeyDown())
         {
-            tooltip.add(l10n("max.altitude") + ": " + TipUtils.whiteFormat("250 ") + l10n("meters"));
+            tooltip.add(l10n("max.altitude") + ": " + TipUtils.whiteFormat(MAX_ALTITUDE + " ") + l10n("meters"));
             tooltip.add(TipUtils.pressShiftKeyFormat(TipUtils.actionKeyFormat()) + l10n("copter.key.onoff1"));
             tooltip.add(l10n("copter.key.onoff2") + " " + l10n("on"));
 
@@ -112,7 +114,7 @@ public class ItemCopterPack extends ItemAdventure
     {
         if (world.isRemote)
         {
-            ModNetwork.net.sendToServer(new GUIPacket.GUImessage(GUIPacket.COPTER_GUI, GUIPacket.FROM_HOLDING));
+            ModNetwork.INSTANCE.sendToServer(new GuiPacket.GuiMessage(GuiPacket.GUI_COPTER, GuiPacket.FROM_HOLDING));
         }
         return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));
     }
@@ -126,7 +128,7 @@ public class ItemCopterPack extends ItemAdventure
     @Override
     public void onEquippedUpdate(World world, EntityPlayer player, ItemStack stack) //TODO extract behavior to separate class
     {
-        InventoryCopterPack inv = new InventoryCopterPack(Wearing.getWearingCopter(player));
+        InventoryCopter inv = new InventoryCopter(Wearing.getWearingCopter(player));
         inv.openInventory(player);
         boolean canElevate = true;
         float fuelConsumption = 0.0f;
@@ -138,7 +140,7 @@ public class ItemCopterPack extends ItemAdventure
                 inv.dirtyStatus();
                 if (!world.isRemote)
                 {
-                    player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.copterpack.cantwater"));
+                    player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.copter.cantwater"));
                 }
                 return;
             }
@@ -151,7 +153,7 @@ public class ItemCopterPack extends ItemAdventure
                     inv.dirtyStatus();
                     if (!world.isRemote)
                     {
-                        player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.copterpack.off"));
+                        player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.copter.off"));
                     }
                     return;
                     //TODO play "backpackOff" sound
@@ -162,7 +164,7 @@ public class ItemCopterPack extends ItemAdventure
                     inv.dirtyStatus();
                     if (!world.isRemote)
                     {
-                        player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.copterpack.outoffuel"));
+                        player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.copter.outoffuel"));
                     }
                     return;
                     //TODO play "outofFuel" sound
@@ -268,9 +270,9 @@ public class ItemCopterPack extends ItemAdventure
     {
         if (player.posY < 100)
             player.motionY = Math.max(player.motionY, 0.18);
-        else if (player.posY < 250)
+        else if (player.posY < MAX_ALTITUDE)
             player.motionY = 0.18 - (player.posY - 100) / 1000;
-        else if (player.posY >= 250)
+        else if (player.posY >= MAX_ALTITUDE)
             player.motionY += 0;
     }
 
@@ -330,7 +332,7 @@ public class ItemCopterPack extends ItemAdventure
     @SideOnly(Side.CLIENT)
     public ModelBiped getWearableModel(ItemStack wearable)
     {
-        return ClientProxy.modelCopterPack.setWearable(wearable);
+        return ClientProxy.modelCopter.setWearable(wearable);
     }
 
     @Override

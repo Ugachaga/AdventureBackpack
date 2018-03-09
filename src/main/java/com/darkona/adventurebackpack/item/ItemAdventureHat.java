@@ -22,7 +22,7 @@ public class ItemAdventureHat extends ArmorAB
         super(2, EntityEquipmentSlot.HEAD);
         setMaxDamage(Items.LEATHER_HELMET.getMaxDamage() + 45);
         setUnlocalizedName("adventureHat");
-        this.setRegistryName(ModInfo.MOD_ID, "adventure_hat");
+        this.setRegistryName(ModInfo.MODID, "adventure_hat");
     }
 
     @Override
@@ -69,7 +69,7 @@ public class ItemAdventureHat extends ArmorAB
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type)
     {
-        return ModInfo.MOD_ID + ":"  +"textures/models/armor/adventureHat.png";
+        return ModInfo.MODID + ":"  +"textures/models/armor/adventureHat.png";
 
     }
 

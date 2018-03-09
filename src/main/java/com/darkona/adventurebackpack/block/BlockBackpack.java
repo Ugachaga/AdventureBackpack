@@ -1,9 +1,9 @@
 package com.darkona.adventurebackpack.block;
 
-import javax.annotation.Nullable;
 import java.util.Random;
+import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.IBlockState;
@@ -12,6 +12,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -29,12 +30,11 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.darkona.adventurebackpack.AdventureBackpack;
-import com.darkona.adventurebackpack.handlers.GuiHandler;
+import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.reference.BackpackTypes;
 import com.darkona.adventurebackpack.reference.GeneralReference;
 import com.darkona.adventurebackpack.reference.ModInfo;
@@ -52,9 +52,43 @@ import static com.darkona.adventurebackpack.reference.BackpackTypes.UNKNOWN;
  *
  * @author Javier Darkona
  */
-public class BlockBackpack extends BlockContainer
+public class BlockBackpack extends Block
 {
     public static final PropertyDirection FACING_HORIZONTAL = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+
+
+
+    //TODO see https://shadowfacts.net/tutorials/forge-modding-112/tile-entities-inventory/
+    //IBlockState immutable and pregenerated, so maybe we should avoid to use it for Types
+    //public static final PropertyEnum<BackpackTypes> TYPE = PropertyEnum.create();
+
+//    @Override
+//    protected BlockStateContainer createBlockState()
+//    {
+//        return new BlockStateContainer(this);
+//    }
+//
+//    @Override
+//    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
+//    {
+//        return super.getActualState(state, worldIn, pos);
+//    }
+//
+//    @Override
+//    public int getMetaFromState(IBlockState state)
+//    {
+//        return super.getMetaFromState(state);
+//    }
+//
+//    @Override
+//    public IBlockState getStateFromMeta(int meta)
+//    {
+//        return super.getStateFromMeta(meta);
+//    }
+
+
+
+
 
     public BlockBackpack()
     {
@@ -62,7 +96,12 @@ public class BlockBackpack extends BlockContainer
         setSoundType(SoundType.CLOTH);
         setHardness(1.0f);
         setResistance(2000f);
-        setRegistryName(ModInfo.MOD_ID + ":" + getUnlocalizedName());
+        setRegistryName(ModInfo.MODID + ":" + getUnlocalizedName());
+
+
+//        setDefaultState(blockState.getBaseState()
+//                .withProperty(FACING_HORIZONTAL, EnumFacing.NORTH));
+//                //.withProperty(TYPE, BackpackTypes.STANDARD));
     }
 
 
@@ -230,10 +269,24 @@ public class BlockBackpack extends BlockContainer
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
+//        if (!world.isRemote && GeneralReference.isDimensionAllowed(player))
+//        {
+//            TileBackpack tileEntity = (TileBackpack) world.getTileEntity(pos);
+//            if (tileEntity != null)
+//                tileEntity.openGUI(world, player);
+//        }
+//        return true;
+
         if (!world.isRemote && GeneralReference.isDimensionAllowed(player))
         {
-            FMLNetworkHandler.openGui(player, AdventureBackpack.instance, GuiHandler.BACKPACK_TILE, world, pos.getX(), pos.getY(), pos.getZ());
-            return true;
+            if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileBackpack)
+            {
+                //TODO
+                ((EntityPlayerMP) player).getServerWorld().addScheduledTask(()
+                        -> AdventureBackpack.proxy.displayBackpackGUI(player,
+                        (TileBackpack) world.getTileEntity(pos), Constants.Source.TILE));
+                return true;
+            }
         }
         return false;
     }
@@ -253,22 +306,23 @@ public class BlockBackpack extends BlockContainer
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
-        IBlockState blockState = this.getActualState(state, source, pos);
-        EnumFacing facing = blockState.getValue(FACING_HORIZONTAL);
-        AxisAlignedBB aabb;
-        switch (facing)
-        {
-            case NORTH:
-            case SOUTH:
-                aabb = new AxisAlignedBB(0.0F, 0.0F, 0.4F, 1.0F, 0.6F, 0.6F);
-                break;
-            case EAST:
-            case WEST:
-            default: // wat?
-                aabb = new AxisAlignedBB(0.4F, 0.0F, 0.0F, 0.6F, 0.6F, 1.0F);
-                break;
-        }
-        return aabb;
+//        IBlockState blockState = this.getActualState(state, source, pos);
+//        EnumFacing facing = blockState.getValue(FACING_HORIZONTAL);
+//        AxisAlignedBB aabb;
+//        switch (facing)
+//        {
+//            case NORTH:
+//            case SOUTH:
+//                aabb = new AxisAlignedBB(0.0F, 0.0F, 0.4F, 1.0F, 0.6F, 0.6F);
+//                break;
+//            case EAST:
+//            case WEST:
+//            default: // wat?
+//                aabb = new AxisAlignedBB(0.4F, 0.0F, 0.0F, 0.6F, 0.6F, 1.0F);
+//                break;
+//        }
+//        return aabb;
+        return new AxisAlignedBB(0.4F, 0.0F, 0.0F, 0.6F, 0.6F, 1.0F);
     }
 
 
@@ -396,12 +450,6 @@ public class BlockBackpack extends BlockContainer
 
     @Override
     public TileEntity createTileEntity(World world, IBlockState state)
-    {
-        return new TileBackpack();
-    }
-
-    @Override
-    public TileEntity createNewTileEntity(World world, int meta)
     {
         return new TileBackpack();
     }

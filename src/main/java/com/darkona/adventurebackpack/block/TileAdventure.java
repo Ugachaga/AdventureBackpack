@@ -226,7 +226,7 @@ abstract class TileAdventure extends TileEntity implements IInventoryTanks
         for (int i = 0; i < getSizeInventory(); i++)
         {
             ItemStack stack = inventory[i];
-            if (stack != ItemStack.EMPTY)
+            if (stack != null && stack != ItemStack.EMPTY)
             {
                 NBTTagCompound item = new NBTTagCompound();
                 item.setByte(TAG_SLOT, (byte) i);

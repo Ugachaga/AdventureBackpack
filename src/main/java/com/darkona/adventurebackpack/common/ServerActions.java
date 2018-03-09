@@ -19,9 +19,9 @@ import com.darkona.adventurebackpack.config.ConfigHandler;
 import com.darkona.adventurebackpack.fluids.FluidEffectRegistry;
 import com.darkona.adventurebackpack.init.ModNetwork;
 import com.darkona.adventurebackpack.inventory.InventoryBackpack;
-import com.darkona.adventurebackpack.inventory.InventoryCoalJetpack;
+import com.darkona.adventurebackpack.inventory.InventoryJetpack;
 import com.darkona.adventurebackpack.inventory.SlotTool;
-import com.darkona.adventurebackpack.item.ItemCopterPack;
+import com.darkona.adventurebackpack.item.ItemCopter;
 import com.darkona.adventurebackpack.item.ItemHose;
 import com.darkona.adventurebackpack.network.WearableModePacket;
 import com.darkona.adventurebackpack.network.messages.EntitySoundPacket;
@@ -235,7 +235,7 @@ public class ServerActions
     {
         byte status = BackpackUtils.getWearableCompound(BackpackProperty.get(player).getWearable()).getByte(TAG_STATUS);
 
-        if (!player.world.isRemote && status != ItemCopterPack.OFF_MODE)
+        if (!player.world.isRemote && status != ItemCopter.OFF_MODE)
         {
             ModNetwork.sendToNearby(new EntitySoundPacket.Message(EntitySoundPacket.COPTER_SOUND, player), player);
         }
@@ -248,23 +248,23 @@ public class ServerActions
         if (!player.world.isRemote && isBoiling)
         {
             //ModNetwork.sendToNearby(new EntitySoundPacket.Message(EntitySoundPacket.BOILING_BUBBLES, player), player); //TODO difference?
-            ModNetwork.net.sendTo(new EntitySoundPacket.Message(EntitySoundPacket.BOILING_BUBBLES, player), (EntityPlayerMP) player);
+            ModNetwork.INSTANCE.sendTo(new EntitySoundPacket.Message(EntitySoundPacket.BOILING_BUBBLES, player), (EntityPlayerMP) player);
         }
     }
 
-    public static void toggleCopterPack(EntityPlayer player, ItemStack copter, byte type)
+    public static void toggleCopter(EntityPlayer player, ItemStack copter, byte type)
     {
         String message = "";
         boolean actionPerformed = false;
         byte mode = BackpackUtils.getWearableCompound(copter).getByte(TAG_STATUS);
-        byte newMode = ItemCopterPack.OFF_MODE;
+        byte newMode = ItemCopter.OFF_MODE;
 
         if (type == WearableModePacket.COPTER_ON_OFF)
         {
-            if (mode == ItemCopterPack.OFF_MODE)
+            if (mode == ItemCopter.OFF_MODE)
             {
-                newMode = ItemCopterPack.NORMAL_MODE;
-                message = "adventurebackpack:messages.copterpack.normal";
+                newMode = ItemCopter.NORMAL_MODE;
+                message = "adventurebackpack:messages.copter.normal";
                 actionPerformed = true;
                 if (!player.world.isRemote)
                 {
@@ -273,24 +273,24 @@ public class ServerActions
             }
             else
             {
-                newMode = ItemCopterPack.OFF_MODE;
-                message = "adventurebackpack:messages.copterpack.off";
+                newMode = ItemCopter.OFF_MODE;
+                message = "adventurebackpack:messages.copter.off";
                 actionPerformed = true;
             }
         }
 
-        if (type == WearableModePacket.COPTER_TOGGLE && mode != ItemCopterPack.OFF_MODE)
+        if (type == WearableModePacket.COPTER_TOGGLE && mode != ItemCopter.OFF_MODE)
         {
-            if (mode == ItemCopterPack.NORMAL_MODE)
+            if (mode == ItemCopter.NORMAL_MODE)
             {
-                newMode = ItemCopterPack.HOVER_MODE;
-                message = "adventurebackpack:messages.copterpack.hover";
+                newMode = ItemCopter.HOVER_MODE;
+                message = "adventurebackpack:messages.copter.hover";
                 actionPerformed = true;
             }
-            if (mode == ItemCopterPack.HOVER_MODE)
+            if (mode == ItemCopter.HOVER_MODE)
             {
-                newMode = ItemCopterPack.NORMAL_MODE;
-                message = "adventurebackpack:messages.copterpack.normal";
+                newMode = ItemCopter.NORMAL_MODE;
+                message = "adventurebackpack:messages.copter.normal";
                 actionPerformed = true;
             }
         }
@@ -308,25 +308,23 @@ public class ServerActions
     public static void toggleToolCycling(EntityPlayer player, ItemStack backpack)
     {
         InventoryBackpack inv = new InventoryBackpack(backpack);
-        if (ConfigHandler.enableToolsCycling)
+
+        if (inv.getDisableCycling())
         {
-            if (inv.getDisableCycling())
+            inv.setDisableCycling(false);
+            inv.markDirty();
+            if (player.world.isRemote)
             {
-                inv.setDisableCycling(false);
-                inv.markDirty();
-                if (player.world.isRemote)
-                {
-                    player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.cycling.on"));
-                }
+                player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.cycling.on"));
             }
-            else
+        }
+        else
+        {
+            inv.setDisableCycling(true);
+            inv.markDirty();
+            if (player.world.isRemote)
             {
-                inv.setDisableCycling(true);
-                inv.markDirty();
-                if (player.world.isRemote)
-                {
-                    player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.cycling.off"));
-                }
+                player.sendMessage(new TextComponentTranslation("adventurebackpack:messages.cycling.off"));
             }
         }
     }
@@ -356,9 +354,9 @@ public class ServerActions
         }
     }
 
-    public static void toggleCoalJetpack(EntityPlayer player, ItemStack jetpack)
+    public static void toggleJetpack(EntityPlayer player, ItemStack jetpack)
     {
-        InventoryCoalJetpack inv = new InventoryCoalJetpack(jetpack);
+        InventoryJetpack inv = new InventoryJetpack(jetpack);
         if (inv.getStatus())
         {
             inv.setStatus(false);

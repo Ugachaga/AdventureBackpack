@@ -23,7 +23,7 @@ public class ShapedBackpackRecipe extends ShapedOreRecipe
 {
     public ShapedBackpackRecipe(ItemStack result, Object... recipe)
     {
-        super(new ResourceLocation(ModInfo.MOD_ID), result, recipe); //TODO is group correct?
+        super(new ResourceLocation(ModInfo.MODID), result, recipe); //TODO is group correct?
     }
 
     @Override

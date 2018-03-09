@@ -13,7 +13,7 @@ public class FluidMelonJuice extends Fluid
 {
     public FluidMelonJuice()
     {
-        super("melonJuice", new ResourceLocation(ModInfo.MOD_ID,"fluid.mushroomStewStill.png"), new ResourceLocation(ModInfo.MOD_ID, "fluid.mushroomStewFlowing.png"));
+        super("melonJuice", new ResourceLocation(ModInfo.MODID,"fluid.mushroomStewStill.png"), new ResourceLocation(ModInfo.MODID, "fluid.mushroomStewFlowing.png"));
     }
 
     //TODO fluid rendering

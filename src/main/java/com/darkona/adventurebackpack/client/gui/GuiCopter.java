@@ -10,7 +10,7 @@ import net.minecraftforge.fluids.FluidTank;
 import com.darkona.adventurebackpack.common.Constants.Source;
 import com.darkona.adventurebackpack.config.ConfigHandler;
 import com.darkona.adventurebackpack.inventory.ContainerCopter;
-import com.darkona.adventurebackpack.inventory.InventoryCopterPack;
+import com.darkona.adventurebackpack.inventory.InventoryCopter;
 import com.darkona.adventurebackpack.reference.GeneralReference;
 import com.darkona.adventurebackpack.util.Resources;
 
@@ -19,17 +19,17 @@ import com.darkona.adventurebackpack.util.Resources;
  *
  * @author Darkona
  */
-public class GuiCopterPack extends GuiWithTanks
+public class GuiCopter extends GuiWithTanks
 {
-    private static final ResourceLocation TEXTURE = Resources.guiTextures("guiCopterPack");
+    private static final ResourceLocation TEXTURE = Resources.guiTextures("copter");
 
     private static GuiImageButtonNormal equipButton = new GuiImageButtonNormal(150, 64, 18, 18);
     private static GuiImageButtonNormal unequipButton = new GuiImageButtonNormal(150, 64, 18, 18);
     private static GuiTank fuelTank = new GuiTank(8, 8, 72, 32, ConfigHandler.typeTankRender);
 
-    private InventoryCopterPack inventory;
+    private InventoryCopter inventory;
 
-    public GuiCopterPack(EntityPlayer player, InventoryCopterPack inv, Source source)
+    public GuiCopter(EntityPlayer player, InventoryCopter inv, Source source)
     {
         super(new ContainerCopter(player, inv, source));
         this.player = player;
@@ -43,7 +43,7 @@ public class GuiCopterPack extends GuiWithTanks
     protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int mouseX, int mouseY)
     {
         GL11.glColor4f(1, 1, 1, 1);
-        this.mc.renderEngine.bindTexture(TEXTURE);
+        this.mc.getTextureManager().bindTexture(TEXTURE);
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
         if (source == Source.WEARING)

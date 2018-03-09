@@ -49,7 +49,7 @@ public class BlockSleepingBag extends BlockBed
 
     public BlockSleepingBag()
     {
-        setRegistryName(ModInfo.MOD_ID, "blockSlepingBag");
+        setRegistryName(ModInfo.MODID, "blockSlepingBag");
     }
 
     public static boolean isSleepingInPortableBag(EntityPlayer player)

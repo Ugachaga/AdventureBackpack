@@ -36,7 +36,7 @@ public class ArmorAB extends ItemArmor
     @Override
     public String getUnlocalizedName()
     {
-        return String.format("item.%s%s", ModInfo.MOD_ID + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+        return String.format("item.%s%s", ModInfo.MODID + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
     }
 
     public void registerItemModel()

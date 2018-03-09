@@ -22,7 +22,6 @@ public class ConfigHandler
     public static boolean backpackAbilities = true;
     public static boolean enableCampfireSpawn = false;
     public static boolean enableHoseDrink = true;
-    public static boolean enableToolsCycling = true;
     public static boolean fixLead = true;
     public static boolean portableSleepingBag = true;
     public static boolean tinkerToolsMaintenance = true;
@@ -32,13 +31,6 @@ public class ConfigHandler
     public static boolean enableToolsRender = true;
     public static int typeTankRender = 2;
     public static boolean tanksHoveringText = false;
-
-    public static boolean statusOverlay = true;
-    public static boolean statusOverlayLeft = true;
-    public static boolean statusOverlayTop = true;
-    public static int statusOverlayIndentH = 2;
-    public static int statusOverlayIndentV = 2;
-    public static boolean statusOverlayThaumcraft = true;
 
     public static boolean tanksOverlay = true;
     public static boolean tanksOverlayRight = true;
@@ -50,15 +42,12 @@ public class ConfigHandler
     public static boolean allowSoundJetpack = true;
     public static boolean allowSoundPiston = true;
 
-    public static String[] forbiddenDimensions;
     public static String[] copterFuels;
     private static String[] defaultFuels = {"biodiesel, 1.0", "biofuel, 1.0", "bioethanol, 1.5", "creosote, 7.0",
             "fuel, 0.8", "lava, 5.0", "liquid_light_oil, 3.0", "liquid_medium_oil, 3.0", "liquid_heavy_oil, 3.0",
             "liquid_light_fuel, 1.0", "liquid_heavy_fuel, 1.3", "nitrofuel, 0.4", "oil, 3.0", "rocket_fuel, 0.8"};
-
-    public static String[] blacklistByID;
-    public static String[] blacklistByName;
-    private static String[] nameDefault = {};
+    public static String[] forbiddenDimensions;
+    public static String[] itemBlacklist;
 
     public static boolean consumeDragonEgg = false;
     public static boolean recipeSaddle = true;
@@ -76,8 +65,6 @@ public class ConfigHandler
     public static boolean allowBonusGen = false;
     public static boolean allowGolemGen = true;
     public static boolean allowPigmanGen = false;
-
-    public static int bossBarIndent = 12;
 
     public static void init(File configFile)
     {
@@ -98,7 +85,6 @@ public class ConfigHandler
         fixLead = config.getBoolean("Fix Vanilla Lead", "gameplay", true, "Fix the vanilla Lead? (Checks mobs falling on a leash to not die of fall damage if they're not falling so fast)");
         enableCampfireSpawn = config.getBoolean("Enable Campfire Spawn", "gameplay", false, "Enable/Disable ability to spawn at campfire");
         enableHoseDrink = config.getBoolean("Enable Hose Drink", "gameplay", true, "Enable/Disable hose drink mode");
-        enableToolsCycling = config.getBoolean("Enable Tools Cycling", "gameplay", true, "Enable/Disable tool cycling");
         portableSleepingBag = config.getBoolean("Portable Sleeping Bag", "gameplay", true, "Allows to use sleeping bag directly from wearing backpacks. Sleep by one touch");
         tinkerToolsMaintenance = config.getBoolean("Maintenance Tinker Tools", "gameplay", true, "Allows to maintenance (repair/upgarde) Tinkers Construct tools in backpacks as if it's Crafting Station");
 
@@ -109,14 +95,6 @@ public class ConfigHandler
         enableToolsRender = config.getBoolean("Enable Tools Render", "graphics", true, "Enable rendering for tools in the backpack tool slots");
         tanksHoveringText = config.getBoolean("Hovering Text", "graphics", false, "Show hovering text on fluid tanks?");
 
-        // Graphics.Status
-        statusOverlay = config.getBoolean("Enable Overlay", "graphics.status", true, "Show player status effects on screen?");
-        statusOverlayLeft = config.getBoolean("Stick To Left", "graphics.status", true, "Stick to left? Icons will appears from left to right. If false: stick to right, icons will appears from right to left");
-        statusOverlayTop = config.getBoolean("Stick To Top", "graphics.status", true, "Stick to top?");
-        statusOverlayIndentH = config.getInt("Indent Horizontal", "graphics.status", 2, 0, 1000, "Horizontal indent from the window border");
-        statusOverlayIndentV = config.getInt("Indent Vertical", "graphics.status", 2, 0, 500, "Vertical indent from the window border");
-        statusOverlayThaumcraft = config.getBoolean("Respect Thaumcraft", "graphics.status", true, "Take into account Thaumcraft wands GUI and do not overlap it");
-
         // Graphics.Tanks
         tanksOverlay = config.getBoolean("Enable Overlay", "graphics.tanks", true, "Show the different wearable overlays on screen?");
         tanksOverlayRight = config.getBoolean("Stick To Right", "graphics.tanks", true, "Stick to right?");
@@ -126,14 +104,13 @@ public class ConfigHandler
 
         // Sound
         allowSoundCopter = config.getBoolean("Copter Pack", "sound", true, "Allow playing the CopterPack sound (Client Only, other players may hear it)");
-        allowSoundJetpack = config.getBoolean("Coal Jetpack", "sound", true, "Allow playing the CoalJetpack sound (Client Only, other players may hear it)");
+        allowSoundJetpack = config.getBoolean("Steam Jetpack", "sound", true, "Allow playing the SteamJetpack sound (Client Only, other players may hear it)");
         allowSoundPiston = config.getBoolean("Piston Boots", "sound", true, "Allow playing the PistonBoots sound");
 
         // Items
-        forbiddenDimensions = config.getStringList("Forbidden Dimensions", "items", nameDefault, "Disallow opening backpack inventory for specific dimension ID");
         copterFuels = config.getStringList("Valid Copter Fuels", "items", defaultFuels, "List of valid fuels for Copter. Consumption rate range: 0.05 ~ 20.0. Format: 'fluid, rate', ex.: 'water, 0.0'");
-        blacklistByID = config.getStringList("By Internal ID", "items", nameDefault, "Disallow items by internal ID. Case sensitive. Example: minecraft:dirt");
-        blacklistByName = config.getStringList("By Internal Name", "items", nameDefault, "Disallow items by internal (unlocalized) name. Not case sensitive. Example: tile.dirt");
+        forbiddenDimensions = config.getStringList("Forbidden Dimensions", "items", new String[]{}, "Disallow opening backpack inventory for specific dimension ID");
+        itemBlacklist = config.getStringList("Item Blacklist", "items", new String[]{}, "Disallow items by internal ID. Example: minecraft:dirt");
 
         // Items.Recipes
         consumeDragonEgg = config.getBoolean("Consume Dragon Egg", "items.recipes", false, "Consume Dragon Egg when Dragon backpack crafted?");
@@ -156,7 +133,7 @@ public class ConfigHandler
         allowPigmanGen = config.getBoolean("Pigman Backpacks", "worldgen", false, "Allow generation of Pigman Backpacks in dungeon loot and villager trades");
 
         // Experimental
-        bossBarIndent = config.getInt("Boss Bar Indent", "experimental", 0, 0, 500, "Boss health bar indent from top border, 0 = standard Forge render");
+        //
 
         if (config.hasChanged())
         {
@@ -167,7 +144,7 @@ public class ConfigHandler
     @SubscribeEvent
     public void onConfigChangeEvent(ConfigChangedEvent.OnConfigChangedEvent event)
     {
-        if (event.getModID().equalsIgnoreCase(ModInfo.MOD_ID))
+        if (event.getModID().equalsIgnoreCase(ModInfo.MODID))
         {
             loadConfiguration();
         }

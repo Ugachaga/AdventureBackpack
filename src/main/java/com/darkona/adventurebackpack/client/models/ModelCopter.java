@@ -10,8 +10,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import codechicken.lib.vec.Vector3;
 
-import com.darkona.adventurebackpack.inventory.InventoryCopterPack;
-import com.darkona.adventurebackpack.item.ItemCopterPack;
+import com.darkona.adventurebackpack.inventory.InventoryCopter;
+import com.darkona.adventurebackpack.item.ItemCopter;
 import com.darkona.adventurebackpack.util.BackpackUtils;
 import com.darkona.adventurebackpack.util.Utils;
 
@@ -22,9 +22,9 @@ import static com.darkona.adventurebackpack.common.Constants.Copter.TAG_STATUS;
  *
  * @author Darkona
  */
-public class ModelCopterPack extends ModelWearable
+public class ModelCopter extends ModelWearable
 {
-    public static ModelCopterPack instance = new ModelCopterPack();
+    public static ModelCopter instance = new ModelCopter();
     public ModelRenderer Base;
     public ModelRenderer EngineBody;
     public ModelRenderer TankTop;
@@ -47,7 +47,7 @@ public class ModelCopterPack extends ModelWearable
     public ModelRenderer Escape2;
     public ModelRenderer Escape3;
     public ModelRenderer EscapeFilter;
-    private ItemStack copterPack;
+    private ItemStack copter;
 
     @SuppressWarnings("unchecked")
     private void init()
@@ -176,23 +176,23 @@ public class ModelCopterPack extends ModelWearable
         }
     }
 
-    public ModelCopterPack setWearable(ItemStack wearable)
+    public ModelCopter setWearable(ItemStack wearable)
     {
-        this.copterPack = wearable;
+        this.copter = wearable;
         return this;
     }
 
-    public ModelCopterPack()
+    public ModelCopter()
     {
         init();
     }
 
-    private void renderCopterPack(Entity entity, float scale)
+    private void renderCopter(Entity entity, float scale)
     {
-        InventoryCopterPack inv = new InventoryCopterPack(this.copterPack);
-        inv.loadFromNBT(copterPack.getTagCompound());
+        InventoryCopter inv = new InventoryCopter(this.copter);
+        inv.loadFromNBT(copter.getTagCompound());
         Axis.isHidden = true;
-        if (BackpackUtils.getWearableCompound(copterPack).getByte(TAG_STATUS) != ItemCopterPack.OFF_MODE)
+        if (BackpackUtils.getWearableCompound(copter).getByte(TAG_STATUS) != ItemCopter.OFF_MODE)
         {
             Axis.isHidden = false;
             int degrees;
@@ -209,13 +209,14 @@ public class ModelCopterPack extends ModelWearable
         }
         this.Base.render(scale);
         this.Axis.render(scale);
+        //codechicken stuff
         renderFluidInTank(inv.getFuelTank(), new Vector3(0, .25f, 0), new Vector3(.25f, 0, .25f), new Vector3(0f, 0.0625f, 0.0f), TankTop);
     }
 
     @Override
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5, ItemStack stack)
     {
-        this.copterPack = stack;
+        this.copter = stack;
         render(entity, f, f1, f2, f3, f4, f5);
     }
 
@@ -237,13 +238,13 @@ public class ModelCopterPack extends ModelWearable
             {
                 if (bipedBody.rotationPointX == 0.0F && bipedBody.rotationPointY == 0.0F && bipedBody.rotationPointZ == 0.0F)
                 {
-                    renderCopterPack(entity, f5);
+                    renderCopter(entity, f5);
 
                 }
                 else
                 {
                     GL11.glTranslatef(bipedBody.rotationPointX * f5, bipedBody.rotationPointY * f5, bipedBody.rotationPointZ * f5);
-                    renderCopterPack(entity, f5);
+                    renderCopter(entity, f5);
                     GL11.glTranslatef(-bipedBody.rotationPointX * f5, -bipedBody.rotationPointY * f5, -bipedBody.rotationPointZ * f5);
                 }
             }
@@ -266,7 +267,7 @@ public class ModelCopterPack extends ModelWearable
                 {
                     GL11.glRotatef(bipedBody.rotateAngleX * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
                 }
-                renderCopterPack(entity, f5);
+                renderCopter(entity, f5);
                 GL11.glPopMatrix();
             }
             GL11.glTranslatef(-bipedBody.offsetX, -bipedBody.offsetY, -(bipedBody.offsetZ));

@@ -16,7 +16,7 @@ public class FluidMilk extends Fluid
 {
     public FluidMilk()
     {
-        super("milk", new ResourceLocation(ModInfo.MOD_ID, "fluid.milkStill.png"), new ResourceLocation(ModInfo.MOD_ID, "fluid.milk.png"));
+        super("milk", new ResourceLocation(ModInfo.MODID, "fluid.milkStill.png"), new ResourceLocation(ModInfo.MODID, "fluid.milk.png"));
         setDensity(1200);
         setViscosity(1200);
     }

@@ -25,15 +25,16 @@ import static com.darkona.adventurebackpack.util.Utils.Null;
 /**
  * Created by Darkona on 12/10/2014.
  */
-@GameRegistry.ObjectHolder(ModInfo.MOD_ID)
+@GameRegistry.ObjectHolder(ModInfo.MODID)
 public class ModBlocks
 {
     public static final BlockBackpack BLOCK_BACKPACK = Null();
+    //public static final BlockBackpack BLOCK_BACKPACK = new BlockBackpack();
     public static final BlockSleepingBag BLOCK_SLEEPING_BAG = Null();
     public static final BlockCampFire BLOCK_CAMP_FIRE = Null();
 
     //TODO see https://github.com/Choonster-Minecraft-Mods/TestMod3/tree/1.12.2/src/main/java/choonster/testmod3/init
-    @Mod.EventBusSubscriber(modid = ModInfo.MOD_ID)
+    @Mod.EventBusSubscriber(modid = ModInfo.MODID)
     public static class RegistrationHandler
     {
         public static final Set<ItemBlock> ITEM_BLOCKS = new HashSet<>();
@@ -87,6 +88,6 @@ public class ModBlocks
 
     private static void registerTileEntity(final Class<? extends TileEntity> tileEntityClass, final String name)
     {
-        GameRegistry.registerTileEntity(tileEntityClass, ModInfo.MOD_ID + ":" + name);
+        GameRegistry.registerTileEntity(tileEntityClass, ModInfo.MODID + ":" + name);
     }
 }

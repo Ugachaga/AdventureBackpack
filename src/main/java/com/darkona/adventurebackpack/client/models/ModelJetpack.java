@@ -10,9 +10,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import codechicken.lib.vec.Vector3;
 
-import com.darkona.adventurebackpack.inventory.InventoryCoalJetpack;
+import com.darkona.adventurebackpack.inventory.InventoryJetpack;
 
-public class ModelCoalJetpack extends ModelWearable
+public class ModelJetpack extends ModelWearable
 {
     public ModelRenderer base;
     public ModelRenderer tubeStraightLeft;
@@ -32,7 +32,7 @@ public class ModelCoalJetpack extends ModelWearable
     private ItemStack jetpack;
 
     @SuppressWarnings("unchecked")
-    public ModelCoalJetpack()
+    public ModelJetpack()
     {
         this.textureWidth = 64;
         this.textureHeight = 32;
@@ -114,7 +114,7 @@ public class ModelCoalJetpack extends ModelWearable
         }
     }
 
-    public ModelCoalJetpack setWearable(ItemStack wearable)
+    public ModelJetpack setWearable(ItemStack wearable)
     {
         this.jetpack = wearable;
         return this;
@@ -145,12 +145,12 @@ public class ModelCoalJetpack extends ModelWearable
             {
                 if (bipedBody.rotationPointX == 0.0F && bipedBody.rotationPointY == 0.0F && bipedBody.rotationPointZ == 0.0F)
                 {
-                    renderCoalJetpack(f5);
+                    renderJetpack(f5);
                 }
                 else
                 {
                     GL11.glTranslatef(bipedBody.rotationPointX * f5, bipedBody.rotationPointY * f5, bipedBody.rotationPointZ * f5);
-                    renderCoalJetpack(f5);
+                    renderJetpack(f5);
                     GL11.glTranslatef(-bipedBody.rotationPointX * f5, -bipedBody.rotationPointY * f5, -bipedBody.rotationPointZ * f5);
                 }
             }
@@ -173,7 +173,7 @@ public class ModelCoalJetpack extends ModelWearable
                 {
                     GL11.glRotatef(bipedBody.rotateAngleX * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
                 }
-                renderCoalJetpack(f5);
+                renderJetpack(f5);
                 GL11.glPopMatrix();
             }
             GL11.glTranslatef(-bipedBody.offsetX, -bipedBody.offsetY, -(bipedBody.offsetZ));
@@ -181,9 +181,9 @@ public class ModelCoalJetpack extends ModelWearable
         }
     }
 
-    public void renderCoalJetpack(float f5)
+    public void renderJetpack(float f5)
     {
-        InventoryCoalJetpack inv = new InventoryCoalJetpack(jetpack);
+        InventoryJetpack inv = new InventoryJetpack(jetpack);
 
         this.fireBox.setTextureOffset((inv.getBurnTicks() > 0) ? 9 : 26, 25);
 
@@ -195,6 +195,7 @@ public class ModelCoalJetpack extends ModelWearable
         tankWallRight.render(f5);
         tubeStraightLeft.render(f5);
 
+        //codechicken stuff
         GL11.glPushMatrix();
         renderFluidInTank(inv.getWaterTank(), new Vector3(0, .5f, 0), new Vector3(.155f, 0, .135f), new Vector3(0.18f, 0.0625f, -0.045f), tankTop);
         GL11.glPopMatrix();

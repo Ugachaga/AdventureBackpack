@@ -30,6 +30,7 @@ import com.darkona.adventurebackpack.entity.ai.EntityAIAvoidPlayerWithBackpack;
 import com.darkona.adventurebackpack.init.ModFluids;
 import com.darkona.adventurebackpack.init.ModNetwork;
 import com.darkona.adventurebackpack.inventory.InventoryBackpack;
+import com.darkona.adventurebackpack.item.ItemBackpack;
 import com.darkona.adventurebackpack.network.messages.EntityParticlePacket;
 import com.darkona.adventurebackpack.reference.BackpackTypes;
 import com.darkona.adventurebackpack.util.LogHelper;
@@ -41,7 +42,7 @@ import com.darkona.adventurebackpack.util.Wearing;
  *
  * @author Darkona
  * @see TileBackpack
- * @see com.darkona.adventurebackpack.item.ItemAdventureBackpack
+ * @see ItemBackpack
  * @see BlockBackpack
  */
 @SuppressWarnings("unused")

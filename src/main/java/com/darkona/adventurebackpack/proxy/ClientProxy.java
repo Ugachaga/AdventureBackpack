@@ -7,16 +7,21 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
-import com.darkona.adventurebackpack.client.gui.GuiOverlay;
+import com.darkona.adventurebackpack.client.gui.GuiBackpack;
+import com.darkona.adventurebackpack.client.gui.GuiCopter;
+import com.darkona.adventurebackpack.client.gui.GuiJetpack;
 import com.darkona.adventurebackpack.client.models.ModelBackpackArmor;
-import com.darkona.adventurebackpack.client.models.ModelCoalJetpack;
-import com.darkona.adventurebackpack.client.models.ModelCopterPack;
+import com.darkona.adventurebackpack.client.models.ModelCopter;
+import com.darkona.adventurebackpack.client.models.ModelJetpack;
+import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.config.Keybindings;
 import com.darkona.adventurebackpack.handlers.KeyInputEventHandler;
+import com.darkona.adventurebackpack.inventory.IInventoryBackpack;
+import com.darkona.adventurebackpack.inventory.InventoryCopter;
+import com.darkona.adventurebackpack.inventory.InventoryJetpack;
 import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
 import com.darkona.adventurebackpack.reference.LoadedMods;
 import com.darkona.adventurebackpack.reference.ModInfo;
@@ -30,15 +35,36 @@ public class ClientProxy implements IProxy
 {
     //public static RendererWearableEquipped rendererWearableEquipped = new RendererWearableEquipped(); //TODO renderManager?
     public static ModelBackpackArmor modelAdventureBackpack = new ModelBackpackArmor();
-    public static ModelCoalJetpack modelCoalJetpack = new ModelCoalJetpack();
-    public static ModelCopterPack modelCopterPack = new ModelCopterPack();
+    public static ModelJetpack modelJetpack = new ModelJetpack();
+    public static ModelCopter modelCopter = new ModelCopter();
+
+    private final Minecraft MINECRAFT = Minecraft.getMinecraft();
+
+    @Override
+    public void displayBackpackGUI(EntityPlayer player, IInventoryBackpack inv, Constants.Source source)
+    {
+        System.out.println("player: " + player + "  inv: " + inv + "  source: " + source);
+        MINECRAFT.displayGuiScreen(new GuiBackpack(player, inv, source)); //TODO merge to one method, switch by enum
+    }
+
+    @Override
+    public void displayCopterGUI(EntityPlayer player, InventoryCopter inv, Constants.Source source)
+    {
+        MINECRAFT.displayGuiScreen(new GuiCopter(player, inv, source));
+    }
+
+    @Override
+    public void displayJetpackGUI(EntityPlayer player, InventoryJetpack inv, Constants.Source source)
+    {
+        MINECRAFT.displayGuiScreen(new GuiJetpack(player, inv, source));
+    }
 
     @Override
     public void init()
     {
         //initRenderers();
         registerKeybindings();
-        MinecraftForge.EVENT_BUS.register(new GuiOverlay(Minecraft.getMinecraft()));
+//        MinecraftForge.EVENT_BUS.register(new GuiOverlay(Minecraft.getMinecraft()));
 
         if (LoadedMods.NEI)
         {
@@ -54,12 +80,6 @@ public class ClientProxy implements IProxy
         ClientRegistry.registerKeyBinding(Keybindings.openInventory);
         ClientRegistry.registerKeyBinding(Keybindings.toggleActions);
         FMLCommonHandler.instance().bus().register(new KeyInputEventHandler());
-    }
-
-    @Override
-    public void initNetwork()
-    {
-
     }
 
     @Override
@@ -81,13 +101,13 @@ public class ClientProxy implements IProxy
     @Override
     public void registerItemRenderer(Item item, int meta, String id)
     {
-        ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(ModInfo.MOD_ID + ":" + id, "inventory"));
+        ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(ModInfo.MODID + ":" + id, "inventory"));
     }
 
     @Override
     public void setCustomModelResourceLocation(Item item, int meta, String id)
     {
-        ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(ModInfo.MOD_ID + ":" + id));
+        ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(ModInfo.MODID + ":" + id));
     }
 
 //    private void initRenderers()

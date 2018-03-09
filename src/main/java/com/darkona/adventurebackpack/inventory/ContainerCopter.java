@@ -19,7 +19,7 @@ public class ContainerCopter extends ContainerAdventure
 {
     private static final int COPTER_INV_START = PLAYER_INV_END + 1;
 
-    public ContainerCopter(EntityPlayer player, InventoryCopterPack copter, Source source)
+    public ContainerCopter(EntityPlayer player, InventoryCopter copter, Source source)
     {
         super(player, copter, source);
         makeSlots(player.inventory);
@@ -39,7 +39,7 @@ public class ContainerCopter extends ContainerAdventure
     {
         if (SlotFluid.isContainer(stack))
         {
-            FluidTank fuelTank = ((InventoryCopterPack) inventory).getFuelTank();
+            FluidTank fuelTank = ((InventoryCopter) inventory).getFuelTank();
             ItemStack stackOut = getSlot(COPTER_INV_START + 1).getStack();
 
             boolean isFuelTankEmpty = SlotFluid.isEmpty(fuelTank);
@@ -48,13 +48,13 @@ public class ContainerCopter extends ContainerAdventure
 
             if (SlotFluid.isFilled(stack))
             {
-                if ((stackOut == null || areSameType) && SlotFluidFuel.isValidItem(stack))
+                if ((stackOut.isEmpty() || areSameType) && SlotFluidFuel.isValidItem(stack))
                     if (isFuelTankEmpty || suitableToTank)
                         return mergeBucket(stack);
             }
             else if (SlotFluid.isEmpty(stack))
             {
-                if ((stackOut == null || areSameType) && SlotFluidFuel.isValidItem(stack))
+                if ((stackOut.isEmpty() || areSameType) && SlotFluidFuel.isValidItem(stack))
                     if (!isFuelTankEmpty)
                         return mergeBucket(stack);
             }

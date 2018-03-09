@@ -70,7 +70,7 @@ public abstract class ContainerAdventure extends Container
         int tempCount = 0;
         for (int i = 0; i < inv.length - inventory.getSlotsOnClosing().length; i++)
         {
-            if (inv[i] != null)
+            if (!inv[i].isEmpty())
                 tempCount++;
         }
         if (itemsCount != tempCount)
@@ -101,7 +101,7 @@ public abstract class ContainerAdventure extends Container
     {
         Slot slot = getSlot(fromSlot);
 
-        if (slot.getStack() == ItemStack.EMPTY)
+        if (slot.getStack().isEmpty())
             return ItemStack.EMPTY;
 
         ItemStack stack = slot.getStack();
@@ -118,7 +118,7 @@ public abstract class ContainerAdventure extends Container
                 return ItemStack.EMPTY;
         }
 
-        if (stack.getCount() == 0)
+        if (stack.isEmpty())
         {
             slot.putStack(ItemStack.EMPTY);
         }
@@ -174,13 +174,13 @@ public abstract class ContainerAdventure extends Container
 
         if (initStack.isStackable())
         {
-            while (initStack.getCount() > 0 && (!backward && activeIndex < maxIndex || backward && activeIndex >= minIndex))
+            while (!initStack.isEmpty() && (!backward && activeIndex < maxIndex || backward && activeIndex >= minIndex))
             {
-                activeSlot = (Slot) this.inventorySlots.get(activeIndex);
+                activeSlot = inventorySlots.get(activeIndex);
                 activeStack = activeSlot.getStack();
 
-                if (activeStack.getItem() == initStack.getItem()
-                        && (!initStack.getHasSubtypes() || initStack.getItemDamage() == activeStack.getItemDamage())
+                if (!activeStack.isEmpty() && activeStack.getItem() == initStack.getItem()
+                        && (!initStack.getHasSubtypes() || initStack.getMetadata() == activeStack.getMetadata())
                         && ItemStack.areItemStackTagsEqual(initStack, activeStack))
                 {
                     int mergedSize = activeStack.getCount() + initStack.getCount();
@@ -205,16 +205,16 @@ public abstract class ContainerAdventure extends Container
             }
         }
 
-        if (initStack.getCount() > 0)
+        if (!initStack.isEmpty())
         {
             activeIndex = (backward ? maxIndex - 1 : minIndex);
 
             while (!backward && activeIndex < maxIndex || backward && activeIndex >= minIndex)
             {
-                activeSlot = (Slot) this.inventorySlots.get(activeIndex);
+                activeSlot = inventorySlots.get(activeIndex);
                 activeStack = activeSlot.getStack();
 
-                if (activeStack == ItemStack.EMPTY /*&& activeSlot.isItemValid(initStack)*/)
+                if (activeStack.isEmpty() /*&& activeSlot.isItemValid(initStack)*/)
                 {
                     ItemStack copyStack = initStack.copy();
                     int mergedSize = Math.min(copyStack.getCount(), activeSlot.getSlotStackLimit());
@@ -255,7 +255,7 @@ public abstract class ContainerAdventure extends Container
         for (int i = 0; i < inventory.getSizeInventory(); i++)
         {
             ItemStack itemstack = inventory.removeStackFromSlot(i);
-            if (itemstack != ItemStack.EMPTY)
+            if (!itemstack.isEmpty())
             {
                 inventory.setInventorySlotContents(i, ItemStack.EMPTY);
                 player.dropItem(itemstack, false);

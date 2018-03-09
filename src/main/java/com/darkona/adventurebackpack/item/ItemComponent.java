@@ -49,7 +49,7 @@ public class ItemComponent extends ItemAB
         setHasSubtypes(true);
         setMaxStackSize(16);
         this.setUnlocalizedName("backpackComponent");
-        this.setRegistryName(ModInfo.MOD_ID, "component");
+        this.setRegistryName(ModInfo.MODID, "component");
     }
 
 

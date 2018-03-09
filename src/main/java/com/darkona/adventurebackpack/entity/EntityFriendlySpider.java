@@ -224,7 +224,7 @@ public class EntityFriendlySpider extends EntityCreature
         }
     }
 
-    //TODO ok.. this peace of code from 1.7.10 vanilla EntityLivingBase#onLivingUpdate, with little changes
+    //TODO ok.. this piece of code from 1.7.10 vanilla EntityLivingBase#onLivingUpdate, with little changes
     private void normalLivingUpdateWithNoAI()
     {
 //        if (this.jumpTicks > 0)

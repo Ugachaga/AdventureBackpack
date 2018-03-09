@@ -9,6 +9,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import com.darkona.adventurebackpack.common.Constants;
+import com.darkona.adventurebackpack.inventory.IInventoryBackpack;
+import com.darkona.adventurebackpack.inventory.InventoryJetpack;
+import com.darkona.adventurebackpack.inventory.InventoryCopter;
 import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
 import com.darkona.adventurebackpack.util.LogHelper;
 
@@ -22,6 +26,24 @@ public class ServerProxy implements IProxy
     private static final Map<UUID, NBTTagCompound> extendedEntityData = new HashMap<>();
 
     @Override
+    public void displayBackpackGUI(EntityPlayer player, IInventoryBackpack inv, Constants.Source source)
+    {
+        throw new IllegalArgumentException("Tried to open the GUI on the server");
+    }
+
+    @Override
+    public void displayCopterGUI(EntityPlayer player, InventoryCopter inv, Constants.Source source)
+    {
+        throw new IllegalArgumentException("Tried to open the GUI on the server");
+    }
+
+    @Override
+    public void displayJetpackGUI(EntityPlayer player, InventoryJetpack inv, Constants.Source source)
+    {
+        throw new IllegalArgumentException("Tried to open the GUI on the server");
+    }
+
+    @Override
     public void init()
     {
 
@@ -29,12 +51,6 @@ public class ServerProxy implements IProxy
 
     @Override
     public void registerKeybindings()
-    {
-
-    }
-
-    @Override
-    public void initNetwork()
     {
 
     }

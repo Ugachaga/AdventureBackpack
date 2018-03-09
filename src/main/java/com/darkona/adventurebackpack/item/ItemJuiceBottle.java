@@ -28,7 +28,7 @@ public class ItemJuiceBottle extends ItemAB
         setCreativeTab(CreativeTabAB.TAB_AB);
         setFull3D();
         setUnlocalizedName("melonJuiceBottle");
-        this.setRegistryName(ModInfo.MOD_ID, "melon_juice_bottle");
+        this.setRegistryName(ModInfo.MODID, "melon_juice_bottle");
         setMaxStackSize(1);
     }
 

@@ -18,7 +18,7 @@ public class ItemAdventureSuit extends ArmorAB
         super(1, EntityEquipmentSlot.CHEST);
         setMaxDamage(Items.LEATHER_CHESTPLATE.getMaxDamage() + 70);
         setUnlocalizedName("adventureSuit");
-        this.setRegistryName(ModInfo.MOD_ID, "adventure_suit");
+        this.setRegistryName(ModInfo.MODID, "adventure_suit");
     }
 
     @Override

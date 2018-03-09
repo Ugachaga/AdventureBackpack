@@ -32,7 +32,7 @@ public class SyncPropertiesPacket implements IMessageHandler<SyncPropertiesPacke
         {
             if (Minecraft.getMinecraft().world == null)
             {
-                ModNetwork.net.sendToServer(new SyncPropertiesPacket.Message());
+                ModNetwork.INSTANCE.sendToServer(new SyncPropertiesPacket.Message());
             }
             else
             {

@@ -29,7 +29,7 @@ public abstract class FluidEffect
         this.fluid = fluid;
         this.timeInTicks = this.timeInSeconds * 20;
         this.effectID = 0;
-        if (!(fluid == null))
+        if (fluid != null)
         {
             com.darkona.adventurebackpack.fluids.FluidEffectRegistry.registerFluidEffect(this);
         }

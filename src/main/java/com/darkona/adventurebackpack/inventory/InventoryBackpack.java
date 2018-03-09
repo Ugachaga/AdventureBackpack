@@ -5,7 +5,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fluids.FluidTank;
@@ -57,12 +56,7 @@ public class InventoryBackpack extends InventoryAdventure implements IInventoryB
     public InventoryBackpack(ItemStack backpack)
     {
         super(backpack, Constants.INVENTORY_SIZE);
-    }
-
-    public InventoryBackpack(ItemStack backpack, EntityPlayer player)
-    {
-        this(backpack);
-        openInventory(player);
+        loadFromNBT(containerStack.getTagCompound());
     }
 
     @Override
@@ -235,6 +229,7 @@ public class InventoryBackpack extends InventoryAdventure implements IInventoryB
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void saveSleepingBag()
     {
         if (sleepingBagDeployed)

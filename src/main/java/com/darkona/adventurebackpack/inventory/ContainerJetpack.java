@@ -23,7 +23,7 @@ public class ContainerJetpack extends ContainerAdventure
 
     private ItemStack fuelStack;
 
-    public ContainerJetpack(EntityPlayer player, InventoryCoalJetpack jetpack, Source source)
+    public ContainerJetpack(EntityPlayer player, InventoryJetpack jetpack, Source source)
     {
         super(player, jetpack, source);
         makeSlots(player.inventory);
@@ -57,7 +57,7 @@ public class ContainerJetpack extends ContainerAdventure
     {
         if (SlotFluid.isContainer(stack))
         {
-            FluidTank waterTank = ((InventoryCoalJetpack ) inventory).getWaterTank();
+            FluidTank waterTank = ((InventoryJetpack) inventory).getWaterTank();
             ItemStack stackOut = getSlot(JETPACK_INV_START + 1).getStack();
 
             boolean isWaterTankEmpty = SlotFluid.isEmpty(waterTank);
@@ -66,13 +66,13 @@ public class ContainerJetpack extends ContainerAdventure
 
             if (SlotFluid.isFilled(stack))
             {
-                if ((stackOut == null || areSameType) && SlotFluidWater.isValidItem(stack))
+                if ((stackOut.isEmpty() || areSameType) && SlotFluidWater.isValidItem(stack))
                     if (isWaterTankEmpty || suitableToTank)
                         return mergeBucket(stack);
             }
             else if (SlotFluid.isEmpty(stack))
             {
-                if ((stackOut == null || areSameType) && SlotFluidWater.isValidItem(stack))
+                if ((stackOut.isEmpty() || areSameType) && SlotFluidWater.isValidItem(stack))
                     if (!isWaterTankEmpty)
                         return mergeBucket(stack);
             }

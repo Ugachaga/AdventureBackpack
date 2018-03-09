@@ -1,9 +1,9 @@
 package com.darkona.adventurebackpack.block;
 
-import javax.annotation.Nullable;
 import java.util.Random;
+import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -26,7 +26,7 @@ import com.darkona.adventurebackpack.util.CoordsUtils;
  *
  * @author Darkona
  */
-public class BlockCampFire extends BlockContainer
+public class BlockCampFire extends Block
 {
     public static final AxisAlignedBB CAMP_FIRE_AABB = new AxisAlignedBB(0.2D, 0.0D, 0.2D, 0.8D, 0.15D, 0.8D);
 
@@ -35,7 +35,7 @@ public class BlockCampFire extends BlockContainer
         super(Material.ROCK);
         this.setTickRandomly(true);
         this.setCreativeTab(CreativeTabAB.TAB_AB);
-        setRegistryName(ModInfo.MOD_ID, getUnlocalizedName());
+        setRegistryName(ModInfo.MODID, getUnlocalizedName());
     }
 
     @Override
@@ -48,12 +48,6 @@ public class BlockCampFire extends BlockContainer
     public boolean hasTileEntity(IBlockState state)
     {
         return true;
-    }
-
-    @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta)
-    {
-        return new TileCampfire();
     }
 
     @Override

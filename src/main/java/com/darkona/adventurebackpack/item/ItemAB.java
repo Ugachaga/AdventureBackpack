@@ -21,18 +21,18 @@ public class ItemAB extends Item
     @Override
     public String getUnlocalizedName(ItemStack stack)
     {
-        return String.format("item.%s%s", ModInfo.MOD_ID + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+        return String.format("item.%s%s", ModInfo.MODID + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
     }
 
     @Override
     public String getUnlocalizedName()
     {
-        return String.format("item.%s%s", ModInfo.MOD_ID + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+        return String.format("item.%s%s", ModInfo.MODID + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
     }
 
     public String getUnlocalizedName(String name)
     {
-        return String.format("item.%s%s", ModInfo.MOD_ID + ":", name);
+        return String.format("item.%s%s", ModInfo.MODID + ":", name);
     }
 
 

@@ -5,8 +5,8 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -18,7 +18,6 @@ import com.darkona.adventurebackpack.config.ConfigHandler;
 import com.darkona.adventurebackpack.init.ModNetwork;
 import com.darkona.adventurebackpack.inventory.ContainerBackpack;
 import com.darkona.adventurebackpack.inventory.IInventoryBackpack;
-import com.darkona.adventurebackpack.inventory.InventoryBackpack;
 import com.darkona.adventurebackpack.network.PlayerActionPacket;
 import com.darkona.adventurebackpack.network.SleepingBagPacket;
 import com.darkona.adventurebackpack.reference.LoadedMods;
@@ -31,9 +30,9 @@ import com.darkona.adventurebackpack.util.TinkersUtils;
  * @author Darkona
  */
 @SideOnly(Side.CLIENT)
-public class GuiAdvBackpack extends GuiWithTanks
+public class GuiBackpack extends GuiWithTanks
 {
-    private static final ResourceLocation TEXTURE = Resources.guiTextures("guiBackpackNew");
+    private static final ResourceLocation TEXTURE = Resources.guiTextures("backpack");
     private static final int TINKERS_SLOT = 38; //ContainerBackpack.CRAFT_MATRIX_EMULATION[4]
 
     private static GuiImageButtonNormal bedButton = new GuiImageButtonNormal(5, 91, 18, 18);
@@ -46,17 +45,7 @@ public class GuiAdvBackpack extends GuiWithTanks
 
     private boolean isHoldingSpace;
 
-    public GuiAdvBackpack(EntityPlayer player, TileBackpack tileBackpack, Source source)
-    {
-        super(new ContainerBackpack(player, tileBackpack, source));
-        this.player = player;
-        inventory = tileBackpack;
-        this.source = source;
-        xSize = 248;
-        ySize = 207;
-    }
-
-    public GuiAdvBackpack(EntityPlayer player, InventoryBackpack inventoryBackpack, Source source)
+    public GuiBackpack(EntityPlayer player, IInventoryBackpack inventoryBackpack, Source source)
     {
         super(new ContainerBackpack(player, inventoryBackpack, source));
         this.player = player;
@@ -76,7 +65,7 @@ public class GuiAdvBackpack extends GuiWithTanks
     protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY)
     {
         GL11.glColor4f(1, 1, 1, 1);
-        this.mc.renderEngine.bindTexture(TEXTURE);
+        this.mc.getTextureManager().bindTexture(TEXTURE);
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
         // Buttons and button highlight
@@ -152,14 +141,14 @@ public class GuiAdvBackpack extends GuiWithTanks
             if (source == Source.TILE)
             {
                 TileBackpack te = (TileBackpack) inventory;
-                ModNetwork.net.sendToServer(new SleepingBagPacket.SleepingBagMessage(true, te.getPos().getX(), te.getPos().getY(), te.getPos().getZ()));
+                ModNetwork.INSTANCE.sendToServer(new SleepingBagPacket.SleepingBagMessage(true, te.getPos().getX(), te.getPos().getY(), te.getPos().getZ()));
             }
             else
             {
                 int posX = MathHelper.floor(player.posX);
                 int posY = MathHelper.floor(player.posY) - 1;
                 int posZ = MathHelper.floor(player.posZ);
-                ModNetwork.net.sendToServer(new SleepingBagPacket.SleepingBagMessage(false, posX, posY, posZ));
+                ModNetwork.INSTANCE.sendToServer(new SleepingBagPacket.SleepingBagMessage(false, posX, posY, posZ));
             }
         }
         else
@@ -178,7 +167,7 @@ public class GuiAdvBackpack extends GuiWithTanks
             if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
             {
                 isHoldingSpace = true;
-                ModNetwork.net.sendToServer(new PlayerActionPacket.ActionMessage(PlayerActionPacket.GUI_HOLDING_SPACE));
+                ModNetwork.INSTANCE.sendToServer(new PlayerActionPacket.ActionMessage(PlayerActionPacket.GUI_HOLDING_SPACE));
                 inventory.getExtendedProperties().setBoolean(Constants.TAG_HOLDING_SPACE, true);
             }
         }
@@ -187,7 +176,7 @@ public class GuiAdvBackpack extends GuiWithTanks
             if (!Keyboard.isKeyDown(Keyboard.KEY_SPACE))
             {
                 isHoldingSpace = false;
-                ModNetwork.net.sendToServer(new PlayerActionPacket.ActionMessage(PlayerActionPacket.GUI_NOT_HOLDING_SPACE));
+                ModNetwork.INSTANCE.sendToServer(new PlayerActionPacket.ActionMessage(PlayerActionPacket.GUI_NOT_HOLDING_SPACE));
                 inventory.getExtendedProperties().removeTag(Constants.TAG_HOLDING_SPACE);
             }
         }

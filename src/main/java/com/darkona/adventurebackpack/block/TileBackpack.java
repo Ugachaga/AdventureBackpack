@@ -53,7 +53,7 @@ import static com.darkona.adventurebackpack.common.Constants.TOOL_UPPER;
 /**
  * Created by Darkona on 12/10/2014.
  */
-public class TileBackpack extends TileAdventure implements IInventoryBackpack, ITickable, ISidedInventory
+public class TileBackpack extends TileAdventure implements IInventoryBackpack, ITickable, ISidedInventory//, IItemHandler
 {
     private static final int[] MAIN_INVENTORY_SLOTS = Utils.createSlotArray(0, Constants.INVENTORY_MAIN_SIZE);
 

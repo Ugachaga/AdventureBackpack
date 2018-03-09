@@ -12,7 +12,7 @@ import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.common.Constants.Source;
 import com.darkona.adventurebackpack.config.ConfigHandler;
 import com.darkona.adventurebackpack.inventory.ContainerJetpack;
-import com.darkona.adventurebackpack.inventory.InventoryCoalJetpack;
+import com.darkona.adventurebackpack.inventory.InventoryJetpack;
 import com.darkona.adventurebackpack.util.Resources;
 
 /**
@@ -20,20 +20,20 @@ import com.darkona.adventurebackpack.util.Resources;
  *
  * @author Darkona
  */
-public class GuiCoalJetpack extends GuiWithTanks
+public class GuiJetpack extends GuiWithTanks
 {
-    private static final ResourceLocation TEXTURE = Resources.guiTextures("guiCoalJetpack");
+    private static final ResourceLocation TEXTURE = Resources.guiTextures("jetpack");
 
     private static GuiImageButtonNormal equipButton = new GuiImageButtonNormal(150, 64, 18, 18);
     private static GuiImageButtonNormal unequipButton = new GuiImageButtonNormal(150, 64, 18, 18);
     private static GuiTank waterTank = new GuiTank(8, 8, 72, 16, ConfigHandler.typeTankRender);
     private static GuiTank steamTank = new GuiTank(116, 8, 72, 16, ConfigHandler.typeTankRender);
 
-    private InventoryCoalJetpack inventory;
+    private InventoryJetpack inventory;
 
     private int boiling = 0;
 
-    public GuiCoalJetpack(EntityPlayer player, InventoryCoalJetpack inv, Source source)
+    public GuiJetpack(EntityPlayer player, InventoryJetpack inv, Source source)
     {
         super(new ContainerJetpack(player, inv, source));
         this.player = player;
@@ -47,7 +47,7 @@ public class GuiCoalJetpack extends GuiWithTanks
     protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int mouseX, int mouseY)
     {
         inventory.openInventory(player);
-        this.mc.renderEngine.bindTexture(TEXTURE);
+        this.mc.getTextureManager().bindTexture(TEXTURE);
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
         if (source == Source.WEARING)
@@ -77,7 +77,7 @@ public class GuiCoalJetpack extends GuiWithTanks
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
-        this.mc.renderEngine.bindTexture(TEXTURE);
+        this.mc.getTextureManager().bindTexture(TEXTURE); //TODO again?
         inventory.openInventory(player);
         FluidTank water = inventory.getWaterTank();
         FluidTank steam = inventory.getSteamTank();

@@ -64,7 +64,7 @@ public class ItemMachete extends ToolAB
         setMaxDamage(Items.IRON_SWORD.getMaxDamage() + 250);
         this.field_150934_a = ModMaterials.ruggedIron.getAttackDamage();
         this.setUnlocalizedName("machete");
-        this.setRegistryName(ModInfo.MOD_ID, "machete");
+        this.setRegistryName(ModInfo.MODID, "machete");
     }
 
     @Override

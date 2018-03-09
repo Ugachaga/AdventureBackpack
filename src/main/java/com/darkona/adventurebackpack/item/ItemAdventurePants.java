@@ -18,7 +18,7 @@ public class ItemAdventurePants extends ArmorAB
         super(2, EntityEquipmentSlot.LEGS);
         setMaxDamage(Items.LEATHER_LEGGINGS.getMaxDamage() + 75);
         setUnlocalizedName("adventurePants");
-        this.setRegistryName(ModInfo.MOD_ID, "adventure_pants");
+        this.setRegistryName(ModInfo.MODID, "adventure_pants");
     }
 
     @Override

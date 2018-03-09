@@ -13,7 +13,7 @@ import com.darkona.adventurebackpack.reference.ModInfo;
  */
 public class Resources
 {
-    private static final String TEXTURE_LOCATION = ModInfo.MOD_ID;
+    private static final String TEXTURE_LOCATION = ModInfo.MODID;
 
     public static ResourceLocation getBackpackTexture(BackpackTypes type)
     {

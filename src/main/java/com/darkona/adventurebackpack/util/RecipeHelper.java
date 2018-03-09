@@ -21,8 +21,8 @@ import com.darkona.adventurebackpack.reference.ModInfo;
 public class RecipeHelper
 {
     private static int j = 0;
-    private static final String MODID = ModInfo.MOD_ID;
-    private static final String MODNAME = ModInfo.MOD_NAME;
+    private static final String MODID = ModInfo.MODID;
+    private static final String MODNAME = ModInfo.NAME;
 
 
     public static void convertToShaped(Item output, Object ... input)

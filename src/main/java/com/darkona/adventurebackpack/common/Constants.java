@@ -59,7 +59,7 @@ public class Constants
     public class Jetpack
     {
         /**
-         *  ### Coal Jetpack ###
+         *  ### Steam Jetpack ###
          */
         public static final int MAX_TEMPERATURE = 200;
         public static final int WATER_CAPACITY = BUCKET * 6;

@@ -16,7 +16,14 @@ import com.darkona.adventurebackpack.inventory.InventoryBackpack;
 import com.darkona.adventurebackpack.reference.BackpackTypes;
 import com.darkona.adventurebackpack.reference.ToolHandler;
 
-import static com.darkona.adventurebackpack.reference.BackpackTypes.*;
+import static com.darkona.adventurebackpack.reference.BackpackTypes.HORSE;
+import static com.darkona.adventurebackpack.reference.BackpackTypes.IRON_GOLEM;
+import static com.darkona.adventurebackpack.reference.BackpackTypes.OCELOT;
+import static com.darkona.adventurebackpack.reference.BackpackTypes.PIG;
+import static com.darkona.adventurebackpack.reference.BackpackTypes.QUARTZ;
+import static com.darkona.adventurebackpack.reference.BackpackTypes.SLIME;
+import static com.darkona.adventurebackpack.reference.BackpackTypes.SNOW;
+import static com.darkona.adventurebackpack.reference.BackpackTypes.VILLAGER;
 
 /**
  * Created on 17/12/2014

@@ -24,14 +24,14 @@ public class NyanMovingSound extends MovingSound
 
     public NyanMovingSound(EntityPlayer player)
     {
-        super(new SoundEvent(new ResourceLocation(ModInfo.MOD_ID, "nyan")), SoundCategory.BLOCKS);
+        super(new SoundEvent(new ResourceLocation(ModInfo.MODID, "nyan")), SoundCategory.BLOCKS);
         this.volume = 0.8f;
         this.player = player;
     }
 
     public NyanMovingSound()
     {
-        super(new SoundEvent(new ResourceLocation(ModInfo.MOD_ID, "nyan")), SoundCategory.BLOCKS);
+        super(new SoundEvent(new ResourceLocation(ModInfo.MODID, "nyan")), SoundCategory.BLOCKS);
     }
 
     public void setDonePlaying()

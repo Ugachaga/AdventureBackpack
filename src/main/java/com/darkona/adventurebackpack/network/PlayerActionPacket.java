@@ -11,7 +11,7 @@ import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.entity.EntityFriendlySpider;
 import com.darkona.adventurebackpack.inventory.ContainerBackpack;
 import com.darkona.adventurebackpack.inventory.IInventoryBackpack;
-import com.darkona.adventurebackpack.inventory.InventoryCoalJetpack;
+import com.darkona.adventurebackpack.inventory.InventoryJetpack;
 import com.darkona.adventurebackpack.util.Wearing;
 
 /**
@@ -46,7 +46,7 @@ public class PlayerActionPacket implements IMessageHandler<PlayerActionPacket.Ac
                 {
                     if (Wearing.isWearingJetpack(player))
                     {
-                        InventoryCoalJetpack inv = new InventoryCoalJetpack(Wearing.getWearingJetpack(player));
+                        InventoryJetpack inv = new InventoryJetpack(Wearing.getWearingJetpack(player));
                         inv.setInUse(message.type == JETPACK_IN_USE);
                         inv.markDirty();
                     }

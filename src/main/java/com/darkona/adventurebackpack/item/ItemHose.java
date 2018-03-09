@@ -69,7 +69,7 @@ public class ItemHose extends ItemAB
         setNoRepair();
         setUnlocalizedName("backpackHose");
         setCreativeTab(CreativeTabAB.TAB_AB);
-        this.setRegistryName(ModInfo.MOD_ID, "backpack_hose");
+        this.setRegistryName(ModInfo.MODID, "backpack_hose");
     }
 
     @Override

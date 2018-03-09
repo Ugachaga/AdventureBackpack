@@ -1,7 +1,7 @@
 package com.darkona.adventurebackpack.item;
 
-import javax.annotation.Nullable;
 import java.util.List;
+import javax.annotation.Nullable;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.model.ModelBiped;
@@ -19,6 +19,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -33,9 +34,8 @@ import com.darkona.adventurebackpack.common.BackpackAbilities;
 import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.config.ConfigHandler;
 import com.darkona.adventurebackpack.events.WearableEvent;
-import com.darkona.adventurebackpack.init.ModBlocks;
 import com.darkona.adventurebackpack.init.ModNetwork;
-import com.darkona.adventurebackpack.network.GUIPacket;
+import com.darkona.adventurebackpack.network.GuiPacket;
 import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
 import com.darkona.adventurebackpack.proxy.ClientProxy;
 import com.darkona.adventurebackpack.reference.BackpackTypes;
@@ -61,13 +61,13 @@ import static com.darkona.adventurebackpack.util.TipUtils.l10n;
  *
  * @author Darkona
  */
-public class ItemAdventureBackpack extends ItemAdventure
+public class ItemBackpack extends ItemAdventure
 {
-    public ItemAdventureBackpack()
+    public ItemBackpack()
     {
         super();
         setUnlocalizedName("adventureBackpack");
-        this.setRegistryName(ModInfo.MOD_ID, "adventure_backpack");
+        this.setRegistryName(ModInfo.MODID, "adventure_backpack");
     }
 
     @Override
@@ -116,10 +116,12 @@ public class ItemAdventureBackpack extends ItemAdventure
 
         if (GuiScreen.isCtrlKeyDown())
         {
-            boolean cycling = !backpackTag.getBoolean(TAG_DISABLE_CYCLING);
-            tooltip.add(l10n("backpack.cycling") + ": " + TipUtils.switchTooltip(cycling, true));
-            tooltip.add(TipUtils.pressKeyFormat(TipUtils.actionKeyFormat()) + l10n("backpack.cycling.key1"));
-            tooltip.add(l10n("backpack.cycling.key2") + " " + TipUtils.switchTooltip(!cycling, false));
+            {
+                boolean cycling = !backpackTag.getBoolean(TAG_DISABLE_CYCLING);
+                tooltip.add(l10n("backpack.cycling") + ": " + TipUtils.switchTooltip(cycling, true));
+                tooltip.add(TipUtils.pressKeyFormat(TipUtils.actionKeyFormat()) + l10n("backpack.cycling.key1"));
+                tooltip.add(l10n("backpack.cycling.key2") + " " + TipUtils.switchTooltip(!cycling, false));
+            }
 
             if (BackpackTypes.isNightVision(type))
             {
@@ -154,7 +156,7 @@ public class ItemAdventureBackpack extends ItemAdventure
         {
             if (world.isRemote)
             {
-                ModNetwork.net.sendToServer(new GUIPacket.GUImessage(GUIPacket.BACKPACK_GUI, GUIPacket.FROM_HOLDING));
+                ModNetwork.INSTANCE.sendToServer(new GuiPacket.GuiMessage(GuiPacket.GUI_BACKPACK, GuiPacket.FROM_HOLDING));
             }
         }
         return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));
@@ -179,11 +181,9 @@ public class ItemAdventureBackpack extends ItemAdventure
 
     private boolean tryPlace(World world, EntityPlayer player, ItemStack backpack) //TODO extract behavior to CoordsUtils
     {
-        int x = (int) player.posX;
-        if (player.posX < 0) x--;
-        int z = (int) player.posZ;
-        if (player.posZ < 0) z--;
-        int Y = (int) player.posY;
+        int x = MathHelper.floor(player.posX);
+        int z = MathHelper.floor(player.posZ);
+        int Y = MathHelper.floor(player.posY);
         if (Y < 1) Y = 1;
 
         int positions[] = {0, -1, 1, -2, 2, -3, 3, -4, 4, -5, 5, -6, 6};
@@ -204,55 +204,30 @@ public class ItemAdventureBackpack extends ItemAdventure
 
     private boolean placeBackpack(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, boolean from)
     {
-        if (stack.getCount() == 0 || !player.canPlayerEdit(pos, side, stack)) return false;
-        if (!stack.hasTagCompound()) stack.setTagCompound(new NBTTagCompound());
-        if (!stack.getTagCompound().hasKey(TAG_TYPE)) //TODO redundant
-        {
-            stack.getTagCompound().setByte(TAG_TYPE, BackpackTypes.getMeta(BackpackTypes.STANDARD));
-        }
-
-        // world.spawnEntityInWorld(new EntityLightningBolt(world, x, y, z));
-        BlockBackpack backpack = ModBlocks.BLOCK_BACKPACK;
-
-        if (pos.getY() <= 0 || pos.getY() >= world.getHeight())
-        {
+        if (stack.isEmpty()
+                || !player.canPlayerEdit(pos, side, stack)
+                || (pos.getY() <= 0 || pos.getY() >= world.getHeight()))
             return false;
-        }
-        if (backpack.canPlaceBlockOnSide(world, pos, side))
+
+        //BlockBackpack backpack = ModBlocks.BLOCK_BACKPACK; //TODO correctly register blocks
+        BlockBackpack backpack = new BlockBackpack();
+
+        //pos = pos.up(); //from now on, we are working with block ABOVE one player click
+
+        if (backpack.canPlaceBlockOnSide(world, pos, side) && world.getBlockState(pos).getMaterial().isSolid())
         {
-            if (world.getBlockState(pos).getMaterial().isSolid())
-            {
-                switch (side)
-                {
-                    case DOWN:
-                        pos.down();
-                        break;
-                    case UP:
-                        pos.up();
-                        break;
-                    case SOUTH:
-                        pos.south();
-                        break;
-                    case EAST:
-                        pos.east();
-                        break;
-                    case WEST:
-                        pos.west();
-                        break;
-                    case NORTH:
-                        pos.north();
-                        break;
-                }
-            }
+            pos = pos.offset(side);
+
             if (pos.getY() <= 0 || pos.getY() >= world.getHeight())
-            {
                 return false;
-            }
+
             if (backpack.canPlaceBlockAt(world, pos))
             {
-                if (world.setBlockState(pos, ModBlocks.BLOCK_BACKPACK.getDefaultState()))
+                if (world.setBlockState(pos, backpack.getDefaultState()))
+                //if (world.setBlockState(pos, ModBlocks.BLOCK_BACKPACK.getDefaultState()))
                 {
-                    backpack.onBlockPlacedBy(world, pos, ModBlocks.BLOCK_BACKPACK.getDefaultState(), player, stack);
+                    backpack.onBlockPlacedBy(world, pos, backpack.getDefaultState(), player, stack);
+                    //backpack.onBlockPlacedBy(world, pos, ModBlocks.BLOCK_BACKPACK.getDefaultState(), player, stack);
                     player.playSound(SoundEvents.BLOCK_CLOTH_PLACE, 0.5f, 1.0f);
                     ((TileBackpack) world.getTileEntity(pos)).loadFromNBT(stack.getTagCompound());
                     if (from)

@@ -20,7 +20,7 @@ public class ModGuiConfig extends GuiConfig
 {
     public ModGuiConfig(GuiScreen guiScreen)
     {
-        super(guiScreen, getConfigElements(), ModInfo.MOD_ID, false, false, ModInfo.MOD_NAME);
+        super(guiScreen, getConfigElements(), ModInfo.MODID, false, false, ModInfo.NAME);
     }
 
     private static List<IConfigElement> getConfigElements()

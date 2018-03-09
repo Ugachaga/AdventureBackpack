@@ -3,131 +3,124 @@ package com.darkona.adventurebackpack.network;
 import io.netty.buffer.ByteBuf;
 
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import com.darkona.adventurebackpack.AdventureBackpack;
-import com.darkona.adventurebackpack.block.TileBackpack;
-import com.darkona.adventurebackpack.handlers.GuiHandler;
-import com.darkona.adventurebackpack.inventory.ContainerBackpack;
+import com.darkona.adventurebackpack.common.Constants;
+import com.darkona.adventurebackpack.inventory.InventoryBackpack;
+import com.darkona.adventurebackpack.inventory.InventoryCopter;
+import com.darkona.adventurebackpack.inventory.InventoryJetpack;
 import com.darkona.adventurebackpack.reference.GeneralReference;
 import com.darkona.adventurebackpack.util.Wearing;
 
 /**
  * Created by Darkona on 12/10/2014.
  */
-public class GUIPacket implements IMessageHandler<GUIPacket.GUImessage, IMessage>
+public class GuiPacket implements IMessageHandler<GuiPacket.GuiMessage, IMessage>
 {
     public static final byte FROM_WEARING = 0;
     public static final byte FROM_HOLDING = 1;
-    public static final byte FROM_TILE = 2;
 
-    public static final byte BACKPACK_GUI = 1;
-    public static final byte COPTER_GUI = 2;
-    public static final byte JETPACK_GUI = 3;
+    public static final byte GUI_BACKPACK = 1;
+    public static final byte GUI_COPTER = 2;
+    public static final byte GUI_JETPACK = 3;
 
     @Override
-    public IMessage onMessage(GUImessage message, MessageContext ctx)
+    public IMessage onMessage(GuiMessage message, MessageContext ctx)
     {
-        if (ctx.side.isServer())
+        if (!ctx.side.isServer())
+            return null;
+
+        EntityPlayerMP player = ctx.getServerHandler().player;
+
+        if (player == null)
+            return null;
+
+        if (message.type == GUI_COPTER)
         {
-            EntityPlayerMP player = ctx.getServerHandler().player;
-
-            if (player != null)
+            if (message.from == FROM_WEARING)
             {
-                int playerX = (int) player.posX;
-                int playerY = (int) player.posY;
-                int playerZ = (int) player.posZ;
-                World world = player.world;
-
-                if (message.type == COPTER_GUI)
+                if (Wearing.isWearingCopter(player))
                 {
-                    if (message.from == FROM_WEARING)
-                    {
-                        if (Wearing.isWearingCopter(player))
-                        {
-                            FMLNetworkHandler.openGui(player, AdventureBackpack.instance, GuiHandler.COPTER_WEARING, world, playerX, playerY, playerZ);
-                            return null;
-                        }
-                    }
-                    if (message.from == FROM_HOLDING)
-                    {
-                        if (Wearing.isHoldingCopter(player))
-                        {
-                            FMLNetworkHandler.openGui(player, AdventureBackpack.instance, GuiHandler.COPTER_HOLDING, world, playerX, playerY, playerZ);
-                            return null;
-                        }
-                    }
+                    player.getServerWorld().addScheduledTask(()
+                            -> AdventureBackpack.proxy.displayCopterGUI(player,
+                            new InventoryCopter(Wearing.getWearingCopter(player)), Constants.Source.WEARING));
+                    return null;
                 }
-                if (message.type == JETPACK_GUI)
+            }
+            else if (message.from == FROM_HOLDING)
+            {
+                if (Wearing.isHoldingCopter(player))
                 {
-                    if (message.from == FROM_WEARING)
-                    {
-                        if (Wearing.isWearingJetpack(player))
-                        {
-                            FMLNetworkHandler.openGui(player, AdventureBackpack.instance, GuiHandler.JETPACK_WEARING, world, playerX, playerY, playerZ);
-                            return null;
-                        }
-                    }
-                    if (message.from == FROM_HOLDING)
-                    {
-                        if (Wearing.isHoldingJetpack(player))
-                        {
-                            FMLNetworkHandler.openGui(player, AdventureBackpack.instance, GuiHandler.JETPACK_HOLDING, world, playerX, playerY, playerZ);
-                            return null;
-                        }
-                    }
+                    player.getServerWorld().addScheduledTask(()
+                            -> AdventureBackpack.proxy.displayCopterGUI(player,
+                            new InventoryCopter(Wearing.getHoldingCopter(player)), Constants.Source.HOLDING));
+                    return null;
                 }
-                if (message.type == BACKPACK_GUI)
+            }
+        }
+        else if (message.type == GUI_JETPACK)
+        {
+            if (message.from == FROM_WEARING)
+            {
+                if (Wearing.isWearingJetpack(player))
                 {
-                    if (!GeneralReference.isDimensionAllowed(player))
-                        return null;
+                    player.getServerWorld().addScheduledTask(()
+                            -> AdventureBackpack.proxy.displayJetpackGUI(player,
+                            new InventoryJetpack(Wearing.getWearingJetpack(player)), Constants.Source.WEARING));
+                    return null;
+                }
+            }
+            else if (message.from == FROM_HOLDING)
+            {
+                if (Wearing.isHoldingJetpack(player))
+                {
+                    player.getServerWorld().addScheduledTask(()
+                            -> AdventureBackpack.proxy.displayJetpackGUI(player,
+                            new InventoryJetpack(Wearing.getHoldingJetpack(player)), Constants.Source.HOLDING));
+                    return null;
+                }
+            }
+        }
+        else if (message.type == GUI_BACKPACK)
+        {
+            if (!GeneralReference.isDimensionAllowed(player))
+                return null;
 
-                    if (message.from == FROM_WEARING)
-                    {
-                        if (Wearing.isWearingBackpack(player))
-                        {
-                            FMLNetworkHandler.openGui(player, AdventureBackpack.instance, GuiHandler.BACKPACK_WEARING, world, playerX, playerY, playerZ);
-                            return null;
-                        }
-                    }
-                    if (message.from == FROM_HOLDING)
-                    {
-                        if (Wearing.isHoldingBackpack(player))
-                        {
-                            FMLNetworkHandler.openGui(player, AdventureBackpack.instance, GuiHandler.BACKPACK_HOLDING, world, playerX, playerY, playerZ);
-                            return null;
-                        }
-                    }
-                    if (message.from == FROM_TILE)
-                    {
-                        if (player.openContainer instanceof ContainerBackpack)
-                        {
-                            TileBackpack te = (TileBackpack) ((ContainerBackpack) player.openContainer).getInventoryBackpack();
-                            FMLNetworkHandler.openGui(player, AdventureBackpack.instance, GuiHandler.BACKPACK_TILE, world, te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
-                            return null;
-                        }
-                    }
+            if (message.from == FROM_WEARING)
+            {
+                if (Wearing.isWearingBackpack(player))
+                {
+                    player.getServerWorld().addScheduledTask(()
+                            -> AdventureBackpack.proxy.displayBackpackGUI(player,
+                            new InventoryBackpack(Wearing.getWearingBackpack(player)), Constants.Source.WEARING));
+                    return null;
+                }
+            }
+            else if (message.from == FROM_HOLDING)
+            {
+                if (Wearing.isHoldingBackpack(player))
+                {
+                    player.getServerWorld().addScheduledTask(()
+                            -> AdventureBackpack.proxy.displayBackpackGUI(player,
+                            new InventoryBackpack(Wearing.getHoldingBackpack(player)), Constants.Source.HOLDING));
+                    return null;
                 }
             }
         }
         return null;
     }
 
-    public static class GUImessage implements IMessage
+    public static class GuiMessage implements IMessage
     {
         private byte type;
         private byte from;
 
-        public GUImessage()
-        {
+        public GuiMessage() {}
 
-        }
-
-        public GUImessage(byte type, byte from)
+        public GuiMessage(byte type, byte from)
         {
             this.type = type;
             this.from = from;

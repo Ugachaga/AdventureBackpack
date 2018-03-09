@@ -1,13 +1,13 @@
 package com.darkona.adventurebackpack.inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants.NBT;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 
 import com.darkona.adventurebackpack.common.Constants;
-import com.darkona.adventurebackpack.item.ItemCopterPack;
+import com.darkona.adventurebackpack.item.ItemCopter;
 
 import static com.darkona.adventurebackpack.common.Constants.Copter.BUCKET_IN;
 import static com.darkona.adventurebackpack.common.Constants.Copter.BUCKET_OUT;
@@ -21,22 +21,17 @@ import static com.darkona.adventurebackpack.common.Constants.TAG_WEARABLE_COMPOU
  *
  * @author Darkona
  */
-public class InventoryCopterPack extends InventoryAdventure
+public class InventoryCopter extends InventoryAdventure
 {
     private FluidTank fuelTank = new FluidTank(Constants.Copter.FUEL_CAPACITY);
 
-    private byte status = ItemCopterPack.OFF_MODE;
+    private byte status = ItemCopter.OFF_MODE;
     private int tickCounter = 0;
 
-    public InventoryCopterPack(ItemStack copter)
+    public InventoryCopter(ItemStack copter)
     {
         super(copter, Constants.Copter.INVENTORY_SIZE);
-    }
-
-    public InventoryCopterPack(ItemStack copter, EntityPlayer player)
-    {
-        this(copter);
-        openInventory(player);
+        loadFromNBT(containerStack.getTagCompound());
     }
 
     @Override
@@ -106,7 +101,8 @@ public class InventoryCopterPack extends InventoryAdventure
 
     public boolean canConsumeFuel(int quantity)
     {
-        return fuelTank.drain(quantity, false) != null && fuelTank.drain(quantity, false).amount > 0;
+        FluidStack drain = fuelTank.drain(quantity, false);
+        return drain != null && drain.amount > 0;
     }
 
     public void consumeFuel(int quantity)

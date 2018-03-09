@@ -14,6 +14,7 @@ import org.apache.commons.lang3.text.WordUtils;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.text.translation.I18n;
 
 import com.darkona.adventurebackpack.util.BackpackUtils;
@@ -30,7 +31,7 @@ import static com.darkona.adventurebackpack.reference.BackpackTypes.Props.TILE;
  * @author Ugachaga
  */
 @SuppressWarnings("unused")
-public enum BackpackTypes
+public enum BackpackTypes implements IStringSerializable
 {
     // @formatter:off
     STANDARD        (  0),
@@ -280,6 +281,12 @@ public enum BackpackTypes
         ;
 
         public static final ImmutableSet<Props> POTION_EFFECT = Sets.immutableEnumSet(SPECIAL, REMOVAL);
+    }
+
+    @Override
+    public String getName()
+    {
+        return this.skinName;
     }
 
 }

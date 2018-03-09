@@ -10,7 +10,7 @@ import com.darkona.adventurebackpack.config.Keybindings;
 import com.darkona.adventurebackpack.entity.EntityFriendlySpider;
 import com.darkona.adventurebackpack.init.ModNetwork;
 import com.darkona.adventurebackpack.network.CycleToolPacket;
-import com.darkona.adventurebackpack.network.GUIPacket;
+import com.darkona.adventurebackpack.network.GuiPacket;
 import com.darkona.adventurebackpack.network.PlayerActionPacket;
 import com.darkona.adventurebackpack.network.SyncPropertiesPacket;
 import com.darkona.adventurebackpack.network.WearableModePacket;
@@ -46,28 +46,28 @@ public class KeyInputEventHandler
             {
                 if (Wearing.isHoldingBackpack(player))
                 {
-                    sendGUIPacket(GUIPacket.BACKPACK_GUI, GUIPacket.FROM_HOLDING);
+                    sendGUIPacket(GuiPacket.GUI_BACKPACK, GuiPacket.FROM_HOLDING);
                 }
             }
             else
             {
                 if (Wearing.isWearingBackpack(player))
                 {
-                    sendGUIPacket(GUIPacket.BACKPACK_GUI, GUIPacket.FROM_WEARING);
+                    sendGUIPacket(GuiPacket.GUI_BACKPACK, GuiPacket.FROM_WEARING);
                 }
                 else if (Wearing.isHoldingBackpack(player))
                 {
-                    sendGUIPacket(GUIPacket.BACKPACK_GUI, GUIPacket.FROM_HOLDING);
+                    sendGUIPacket(GuiPacket.GUI_BACKPACK, GuiPacket.FROM_HOLDING);
                 }
 
                 if (Wearing.isWearingCopter(player))
                 {
-                    sendGUIPacket(GUIPacket.COPTER_GUI, GUIPacket.FROM_WEARING);
+                    sendGUIPacket(GuiPacket.GUI_COPTER, GuiPacket.FROM_WEARING);
                 }
 
                 if (Wearing.isWearingJetpack(player))
                 {
-                    sendGUIPacket(GUIPacket.JETPACK_GUI, GUIPacket.FROM_WEARING);
+                    sendGUIPacket(GuiPacket.GUI_JETPACK, GuiPacket.FROM_WEARING);
                 }
             }
         }
@@ -100,12 +100,12 @@ public class KeyInputEventHandler
                 if (player.isSneaking())
                 {
                     sendWearableModePacket(WearableModePacket.COPTER_ON_OFF);
-                    ServerActions.toggleCopterPack(player, Wearing.getWearingCopter(player), WearableModePacket.COPTER_ON_OFF);
+                    ServerActions.toggleCopter(player, Wearing.getWearingCopter(player), WearableModePacket.COPTER_ON_OFF);
                 }
                 else
                 {
                     sendWearableModePacket(WearableModePacket.COPTER_TOGGLE);
-                    ServerActions.toggleCopterPack(player, Wearing.getWearingCopter(player), WearableModePacket.COPTER_TOGGLE);
+                    ServerActions.toggleCopter(player, Wearing.getWearingCopter(player), WearableModePacket.COPTER_TOGGLE);
                 }
             }
             if (Wearing.isWearingJetpack(player))
@@ -113,7 +113,7 @@ public class KeyInputEventHandler
                 if (player.isSneaking())
                 {
                     sendWearableModePacket(WearableModePacket.JETPACK_ON_OFF);
-                    ServerActions.toggleCoalJetpack(player, Wearing.getWearingJetpack(player));
+                    ServerActions.toggleJetpack(player, Wearing.getWearingJetpack(player));
                 }
             }
         }
@@ -147,26 +147,26 @@ public class KeyInputEventHandler
 
     private void sendSyncPropertiesPacket()
     {
-        ModNetwork.net.sendToServer(new SyncPropertiesPacket.Message());
+        ModNetwork.INSTANCE.sendToServer(new SyncPropertiesPacket.Message());
     }
 
     private void sendGUIPacket(byte type, byte from)
     {
-        ModNetwork.net.sendToServer(new GUIPacket.GUImessage(type, from));
+        ModNetwork.INSTANCE.sendToServer(new GuiPacket.GuiMessage(type, from));
     }
 
     private void sendWearableModePacket(byte type)
     {
-        ModNetwork.net.sendToServer(new WearableModePacket.Message(type, "")); //TODO playerID?
+        ModNetwork.INSTANCE.sendToServer(new WearableModePacket.Message(type, "")); //TODO playerID?
     }
 
     private void sendCycleToolPacket(int slot, byte type)
     {
-        ModNetwork.net.sendToServer(new CycleToolPacket.CycleToolMessage(false, slot, type));
+        ModNetwork.INSTANCE.sendToServer(new CycleToolPacket.CycleToolMessage(false, slot, type));
     }
 
     private void sendPlayerActionPacket(byte type)
     {
-        ModNetwork.net.sendToServer(new PlayerActionPacket.ActionMessage(type));
+        ModNetwork.INSTANCE.sendToServer(new PlayerActionPacket.ActionMessage(type));
     }
 }

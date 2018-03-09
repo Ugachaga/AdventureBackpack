@@ -10,7 +10,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import com.darkona.adventurebackpack.network.CowAbilityPacket;
 import com.darkona.adventurebackpack.network.CycleToolPacket;
 import com.darkona.adventurebackpack.network.EquipUnequipBackWearablePacket;
-import com.darkona.adventurebackpack.network.GUIPacket;
+import com.darkona.adventurebackpack.network.GuiPacket;
 import com.darkona.adventurebackpack.network.PlayerActionPacket;
 import com.darkona.adventurebackpack.network.SleepingBagPacket;
 import com.darkona.adventurebackpack.network.SyncPropertiesPacket;
@@ -27,20 +27,20 @@ import com.darkona.adventurebackpack.reference.ModInfo;
  */
 public class ModNetwork
 {
-    public static SimpleNetworkWrapper net;
-    public static int messages = 0;
+    public static final SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.MODID);
+
+    private static int messageID = 1;
 
     public static void init()
     {
-        net = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.MOD_CHANNEL);
-
         registerMessage(SyncPropertiesPacket.class, SyncPropertiesPacket.Message.class);
         registerMessage(EntityParticlePacket.class, EntityParticlePacket.Message.class);
         registerMessage(EntitySoundPacket.class, EntitySoundPacket.Message.class);
 
         registerMessage(WearableModePacket.class, WearableModePacket.Message.class);
         registerMessage(CycleToolPacket.class, CycleToolPacket.CycleToolMessage.class);
-        registerMessage(GUIPacket.class, GUIPacket.GUImessage.class);
+        //registerMessage(GuiPacket.class, GuiPacket.GuiMessage.class);
+        registerServerSide(GuiPacket.class, GuiPacket.GuiMessage.class);
         registerMessage(SleepingBagPacket.class, SleepingBagPacket.SleepingBagMessage.class);
         registerMessage(CowAbilityPacket.class, CowAbilityPacket.CowAbilityMessage.class);
         registerMessage(PlayerActionPacket.class, PlayerActionPacket.ActionMessage.class);
@@ -50,16 +50,23 @@ public class ModNetwork
     @SuppressWarnings("unchecked")
     public static void registerClientSide(Class handler, Class message)
     {
-        net.registerMessage(handler, message, messages, Side.CLIENT);
-        messages++;
+        INSTANCE.registerMessage(handler, message, messageID, Side.CLIENT);
+        messageID++;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void registerServerSide(Class handler, Class message)
+    {
+        INSTANCE.registerMessage(handler, message, messageID, Side.SERVER);
+        messageID++;
     }
 
     @SuppressWarnings("unchecked")
     private static void registerMessage(Class handler, Class message)
     {
-        net.registerMessage(handler, message, messages, Side.CLIENT);
-        net.registerMessage(handler, message, messages, Side.SERVER);
-        messages++;
+        INSTANCE.registerMessage(handler, message, messageID, Side.CLIENT);
+        INSTANCE.registerMessage(handler, message, messageID, Side.SERVER);
+        messageID++;
     }
 
     public static void sendToNearby(IMessage message, EntityPlayer player)
@@ -68,7 +75,7 @@ public class ModNetwork
         {
             try
             {
-                ((WorldServer) player.world).getEntityTracker().sendToTracking(player, ModNetwork.net.getPacketFrom(message));
+                ((WorldServer) player.world).getEntityTracker().sendToTracking(player, ModNetwork.INSTANCE.getPacketFrom(message));
             }
             catch (Exception ex)
             {
@@ -79,7 +86,7 @@ public class ModNetwork
 
     public static void sendToDimension(IMessage message, EntityPlayer player)
     {
-        net.sendToDimension(message, player.dimension);
+        INSTANCE.sendToDimension(message, player.dimension);
         BackpackProperty.sync(player);
     }
 }

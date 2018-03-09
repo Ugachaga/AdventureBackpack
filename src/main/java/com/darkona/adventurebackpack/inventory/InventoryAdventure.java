@@ -58,14 +58,14 @@ abstract class InventoryAdventure implements IInventoryTanks
     @Override
     public ItemStack getStackInSlot(int slot)
     {
-        return inventory[slot];
+        return inventory[slot] == null ? ItemStack.EMPTY : inventory[slot]; //TODO why null here is ever possible?
     }
 
     @Override
     public ItemStack decrStackSize(int slot, int quantity)
     {
         ItemStack stack = getStackInSlot(slot);
-        if (stack != ItemStack.EMPTY)
+        if (!stack.isEmpty())
         {
             if (stack.getCount() <= quantity)
                 setInventorySlotContents(slot, ItemStack.EMPTY);
@@ -76,7 +76,7 @@ abstract class InventoryAdventure implements IInventoryTanks
     }
 
     @Override
-    public ItemStack removeStackFromSlot(int slot)
+    public ItemStack removeStackFromSlot(int slot) //TODO wrong behavior
     {
         for (int s : getSlotsOnClosing())
             if (slot == s)
@@ -162,7 +162,7 @@ abstract class InventoryAdventure implements IInventoryTanks
     public ItemStack decrStackSizeNoSave(int slot, int quantity)
     {
         ItemStack stack = getStackInSlot(slot);
-        if (stack != ItemStack.EMPTY)
+        if (!stack.isEmpty())
         {
             if (stack.getCount() <= quantity)
                 setInventorySlotContentsNoSave(slot, ItemStack.EMPTY);
@@ -175,17 +175,8 @@ abstract class InventoryAdventure implements IInventoryTanks
     @Override
     public void setInventorySlotContentsNoSave(int slot, ItemStack stack)
     {
-        if (slot >= getSizeInventory())
-            return;
-
-        if (stack != ItemStack.EMPTY)
-        {
-            if (stack.getCount() > getInventoryStackLimit())
-                stack.setCount(getInventoryStackLimit());
-
-            if (stack.getCount() == 0)
-                stack = ItemStack.EMPTY;
-        }
+        if (!stack.isEmpty() && stack.getCount() > getInventoryStackLimit())
+            stack.setCount(getInventoryStackLimit());
 
         inventory[slot] = stack;
     }
@@ -196,7 +187,6 @@ abstract class InventoryAdventure implements IInventoryTanks
         if (updateTankSlots()) //TODO this can be generalized too
             dirtyTanks();      //TODO and also this
 
-        getWearableCompound().removeTag(TAG_INVENTORY); //TODO why? sync related?
         getWearableCompound().setTag(TAG_INVENTORY, getInventoryTagList());
     }
 
@@ -224,7 +214,7 @@ abstract class InventoryAdventure implements IInventoryTanks
         for (int i = 0; i < getSizeInventory(); i++)
         {
             ItemStack stack = inventory[i];
-            if (stack != ItemStack.EMPTY)
+            if (stack != null && !stack.isEmpty()) //TODO where does null come from?
             {
                 NBTTagCompound item = new NBTTagCompound();
                 item.setByte(TAG_SLOT, (byte) i);

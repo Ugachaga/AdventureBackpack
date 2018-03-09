@@ -109,7 +109,7 @@ public class ContainerBackpack extends ContainerAdventure
 
         if (!ItemStack.areItemStacksEqual(stackB, stackA))
         {
-            stackB = stackA == ItemStack.EMPTY ? ItemStack.EMPTY : stackA.copy();
+            stackB = stackA.isEmpty() ? ItemStack.EMPTY : stackA.copy();
             inventoryItemStacks.set(CRAFT_RESULT, stackB);
 
             if (player instanceof EntityPlayerMP)
@@ -180,18 +180,18 @@ public class ContainerBackpack extends ContainerAdventure
         {
             if (isLeftTankEmpty)
             {
-                if (!isRightTankEmpty && suitableToRight && (rightStackOut == null || areRightSameType))
+                if (!isRightTankEmpty && suitableToRight && (rightStackOut.isEmpty() || areRightSameType))
                     return mergeRightBucket(container);
-                else if (leftStackOut == null || areLeftSameType)
+                else if (leftStackOut.isEmpty() || areLeftSameType)
                     return mergeLeftBucket(container);
             }
             else
             {
-                if (suitableToLeft && (leftStackOut == null || areLeftSameType))
+                if (suitableToLeft && (leftStackOut.isEmpty() || areLeftSameType))
                     return mergeLeftBucket(container);
-                else if ((isRightTankEmpty || suitableToRight) && (rightStackOut == null || areRightSameType))
+                else if ((isRightTankEmpty || suitableToRight) && (rightStackOut.isEmpty() || areRightSameType))
                     return mergeRightBucket(container);
-                else if (leftStackOut == null && rightStackOut == null && SlotBackpack.isValidItem(container))
+                else if (leftStackOut.isEmpty() && rightStackOut.isEmpty() && SlotBackpack.isValidItem(container))
                     return mergeBackpackInv(container);
             }
         }
@@ -199,14 +199,14 @@ public class ContainerBackpack extends ContainerAdventure
         {
             if (isLeftTankEmpty)
             {
-                if (!isRightTankEmpty && (rightStackOut == null || areRightSameType))
+                if (!isRightTankEmpty && (rightStackOut.isEmpty() || areRightSameType))
                     return mergeRightBucket(container);
-                else if (leftStackOut == null && rightStackOut == null && SlotBackpack.isValidItem(container))
+                else if (leftStackOut.isEmpty() && rightStackOut.isEmpty() && SlotBackpack.isValidItem(container))
                     return mergeBackpackInv(container);
             }
             else
             {
-                if (leftStackOut == null || areLeftSameType)
+                if (leftStackOut.isEmpty() || areLeftSameType)
                     return mergeLeftBucket(container);
             }
         }
@@ -214,7 +214,6 @@ public class ContainerBackpack extends ContainerAdventure
     }
 
     @Override
-    //public ItemStack slotClick(int slot, int button, int flag, EntityPlayer player)
     public ItemStack slotClick(int slot, int dragType, ClickType clickType, EntityPlayer player)
     {
         final ItemStack result = super.slotClick(slot, dragType, clickType, player);
@@ -227,7 +226,7 @@ public class ContainerBackpack extends ContainerAdventure
     {
         for (int i = 0; i < craftMatrix.getSizeInventory(); i++)
         {
-            this.craftMatrix.setInventorySlotContentsNoUpdate(i, null);
+            this.craftMatrix.setInventorySlotContentsNoUpdate(i, ItemStack.EMPTY);
         }
         onCraftMatrixChanged(craftMatrix);
 
@@ -260,12 +259,12 @@ public class ContainerBackpack extends ContainerAdventure
             {
                 if (preCraft)
                 {
-                    craftStack = invStack == ItemStack.EMPTY ? ItemStack.EMPTY : invStack.copy();
+                    craftStack = invStack.isEmpty() ? ItemStack.EMPTY : invStack.copy();
                     craftMatrix.setInventorySlotContentsNoUpdate(craftSlotID, craftStack);
                 }
                 else
                 {
-                    invStack = craftStack == ItemStack.EMPTY ? ItemStack.EMPTY : craftStack.copy();
+                    invStack = craftStack.isEmpty() ? ItemStack.EMPTY : craftStack.copy();
                     inventory.setInventorySlotContentsNoSave(invSlotID, invStack);
                 }
                 changesMade = true;

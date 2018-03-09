@@ -58,7 +58,7 @@ public class BackpackProperty //implements IExtendedEntityProperties
         try
         {
             player.getServerWorld().getEntityTracker()
-                    .sendToTrackingAndSelf(player, ModNetwork.net.getPacketFrom(new SyncPropertiesPacket
+                    .sendToTrackingAndSelf(player, ModNetwork.INSTANCE.getPacketFrom(new SyncPropertiesPacket
                             .Message(player.getEntityId(), get(player).getData())));
         }
         catch (Exception ex)

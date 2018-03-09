@@ -8,7 +8,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.darkona.adventurebackpack.client.audio.BoilingBoilerSound;
-import com.darkona.adventurebackpack.client.audio.CopterPackSound;
+import com.darkona.adventurebackpack.client.audio.CopterSound;
 import com.darkona.adventurebackpack.client.audio.JetpackSoundOn;
 import com.darkona.adventurebackpack.client.audio.LeakingBoilerSound;
 import com.darkona.adventurebackpack.client.audio.NyanMovingSound;
@@ -62,7 +62,7 @@ public class ClientActions
                 case EntitySoundPacket.COPTER_SOUND:
                     if (ConfigHandler.allowSoundCopter)
                     {
-                        snd.playSound(new CopterPackSound(player));
+                        snd.playSound(new CopterSound(player));
                     }
                     break;
                 case EntitySoundPacket.NYAN_SOUND:

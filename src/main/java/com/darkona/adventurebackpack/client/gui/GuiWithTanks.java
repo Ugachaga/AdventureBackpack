@@ -54,7 +54,7 @@ public abstract class GuiWithTanks extends GuiContainer
         {
             if (getUnequipButton().inButton(this, mouseX, mouseY))
             {
-                ModNetwork.net.sendToServer(new EquipUnequipBackWearablePacket.Message(EquipUnequipBackWearablePacket.UNEQUIP_WEARABLE));
+                ModNetwork.INSTANCE.sendToServer(new EquipUnequipBackWearablePacket.Message(EquipUnequipBackWearablePacket.UNEQUIP_WEARABLE));
                 player.closeScreen();
             }
         }
@@ -62,7 +62,7 @@ public abstract class GuiWithTanks extends GuiContainer
         {
             if (getEquipButton().inButton(this, mouseX, mouseY))
             {
-                ModNetwork.net.sendToServer(new EquipUnequipBackWearablePacket.Message(EquipUnequipBackWearablePacket.EQUIP_WEARABLE));
+                ModNetwork.INSTANCE.sendToServer(new EquipUnequipBackWearablePacket.Message(EquipUnequipBackWearablePacket.EQUIP_WEARABLE));
                 player.closeScreen();
             }
         }

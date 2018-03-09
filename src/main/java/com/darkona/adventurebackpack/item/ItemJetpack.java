@@ -1,8 +1,8 @@
 package com.darkona.adventurebackpack.item;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
+import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -33,8 +33,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.config.ConfigHandler;
 import com.darkona.adventurebackpack.init.ModNetwork;
-import com.darkona.adventurebackpack.inventory.InventoryCoalJetpack;
-import com.darkona.adventurebackpack.network.GUIPacket;
+import com.darkona.adventurebackpack.inventory.InventoryJetpack;
+import com.darkona.adventurebackpack.network.GuiPacket;
 import com.darkona.adventurebackpack.network.PlayerActionPacket;
 import com.darkona.adventurebackpack.network.messages.EntityParticlePacket;
 import com.darkona.adventurebackpack.network.messages.EntitySoundPacket;
@@ -51,13 +51,15 @@ import static com.darkona.adventurebackpack.util.TipUtils.l10n;
  *
  * @author Darkona
  */
-public class ItemSteamJetpack extends ItemAdventure
+public class ItemJetpack extends ItemAdventure
 {
-    public ItemSteamJetpack()
+    private static final int MAX_ALTITUDE = 185;
+
+    public ItemJetpack()
     {
         super();
         setUnlocalizedName("steamJetpack");
-        this.setRegistryName(ModInfo.MOD_ID, "steam_jetpack");
+        this.setRegistryName(ModInfo.MODID, "steam_jetpack");
     }
 
     @Override
@@ -98,7 +100,7 @@ public class ItemSteamJetpack extends ItemAdventure
 
         if (GuiScreen.isCtrlKeyDown())
         {
-            tooltip.add(l10n("max.altitude") + ": " + TipUtils.whiteFormat("185 ") + l10n("meters"));
+            tooltip.add(l10n("max.altitude") + ": " + TipUtils.whiteFormat(MAX_ALTITUDE + " ") + l10n("meters"));
             tooltip.add(TipUtils.pressShiftKeyFormat(TipUtils.actionKeyFormat()) + l10n("jetpack.key.onoff1"));
             tooltip.add(l10n("jetpack.key.onoff2") + " " + l10n("on"));
         }
@@ -109,7 +111,7 @@ public class ItemSteamJetpack extends ItemAdventure
     {
         if (world.isRemote)
         {
-            ModNetwork.net.sendToServer(new GUIPacket.GUImessage(GUIPacket.JETPACK_GUI, GUIPacket.FROM_HOLDING));
+            ModNetwork.INSTANCE.sendToServer(new GuiPacket.GuiMessage(GuiPacket.GUI_JETPACK, GuiPacket.FROM_HOLDING));
         }
         return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));
     }
@@ -117,14 +119,14 @@ public class ItemSteamJetpack extends ItemAdventure
     @Override
     public void onEquipped(World world, EntityPlayer player, ItemStack stack)
     {
-        InventoryCoalJetpack inv = new InventoryCoalJetpack(stack);
+        InventoryJetpack inv = new InventoryJetpack(stack);
         if (inv.getTemperature() == 0) inv.setTemperature(getBiomeMinTemp(player, world));
     }
 
     @Override
     public void onEquippedUpdate(World world, EntityPlayer player, ItemStack stack) //TODO extract behavior to separate class
     {
-        InventoryCoalJetpack inv = new InventoryCoalJetpack(stack);
+        InventoryJetpack inv = new InventoryJetpack(stack);
         inv.openInventory(player);
         boolean mustFizzz = !inv.isInUse();
         int CoalConsumed = 13;
@@ -150,16 +152,16 @@ public class ItemSteamJetpack extends ItemAdventure
             if (inv.getStatus() && canUse && Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown())
             {
                 inv.setInUse(true);
-                ModNetwork.net.sendToServer(new PlayerActionPacket.ActionMessage(PlayerActionPacket.JETPACK_IN_USE));
+                ModNetwork.INSTANCE.sendToServer(new PlayerActionPacket.ActionMessage(PlayerActionPacket.JETPACK_IN_USE));
                 if (mustFizzz)
                 {
-                    ModNetwork.net.sendToServer(new EntitySoundPacket.Message(EntitySoundPacket.JETPACK_FIZZ, player));
+                    ModNetwork.INSTANCE.sendToServer(new EntitySoundPacket.Message(EntitySoundPacket.JETPACK_FIZZ, player));
                 }
             }
             else
             {
                 inv.setInUse(false);
-                ModNetwork.net.sendToServer(new PlayerActionPacket.ActionMessage(PlayerActionPacket.JETPACK_NOT_IN_USE));
+                ModNetwork.INSTANCE.sendToServer(new PlayerActionPacket.ActionMessage(PlayerActionPacket.JETPACK_NOT_IN_USE));
             }
         }
 
@@ -193,13 +195,13 @@ public class ItemSteamJetpack extends ItemAdventure
                 player.motionY += 0.1;
             else
                 player.motionY = Math.max(player.motionY, 0.32);
-        else if (player.posY < 185)
+        else if (player.posY < MAX_ALTITUDE)
             player.motionY = 0.32 - (player.posY - 135) / 160;
-        else if (player.posY >= 185)
+        else if (player.posY >= MAX_ALTITUDE)
             player.motionY += 0;
     }
 
-    private void runBoiler(InventoryCoalJetpack inv, World world, EntityPlayer player)
+    private void runBoiler(InventoryJetpack inv, World world, EntityPlayer player)
     {
         int temperature = inv.getTemperature();
         boolean mustSSSSS = !inv.isLeaking();
@@ -213,7 +215,7 @@ public class ItemSteamJetpack extends ItemAdventure
 
             if (!world.isRemote && mustBlublub)
             {
-                ModNetwork.net.sendTo(new EntitySoundPacket.Message(EntitySoundPacket.BOILING_BUBBLES, player), (EntityPlayerMP) player);
+                ModNetwork.INSTANCE.sendTo(new EntitySoundPacket.Message(EntitySoundPacket.BOILING_BUBBLES, player), (EntityPlayerMP) player);
             }
         }
         else
@@ -251,7 +253,7 @@ public class ItemSteamJetpack extends ItemAdventure
                 leaking = true;
                 if (!world.isRemote && mustSSSSS)
                 {
-                    ModNetwork.net.sendTo(new EntitySoundPacket.Message(EntitySoundPacket.LEAKING_STEAM, player), (EntityPlayerMP) player);
+                    ModNetwork.INSTANCE.sendTo(new EntitySoundPacket.Message(EntitySoundPacket.LEAKING_STEAM, player), (EntityPlayerMP) player);
                 }
             }
         }
@@ -260,7 +262,7 @@ public class ItemSteamJetpack extends ItemAdventure
         inv.setTemperature(temperature);
     }
 
-    private void runFirebox(InventoryCoalJetpack inv)
+    private void runFirebox(InventoryJetpack inv)
     {
         if (inv.getBurnTicks() <= 0)
         {
@@ -270,7 +272,7 @@ public class ItemSteamJetpack extends ItemAdventure
         inv.dirtyInventory();
     }
 
-    private void runHeater(InventoryCoalJetpack inv, World world, EntityPlayer player)
+    private void runHeater(InventoryJetpack inv, World world, EntityPlayer player)
     {
         int temperature = inv.getTemperature();
         int burnTicks = inv.getBurnTicks() - 1;
@@ -303,7 +305,7 @@ public class ItemSteamJetpack extends ItemAdventure
     @Override
     public void onUnequipped(World world, EntityPlayer player, ItemStack stack)
     {
-        InventoryCoalJetpack inv = new InventoryCoalJetpack(stack);
+        InventoryJetpack inv = new InventoryJetpack(stack);
         inv.setBoiling(false);
         inv.setInUse(false);
         inv.setLeaking(false);
@@ -359,7 +361,7 @@ public class ItemSteamJetpack extends ItemAdventure
     @SideOnly(Side.CLIENT)
     public ModelBiped getWearableModel(ItemStack wearable)
     {
-        return ClientProxy.modelCoalJetpack.setWearable(wearable);
+        return ClientProxy.modelJetpack.setWearable(wearable);
     }
 
     @Override

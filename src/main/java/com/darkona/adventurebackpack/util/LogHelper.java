@@ -15,7 +15,7 @@ public class LogHelper
 
     public static void log(Level logLevel, Object object)
     {
-        FMLLog.log(ModInfo.MOD_NAME, logLevel, String.valueOf(object)); //TODO deprecated, see see FMLPreInitializationEvent#getModLog()
+        FMLLog.log(ModInfo.NAME, logLevel, String.valueOf(object)); //TODO deprecated, see see FMLPreInitializationEvent#getModLog()
     }
 
     public static void debug(Object object)

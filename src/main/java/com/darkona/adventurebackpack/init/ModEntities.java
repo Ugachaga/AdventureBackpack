@@ -21,9 +21,9 @@ public class ModEntities
     public static void init()
     {
         int counter = 0;
-        EntityRegistry.registerModEntity(new ResourceLocation(ModInfo.MOD_ID, NAME_BOAT), EntityInflatableBoat.class,
+        EntityRegistry.registerModEntity(new ResourceLocation(ModInfo.MODID, NAME_BOAT), EntityInflatableBoat.class,
                 NAME_BOAT, counter++, AdventureBackpack.instance, 64, 1, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(ModInfo.MOD_ID, NAME_SPIDER), EntityFriendlySpider.class,
+        EntityRegistry.registerModEntity(new ResourceLocation(ModInfo.MODID, NAME_SPIDER), EntityFriendlySpider.class,
                 NAME_SPIDER, counter++, AdventureBackpack.instance, 64, 2, true);
     }
 }

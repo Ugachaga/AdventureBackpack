@@ -36,7 +36,7 @@ import com.darkona.adventurebackpack.entity.ai.EntityAIHorseFollowOwner;
 import com.darkona.adventurebackpack.init.ModBlocks;
 import com.darkona.adventurebackpack.init.ModItems;
 import com.darkona.adventurebackpack.item.IBackWearableItem;
-import com.darkona.adventurebackpack.item.ItemAdventureBackpack;
+import com.darkona.adventurebackpack.item.ItemBackpack;
 import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
 import com.darkona.adventurebackpack.proxy.ServerProxy;
 import com.darkona.adventurebackpack.reference.BackpackTypes;
@@ -249,7 +249,7 @@ public class PlayerEventHandler
             BackpackProperty props = BackpackProperty.get(player);
 
             if (EnchUtils.isSoulBounded(pack)
-                    || (ConfigHandler.backpackDeathPlace && pack.getItem() instanceof ItemAdventureBackpack))
+                    || (ConfigHandler.backpackDeathPlace && pack.getItem() instanceof ItemBackpack))
             {
                 ((IBackWearableItem) props.getWearable().getItem()).onPlayerDeath(player.world, player, props.getWearable());
                 ServerProxy.storePlayerProps(player);

@@ -21,7 +21,7 @@ public class ItemPistonBoots extends ArmorAB
         super(2, EntityEquipmentSlot.FEET);
         setMaxDamage(Items.IRON_BOOTS.getMaxDamage() + 55);
         setUnlocalizedName("pistonBoots");
-        this.setRegistryName(ModInfo.MOD_ID, "piston_boots");
+        this.setRegistryName(ModInfo.MODID, "piston_boots");
     }
 
     @Override

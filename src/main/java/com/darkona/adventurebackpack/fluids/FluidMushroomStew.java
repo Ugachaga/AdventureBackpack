@@ -15,7 +15,7 @@ public class FluidMushroomStew extends Fluid
 {
     public FluidMushroomStew()
     {
-        super("mushroomStew", new ResourceLocation(ModInfo.MOD_ID, "fluid.melonJuiceStill.png"), new ResourceLocation(ModInfo.MOD_ID, "fluid.melonJuiceFlowing.png"));
+        super("mushroomStew", new ResourceLocation(ModInfo.MODID, "fluid.melonJuiceStill.png"), new ResourceLocation(ModInfo.MODID, "fluid.melonJuiceFlowing.png"));
         setDensity(1200);
         setViscosity(1200);
     }

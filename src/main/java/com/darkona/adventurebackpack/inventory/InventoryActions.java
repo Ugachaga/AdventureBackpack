@@ -14,7 +14,7 @@ import com.darkona.adventurebackpack.item.ItemHose;
  *
  * @author Darkona
  */
-public class InventoryActions
+public class InventoryActions //TODO reorganize, rename. move to Utils?
 {
     /**
      * What a complicated mess. I hated every minute of coding this.
@@ -34,20 +34,19 @@ public class InventoryActions
         int slotOut = slotIn + 1;
         ItemStack stackHose = inventory.getStackInSlot(slotOut);
 
-        if (stackHose != null && stackHose.getItem() instanceof ItemHose)
+        if (!stackHose.isEmpty() && stackHose.getItem() instanceof ItemHose)
         {
             if (tank.getFluidAmount() > 0)
             {
-                tank.drain(tank.getFluidAmount(), true); //Hose in the bucketOut slot will empty the tank
+                tank.drain(tank.getFluidAmount(), true); // hose in the bucketOut slot will empty the tank
                 return true;
             }
-            //return false;
         }
 
         ItemStack stackIn = inventory.getStackInSlot(slotIn);
-        if (stackIn == null) return false;
+        if (stackIn.isEmpty()) return false;
 
-        //CONTAINER ===========> TANK //TODO implement fluid transrer to/from tanks
+        //CONTAINER ===========> TANK //TODO implement fluid transfer to/from tanks
 //        if (FluidContainerRegistry.isFilledContainer(stackIn))
 //        {
 //            int fill = tank.fill(FluidContainerRegistry.getFluidForFilledItem(stackIn), false); //See if the tank can accept moar fluid
@@ -115,10 +114,10 @@ public class InventoryActions
         return false;
     }
 
-    public static boolean areStacksCompatible(ItemStack stackA, ItemStack stackB)
+    public static boolean areStacksCompatible(ItemStack stackA, ItemStack stackB) //TODO use in ContainerAdventure#mergeItemStack
     {
         return stackA.getItem() == stackB.getItem()
-                && (!stackA.getHasSubtypes() || stackA.getItemDamage() == stackB.getItemDamage())
+                && (!stackA.getHasSubtypes() || stackA.getMetadata() == stackB.getMetadata())
                 && ItemStack.areItemStackTagsEqual(stackA, stackB);
     }
 
@@ -127,7 +126,7 @@ public class InventoryActions
         int i = -1;
         for (int j = 0; j < Constants.END_OF_INVENTORY; ++j)
         {
-            if (backpack.getStackInSlot(j) != null && backpack.getStackInSlot(j).getItem() == item)
+            if (!backpack.getStackInSlot(j).isEmpty() && backpack.getStackInSlot(j).getItem() == item)
             {
                 i = j;
                 break;
@@ -144,10 +143,8 @@ public class InventoryActions
         ItemStack[] inventory = backpack.getInventory();
         for (ItemStack slotStack : inventory)
         {
-            if (slotStack != null && slotStack.getItem().equals(item))
-            {
+            if (!slotStack.isEmpty() && slotStack.getItem().equals(item))
                 return true;
-            }
         }
         return false;
     }
@@ -157,17 +154,15 @@ public class InventoryActions
         ItemStack[] inventory = backpack.getInventory();
         for (ItemStack slotStack : inventory)
         {
-            if (slotStack != null && slotStack.getItem().equals(Item.getItemFromBlock(item)))
-            {
+            if (!slotStack.isEmpty() && slotStack.getItem().equals(Item.getItemFromBlock(item)))
                 return true;
-            }
         }
         return false;
     }
 
     public static boolean areContainersOfSameType(ItemStack stackIn, ItemStack stackOut)
     {
-        if (stackIn == null || stackOut == null)
+        if (stackIn.isEmpty() || stackOut.isEmpty())
             return false;
 
         if (SlotFluid.isFilled(stackIn) && SlotFluid.isEmpty(stackOut))

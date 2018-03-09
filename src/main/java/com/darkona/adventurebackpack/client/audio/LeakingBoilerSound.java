@@ -6,7 +6,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 
-import com.darkona.adventurebackpack.inventory.InventoryCoalJetpack;
+import com.darkona.adventurebackpack.inventory.InventoryJetpack;
 import com.darkona.adventurebackpack.reference.ModInfo;
 import com.darkona.adventurebackpack.util.Wearing;
 
@@ -24,7 +24,7 @@ public class LeakingBoilerSound extends MovingSound
 
     public LeakingBoilerSound(EntityPlayer player)
     {
-        super(new SoundEvent(new ResourceLocation(ModInfo.MOD_ID, "s_background2")), SoundCategory.BLOCKS);
+        super(new SoundEvent(new ResourceLocation(ModInfo.MODID, "s_background2")), SoundCategory.BLOCKS);
         volume = 0.2f;
         pitch = 1.2F;
         thePlayer = player;
@@ -52,7 +52,7 @@ public class LeakingBoilerSound extends MovingSound
             return;
         }
 
-        InventoryCoalJetpack inv = new InventoryCoalJetpack(Wearing.getWearingJetpack(thePlayer));
+        InventoryJetpack inv = new InventoryJetpack(Wearing.getWearingJetpack(thePlayer));
         if (inv.isLeaking())
         {
             xPosF = (float) thePlayer.posX;

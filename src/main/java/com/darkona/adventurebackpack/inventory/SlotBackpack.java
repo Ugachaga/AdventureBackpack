@@ -12,7 +12,7 @@ public class SlotBackpack extends SlotAdventure
 {
     private static final String[] FORBIDDEN_CLASSES = { //TODO need update
             // Adventure Backpack
-            "com.darkona.adventurebackpack.item.ItemAdventureBackpack",
+            "com.darkona.adventurebackpack.item.ItemBackpack",
             // Backpack Mod
             "de.eydamos.backpack.item.ItemBackpack",
             "de.eydamos.backpack.item.ItemWorkbenchBackpack",
@@ -45,14 +45,11 @@ public class SlotBackpack extends SlotAdventure
         {
             if (itemCurrent.getClass().getName().equals(classDisallowed)) return false;
         }
-        for (String itemDisallowed : ConfigHandler.blacklistByID)
+        for (String itemDisallowed : ConfigHandler.itemBlacklist)
         {
+            //TODO check it
             //if (Item.itemRegistry.getNameForObject(itemCurrent).equals(itemDisallowed)) return false;
             if (Item.REGISTRY.getNameForObject(itemCurrent).toString().equals(itemDisallowed)) return false;
-        }
-        for (String itemDisallowed : ConfigHandler.blacklistByName)
-        {
-            if (itemCurrent.getUnlocalizedName().equalsIgnoreCase(itemDisallowed)) return false;
         }
         return true;
     }

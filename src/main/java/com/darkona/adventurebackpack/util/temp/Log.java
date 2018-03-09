@@ -14,7 +14,7 @@ import com.darkona.adventurebackpack.reference.ModInfo;
  */
 public class Log
 {
-    public static final Marker MOD_MARKER = MarkerManager.getMarker(ModInfo.MOD_ID);
+    public static final Marker MOD_MARKER = MarkerManager.getMarker(ModInfo.MODID);
 
     private static Logger logger;
 

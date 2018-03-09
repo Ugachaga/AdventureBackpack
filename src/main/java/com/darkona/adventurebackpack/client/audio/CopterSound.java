@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 
-import com.darkona.adventurebackpack.item.ItemCopterPack;
+import com.darkona.adventurebackpack.item.ItemCopter;
 import com.darkona.adventurebackpack.reference.ModInfo;
 import com.darkona.adventurebackpack.util.BackpackUtils;
 import com.darkona.adventurebackpack.util.LogHelper;
@@ -20,16 +20,16 @@ import static com.darkona.adventurebackpack.common.Constants.Copter.TAG_STATUS;
  *
  * @author Darkona
  */
-public class CopterPackSound extends MovingSound
+public class CopterSound extends MovingSound
 {
     private EntityPlayer thePlayer;
     private boolean repeat = true;
     private int repeatDelay = 0;
     private float pitch;
 
-    public CopterPackSound(EntityPlayer player)
+    public CopterSound(EntityPlayer player)
     {
-        super(new SoundEvent(new ResourceLocation(ModInfo.MOD_ID, "helicopter")), SoundCategory.BLOCKS);
+        super(new SoundEvent(new ResourceLocation(ModInfo.MODID, "helicopter")), SoundCategory.BLOCKS);
         volume = 0.6f;
         pitch = 1.0F;
         thePlayer = player;
@@ -59,22 +59,22 @@ public class CopterPackSound extends MovingSound
     {
         ItemStack copter = Wearing.getWearingCopter(thePlayer);
         byte status = 0;
-        if (thePlayer == null || thePlayer.isDead || thePlayer.world == null || copter == null || !(copter.getItem() instanceof ItemCopterPack))
+        if (thePlayer == null || thePlayer.isDead || thePlayer.world == null || copter == null || !(copter.getItem() instanceof ItemCopter))
         {
             setDonePlaying();
             return;
         }
 
         status = BackpackUtils.getWearableCompound(copter).getByte(TAG_STATUS);
-        if (status == ItemCopterPack.OFF_MODE)
+        if (status == ItemCopter.OFF_MODE)
         {
             setDonePlaying();
         }
-        else if (status == ItemCopterPack.HOVER_MODE)
+        else if (status == ItemCopter.HOVER_MODE)
         {
             pitch = (thePlayer.motionY > 0) ? 1.2f : (thePlayer.motionY < -0.1) ? 0.8f : 1.0f;
         }
-        else if (status == ItemCopterPack.NORMAL_MODE)
+        else if (status == ItemCopter.NORMAL_MODE)
         {
             if (thePlayer.onGround)
                 pitch = 0.8f;

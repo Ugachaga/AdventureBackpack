@@ -1,6 +1,5 @@
 package com.darkona.adventurebackpack.inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -22,7 +21,7 @@ import static com.darkona.adventurebackpack.common.Constants.TAG_WEARABLE_COMPOU
  *
  * @author Darkona
  */
-public class InventoryCoalJetpack extends InventoryAdventure
+public class InventoryJetpack extends InventoryAdventure
 {
     private FluidTank waterTank = new FluidTank(Constants.Jetpack.WATER_CAPACITY);
     private FluidTank steamTank = new FluidTank(Constants.Jetpack.STEAM_CAPACITY);
@@ -36,15 +35,10 @@ public class InventoryCoalJetpack extends InventoryAdventure
     private int coolTicks = 5000;
     private int currentItemBurnTime = 0;
 
-    public InventoryCoalJetpack(ItemStack jetpack)
+    public InventoryJetpack(ItemStack jetpack)
     {
         super(jetpack, Constants.Jetpack.INVENTORY_SIZE);
-    }
-
-    public InventoryCoalJetpack(ItemStack jetpack, EntityPlayer palyer)
-    {
-        this(jetpack);
-        openInventory(palyer);
+        loadFromNBT(containerStack.getTagCompound());
     }
 
     @Override
