@@ -1,7 +1,7 @@
 package com.darkona.adventurebackpack.block;
 
-import javax.annotation.Nullable;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.state.IBlockState;
@@ -49,7 +49,7 @@ public class BlockSleepingBag extends BlockBed
 
     public BlockSleepingBag()
     {
-        setRegistryName(ModInfo.MODID, "blockSlepingBag");
+        setRegistryName(ModInfo.MODID, "block_sleeping_bag");
     }
 
     public static boolean isSleepingInPortableBag(EntityPlayer player)
@@ -163,7 +163,7 @@ public class BlockSleepingBag extends BlockBed
                     {
                         player.setSpawnChunk(pos, true, player.dimension);
                         LogHelper.info("Looking for a campfire nearby...");
-                        BlockPos campfire = CoordsUtils.findBlock3D(world, pos.getX(), pos.getY(), pos.getZ(), ModBlocks.BLOCK_CAMP_FIRE, 8, 2);
+                        BlockPos campfire = CoordsUtils.findBlock3D(world, pos.getX(), pos.getY(), pos.getZ(), ModBlocks.BLOCK_CAMPFIRE, 8, 2);
                         if (campfire != null)
                         {
                             LogHelper.info("Campfire Found, saving coordinates. " + campfire.toString());

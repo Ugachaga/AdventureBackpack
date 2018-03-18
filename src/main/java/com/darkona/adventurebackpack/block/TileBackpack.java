@@ -53,7 +53,7 @@ import static com.darkona.adventurebackpack.common.Constants.TOOL_UPPER;
 /**
  * Created by Darkona on 12/10/2014.
  */
-public class TileBackpack extends TileAdventure implements IInventoryBackpack, ITickable, ISidedInventory//, IItemHandler
+public class TileBackpack extends TileAdventure implements IInventoryBackpack, ITickable, ISidedInventory//, IInteractionObject//, IItemHandler
 {
     private static final int[] MAIN_INVENTORY_SLOTS = Utils.createSlotArray(0, Constants.INVENTORY_MAIN_SIZE);
 
@@ -80,6 +80,18 @@ public class TileBackpack extends TileAdventure implements IInventoryBackpack, I
     {
         super(Constants.INVENTORY_SIZE);
     }
+
+//    @Override
+//    public Container createContainer(InventoryPlayer playerInventory, EntityPlayer player)
+//    {
+//        return new ContainerBackpack(player, this, Constants.Source.TILE);
+//    }
+//
+//    @Override
+//    public String getGuiID()
+//    {
+//        return "tile:backpack";
+//    }
 
     @Override
     public BackpackTypes getType()

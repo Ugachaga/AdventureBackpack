@@ -56,6 +56,11 @@ public class CoordsUtils
         return null;
     }
 
+    public static boolean isValidHeight(World world, BlockPos pos)
+    {
+        return pos.getY() > 0 && pos.getY() < world.getHeight();
+    }
+
     @Nullable
     private static BlockPos checkCoordsForBackpack(IBlockAccess world, int x, int y, int z)
     {

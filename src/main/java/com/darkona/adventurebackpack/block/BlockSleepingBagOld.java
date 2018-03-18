@@ -177,7 +177,7 @@ public class BlockSleepingBagOld extends BlockDirectional
 //                    {
 //                        player.setSpawnChunk(new ChunkCoordinates(x, y, z), true, player.dimension);
 //                        LogHelper.info("Looking for a campfire nearby...");
-//                        ChunkCoordinates campfire = CoordsUtils.findBlock3D(world, x, y, z, ModBlocks.BLOCK_CAMP_FIRE, 8, 2);
+//                        ChunkCoordinates campfire = CoordsUtils.findBlock3D(world, x, y, z, ModBlocks.BLOCK_CAMPFIRE, 8, 2);
 //                        if (campfire != null)
 //                        {
 //                            LogHelper.info("Campfire Found, saving coordinates. " + campfire.toString());

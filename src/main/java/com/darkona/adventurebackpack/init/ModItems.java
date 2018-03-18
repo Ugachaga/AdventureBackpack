@@ -2,6 +2,7 @@ package com.darkona.adventurebackpack.init;
 
 import java.util.HashSet;
 import java.util.Set;
+import javax.annotation.Nonnull;
 
 import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;
@@ -11,43 +12,37 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import com.darkona.adventurebackpack.item.ArmorAB;
-import com.darkona.adventurebackpack.item.ItemBackpack;
 import com.darkona.adventurebackpack.item.ItemAdventureHat;
 import com.darkona.adventurebackpack.item.ItemAdventurePants;
 import com.darkona.adventurebackpack.item.ItemAdventureSuit;
+import com.darkona.adventurebackpack.item.ItemBackpack;
 import com.darkona.adventurebackpack.item.ItemComponent;
 import com.darkona.adventurebackpack.item.ItemCopter;
 import com.darkona.adventurebackpack.item.ItemHose;
+import com.darkona.adventurebackpack.item.ItemJetpack;
 import com.darkona.adventurebackpack.item.ItemJuiceBottle;
 import com.darkona.adventurebackpack.item.ItemMachete;
 import com.darkona.adventurebackpack.item.ItemPistonBoots;
-import com.darkona.adventurebackpack.item.ItemJetpack;
 import com.darkona.adventurebackpack.reference.ModInfo;
 
-import static com.darkona.adventurebackpack.util.Utils.Null;
+import static com.darkona.adventurebackpack.util.Utils.getNull;
 
-/**
- * Created on 10/10/2014
- *
- * @author Darkona
- */
+@SuppressWarnings({"ConstantConditions", "unused", "WeakerAccess"})
 @GameRegistry.ObjectHolder(ModInfo.MODID)
 public class ModItems
 {
-    public static final ItemMachete MACHETE = Null();
-    public static final ArmorAB ADVENTURE_HAT = Null();
-    public static final ArmorAB ADVENTURE_SUIT = Null();
-    public static final ArmorAB ADVENTURE_PANTS = Null();
-    public static final ArmorAB PISTON_BOOTS = Null();
-    public static final ItemCopter COPTER_PACK = Null();
-    public static final ItemJetpack STEAM_JETPACK = Null();
-    public static final ItemBackpack ADVENTURE_BACKPACK = Null();
-    public static final ItemComponent COMPONENT = Null();
-    public static final ItemHose HOSE = Null();
-    public static final ItemJuiceBottle MELON_JUICE_BOTTLE = Null();
+    @Nonnull public static final ItemMachete MACHETE = getNull();
+    @Nonnull public static final ArmorAB ADVENTURE_HAT = getNull();
+    @Nonnull public static final ArmorAB ADVENTURE_SUIT = getNull();
+    @Nonnull public static final ArmorAB ADVENTURE_PANTS = getNull();
+    @Nonnull public static final ArmorAB PISTON_BOOTS = getNull();
+    @Nonnull public static final ItemBackpack ADVENTURE_BACKPACK = getNull();
+    @Nonnull public static final ItemCopter COPTER_PACK = getNull();
+    @Nonnull public static final ItemJetpack STEAM_JETPACK = getNull();
+    @Nonnull public static final ItemComponent COMPONENT = getNull();
+    @Nonnull public static final ItemHose HOSE = getNull();
+    @Nonnull public static final ItemJuiceBottle MELON_JUICE_BOTTLE = getNull();
 
-
-    //TODO see https://github.com/Choonster-Minecraft-Mods/TestMod3/tree/1.12.2/src/main/java/choonster/testmod3/init
     @Mod.EventBusSubscriber(modid = ModInfo.MODID)
     public static class RegistrationHandler
     {
@@ -62,9 +57,9 @@ public class ModItems
                     new ItemAdventureSuit(),
                     new ItemAdventurePants(),
                     new ItemPistonBoots(),
+                    new ItemBackpack(),
                     new ItemCopter(),
                     new ItemJetpack(),
-                    new ItemBackpack(),
                     new ItemComponent(),
                     new ItemHose(),
                     new ItemJuiceBottle(),
@@ -82,19 +77,6 @@ public class ModItems
 
     public static void init()
     {
-        // Sequence affect location in NEI and CreativeTab, so keep it logically grouped
-//        GameRegistry.registerItem(MACHETE, "machete");
-//        GameRegistry.registerItem(ADVENTURE_HAT, "adventureHat");
-//        GameRegistry.registerItem(ADVENTURE_SUIT, "adventureSuit");
-//        GameRegistry.registerItem(ADVENTURE_PANTS, "adventurePants");
-//        GameRegistry.registerItem(PISTON_BOOTS, "pistonBoots");
-//        GameRegistry.registerItem(COPTER_PACK, "copterPack");
-//        GameRegistry.registerItem(STEAM_JETPACK, "steamJetpack");
-//        GameRegistry.registerItem(ADVENTURE_BACKPACK, "adventureBackpack");
-//        GameRegistry.registerItem(COMPONENT, "backpackComponent");
-//        GameRegistry.registerItem(HOSE, "backpackHose");
-//        GameRegistry.registerItem(MELON_JUICE_BOTTLE, "melonJuiceBottle");
-
 //        MACHETE.registerItemModel();
 //        ADVENTURE_HAT.setCustomModelResourceLocation();
 //        ADVENTURE_SUIT.registerItemModel();

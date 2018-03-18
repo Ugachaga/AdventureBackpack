@@ -30,9 +30,9 @@ import static com.darkona.adventurebackpack.reference.BackpackTypes.VILLAGER;
  *
  * @author Darkona
  */
-public class ModelBackpackArmor extends ModelWearable
+public class ModelBackpack extends ModelWearable
 {
-    public static final ModelBackpackArmor instance = new ModelBackpackArmor();
+    public static final ModelBackpack instance = new ModelBackpack();
 
     public ModelRenderer mainBody;
     public ModelRenderer tankLeftTop;
@@ -233,18 +233,18 @@ public class ModelBackpackArmor extends ModelWearable
 
     }
 
-    public ModelBackpackArmor setWearable(ItemStack wearable)
+    public ModelBackpack setWearable(ItemStack wearable)
     {
         this.backpack = wearable;
         return this;
     }
 
-    public ModelBackpackArmor()
+    public ModelBackpack()
     {
         init();
     }
 
-    public ModelBackpackArmor(ItemStack backpack)
+    public ModelBackpack(ItemStack backpack)
     {
         init();
         this.backpack = backpack;

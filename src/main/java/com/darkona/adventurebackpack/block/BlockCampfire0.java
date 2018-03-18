@@ -26,22 +26,17 @@ import com.darkona.adventurebackpack.util.CoordsUtils;
  *
  * @author Darkona
  */
-public class BlockCampFire extends Block
+public class BlockCampfire0 extends Block
 {
     public static final AxisAlignedBB CAMP_FIRE_AABB = new AxisAlignedBB(0.2D, 0.0D, 0.2D, 0.8D, 0.15D, 0.8D);
 
-    public BlockCampFire()
+    public BlockCampfire0()
     {
         super(Material.ROCK);
-        this.setTickRandomly(true);
-        this.setCreativeTab(CreativeTabAB.TAB_AB);
-        setRegistryName(ModInfo.MODID, getUnlocalizedName());
-    }
-
-    @Override
-    public String getUnlocalizedName()
-    {
-        return "blockCampFire";
+        setRegistryName(ModInfo.MODID, "block_campfire");
+        setUnlocalizedName("block_campfire");
+        setTickRandomly(true);
+        setCreativeTab(CreativeTabAB.TAB_AB);
     }
 
     @Override
@@ -53,7 +48,7 @@ public class BlockCampFire extends Block
     @Override
     public TileEntity createTileEntity(World world, IBlockState state)
     {
-        return new TileCampfire();
+        return new TileCampfire0();
     }
 
     @Override

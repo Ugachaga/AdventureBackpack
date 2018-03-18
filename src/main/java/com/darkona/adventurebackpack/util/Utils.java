@@ -149,8 +149,8 @@ public class Utils
         return decorated.toString();
     }
 
-    @SuppressWarnings({"ConstantConditions", "SameReturnValue"})
-    public static <T> T Null()
+    @SuppressWarnings("ConstantConditions")
+    public static <T> T getNull()
     {
         return null;
     }

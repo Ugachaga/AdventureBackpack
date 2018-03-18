@@ -15,11 +15,9 @@ import com.darkona.adventurebackpack.handlers.ClientEventHandler;
 import com.darkona.adventurebackpack.handlers.GeneralEventHandler;
 import com.darkona.adventurebackpack.handlers.GuiHandler;
 import com.darkona.adventurebackpack.handlers.PlayerEventHandler;
-import com.darkona.adventurebackpack.init.ModBlocks;
 import com.darkona.adventurebackpack.init.ModDates;
 import com.darkona.adventurebackpack.init.ModEntities;
 import com.darkona.adventurebackpack.init.ModFluids;
-import com.darkona.adventurebackpack.init.ModItems;
 import com.darkona.adventurebackpack.init.ModNetwork;
 import com.darkona.adventurebackpack.init.ModRecipes;
 import com.darkona.adventurebackpack.init.ModWorldGen;
@@ -29,11 +27,7 @@ import com.darkona.adventurebackpack.reference.LoadedMods;
 import com.darkona.adventurebackpack.reference.ModInfo;
 import com.darkona.adventurebackpack.reference.WailaTileAdventureBackpack;
 
-/**
- * Created on 10/10/2014
- *
- * @author Javier Darkona
- */
+@SuppressWarnings("unused")
 @Mod(modid = ModInfo.MODID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.GUI_FACTORY_CLASS,
         dependencies = "required-after:codechickenlib@[3.1.5.331,)")
 public class AdventureBackpack
@@ -58,8 +52,8 @@ public class AdventureBackpack
 
         //ModStuff
         ModDates.init();
-        ModItems.init();
-        ModBlocks.init();
+        //ModItems.init();
+        //ModBlocks.init();
         ModFluids.init();
         FluidEffectRegistry.init();
         ModEntities.init();

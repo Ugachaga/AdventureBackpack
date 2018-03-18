@@ -24,7 +24,7 @@ public class LeakingBoilerSound extends MovingSound
 
     public LeakingBoilerSound(EntityPlayer player)
     {
-        super(new SoundEvent(new ResourceLocation(ModInfo.MODID, "s_background2")), SoundCategory.BLOCKS);
+        super(new SoundEvent(new ResourceLocation(ModInfo.MODID, "leaking_boiler")), SoundCategory.BLOCKS);
         volume = 0.2f;
         pitch = 1.2F;
         thePlayer = player;

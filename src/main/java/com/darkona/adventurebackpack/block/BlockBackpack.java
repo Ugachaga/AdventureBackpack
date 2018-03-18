@@ -10,11 +10,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -47,15 +45,11 @@ import static com.darkona.adventurebackpack.reference.BackpackTypes.GLOWSTONE;
 import static com.darkona.adventurebackpack.reference.BackpackTypes.REDSTONE;
 import static com.darkona.adventurebackpack.reference.BackpackTypes.UNKNOWN;
 
-/**
- * Created on 12/10/2014.
- *
- * @author Javier Darkona
- */
 public class BlockBackpack extends Block
 {
     public static final PropertyDirection FACING_HORIZONTAL = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 
+    private static final String BLOCK_NAME = "block_backpack";
 
 
     //TODO see https://shadowfacts.net/tutorials/forge-modding-112/tile-entities-inventory/
@@ -87,23 +81,70 @@ public class BlockBackpack extends Block
 //    }
 
 
-
-
-
     public BlockBackpack()
     {
         super(new BackpackMaterial());
-        setSoundType(SoundType.CLOTH);
-        setHardness(1.0f);
-        setResistance(2000f);
-        setRegistryName(ModInfo.MODID + ":" + getUnlocalizedName());
+        this.setRegistryName(ModInfo.MODID, BLOCK_NAME);
+        this.setUnlocalizedName(BLOCK_NAME);
 
+        this.setSoundType(SoundType.CLOTH);
+        this.setHardness(1.0f);
+        this.setResistance(2000f);
 
 //        setDefaultState(blockState.getBaseState()
 //                .withProperty(FACING_HORIZONTAL, EnumFacing.NORTH));
 //                //.withProperty(TYPE, BackpackTypes.STANDARD));
     }
 
+    @Override
+    public EnumBlockRenderType getRenderType(IBlockState state)
+    {
+        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED; //TODO not sure
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+    {
+//        IBlockState blockState = this.getActualState(state, source, pos);
+//        EnumFacing facing = blockState.getValue(FACING_HORIZONTAL);
+//        AxisAlignedBB aabb;
+//        switch (facing)
+//        {
+//            case NORTH:
+//            case SOUTH:
+//                aabb = new AxisAlignedBB(0.0F, 0.0F, 0.4F, 1.0F, 0.6F, 0.6F);
+//                break;
+//            case EAST:
+//            case WEST:
+//            default: // wat?
+//                aabb = new AxisAlignedBB(0.4F, 0.0F, 0.0F, 0.6F, 0.6F, 1.0F);
+//                break;
+//        }
+//        return aabb;
+        return new AxisAlignedBB(0.4F, 0.0F, 0.0F, 0.6F, 0.6F, 1.0F);
+    }
+
+    @Nullable
+    @Override
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos)
+    {
+        getBoundingBox(state, world, pos);
+        return super.getCollisionBoundingBox(state, world, pos);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos)
+    {
+        getBoundingBox(state, world, pos);
+        return super.getSelectedBoundingBox(state, world, pos);
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState state)
+    {
+        return false;
+    }
 
     /**
      * Pretty effects for the bookshelf ;)
@@ -122,9 +163,8 @@ public class BlockBackpack extends Block
             if (enchTable != null)
             {
                 if (!world.isAirBlock(new BlockPos((enchTable.getX() - x) / 2 + x, enchTable.getY(), (enchTable.getZ() - z) / 2 + z)))
-                {
                     return;
-                }
+
                 for (int o = 0; o < 4; o++)
                 {
                     world.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, enchTable.getX() + 0.5D, enchTable.getY() + 2.0D, enchTable.getZ() + 0.5D,
@@ -140,130 +180,31 @@ public class BlockBackpack extends Block
         return tile instanceof TileBackpack ? ((TileBackpack) tile).getType() : UNKNOWN;
     }
 
+    @Override
+    public int quantityDropped(Random random)
+    {
+        return 0;
+    }
+
     @Nullable
     @Override
-    public String getHarvestTool(IBlockState state)
+    public RayTraceResult collisionRayTrace(IBlockState state, World world, BlockPos pos, Vec3d start, Vec3d end)
     {
-        return null; // anything can harvest this block
+        getBoundingBox(state, world, pos);
+        return super.collisionRayTrace(state, world, pos, start, end);
     }
 
     @Override
-    public int getHarvestLevel(IBlockState state)
+    public void onBlockDestroyedByExplosion(World world, BlockPos pos, Explosion explosion)
     {
-        return 0;
+        world.destroyBlock(pos, false); //TODO redundant?
     }
 
     @Override
-    public boolean isToolEffective(String type, IBlockState state)
+    public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side)
     {
-        return true;
+        return side == EnumFacing.UP;
     }
-
-    @Override
-    public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer)
-    {
-        return super.canRenderInLayer(state, layer); //TODO was: canRenderInPass(int pass) return true;
-    }
-
-    @Override
-    public boolean canEntityDestroy(IBlockState state, IBlockAccess world, BlockPos pos, Entity entity)
-    {
-        return false;
-    }
-
-    @Override
-    public float getEnchantPowerBonus(World world, BlockPos pos)
-    {
-        return getAssociatedTileBackpackType(world, pos) == BOOKSHELF ? 10 : 0;
-    }
-
-    @Override
-    public boolean canBeReplacedByLeaves(IBlockState state, IBlockAccess world, BlockPos pos)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean isWood(IBlockAccess world, BlockPos pos)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean isLeaves(IBlockState state, IBlockAccess world, BlockPos pos)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type)
-    {
-        return false;
-    }
-
-    @Override
-    public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face)
-    {
-        return 0;
-    }
-
-    @Override
-    public boolean canHarvestBlock(IBlockAccess world, BlockPos pos, EntityPlayer player)
-    {
-        return true;
-    }
-
-    @Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity)
-    {
-        if (getAssociatedTileBackpackType(world, pos) == CACTUS)
-        {
-            entity.attackEntityFrom(DamageSource.CACTUS, 1.0F);
-        }
-    }
-
-    @Override
-    public boolean isFlammable(IBlockAccess world, BlockPos pos, EnumFacing face)
-    {
-        return false;
-    }
-
-    @Override
-    public String getUnlocalizedName()
-    {
-        return "blockAdventureBackpack";
-    }
-
-    @Override
-    public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos)
-    //public int getLightValue(IBlockAccess world, int x, int y, int z)
-    {
-        if (getAssociatedTileBackpackType(world, pos) == GLOWSTONE)
-        {
-            return 15;
-        }
-        else if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileBackpack)
-        {
-            return ((TileBackpack) world.getTileEntity(pos)).getLuminosity();
-        }
-        else
-        {
-            return 0;
-        }
-    }
-
-    @Override
-    public int getWeakPower(IBlockState blockState, IBlockAccess world, BlockPos pos, EnumFacing side)
-    {
-        return getAssociatedTileBackpackType(world, pos) == REDSTONE ? 15 : 0;
-    }
-
-    @Override
-    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side)
-    {
-        return getAssociatedTileBackpackType(world, pos) == REDSTONE;
-    }
-
 
 
     @Override
@@ -292,51 +233,18 @@ public class BlockBackpack extends Block
     }
 
     @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player)
+    public int getWeakPower(IBlockState blockState, IBlockAccess world, BlockPos pos, EnumFacing side)
     {
-        return BackpackUtils.createBackpackStack(getAssociatedTileBackpackType(world, pos));
+        return getAssociatedTileBackpackType(world, pos) == REDSTONE ? 15 : 0;
     }
 
     @Override
-    public boolean hasTileEntity(IBlockState state)
+    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity)
     {
-        return true;
-    }
-
-    @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
-    {
-//        IBlockState blockState = this.getActualState(state, source, pos);
-//        EnumFacing facing = blockState.getValue(FACING_HORIZONTAL);
-//        AxisAlignedBB aabb;
-//        switch (facing)
-//        {
-//            case NORTH:
-//            case SOUTH:
-//                aabb = new AxisAlignedBB(0.0F, 0.0F, 0.4F, 1.0F, 0.6F, 0.6F);
-//                break;
-//            case EAST:
-//            case WEST:
-//            default: // wat?
-//                aabb = new AxisAlignedBB(0.4F, 0.0F, 0.0F, 0.6F, 0.6F, 1.0F);
-//                break;
-//        }
-//        return aabb;
-        return new AxisAlignedBB(0.4F, 0.0F, 0.0F, 0.6F, 0.6F, 1.0F);
-    }
-
-
-    @Override
-    public EnumBlockRenderType getRenderType(IBlockState state)
-    {
-        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED; //TODO not sure
-    }
-
-
-    @Override
-    public boolean isOpaqueCube(IBlockState state)
-    {
-        return false;
+        if (getAssociatedTileBackpackType(world, pos) == CACTUS)
+        {
+            entity.attackEntityFrom(DamageSource.CACTUS, 1.0F);
+        }
     }
 
     @Override
@@ -359,41 +267,36 @@ public class BlockBackpack extends Block
         createTileEntity(world, state);
     }
 
+
     @Override
-    public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side)
+    public String getUnlocalizedName()
     {
-        return side == EnumFacing.UP;
+        return BLOCK_NAME;
     }
 
     @Override
-    public int quantityDropped(Random random)
+    public boolean canDropFromExplosion(Explosion explosionIn)
     {
+        return false;
+    }
+
+    @Override
+    public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos)
+    {
+        if (getAssociatedTileBackpackType(world, pos) == GLOWSTONE)
+            return 15;
+
+        TileEntity te = world.getTileEntity(pos);
+        if (te instanceof TileBackpack)
+            return ((TileBackpack) te).getLuminosity();
+
         return 0;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos)
+    public boolean canHarvestBlock(IBlockAccess world, BlockPos pos, EntityPlayer player)
     {
-        getBoundingBox(state, world, pos);
-        return super.getSelectedBoundingBox(state, world, pos);
-    }
-
-    @Nullable
-    @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos)
-    {
-        getBoundingBox(state, world, pos);
-        return super.getCollisionBoundingBox(state, world, pos);
-
-    }
-
-    @Nullable
-    @Override
-    public RayTraceResult collisionRayTrace(IBlockState state, World world, BlockPos pos, Vec3d start, Vec3d end)
-    {
-        getBoundingBox(state, world, pos);
-        return super.collisionRayTrace(state, world, pos, start, end);
+        return true;
     }
 
     @Override
@@ -418,34 +321,15 @@ public class BlockBackpack extends Block
     }
 
     @Override
-    public void breakBlock(World world, BlockPos pos, IBlockState state)
+    public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face)
     {
-        TileEntity te = world.getTileEntity(pos);
-        if (te != null && te instanceof IInventory)
-        {
-            IInventory inventory = (IInventory) te;
-            for (int i = 0; i < inventory.getSizeInventory(); i++)
-            {
-                ItemStack stack = inventory.removeStackFromSlot(i);
+        return 0;
+    }
 
-                if (stack != ItemStack.EMPTY)
-                {
-                    float spawnX = pos.getX() + world.rand.nextFloat();
-                    float spawnY = pos.getY() + world.rand.nextFloat();
-                    float spawnZ = pos.getZ() + world.rand.nextFloat();
-                    float mult = 0.05F;
-
-                    EntityItem droppedItem = new EntityItem(world, spawnX, spawnY, spawnZ, stack);
-
-                    droppedItem.motionX = -0.5F + world.rand.nextFloat() * mult;
-                    droppedItem.motionY = 4 + world.rand.nextFloat() * mult;
-                    droppedItem.motionZ = -0.5 + world.rand.nextFloat() * mult;
-
-                    world.spawnEntity(droppedItem);
-                }
-            }
-        }
-        super.breakBlock(world, pos, state);
+    @Override
+    public boolean hasTileEntity(IBlockState state)
+    {
+        return true;
     }
 
     @Override
@@ -455,15 +339,27 @@ public class BlockBackpack extends Block
     }
 
     @Override
-    public boolean canDropFromExplosion(Explosion explosionIn)
+    public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type)
     {
         return false;
     }
 
     @Override
-    public void onBlockDestroyedByExplosion(World world, BlockPos pos, Explosion explosion)
+    public boolean isLeaves(IBlockState state, IBlockAccess world, BlockPos pos)
     {
-        world.destroyBlock(pos, false);
+        return false;
+    }
+
+    @Override
+    public boolean canBeReplacedByLeaves(IBlockState state, IBlockAccess world, BlockPos pos)
+    {
+        return false;
+    }
+
+    @Override
+    public boolean isWood(IBlockAccess world, BlockPos pos)
+    {
+        return false;
     }
 
     @Override
@@ -471,4 +367,69 @@ public class BlockBackpack extends Block
     {
         //DO NOTHING
     }
+
+    @Override
+    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side)
+    {
+        return getAssociatedTileBackpackType(world, pos) == REDSTONE;
+    }
+
+    @Override
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player)
+    {
+        return BackpackUtils.createBackpackStack(getAssociatedTileBackpackType(world, pos)); //TODO
+    }
+
+    @Override
+    public boolean canEntityDestroy(IBlockState state, IBlockAccess world, BlockPos pos, Entity entity)
+    {
+        return false;
+    }
+
+    @Override
+    public float getEnchantPowerBonus(World world, BlockPos pos)
+    {
+        return getAssociatedTileBackpackType(world, pos) == BOOKSHELF ? 10 : 0;
+    }
+
+    @Nullable
+    @Override
+    public String getHarvestTool(IBlockState state)
+    {
+        return null; // anything can harvest this block
+    }
+
+    @Override
+    public int getHarvestLevel(IBlockState state)
+    {
+        return 0;
+    }
+
+    @Override
+    public boolean isToolEffective(String type, IBlockState state)
+    {
+        return true;
+    }
+
+    @Override
+    public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer)
+    {
+        return super.canRenderInLayer(state, layer); //TODO was: canRenderInPass(int pass) return true;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

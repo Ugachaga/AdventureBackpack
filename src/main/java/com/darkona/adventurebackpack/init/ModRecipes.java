@@ -33,7 +33,7 @@ public class ModRecipes
         }
 
         // CampFire
-        RecipeHelper.convertToShaped(ModBlocks.BLOCK_CAMP_FIRE,
+        RecipeHelper.convertToShaped(ModBlocks.BLOCK_CAMPFIRE,
                 " S ",
                 "SxS",
                 "ccc",

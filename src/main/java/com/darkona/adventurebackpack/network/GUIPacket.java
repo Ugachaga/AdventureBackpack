@@ -118,6 +118,7 @@ public class GuiPacket implements IMessageHandler<GuiPacket.GuiMessage, IMessage
         private byte type;
         private byte from;
 
+        @SuppressWarnings("unused")
         public GuiMessage() {}
 
         public GuiMessage(byte type, byte from)

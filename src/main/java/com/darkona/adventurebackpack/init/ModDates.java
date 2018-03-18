@@ -24,6 +24,7 @@ public class ModDates
         return holiday;
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     private static String setHoliday()
     {
         // here and below commented lines: textures are missing.

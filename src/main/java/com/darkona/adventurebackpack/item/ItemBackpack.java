@@ -34,6 +34,7 @@ import com.darkona.adventurebackpack.common.BackpackAbilities;
 import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.config.ConfigHandler;
 import com.darkona.adventurebackpack.events.WearableEvent;
+import com.darkona.adventurebackpack.init.ModBlocks;
 import com.darkona.adventurebackpack.init.ModNetwork;
 import com.darkona.adventurebackpack.network.GuiPacket;
 import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
@@ -66,8 +67,8 @@ public class ItemBackpack extends ItemAdventure
     public ItemBackpack()
     {
         super();
-        setUnlocalizedName("adventureBackpack");
-        this.setRegistryName(ModInfo.MODID, "adventure_backpack");
+        setRegistryName(ModInfo.MODID, "adventure_backpack");
+        setUnlocalizedName("adventure_backpack");
     }
 
     @Override
@@ -204,30 +205,24 @@ public class ItemBackpack extends ItemAdventure
 
     private boolean placeBackpack(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, boolean from)
     {
-        if (stack.isEmpty()
-                || !player.canPlayerEdit(pos, side, stack)
-                || (pos.getY() <= 0 || pos.getY() >= world.getHeight()))
+        if (stack.isEmpty() || !CoordsUtils.isValidHeight(world, pos)
+                || !player.canPlayerEdit(pos, side, stack))
             return false;
 
-        //BlockBackpack backpack = ModBlocks.BLOCK_BACKPACK; //TODO correctly register blocks
-        BlockBackpack backpack = new BlockBackpack();
-
-        //pos = pos.up(); //from now on, we are working with block ABOVE one player click
+        BlockBackpack backpack = ModBlocks.BLOCK_BACKPACK;
 
         if (backpack.canPlaceBlockOnSide(world, pos, side) && world.getBlockState(pos).getMaterial().isSolid())
         {
             pos = pos.offset(side);
 
-            if (pos.getY() <= 0 || pos.getY() >= world.getHeight())
+            if (!CoordsUtils.isValidHeight(world, pos))
                 return false;
 
             if (backpack.canPlaceBlockAt(world, pos))
             {
                 if (world.setBlockState(pos, backpack.getDefaultState()))
-                //if (world.setBlockState(pos, ModBlocks.BLOCK_BACKPACK.getDefaultState()))
                 {
                     backpack.onBlockPlacedBy(world, pos, backpack.getDefaultState(), player, stack);
-                    //backpack.onBlockPlacedBy(world, pos, ModBlocks.BLOCK_BACKPACK.getDefaultState(), player, stack);
                     player.playSound(SoundEvents.BLOCK_CLOTH_PLACE, 0.5f, 1.0f);
                     ((TileBackpack) world.getTileEntity(pos)).loadFromNBT(stack.getTagCompound());
                     if (from)
@@ -304,7 +299,7 @@ public class ItemBackpack extends ItemAdventure
     @SideOnly(Side.CLIENT)
     public ModelBiped getWearableModel(ItemStack wearable)
     {
-        return ClientProxy.modelAdventureBackpack.setWearable(wearable);
+        return ClientProxy.modelBackpack.setWearable(wearable);
     }
 
     @Override

@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import com.darkona.adventurebackpack.client.gui.GuiBackpack;
 import com.darkona.adventurebackpack.client.gui.GuiCopter;
 import com.darkona.adventurebackpack.client.gui.GuiJetpack;
-import com.darkona.adventurebackpack.client.models.ModelBackpackArmor;
+import com.darkona.adventurebackpack.client.models.ModelBackpack;
 import com.darkona.adventurebackpack.client.models.ModelCopter;
 import com.darkona.adventurebackpack.client.models.ModelJetpack;
 import com.darkona.adventurebackpack.common.Constants;
@@ -34,7 +34,7 @@ import com.darkona.adventurebackpack.reference.ModInfo;
 public class ClientProxy implements IProxy
 {
     //public static RendererWearableEquipped rendererWearableEquipped = new RendererWearableEquipped(); //TODO renderManager?
-    public static ModelBackpackArmor modelAdventureBackpack = new ModelBackpackArmor();
+    public static ModelBackpack modelBackpack = new ModelBackpack();
     public static ModelJetpack modelJetpack = new ModelJetpack();
     public static ModelCopter modelCopter = new ModelCopter();
 
@@ -125,7 +125,7 @@ public class ClientProxy implements IProxy
 //            MinecraftForgeClient.registerItemRenderer(ModItems.HOSE, new RendererHose());
 //        }
 //
-//        ClientRegistry.bindTileEntitySpecialRenderer(TileCampfire.class, new RendererCampFire());
+//        ClientRegistry.bindTileEntitySpecialRenderer(TileCampfire0.class, new RendererCampFire());
 //
 //        //TODO deprecated use the factory version during Preinitialization
 //        RenderingRegistry.registerEntityRenderingHandler(EntityInflatableBoat.class, new RendererInflatableBoat());

@@ -1,6 +1,6 @@
 {
     "pack": {
-        "description": "Adventure Backpack resources",
-        "pack_format": 2
+        "pack_format": 3,
+        "description": "Adventure Backpack resources"
     }
 }

@@ -24,7 +24,7 @@ public class JetpackSoundOn extends MovingSound
 
     public JetpackSoundOn(EntityPlayer player)
     {
-        super(new SoundEvent(new ResourceLocation(ModInfo.MODID,"s_jetpackon")), SoundCategory.BLOCKS);
+        super(new SoundEvent(new ResourceLocation(ModInfo.MODID,"jetpack_on")), SoundCategory.BLOCKS);
         volume = 0.9f;
         pitch = 1.0F;
         thePlayer = player;
