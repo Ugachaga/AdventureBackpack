@@ -11,11 +11,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import com.darkona.adventurebackpack.common.ServerActions;
 import com.darkona.adventurebackpack.util.Wearing;
 
-/**
- * Created on 12/10/2014
- *
- * @author Darkona
- */
 public class WearableModePacket implements IMessageHandler<WearableModePacket.Message, WearableModePacket.Message>
 {
     public static final byte COPTER_ON_OFF = 0;

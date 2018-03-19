@@ -15,11 +15,6 @@ import com.darkona.adventurebackpack.inventory.ContainerJetpack;
 import com.darkona.adventurebackpack.inventory.InventoryJetpack;
 import com.darkona.adventurebackpack.util.Resources;
 
-/**
- * Created on 15/01/2015
- *
- * @author Darkona
- */
 public class GuiJetpack extends GuiWithTanks
 {
     private static final ResourceLocation TEXTURE = Resources.guiTextures("jetpack");

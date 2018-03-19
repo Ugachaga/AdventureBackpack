@@ -11,12 +11,7 @@ import static com.darkona.adventurebackpack.common.Constants.Jetpack.BUCKET_IN;
 import static com.darkona.adventurebackpack.common.Constants.Jetpack.BUCKET_OUT;
 import static com.darkona.adventurebackpack.common.Constants.Jetpack.FUEL_SLOT;
 
-/**
- * Created on 15/01/2015
- *
- * @author Darkona
- */
-public class ContainerJetpack extends ContainerAdventure
+public class ContainerJetpack extends ContainerWearable
 {
     private static final int JETPACK_INV_START = PLAYER_INV_END + 1;
     private static final int JETPACK_FUEL_START = PLAYER_INV_END + 3;

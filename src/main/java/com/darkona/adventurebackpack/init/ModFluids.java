@@ -4,11 +4,6 @@ import com.darkona.adventurebackpack.fluids.FluidMelonJuice;
 import com.darkona.adventurebackpack.fluids.FluidMilk;
 import com.darkona.adventurebackpack.fluids.FluidMushroomStew;
 
-/**
- * Created on 12/10/2014.
- *
- * @author Javier Darkona
- */
 public class ModFluids
 {
     public static FluidMilk milk;

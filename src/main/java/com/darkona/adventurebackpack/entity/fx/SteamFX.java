@@ -7,12 +7,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- * Created on 19/01/2015
- *
- * @author Darkona
- */
-
 @SideOnly(Side.CLIENT)
 public class SteamFX extends Particle
 {

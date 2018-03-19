@@ -11,11 +11,6 @@ import codechicken.lib.render.RenderUtils;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Vector3;
 
-/**
- * Created on 10/01/2015
- *
- * @author Darkona
- */
 public abstract class ModelWearable extends ModelBiped
 {
     protected void startBlending()

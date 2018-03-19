@@ -17,9 +17,6 @@ import com.darkona.adventurebackpack.network.messages.EntityParticlePacket;
 import com.darkona.adventurebackpack.network.messages.EntitySoundPacket;
 
 /**
- * Created on 11/10/2014
- *
- * @author Darkona
  * @see com.darkona.adventurebackpack.handlers.PlayerEventHandler
  * @see com.darkona.adventurebackpack.fluids.FluidEffectRegistry
  * @see com.darkona.adventurebackpack.common.BackpackAbilities

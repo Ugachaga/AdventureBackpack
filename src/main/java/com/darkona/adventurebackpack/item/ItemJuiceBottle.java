@@ -10,26 +10,18 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
-import com.darkona.adventurebackpack.CreativeTabAB;
 import com.darkona.adventurebackpack.fluids.FluidEffectRegistry;
 import com.darkona.adventurebackpack.init.ModFluids;
 import com.darkona.adventurebackpack.reference.ModInfo;
 
-/**
- * Created on 19/10/2014
- *
- * @author Darkona
- */
-public class ItemJuiceBottle extends ItemAB
+public class ItemJuiceBottle extends AdventureItem
 {
-    public ItemJuiceBottle()
+    public ItemJuiceBottle(String name)
     {
-        super();
-        setCreativeTab(CreativeTabAB.TAB_AB);
-        setFull3D();
-        setUnlocalizedName("melonJuiceBottle");
-        this.setRegistryName(ModInfo.MODID, "melon_juice_bottle");
-        setMaxStackSize(1);
+        super(name);
+        this.setCreativeTab(ModInfo.CREATIVE_TAB);
+        this.setMaxStackSize(1);
+        this.setFull3D();
     }
 
     @Override

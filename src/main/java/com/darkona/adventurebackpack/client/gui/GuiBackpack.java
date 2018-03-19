@@ -24,11 +24,6 @@ import com.darkona.adventurebackpack.reference.LoadedMods;
 import com.darkona.adventurebackpack.util.Resources;
 import com.darkona.adventurebackpack.util.TinkersUtils;
 
-/**
- * Created on 12/10/2014
- *
- * @author Darkona
- */
 @SideOnly(Side.CLIENT)
 public class GuiBackpack extends GuiWithTanks
 {

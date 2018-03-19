@@ -3,11 +3,6 @@ package com.darkona.adventurebackpack.block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.material.Material;
 
-/**
- * Created on 14/10/2014
- *
- * @author Darkona
- */
 public class BlockSleepingBagOld extends BlockDirectional
 {
 //    private static final int[][] footBlockToHeadBlockMap = new int[][]{{0, 1}, {-1, 0}, {0, -1}, {1, 0}};
@@ -177,7 +172,7 @@ public class BlockSleepingBagOld extends BlockDirectional
 //                    {
 //                        player.setSpawnChunk(new ChunkCoordinates(x, y, z), true, player.dimension);
 //                        LogHelper.info("Looking for a campfire nearby...");
-//                        ChunkCoordinates campfire = CoordsUtils.findBlock3D(world, x, y, z, ModBlocks.BLOCK_CAMPFIRE, 8, 2);
+//                        ChunkCoordinates campfire = CoordsUtils.findBlock3D(world, x, y, z, ModBlocks.CAMPFIRE_BLOCK, 8, 2);
 //                        if (campfire != null)
 //                        {
 //                            LogHelper.info("Campfire Found, saving coordinates. " + campfire.toString());

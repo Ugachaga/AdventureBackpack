@@ -8,11 +8,6 @@ import com.darkona.adventurebackpack.entity.EntityFriendlySpider;
 import com.darkona.adventurebackpack.entity.EntityInflatableBoat;
 import com.darkona.adventurebackpack.reference.ModInfo;
 
-/**
- * Created on 12/10/2014
- *
- * @author Darkona
- */
 public class ModEntities
 {
     private static final String NAME_BOAT = "inflatableBoat";

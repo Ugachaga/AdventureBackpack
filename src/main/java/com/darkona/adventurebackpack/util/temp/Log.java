@@ -7,11 +7,6 @@ import org.apache.logging.log4j.MarkerManager;
 
 import com.darkona.adventurebackpack.reference.ModInfo;
 
-/**
- * Created on 06.03.2018
- *
- * @author Ugachaga
- */
 public class Log
 {
     public static final Marker MOD_MARKER = MarkerManager.getMarker(ModInfo.MODID);

@@ -13,11 +13,6 @@ import com.darkona.adventurebackpack.AdventureBackpack;
 import com.darkona.adventurebackpack.init.ModNetwork;
 import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
 
-/**
- * Created on 08/01/2015
- *
- * @author Darkona
- */
 public class SyncPropertiesPacket implements IMessageHandler<SyncPropertiesPacket.Message, SyncPropertiesPacket.Message>
 {
     public static final byte DATA_ONLY = 0;

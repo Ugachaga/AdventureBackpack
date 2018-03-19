@@ -20,7 +20,7 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12.2-14.23.2.2611"
+    version = "${minecraft_version}-${forge_version}"
     runDir = "run"
     
     // the mappings can be changed at any time, and must be in the following format.
@@ -28,7 +28,7 @@ minecraft {
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not always work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20171003"
+    mappings = "${mappings_version}"
     makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
@@ -39,14 +39,23 @@ repositories {
     maven {
         url "http://chickenbones.net/maven/" // CodeChikenLib
     }
+    maven {
+        url = "http://dvs1.progwml6.com/files/maven" // JEI
+    }
+    maven {
+        url = "http://modmaven.k-4u.nl/" // JEI 
+    }
 }
 
 dependencies {
 
     deobfCompile "mcp.mobius.waila:Hwyla:${hwyla_version}:api"
     runtime "mcp.mobius.waila:Hwyla:${hwyla_version}"
-    compile "codechicken:CodeChickenLib:${minecraft_version}-${ccl_version}:deobf"
 
+    deobfProvided "mezz.jei:jei_${minecraft_version}:${jei_version}:api"
+    runtime "mezz.jei:jei_${minecraft_version}:${jei_version}"
+
+    compile "codechicken:CodeChickenLib:${minecraft_version}-${ccl_version}:deobf" 
 
     //compile "codechicken:CodeChickenCore:${minecraft_version}-${ccc_version}:dev" 
     //compile "codechicken:NotEnoughItems:${minecraft_version}-${nei_version}:dev"

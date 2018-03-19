@@ -10,11 +10,6 @@ import net.minecraft.world.World;
 
 import com.darkona.adventurebackpack.entity.fx.SteamFX;
 
-/**
- * Created on 17/10/2014
- *
- * @author Darkona
- */
 public class Visuals
 {
     public static void NyanParticles(EntityPlayer player, World world)

@@ -1,6 +1,9 @@
 package com.darkona.adventurebackpack.item;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -17,63 +20,84 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.darkona.adventurebackpack.AdventureBackpack;
 import com.darkona.adventurebackpack.entity.EntityInflatableBoat;
 import com.darkona.adventurebackpack.reference.ModInfo;
+import com.darkona.adventurebackpack.util.temp.IVariant;
 
-/**
- * Created on 11/10/2014
- *
- * @author Darkona
- */
-public class ItemComponent extends ItemAB
+public class ItemComponent extends AdventureItem
 {
-    private String[] names = {
-            "sleepingBag",
-            "backpackTank",
-            "hoseHead",
-            "macheteHandle",
-            "copterEngine",
-            "copterBlades",
-            "inflatableBoat",
-            "inflatableBoatMotorized",
-            "hydroBlades",
-    };
-
-    public ItemComponent()
+    public ItemComponent(String name)
     {
-        setNoRepair();
-        setHasSubtypes(true);
-        setMaxStackSize(16);
-        this.setUnlocalizedName("backpackComponent");
-        this.setRegistryName(ModInfo.MODID, "component");
-    }
-
-
-    @Override
-    public String getUnlocalizedName(ItemStack stack)
-    {
-        int meta = stack.getMetadata() - 1;
-
-        if (meta < 0)
-            meta = 0;
-        else if (meta >= names.length) //TODO wtf
-            meta = names.length - 1;
-
-        return super.getUnlocalizedName(names[meta]);
+        super(name);
+        this.setNoRepair();
+        this.setHasSubtypes(true);
+        this.setMaxStackSize(16);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    @SideOnly(Side.CLIENT)
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
+    public String getUnlocalizedName(final ItemStack stack)
     {
-        for (int i = 1; i <= names.length; i++)
+        return "item." + ModInfo.MODID + ":" + Types.getType(stack.getMetadata()).getName();
+    }
+
+    @Override
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems)
+    {
+        if (isInCreativeTab(tab))
         {
-            items.add(new ItemStack(this, 1, i));
+            List<ItemStack> items = Stream.of(Types.values())
+                    .map(types -> new ItemStack(this, 1, types.getMeta()))
+                    .collect(Collectors.toList());
+
+            subItems.addAll(items);
+        }
+    }
+
+    public enum Types implements IVariant
+    {
+        SLEEPING_BAG (0),
+        BACKPACK_TANK (1),
+        HOSE_HEAD (2),
+        MACHETE_HANDLE (3),
+        COPTER_ENGINE (4),
+        COPTER_BLADES (5),
+        INFLATABLE_BOAT (6),
+        INFLATABLE_BOAT_MOTORIZED (7),
+        HYDRO_BLADES (8),
+        ;
+
+        private static final Types[] BY_META = Stream.of(values())
+                .sorted(Comparator.comparing(Types::getMeta))
+                .toArray(Types[]::new);
+
+        private final int meta;
+        private final String name;
+
+        Types(int meta)
+        {
+            this.meta = meta;
+            this.name = name().toLowerCase();
+        }
+
+        @Override
+        public int getMeta()
+        {
+            return meta;
+        }
+
+        @Override
+        public String getName()
+        {
+            return name;
+        }
+
+        public static Types getType(int meta)
+        {
+            if (meta < 0 || meta >= BY_META.length)
+                meta = 0;
+
+            return BY_META[meta];
         }
     }
 
@@ -176,15 +200,4 @@ public class ItemComponent extends ItemAB
             }
         }
     }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerItemModel()
-    {
-        for (int i = 0; i < names.length; i++)
-        {
-            AdventureBackpack.proxy.registerItemRenderer(this, i +1, getUnwrappedUnlocalizedName(names[i]));
-        }
-    }
-
 }

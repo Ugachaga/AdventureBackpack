@@ -1,13 +1,7 @@
 package com.darkona.adventurebackpack.common;
 
-
 import net.minecraftforge.fluids.Fluid;
 
-/**
- * Created on 11/10/2014.
- *
- * @author Javier Darkona
- */
 public class Constants
 {
     public enum Source //TODO move to separate class?

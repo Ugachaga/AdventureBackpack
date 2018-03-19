@@ -19,12 +19,7 @@ import static com.darkona.adventurebackpack.common.Constants.BUCKET_OUT_RIGHT;
 import static com.darkona.adventurebackpack.common.Constants.TOOL_LOWER;
 import static com.darkona.adventurebackpack.common.Constants.TOOL_UPPER;
 
-/**
- * Created on 12/10/2014
- *
- * @author Darkona
- */
-public class ContainerBackpack extends ContainerAdventure
+public class ContainerBackpack extends ContainerWearable
 {
     private static final int BACK_INV_ROWS = 6;
     private static final int BACK_INV_COLUMNS = 8;

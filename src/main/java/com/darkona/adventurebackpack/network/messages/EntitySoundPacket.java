@@ -12,11 +12,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import com.darkona.adventurebackpack.client.ClientActions;
 import com.darkona.adventurebackpack.init.ModNetwork;
 
-/**
- * Created on 06/01/2015
- *
- * @author Darkona
- */
 public class EntitySoundPacket implements IMessageHandler<EntitySoundPacket.Message, EntitySoundPacket.Message>
 {
     public static final boolean play = true;

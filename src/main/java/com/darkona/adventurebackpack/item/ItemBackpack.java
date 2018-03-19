@@ -40,7 +40,6 @@ import com.darkona.adventurebackpack.network.GuiPacket;
 import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
 import com.darkona.adventurebackpack.proxy.ClientProxy;
 import com.darkona.adventurebackpack.reference.BackpackTypes;
-import com.darkona.adventurebackpack.reference.ModInfo;
 import com.darkona.adventurebackpack.util.BackpackUtils;
 import com.darkona.adventurebackpack.util.CoordsUtils;
 import com.darkona.adventurebackpack.util.EnchUtils;
@@ -57,22 +56,14 @@ import static com.darkona.adventurebackpack.common.Constants.TAG_RIGHT_TANK;
 import static com.darkona.adventurebackpack.common.Constants.TAG_TYPE;
 import static com.darkona.adventurebackpack.util.TipUtils.l10n;
 
-/**
- * Created on 12/10/2014
- *
- * @author Darkona
- */
-public class ItemBackpack extends ItemAdventure
+public class ItemBackpack extends ItemWearable
 {
-    public ItemBackpack()
+    public ItemBackpack(String name)
     {
-        super();
-        setRegistryName(ModInfo.MODID, "adventure_backpack");
-        setUnlocalizedName("adventure_backpack");
+        super(name);
     }
 
     @Override
-    @SuppressWarnings({"unchecked"})
     @SideOnly(Side.CLIENT)
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
     {
@@ -83,13 +74,23 @@ public class ItemBackpack extends ItemAdventure
 
             items.add(BackpackUtils.createBackpackStack(type));
         }
+
+//        if (isInCreativeTab(tab))
+//        {
+//            List<ItemStack> itemz = Stream.of(BackpackTypes.values())
+//                    .map(BackpackUtils::createBackpackStack)
+//                    .collect(Collectors.toList());
+//
+//            items.addAll(itemz);
+//        }
     }
 
     @Override
-    @SuppressWarnings({"unchecked"})
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag)
     {
+        if (world == null) return;
+
         NBTTagCompound backpackTag = BackpackUtils.getWearableCompound(stack);
 
         BackpackTypes type = BackpackTypes.getType(backpackTag.getByte(TAG_TYPE));
@@ -124,7 +125,7 @@ public class ItemBackpack extends ItemAdventure
                 tooltip.add(l10n("backpack.cycling.key2") + " " + TipUtils.switchTooltip(!cycling, false));
             }
 
-            if (BackpackTypes.isNightVision(type))
+            if (type.isNightVision())
             {
                 boolean vision = !backpackTag.getBoolean(TAG_DISABLE_NVISION);
                 tooltip.add(l10n("backpack.vision") + ": " + TipUtils.switchTooltip(vision, true));
@@ -209,7 +210,7 @@ public class ItemBackpack extends ItemAdventure
                 || !player.canPlayerEdit(pos, side, stack))
             return false;
 
-        BlockBackpack backpack = ModBlocks.BLOCK_BACKPACK;
+        BlockBackpack backpack = ModBlocks.BACKPACK_BLOCK;
 
         if (backpack.canPlaceBlockOnSide(world, pos, side) && world.getBlockState(pos).getMaterial().isSolid())
         {
@@ -254,7 +255,7 @@ public class ItemBackpack extends ItemAdventure
         if (!ConfigHandler.backpackAbilities || world == null || player == null || stack == null)
             return;
 
-        if (BackpackTypes.isSpecial(BackpackTypes.getType(stack)))
+        if (BackpackTypes.getType(stack).isSpecial())
         {
             BackpackAbilities.backpackAbilities.executeAbility(player, world, stack);
         }
@@ -263,7 +264,7 @@ public class ItemBackpack extends ItemAdventure
     @Override
     public void onUnequipped(World world, EntityPlayer player, ItemStack stack)
     {
-        if (BackpackTypes.hasProperty(BackpackTypes.getType(stack), BackpackTypes.Props.REMOVAL))
+        if (BackpackTypes.getType(stack).hasProperty(BackpackTypes.Props.REMOVAL))
         {
             BackpackAbilities.backpackAbilities.executeRemoval(player, world, stack);
         }

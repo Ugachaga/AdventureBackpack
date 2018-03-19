@@ -6,9 +6,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.darkona.adventurebackpack.reference.ModInfo;
 
-/**
- * Created by Darkona on 12/10/2014.
- */
 public class FluidMelonJuice extends Fluid
 {
     public FluidMelonJuice()

@@ -10,11 +10,6 @@ import com.darkona.adventurebackpack.inventory.InventoryJetpack;
 import com.darkona.adventurebackpack.reference.ModInfo;
 import com.darkona.adventurebackpack.util.Wearing;
 
-/**
- * Created on 16/01/2015
- *
- * @author Darkona
- */
 public class BoilingBoilerSound extends MovingSound
 {
     private EntityPlayer thePlayer;

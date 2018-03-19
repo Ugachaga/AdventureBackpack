@@ -13,11 +13,6 @@ import com.darkona.adventurebackpack.config.Keybindings;
 import com.darkona.adventurebackpack.init.ModNetwork;
 import com.darkona.adventurebackpack.network.EquipUnequipBackWearablePacket;
 
-/**
- * Created on 06/01/2015
- *
- * @author Darkona
- */
 public abstract class GuiWithTanks extends GuiContainer
 {
     protected EntityPlayer player;

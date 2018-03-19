@@ -1,16 +1,13 @@
 package com.darkona.adventurebackpack.reference;
 
 import java.util.Arrays;
-import java.util.EnumSet;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.EnumHashBiMap;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.text.WordUtils;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,11 +22,6 @@ import static com.darkona.adventurebackpack.reference.BackpackTypes.Props.REMOVA
 import static com.darkona.adventurebackpack.reference.BackpackTypes.Props.SPECIAL;
 import static com.darkona.adventurebackpack.reference.BackpackTypes.Props.TILE;
 
-/**
- * Created on 15.08.2017
- *
- * @author Ugachaga
- */
 @SuppressWarnings("unused")
 public enum BackpackTypes implements IStringSerializable
 {
@@ -112,95 +104,39 @@ public enum BackpackTypes implements IStringSerializable
     YELLOW          ( 74),
     ZOMBIE          ( 75),
 
-    UNKNOWN         (127, "UNKNOWN"), // null object
+    UNKNOWN         (127), // null object
     ;
     // @formatter:on
 
     public static final ImmutableBiMap<Byte, BackpackTypes> BY_META;
-    public static final ImmutableSet<BackpackTypes> SPECIAL_TYPES; //TODO okay... how can we use all these sets?
-    public static final ImmutableSet<BackpackTypes> REMOVAL_TYPES;
-    public static final ImmutableSet<BackpackTypes> NIGHT_VISION_TYPES;
 
     private final byte meta;
-    private final String skinName;
+    private final String name;
     private final ImmutableSet<Props> props;
 
-    BackpackTypes(int meta, String skin, Props... props)
+    BackpackTypes(int meta, Props... props)
     {
         Validate.inclusiveBetween(0, (int) Byte.MAX_VALUE, meta, "wrong meta value: %s (%s)", meta, this);
 
         this.meta = (byte) meta;
-        this.skinName = skin.isEmpty() ? generateSkinName() : skin;
-        this.props = Sets.immutableEnumSet((Arrays.asList(props)));
-    }
-
-    BackpackTypes(int meta, Props... props)
-    {
-        this(meta, StringUtils.EMPTY, props);
-    }
-
-    private String generateSkinName()
-    {
-        return WordUtils
-                .capitalize(this.name().toLowerCase(), '_')
-                .replaceAll("_", "");
+        this.name = name().toLowerCase();
+        this.props = Sets.immutableEnumSet(Arrays.asList(props));
     }
 
     static
     {
         BiMap<BackpackTypes, Byte> byMeta = EnumHashBiMap.create(BackpackTypes.class);
-        EnumSet<BackpackTypes> specials = EnumSet.noneOf(BackpackTypes.class);
-        EnumSet<BackpackTypes> removals = EnumSet.noneOf(BackpackTypes.class);
-        EnumSet<BackpackTypes> nightVisions = EnumSet.noneOf(BackpackTypes.class);
 
         for (BackpackTypes type : BackpackTypes.values())
-        {
             if (byMeta.put(type, type.meta) != null)
                 throw new IllegalArgumentException("duplicate meta: " + type.meta);
 
-            for (Props property : type.props)
-            {
-                if (property == SPECIAL)
-                    specials.add(type);
-                if (property == REMOVAL)
-                    removals.add(type);
-                if (property == NIGHT_VISION)
-                    nightVisions.add(type);
-            }
-        }
-
         BY_META = ImmutableBiMap.copyOf(byMeta.inverse());
-        SPECIAL_TYPES = Sets.immutableEnumSet(specials);
-        REMOVAL_TYPES = Sets.immutableEnumSet(removals);
-        NIGHT_VISION_TYPES = Sets.immutableEnumSet(nightVisions);
-
-        //ImmutableSet.<BackpackTypes>builder().addAll(SPECIAL).addAll(TILE).addAll(OTHER).build();
-        //TODO LogHelper.info("Registered blablabla types, blabla specials...");
-    }
-
-    public static String getSkinName(BackpackTypes type)
-    {
-        return type.skinName;
-    }
-
-    public static String getSkinName(int meta)
-    {
-        return getType(meta).skinName;
     }
 
     public static String getSkinName(ItemStack backpack)
     {
-        return getSkinName(getType(backpack));
-    }
-
-    public static String getLocalizedName(BackpackTypes type)
-    {
-        return I18n.translateToLocal("adventurebackpack:skin.name." + type.name().toLowerCase());
-    }
-
-    public static byte getMeta(BackpackTypes type)
-    {
-        return type.meta;
+        return getType(backpack).getName();
     }
 
     public static BackpackTypes getType(int meta)
@@ -217,13 +153,12 @@ public enum BackpackTypes implements IStringSerializable
         return type != null ? type : UNKNOWN;
     }
 
-    public static BackpackTypes getType(String skinName)
+    public static BackpackTypes getType(String name)
     {
         for (BackpackTypes type : BackpackTypes.values())
-        {
-            if (type.skinName.equals(skinName))
+            if (type.name.equals(name))
                 return type;
-        }
+
         return UNKNOWN;
     }
 
@@ -250,24 +185,24 @@ public enum BackpackTypes implements IStringSerializable
         return -1;
     }
 
-    public static boolean isNightVision(BackpackTypes type)
+    public boolean isNightVision()
     {
-        return hasProperty(type, NIGHT_VISION);
+        return hasProperty(NIGHT_VISION);
     }
 
-    public static boolean isSpecial(BackpackTypes type)
+    public boolean isSpecial()
     {
-        return hasProperty(type, SPECIAL);
+        return hasProperty(SPECIAL);
     }
 
-    public static boolean hasProperty(BackpackTypes type, Props prop)
+    public boolean hasProperty(Props prop)
     {
-        return type.props.contains(prop);
+        return this.props.contains(prop);
     }
 
-    public static boolean hasProperties(BackpackTypes type, ImmutableSet<Props> props)
+    public boolean hasProperties(ImmutableSet<Props> props)
     {
-        return type.props.containsAll(props);
+        return this.props.containsAll(props);
     }
 
     public enum Props
@@ -283,10 +218,19 @@ public enum BackpackTypes implements IStringSerializable
         public static final ImmutableSet<Props> POTION_EFFECT = Sets.immutableEnumSet(SPECIAL, REMOVAL);
     }
 
+    public byte getMeta()
+    {
+        return this.meta;
+    }
+
     @Override
     public String getName()
     {
-        return this.skinName;
+        return this.name;
     }
 
+    public String getLocalizedName()
+    {
+        return I18n.translateToLocal("adventurebackpack:skin." + name + ".name");
+    }
 }

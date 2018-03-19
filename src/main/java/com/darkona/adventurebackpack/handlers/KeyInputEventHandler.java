@@ -14,12 +14,7 @@ import com.darkona.adventurebackpack.network.GuiPacket;
 import com.darkona.adventurebackpack.network.PlayerActionPacket;
 import com.darkona.adventurebackpack.network.SyncPropertiesPacket;
 import com.darkona.adventurebackpack.network.WearableModePacket;
-import com.darkona.adventurebackpack.reference.BackpackTypes;
 import com.darkona.adventurebackpack.util.Wearing;
-
-/**
- * Created by Darkona on 11/10/2014.
- */
 
 public class KeyInputEventHandler
 {
@@ -83,7 +78,7 @@ public class KeyInputEventHandler
             {
                 if (player.isSneaking())
                 {
-                    if (BackpackTypes.isNightVision(Wearing.getWearingBackpackInv(player).getType()))
+                    if (Wearing.getWearingBackpackInv(player).getType().isNightVision())
                     {
                         sendWearableModePacket(WearableModePacket.NIGHTVISION_ON_OFF);
                         ServerActions.toggleNightVision(player, Wearing.getWearingBackpack(player));

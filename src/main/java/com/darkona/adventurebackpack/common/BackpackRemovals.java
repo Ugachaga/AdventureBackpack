@@ -10,11 +10,6 @@ import com.darkona.adventurebackpack.config.ConfigHandler;
 import com.darkona.adventurebackpack.inventory.InventoryBackpack;
 import com.darkona.adventurebackpack.util.Wearing;
 
-/**
- * Created on 09/01/2015
- *
- * @author Darkona
- */
 public class BackpackRemovals
 {
     public void itemBat(EntityPlayer player, World world, ItemStack backpack)

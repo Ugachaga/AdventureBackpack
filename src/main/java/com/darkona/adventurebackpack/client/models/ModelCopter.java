@@ -17,11 +17,6 @@ import com.darkona.adventurebackpack.util.Utils;
 
 import static com.darkona.adventurebackpack.common.Constants.Copter.TAG_STATUS;
 
-/**
- * Created on 31/12/2014
- *
- * @author Darkona
- */
 public class ModelCopter extends ModelWearable
 {
     public static ModelCopter instance = new ModelCopter();

@@ -19,11 +19,6 @@ import com.darkona.adventurebackpack.inventory.InventoryCopter;
 import com.darkona.adventurebackpack.inventory.InventoryJetpack;
 import com.darkona.adventurebackpack.util.Wearing;
 
-/**
- * Created on 12/10/2014
- *
- * @author Darkona
- */
 public class GuiHandler implements IGuiHandler
 {
     private static final byte BACKPACK_TILE = 0;

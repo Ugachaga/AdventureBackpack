@@ -11,11 +11,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import com.darkona.adventurebackpack.util.BackpackUtils;
 import com.darkona.adventurebackpack.util.Wearing;
 
-/**
- * Created on 08/01/2015
- *
- * @author Darkona
- */
 public class EquipUnequipBackWearablePacket implements IMessageHandler<EquipUnequipBackWearablePacket.Message, EquipUnequipBackWearablePacket.Message>
 {
     public static final byte EQUIP_WEARABLE = 0;

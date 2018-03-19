@@ -10,9 +10,6 @@ import net.minecraft.util.ResourceLocation;
 import com.darkona.adventurebackpack.client.models.ModelAdventureHat;
 import com.darkona.adventurebackpack.util.Resources;
 
-/**
- * Created by Darkona on 11/10/2014.
- */
 public class RendererItemAdventureHat
 {
     private final ModelAdventureHat model;

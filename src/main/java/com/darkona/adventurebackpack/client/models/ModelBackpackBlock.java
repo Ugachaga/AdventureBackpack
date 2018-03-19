@@ -17,11 +17,6 @@ import com.darkona.adventurebackpack.reference.BackpackTypes;
 
 import static com.darkona.adventurebackpack.reference.BackpackTypes.*;
 
-/**
- * Created on 17/12/2014
- *
- * @author Darkona
- */
 public class ModelBackpackBlock extends ModelBase
 {
     public ModelRenderer mainBody;

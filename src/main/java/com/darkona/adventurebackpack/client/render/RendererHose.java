@@ -8,11 +8,6 @@ import net.minecraft.item.ItemStack;
 
 import com.darkona.adventurebackpack.config.ConfigHandler;
 
-/**
- * Created on 13/10/2014
- *
- * @author Darkona
- */
 public class RendererHose
 {
     private FontRenderer fontRenderer;

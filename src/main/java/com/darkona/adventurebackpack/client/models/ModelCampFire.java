@@ -4,10 +4,6 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-/**
- * campFire - Darkona
- * Created using Tabula 4.1.0
- */
 public class ModelCampFire extends ModelBase
 {
     public ModelRenderer rock1;

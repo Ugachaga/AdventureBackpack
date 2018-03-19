@@ -44,13 +44,6 @@ import com.darkona.adventurebackpack.util.EnchUtils;
 import com.darkona.adventurebackpack.util.LogHelper;
 import com.darkona.adventurebackpack.util.Wearing;
 
-/**
- * Created on 11/10/2014
- * Handle ALL the events!
- *
- * @author Darkona
- * @see com.darkona.adventurebackpack.client.ClientActions
- */
 public class PlayerEventHandler
 {
     @SubscribeEvent
@@ -334,7 +327,7 @@ public class PlayerEventHandler
 
         EntityPlayer player = event.getEntityPlayer();
         BlockPos bedLocation = player.getBedLocation(player.dimension);
-        if (player.world.getBlockState(bedLocation) == ModBlocks.BLOCK_SLEEPING_BAG)
+        if (player.world.getBlockState(bedLocation) == ModBlocks.SLEEPING_BAG_BLOCK)
         {
             //If the player wakes up in one of those super confortable SleepingBags (tm) (Patent Pending)
             if (BlockSleepingBag.isSleepingInPortableBag(player))

@@ -8,11 +8,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.darkona.adventurebackpack.reference.ModInfo;
 
-/**
- * Created on 10/10/2014.
- *
- * @author Javier Darkona
- */
 public class ConfigHandler
 {
     public static Configuration config;

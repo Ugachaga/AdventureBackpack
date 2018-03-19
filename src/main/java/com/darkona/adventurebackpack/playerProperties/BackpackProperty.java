@@ -12,11 +12,6 @@ import com.darkona.adventurebackpack.init.ModNetwork;
 import com.darkona.adventurebackpack.item.IBackWearableItem;
 import com.darkona.adventurebackpack.network.SyncPropertiesPacket;
 
-/**
- * Created on 24/10/2014
- *
- * @author Darkona
- */
 public class BackpackProperty //implements IExtendedEntityProperties
 {
 

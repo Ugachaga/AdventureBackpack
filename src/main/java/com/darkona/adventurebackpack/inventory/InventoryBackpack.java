@@ -27,12 +27,7 @@ import static com.darkona.adventurebackpack.common.Constants.TAG_RIGHT_TANK;
 import static com.darkona.adventurebackpack.common.Constants.TAG_TYPE;
 import static com.darkona.adventurebackpack.common.Constants.TAG_WEARABLE_COMPOUND;
 
-/**
- * Created on 12/10/2014
- *
- * @author Darkona
- */
-public class InventoryBackpack extends InventoryAdventure implements IInventoryBackpack
+public class InventoryBackpack extends InventoryWearable implements IInventoryBackpack
 {
     private static final String TAG_IS_SLEEPING_BAG = "sleepingBag";
     private static final String TAG_SLEEPING_BAG_X = "sleepingBagX";
@@ -123,7 +118,7 @@ public class InventoryBackpack extends InventoryAdventure implements IInventoryB
     public void saveToNBT(NBTTagCompound compound)
     {
         NBTTagCompound backpackTag = new NBTTagCompound();
-        backpackTag.setByte(TAG_TYPE, BackpackTypes.getMeta(type));
+        backpackTag.setByte(TAG_TYPE, type.getMeta());
         backpackTag.setTag(TAG_INVENTORY, getInventoryTagList());
         backpackTag.setTag(TAG_RIGHT_TANK, rightTank.writeToNBT(new NBTTagCompound()));
         backpackTag.setTag(TAG_LEFT_TANK, leftTank.writeToNBT(new NBTTagCompound()));
@@ -272,7 +267,7 @@ public class InventoryBackpack extends InventoryAdventure implements IInventoryB
         if (this.sleepingBagDeployed)
         {
             BlockPos pos = new BlockPos(sleepingBagX, sleepingBagY, sleepingBagZ);
-            if (world.getBlockState(pos) == ModBlocks.BLOCK_SLEEPING_BAG)
+            if (world.getBlockState(pos) == ModBlocks.SLEEPING_BAG_BLOCK)
                 world.destroyBlock(pos, false);
         }
         this.sleepingBagDeployed = false;

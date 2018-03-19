@@ -5,6 +5,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -25,7 +26,6 @@ import com.darkona.adventurebackpack.proxy.IProxy;
 import com.darkona.adventurebackpack.reference.GeneralReference;
 import com.darkona.adventurebackpack.reference.LoadedMods;
 import com.darkona.adventurebackpack.reference.ModInfo;
-import com.darkona.adventurebackpack.reference.WailaTileAdventureBackpack;
 
 @SuppressWarnings("unused")
 @Mod(modid = ModInfo.MODID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.GUI_FACTORY_CLASS,
@@ -52,8 +52,7 @@ public class AdventureBackpack
 
         //ModStuff
         ModDates.init();
-        //ModItems.init();
-        //ModBlocks.init();
+
         ModFluids.init();
         FluidEffectRegistry.init();
         ModEntities.init();
@@ -72,7 +71,8 @@ public class AdventureBackpack
         proxy.init();
         ModRecipes.init();
         ModWorldGen.init();
-        WailaTileAdventureBackpack.init();
+        //WailaTileAdventureBackpack.init();
+        FMLInterModComms.sendMessage("waila", "register", "com.darkona.adventurebackpack.reference.WailaTileAdventureBackpack.callbackRegister");
 
         //GUIs
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());

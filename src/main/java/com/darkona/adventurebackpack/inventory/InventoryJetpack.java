@@ -16,12 +16,7 @@ import static com.darkona.adventurebackpack.common.Constants.Jetpack.TAG_WATER_T
 import static com.darkona.adventurebackpack.common.Constants.TAG_INVENTORY;
 import static com.darkona.adventurebackpack.common.Constants.TAG_WEARABLE_COMPOUND;
 
-/**
- * Created on 15/01/2015
- *
- * @author Darkona
- */
-public class InventoryJetpack extends InventoryAdventure
+public class InventoryJetpack extends InventoryWearable
 {
     private FluidTank waterTank = new FluidTank(Constants.Jetpack.WATER_CAPACITY);
     private FluidTank steamTank = new FluidTank(Constants.Jetpack.STEAM_CAPACITY);

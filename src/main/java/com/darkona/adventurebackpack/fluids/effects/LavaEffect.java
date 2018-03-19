@@ -9,9 +9,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 
 import adventurebackpack.api.FluidEffect;
 
-/**
- * Created by Darkona on 12/10/2014.
- */
 public class LavaEffect extends FluidEffect
 {
     public LavaEffect()

@@ -10,11 +10,6 @@ import com.darkona.adventurebackpack.reference.BackpackTypes;
 
 import static com.darkona.adventurebackpack.common.Constants.TAG_TYPE;
 
-/**
- * Created on 24/12/2014
- *
- * @author Darkona
- */
 public class AbstractBackpackRecipeTwo //implements IRecipe //TODO unused, implement or delete
 {
     private ItemStack result;
@@ -52,12 +47,12 @@ public class AbstractBackpackRecipeTwo //implements IRecipe //TODO unused, imple
         if (backpackIn.getTagCompound() == null)
         {
             backpackIn.setTagCompound(new NBTTagCompound());
-            backpackIn.getTagCompound().setByte(TAG_TYPE, BackpackTypes.getMeta(type));
+            backpackIn.getTagCompound().setByte(TAG_TYPE, type.getMeta());
         }
         ItemStack newBackpack = backpackIn.copy();
-        NBTTagCompound compound = (NBTTagCompound) backpackIn.getTagCompound().copy();
+        NBTTagCompound compound = backpackIn.getTagCompound().copy();
         newBackpack.setTagCompound(compound);
-        newBackpack.getTagCompound().setByte(TAG_TYPE, BackpackTypes.getMeta(type));
+        newBackpack.getTagCompound().setByte(TAG_TYPE, type.getMeta());
         return newBackpack;
     }
 

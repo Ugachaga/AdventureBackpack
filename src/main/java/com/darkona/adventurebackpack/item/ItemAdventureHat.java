@@ -12,17 +12,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.darkona.adventurebackpack.client.models.ModelAdventureHat;
 import com.darkona.adventurebackpack.reference.ModInfo;
 
-/**
- * Created by Darkona on 11/10/2014.
- */
-public class ItemAdventureHat extends ArmorAB
+public class ItemAdventureHat extends AdventureArmor
 {
-    public ItemAdventureHat()
+    public ItemAdventureHat(String name)
     {
-        super(2, EntityEquipmentSlot.HEAD);
+        super(name, 2, EntityEquipmentSlot.HEAD);
+
         setMaxDamage(Items.LEATHER_HELMET.getMaxDamage() + 45);
-        setUnlocalizedName("adventureHat");
-        this.setRegistryName(ModInfo.MODID, "adventure_hat");
     }
 
     @Override
@@ -31,9 +27,9 @@ public class ItemAdventureHat extends ArmorAB
     {
         if (itemStack != null)
         {
-            if (itemStack.getItem() instanceof ArmorAB)
+            if (itemStack.getItem() instanceof AdventureArmor)
             {
-                EntityEquipmentSlot type = ((ArmorAB) itemStack.getItem()).armorType;
+                EntityEquipmentSlot type = ((AdventureArmor) itemStack.getItem()).armorType;
                 ModelBiped armorModel = null;
                 switch(type)
                 {
@@ -71,11 +67,5 @@ public class ItemAdventureHat extends ArmorAB
     {
         return ModInfo.MODID + ":"  +"textures/models/armor/adventureHat.png";
 
-    }
-
-    @Override
-    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair)
-    {
-        return repair.isItemEqual(new ItemStack(Items.LEATHER));
     }
 }

@@ -11,11 +11,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import com.darkona.adventurebackpack.client.ClientActions;
 import com.darkona.adventurebackpack.init.ModNetwork;
 
-/**
- * Created on 06/01/2015
- *
- * @author Darkona
- */
 public class EntityParticlePacket implements IMessageHandler<EntityParticlePacket.Message, EntityParticlePacket.Message>
 {
     public static final byte NYAN_PARTICLE = 0;

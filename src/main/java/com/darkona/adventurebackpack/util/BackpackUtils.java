@@ -20,11 +20,6 @@ import static com.darkona.adventurebackpack.common.Constants.TAG_INVENTORY;
 import static com.darkona.adventurebackpack.common.Constants.TAG_TYPE;
 import static com.darkona.adventurebackpack.common.Constants.TAG_WEARABLE_COMPOUND;
 
-/**
- * Created on 08/01/2015
- *
- * @author Darkona
- */
 public class BackpackUtils
 {
     private static Timer timer = new Timer(); //TODO remove timer, find the dupe, fix the dupe
@@ -132,14 +127,14 @@ public class BackpackUtils
 
     public static ItemStack createBackpackStack(BackpackTypes type)
     {
-        ItemStack backpackStack = new ItemStack(ModItems.ADVENTURE_BACKPACK, 1, BackpackTypes.getMeta(type));
+        ItemStack backpackStack = new ItemStack(ModItems.ADVENTURE_BACKPACK, 1, type.getMeta());
         setBackpackType(backpackStack, type);
         return backpackStack;
     }
 
     public static void setBackpackType(ItemStack stack, BackpackTypes type)
     {
-        getWearableCompound(stack).setByte(TAG_TYPE, BackpackTypes.getMeta(type));
+        getWearableCompound(stack).setByte(TAG_TYPE, type.getMeta());
     }
 
     public static ItemStack createCopterStack()

@@ -11,11 +11,6 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- * Created on 05/01/2015
- *
- * @author Darkona
- */
 public class EntityInflatableBoat extends EntityBoat implements /*IInventoryTanks, */IEntityAdditionalSpawnData
 {
     private FluidTank fuelTank;

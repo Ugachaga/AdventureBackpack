@@ -10,11 +10,6 @@ import com.darkona.adventurebackpack.init.ModItems;
 import com.darkona.adventurebackpack.reference.BackpackTypes;
 import com.darkona.adventurebackpack.util.BackpackUtils;
 
-/**
- * Created on 20/10/2014
- *
- * @author Darkona
- */
 public class BackpackRecipesList
 {
     public List<BackpackRecipe> recipes;

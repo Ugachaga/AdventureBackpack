@@ -4,11 +4,6 @@ import net.minecraft.item.ItemStack;
 
 import com.darkona.adventurebackpack.reference.LoadedMods;
 
-/**
- * Created on 06.02.2018
- *
- * @author Ugachaga
- */
 public final class ThaumcraftUtils
 {
     public static final boolean DIAL_BOTTOM = setDialBottom();

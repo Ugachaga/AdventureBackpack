@@ -4,11 +4,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 
-/**
- * Created on 17/01/2015
- *
- * @author Darkona
- */
 public class TankWrapper extends FluidTank //TODO any use of this?
 {
     public TankWrapper(int capacity)

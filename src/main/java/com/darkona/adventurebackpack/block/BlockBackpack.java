@@ -35,7 +35,6 @@ import com.darkona.adventurebackpack.AdventureBackpack;
 import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.reference.BackpackTypes;
 import com.darkona.adventurebackpack.reference.GeneralReference;
-import com.darkona.adventurebackpack.reference.ModInfo;
 import com.darkona.adventurebackpack.util.BackpackUtils;
 import com.darkona.adventurebackpack.util.CoordsUtils;
 
@@ -48,9 +47,6 @@ import static com.darkona.adventurebackpack.reference.BackpackTypes.UNKNOWN;
 public class BlockBackpack extends Block
 {
     public static final PropertyDirection FACING_HORIZONTAL = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-
-    private static final String BLOCK_NAME = "block_backpack";
-
 
     //TODO see https://shadowfacts.net/tutorials/forge-modding-112/tile-entities-inventory/
     //IBlockState immutable and pregenerated, so maybe we should avoid to use it for Types
@@ -81,11 +77,10 @@ public class BlockBackpack extends Block
 //    }
 
 
-    public BlockBackpack()
+    public BlockBackpack(String name)
     {
         super(new BackpackMaterial());
-        this.setRegistryName(ModInfo.MODID, BLOCK_NAME);
-        this.setUnlocalizedName(BLOCK_NAME);
+        AdventureBlock.setBlockName(this, name);
 
         this.setSoundType(SoundType.CLOTH);
         this.setHardness(1.0f);
@@ -265,13 +260,6 @@ public class BlockBackpack extends Block
 //        }
         world.setBlockState(pos, state, 3);
         createTileEntity(world, state);
-    }
-
-
-    @Override
-    public String getUnlocalizedName()
-    {
-        return BLOCK_NAME;
     }
 
     @Override

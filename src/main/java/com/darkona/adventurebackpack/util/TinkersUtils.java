@@ -1,8 +1,8 @@
 package com.darkona.adventurebackpack.util;
 
+import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.UUID;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -17,11 +17,6 @@ import com.mojang.authlib.GameProfile;
 
 import com.darkona.adventurebackpack.reference.LoadedMods;
 
-/**
- * Created on 03.02.2018
- *
- * @author Ugachaga
- */
 public final class TinkersUtils
 {
     public static final ResourceLocation GUI_ICONS = new ResourceLocation("tinker", "textures/gui/icons.png");

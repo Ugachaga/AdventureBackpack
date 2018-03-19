@@ -23,14 +23,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.darkona.adventurebackpack.block.BlockBackpack;
 import com.darkona.adventurebackpack.block.TileBackpack;
 import com.darkona.adventurebackpack.config.ConfigHandler;
 import com.darkona.adventurebackpack.entity.ai.EntityAIAvoidPlayerWithBackpack;
 import com.darkona.adventurebackpack.init.ModFluids;
 import com.darkona.adventurebackpack.init.ModNetwork;
 import com.darkona.adventurebackpack.inventory.InventoryBackpack;
-import com.darkona.adventurebackpack.item.ItemBackpack;
 import com.darkona.adventurebackpack.network.messages.EntityParticlePacket;
 import com.darkona.adventurebackpack.reference.BackpackTypes;
 import com.darkona.adventurebackpack.util.LogHelper;
@@ -38,12 +36,9 @@ import com.darkona.adventurebackpack.util.Utils;
 import com.darkona.adventurebackpack.util.Wearing;
 
 /**
- * Created on 12/10/2014
- *
- * @author Darkona
- * @see TileBackpack
- * @see ItemBackpack
- * @see BlockBackpack
+ * @see com.darkona.adventurebackpack.block.BlockBackpack
+ * @see com.darkona.adventurebackpack.block.TileBackpack
+ * @see com.darkona.adventurebackpack.item.ItemBackpack
  */
 @SuppressWarnings("unused")
 public class BackpackAbilities
@@ -56,7 +51,7 @@ public class BackpackAbilities
      */
     public void executeAbility(EntityPlayer player, World world, ItemStack backpack)
     {
-        String skinName = BackpackTypes.getSkinName(backpack);
+        String skinName = BackpackTypes.getSkinName(backpack); //TODO capitalize or rename methods
         try
         {
             //This is black magic and shouldn't be attempted by the faint of heart.
@@ -72,7 +67,7 @@ public class BackpackAbilities
 
     public void executeTileAbility(World world, TileBackpack backpack)
     {
-        String skinName = BackpackTypes.getSkinName(backpack.getType());
+        String skinName = backpack.getType().getName();
         try
         {
             /*

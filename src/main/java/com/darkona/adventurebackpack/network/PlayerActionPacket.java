@@ -14,9 +14,6 @@ import com.darkona.adventurebackpack.inventory.IInventoryBackpack;
 import com.darkona.adventurebackpack.inventory.InventoryJetpack;
 import com.darkona.adventurebackpack.util.Wearing;
 
-/**
- * Created by Darkona on 12/10/2014.
- */
 public class PlayerActionPacket implements IMessageHandler<PlayerActionPacket.ActionMessage, IMessage>
 {
     public static final byte SPIDER_JUMP = 0;

@@ -13,11 +13,6 @@ import com.darkona.adventurebackpack.util.BackpackUtils;
 import com.darkona.adventurebackpack.util.LogHelper;
 import com.darkona.adventurebackpack.util.RecipeHelper;
 
-/**
- * Created on 20/10/2014
- *
- * @author Darkona
- */
 public class ModRecipes
 {
     public static void init()
@@ -33,7 +28,7 @@ public class ModRecipes
         }
 
         // CampFire
-        RecipeHelper.convertToShaped(ModBlocks.BLOCK_CAMPFIRE,
+        RecipeHelper.convertToShaped(ModBlocks.CAMPFIRE_BLOCK,
                 " S ",
                 "SxS",
                 "ccc",
@@ -134,7 +129,7 @@ public class ModRecipes
                 'L', Blocks.LEVER);
 
         // Hose
-        RecipeHelper.convertToShaped(new ItemStack(ModItems.HOSE),
+        RecipeHelper.convertToShaped(new ItemStack(ModItems.BACKPACK_HOSE),
                 "NGG",
                 "  G",
                 'N', new ItemStack(ModItems.COMPONENT, 1, 3),
@@ -209,7 +204,7 @@ public class ModRecipes
             {
                 try
                 {
-                    if (field.getName().equals(BackpackTypes.getSkinName(type)))
+                    if (field.getName().equals(type.getName()))
                     {
                         //TODO add ShapedBackpackRecipe support
                         RecipeHelper.convertToShaped(BackpackUtils.createBackpackStack(type), (Object[]) field.get(br));

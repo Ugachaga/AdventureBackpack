@@ -1,6 +1,7 @@
 package com.darkona.adventurebackpack.inventory;
 
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidTank;
@@ -10,12 +11,7 @@ import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.item.ItemHose;
 import com.darkona.adventurebackpack.util.Utils;
 
-/**
- * Created on 12/10/2014
- *
- * @author Darkona
- */
-public class SlotFluid extends SlotAdventure
+public class SlotFluid extends Slot
 {
     SlotFluid(IInventory inventory, int slotIndex, int posX, int posY)
     {

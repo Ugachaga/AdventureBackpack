@@ -9,11 +9,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import com.darkona.adventurebackpack.common.ServerActions;
 
-/**
- * Created by Darkona on 12/10/2014.
- *
- * @
- */
 public class CycleToolPacket implements IMessageHandler<CycleToolPacket.CycleToolMessage, IMessage>
 {
     public static final byte TOGGLE_HOSE_TANK = 0;

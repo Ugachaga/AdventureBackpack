@@ -7,11 +7,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.darkona.adventurebackpack.reference.ModInfo;
 
-/**
- * Created on 12/10/2014.
- *
- * @author Javier Darkona
- */
 public class FluidMilk extends Fluid
 {
     public FluidMilk()

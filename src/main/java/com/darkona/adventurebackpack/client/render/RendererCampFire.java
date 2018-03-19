@@ -10,11 +10,6 @@ import net.minecraft.util.ResourceLocation;
 import com.darkona.adventurebackpack.client.models.ModelCampFire;
 import com.darkona.adventurebackpack.util.Resources;
 
-/**
- * Created on 05/01/2015
- *
- * @author Darkona
- */
 public class RendererCampFire extends TileEntitySpecialRenderer
 {
     private ModelCampFire model;

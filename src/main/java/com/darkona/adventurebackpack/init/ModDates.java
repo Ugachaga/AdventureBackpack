@@ -2,9 +2,6 @@ package com.darkona.adventurebackpack.init;
 
 import java.util.Calendar;
 
-/**
- * Created by Ugachaga on 06.07.2017.
- */
 public class ModDates
 {
     private static String holiday;

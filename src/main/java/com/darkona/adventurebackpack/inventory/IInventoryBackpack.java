@@ -6,9 +6,6 @@ import net.minecraftforge.fluids.FluidTank;
 
 import com.darkona.adventurebackpack.reference.BackpackTypes;
 
-/**
- * Created by Darkona on 12/10/2014.
- */
 public interface IInventoryBackpack extends IInventoryTanks
 {
     BackpackTypes getType();

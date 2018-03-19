@@ -6,11 +6,6 @@ import com.darkona.adventurebackpack.util.GregtechUtils;
 import com.darkona.adventurebackpack.util.ThaumcraftUtils;
 import com.darkona.adventurebackpack.util.TinkersUtils;
 
-/**
- * Created on 06.02.2018
- *
- * @author Ugachaga
- */
 public enum ToolHandler
 {
     VANILLA,

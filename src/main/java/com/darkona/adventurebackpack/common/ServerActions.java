@@ -37,11 +37,6 @@ import static com.darkona.adventurebackpack.common.Constants.Copter.TAG_STATUS;
 import static com.darkona.adventurebackpack.common.Constants.TOOL_LOWER;
 import static com.darkona.adventurebackpack.common.Constants.TOOL_UPPER;
 
-/**
- * Created on 23/12/2014
- *
- * @author Darkona
- */
 public class ServerActions
 {
     public static final boolean HOSE_SWITCH = false;

@@ -1,7 +1,7 @@
 package com.darkona.adventurebackpack.item;
 
-import javax.annotation.Nullable;
 import java.util.List;
+import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -37,7 +37,6 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.darkona.adventurebackpack.CreativeTabAB;
 import com.darkona.adventurebackpack.common.ServerActions;
 import com.darkona.adventurebackpack.fluids.FluidEffectRegistry;
 import com.darkona.adventurebackpack.init.ModFluids;
@@ -49,27 +48,19 @@ import com.darkona.adventurebackpack.util.Wearing;
 import static com.darkona.adventurebackpack.common.Constants.BUCKET;
 import static com.darkona.adventurebackpack.util.TipUtils.l10n;
 
-/**
- * Created by Darkona on 12/10/2014.
- */
-public class ItemHose extends ItemAB
+public class ItemHose extends AdventureItem
 {
-//    private IIcon drinkIcon;
-//    private IIcon spillIcon;
-//    private IIcon suckIcon;
     private static final byte HOSE_SUCK_MODE = 0;
     private static final byte HOSE_SPILL_MODE = 1;
     private static final byte HOSE_DRINK_MODE = 2;
 
-    public ItemHose()
+    public ItemHose(String name)
     {
-        super();
-        setMaxStackSize(1);
-        setFull3D();
-        setNoRepair();
-        setUnlocalizedName("backpackHose");
-        setCreativeTab(CreativeTabAB.TAB_AB);
-        this.setRegistryName(ModInfo.MODID, "backpack_hose");
+        super(name);
+        this.setCreativeTab(ModInfo.CREATIVE_TAB);
+        this.setMaxStackSize(1);
+        this.setFull3D();
+        this.setNoRepair();
     }
 
     @Override
@@ -116,18 +107,23 @@ public class ItemHose extends ItemAB
     @Override
     public String getUnlocalizedName(ItemStack stack)
     {
-        String name = "hose_" + (getHoseTank(stack) == 0 ? "leftTank" : getHoseTank(stack) == 1 ? "rightTank" : "");
+        String name = "hose_" + (getHoseTank(stack) == 0 ? "left_tank" : getHoseTank(stack) == 1 ? "right_tank" : "");
         switch (getHoseMode(stack))
         {
             case 0:
-                return super.getUnlocalizedName(name + "_suck");
+                return getUnlocalizedName(name + "_suck");
             case 1:
-                return super.getUnlocalizedName(name + "_spill");
+                return getUnlocalizedName(name + "_spill");
             case 2:
-                return super.getUnlocalizedName(name + "_drink");
+                return getUnlocalizedName(name + "_drink");
             default:
-                return super.getUnlocalizedName("hoseUseless");
+                return getUnlocalizedName("hose_useless");
         }
+    }
+
+    public String getUnlocalizedName(String name)
+    {
+        return "item." + ModInfo.MODID + ":" + name;
     }
 
     @Override

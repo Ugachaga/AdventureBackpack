@@ -14,9 +14,6 @@ import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.config.ConfigHandler;
 import com.darkona.adventurebackpack.util.LogHelper;
 
-/**
- * Created by Darkona on 12/10/2014.
- */
 public class GuiTank
 {
     private int height;

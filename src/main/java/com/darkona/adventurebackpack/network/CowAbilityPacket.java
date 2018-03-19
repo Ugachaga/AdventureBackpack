@@ -15,11 +15,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import com.darkona.adventurebackpack.inventory.ContainerBackpack;
 import com.darkona.adventurebackpack.inventory.IInventoryBackpack;
 
-/**
- * Created on 16/10/2014
- *
- * @author Darkona
- */
 public class CowAbilityPacket implements IMessageHandler<CowAbilityPacket.CowAbilityMessage, IMessage>
 {
     public static final byte CONSUME_WHEAT = 0;

@@ -4,6 +4,7 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -18,53 +19,43 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.oredict.OreDictionary;
 
-import com.darkona.adventurebackpack.CreativeTabAB;
-import com.darkona.adventurebackpack.init.ModMaterials;
+import com.darkona.adventurebackpack.init.ModItems;
 import com.darkona.adventurebackpack.reference.ModInfo;
 
-/**
- * Created on 10/10/2014
- *
- * @author Darkona
- */
-public class ItemMachete extends ToolAB
+public class ItemMachete extends AdventureTool
 {
-    private static final Set BREAKABLE_BLOCKS = Sets.newHashSet(
-            Blocks.PUMPKIN,
-            Blocks.WEB,
+    private static final Set<Block> BREAKABLE_BLOCKS = Sets.newHashSet(
+            Blocks.BROWN_MUSHROOM,
+            Blocks.BROWN_MUSHROOM_BLOCK,
+            Blocks.CACTUS,
+            Blocks.CARROTS,
+            Blocks.COCOA,
+            Blocks.GRASS,
+            Blocks.HAY_BLOCK,
             Blocks.LEAVES,
             Blocks.LEAVES2,
             Blocks.MELON_BLOCK,
             Blocks.MELON_STEM,
-            Blocks.BROWN_MUSHROOM,
+            Blocks.POTATOES,
+            Blocks.PUMPKIN,
             Blocks.RED_FLOWER,
             Blocks.RED_MUSHROOM,
-            Blocks.CACTUS,
-            Blocks.COCOA,
-            Blocks.HAY_BLOCK,
-            Blocks.CARROTS,
-            Blocks.POTATOES,
             Blocks.RED_MUSHROOM_BLOCK,
-            Blocks.BROWN_MUSHROOM_BLOCK,
             Blocks.REEDS,
-            Blocks.GRASS,
             Blocks.TALLGRASS,
-            Blocks.YELLOW_FLOWER,
             Blocks.WATERLILY,
+            Blocks.WEB,
             Blocks.WHEAT,
-            Blocks.WOOL);
+            Blocks.WOOL,
+            Blocks.YELLOW_FLOWER
+    );
 
-    @SuppressWarnings("FieldCanBeLocal")
-    private float field_150934_a;
-
-    public ItemMachete()
+    public ItemMachete(String name)
     {
-        super(ModMaterials.ruggedIron, BREAKABLE_BLOCKS);
-        setCreativeTab(CreativeTabAB.TAB_AB);
-        setMaxDamage(Items.IRON_SWORD.getMaxDamage() + 250);
-        this.field_150934_a = ModMaterials.ruggedIron.getAttackDamage();
-        this.setUnlocalizedName("machete");
-        this.setRegistryName(ModInfo.MODID, "machete");
+        super(name, ModItems.Materials.TOOL_RUGGED_IRON, BREAKABLE_BLOCKS);
+
+        this.setMaxDamage(Items.IRON_SWORD.getMaxDamage() + 250);
+        this.setCreativeTab(ModInfo.CREATIVE_TAB);
     }
 
     @Override

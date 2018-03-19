@@ -13,9 +13,6 @@ import net.minecraftforge.fml.client.config.IConfigElement;
 import com.darkona.adventurebackpack.config.ConfigHandler;
 import com.darkona.adventurebackpack.reference.ModInfo;
 
-/**
- * Created by Darkona on 10/10/2014.
- */
 public class ModGuiConfig extends GuiConfig
 {
     public ModGuiConfig(GuiScreen guiScreen)

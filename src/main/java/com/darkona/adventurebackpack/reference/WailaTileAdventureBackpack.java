@@ -8,7 +8,11 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
+
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
+import mcp.mobius.waila.api.IWailaDataProvider;
+import mcp.mobius.waila.api.IWailaRegistrar;
 
 import com.darkona.adventurebackpack.block.TileBackpack;
 import com.darkona.adventurebackpack.common.Constants;
@@ -16,28 +20,18 @@ import com.darkona.adventurebackpack.util.BackpackUtils;
 import com.darkona.adventurebackpack.util.TipUtils;
 import com.darkona.adventurebackpack.util.Utils;
 
-import mcp.mobius.waila.api.IWailaConfigHandler;
-import mcp.mobius.waila.api.IWailaDataAccessor;
-import mcp.mobius.waila.api.IWailaDataProvider;
-import mcp.mobius.waila.api.IWailaRegistrar;
-
 import static com.darkona.adventurebackpack.common.Constants.TAG_INVENTORY;
 import static com.darkona.adventurebackpack.common.Constants.TAG_LEFT_TANK;
 import static com.darkona.adventurebackpack.common.Constants.TAG_RIGHT_TANK;
 import static com.darkona.adventurebackpack.common.Constants.TAG_TYPE;
 import static com.darkona.adventurebackpack.common.Constants.TAG_WEARABLE_COMPOUND;
 
-/**
- * Created on 03.02.2018
- *
- * @author Ugachaga
- */
 public class WailaTileAdventureBackpack implements IWailaDataProvider
 {
-    public static void init()
-    {
-        FMLInterModComms.sendMessage("waila", "register", "com.darkona.adventurebackpack.reference.WailaTileAdventureBackpack.callbackRegister");
-    }
+//    public static void init()
+//    {
+//        FMLInterModComms.sendMessage("waila", "register", "com.darkona.adventurebackpack.reference.WailaTileAdventureBackpack.callbackRegister");
+//    }
 
     @SuppressWarnings("unused")
     public static void callbackRegister(IWailaRegistrar registrar)

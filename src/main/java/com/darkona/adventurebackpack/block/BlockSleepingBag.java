@@ -28,16 +28,10 @@ import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.init.ModBlocks;
 import com.darkona.adventurebackpack.inventory.InventoryBackpack;
 import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
-import com.darkona.adventurebackpack.reference.ModInfo;
 import com.darkona.adventurebackpack.util.CoordsUtils;
 import com.darkona.adventurebackpack.util.LogHelper;
 import com.darkona.adventurebackpack.util.Wearing;
 
-/**
- * Created on 06.03.2018
- *
- * @author Ugachaga
- */
 public class BlockSleepingBag extends BlockBed
 {
     private static final AxisAlignedBB SLEEPING_BAG_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.1D, 1.0D);
@@ -47,9 +41,9 @@ public class BlockSleepingBag extends BlockBed
     private static final String TAG_SPAWN_POS_Y = "posY";
     private static final String TAG_SPAWN_POS_Z = "posZ";
 
-    public BlockSleepingBag()
+    public BlockSleepingBag(String name)
     {
-        setRegistryName(ModInfo.MODID, "block_sleeping_bag");
+        AdventureBlock.setBlockName(this, name);
     }
 
     public static boolean isSleepingInPortableBag(EntityPlayer player)
@@ -163,7 +157,7 @@ public class BlockSleepingBag extends BlockBed
                     {
                         player.setSpawnChunk(pos, true, player.dimension);
                         LogHelper.info("Looking for a campfire nearby...");
-                        BlockPos campfire = CoordsUtils.findBlock3D(world, pos.getX(), pos.getY(), pos.getZ(), ModBlocks.BLOCK_CAMPFIRE, 8, 2);
+                        BlockPos campfire = CoordsUtils.findBlock3D(world, pos.getX(), pos.getY(), pos.getZ(), ModBlocks.CAMPFIRE_BLOCK, 8, 2);
                         if (campfire != null)
                         {
                             LogHelper.info("Campfire Found, saving coordinates. " + campfire.toString());

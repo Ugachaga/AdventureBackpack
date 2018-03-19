@@ -1,14 +1,12 @@
 package com.darkona.adventurebackpack.inventory;
 
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import com.darkona.adventurebackpack.config.ConfigHandler;
 
-/**
- * Created by Darkona on 12/10/2014.
- */
-public class SlotBackpack extends SlotAdventure
+public class SlotBackpack extends Slot
 {
     private static final String[] FORBIDDEN_CLASSES = { //TODO need update
             // Adventure Backpack

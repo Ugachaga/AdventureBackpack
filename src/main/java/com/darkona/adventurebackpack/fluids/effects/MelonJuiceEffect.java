@@ -10,9 +10,6 @@ import com.darkona.adventurebackpack.init.ModFluids;
 import com.darkona.adventurebackpack.util.Utils;
 import adventurebackpack.api.FluidEffect;
 
-/**
- * Created by Darkona on 12/10/2014.
- */
 public class MelonJuiceEffect extends FluidEffect
 {
     public MelonJuiceEffect()

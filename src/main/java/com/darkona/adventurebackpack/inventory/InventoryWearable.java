@@ -12,13 +12,8 @@ import com.darkona.adventurebackpack.util.BackpackUtils;
 import static com.darkona.adventurebackpack.common.Constants.TAG_INVENTORY;
 import static com.darkona.adventurebackpack.common.Constants.TAG_SLOT;
 
-/**
- * Created on 15.07.2017
- *
- * @author Ugachaga
- */
 @SuppressWarnings("WeakerAccess")
-abstract class InventoryAdventure implements IInventoryTanks
+abstract class InventoryWearable implements IInventoryTanks
 {
     // when porting to java 8+ most this methods should move to IInventoryTanks
 
@@ -43,7 +38,7 @@ abstract class InventoryAdventure implements IInventoryTanks
         return new TextComponentString(this.getName());
     }
 
-    protected InventoryAdventure(ItemStack container, int inventorySize)
+    protected InventoryWearable(ItemStack container, int inventorySize)
     {
         this.containerStack = container;
         this.inventory = new ItemStack[inventorySize];

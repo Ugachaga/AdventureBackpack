@@ -1,10 +1,5 @@
 package com.darkona.adventurebackpack.init;
 
-/**
- * Created on 24/12/2014
- *
- * @author Darkona
- */
 public class ModWorldGen
 {
     public static void init()

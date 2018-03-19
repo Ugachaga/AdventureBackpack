@@ -9,11 +9,6 @@ import net.minecraftforge.fluids.FluidTank;
 import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.item.ItemHose;
 
-/**
- * Created on 16/10/2014
- *
- * @author Darkona
- */
 public class InventoryActions //TODO reorganize, rename. move to Utils?
 {
     /**
@@ -114,7 +109,7 @@ public class InventoryActions //TODO reorganize, rename. move to Utils?
         return false;
     }
 
-    public static boolean areStacksCompatible(ItemStack stackA, ItemStack stackB) //TODO use in ContainerAdventure#mergeItemStack
+    public static boolean areStacksCompatible(ItemStack stackA, ItemStack stackB) //TODO use in ContainerWearable#mergeItemStack
     {
         return stackA.getItem() == stackB.getItem()
                 && (!stackA.getHasSubtypes() || stackA.getMetadata() == stackB.getMetadata())

@@ -1,0 +1,199 @@
+# Items THIS IS ALL UPDATED ALL OF THE OTHER LANGUAGE IS NOT
+
+## CreativeTab
+itemGroup.adventurebackpack=Adventure Backpack Mod
+
+## Keybindings
+keys.adventureBackpack:category=Adventure Backpack
+keys.adventureBackpack:open_inventory=Open Inventory
+keys.adventureBackpack:toggle_actions=Toggle Actions
+
+## Wearables
+item.adventurebackpack:adventure_backpack.name=Adventure Backpack
+item.adventurebackpack:copter_pack.name=Copter Pack
+item.adventurebackpack:steam_jetpack.name=Steam Jetpack
+
+## Armor
+item.adventurebackpack:adventure_hat.name=Adventurer's Fedora
+item.adventurebackpack:adventure_suit.name=Adventurer's Suit
+item.adventurebackpack:adventure_pants.name=Adventurer's Pants
+item.adventurebackpack:piston_boots.name=Piston Boots
+
+## Tools and consumables
+item.adventurebackpack:melon_juice_bottle.name=Melon Juice Bottle
+item.adventurebackpack:machete.name=Machete
+
+item.adventurebackpack:backpack_hose.name=Backpack Hose
+item.adventurebackpack:hose_left_tank_suck.name=Hose: Left Tank / Suck Mode
+item.adventurebackpack:hose_left_tank_spill.name=Hose: Left Tank / Spill Mode
+item.adventurebackpack:hose_left_tank_drink.name=Hose: Left Tank / Drink Mode
+item.adventurebackpack:hose_right_tank_suck.name=Hose: Right Tank / Suck Mode
+item.adventurebackpack:hose_right_tank_spill.name=Hose: Right Tank / Spill Mode
+item.adventurebackpack:hose_right_tank_drink.name=Hose: Right Tank / Drink Mode
+item.adventurebackpack:hose_useless.name=Hose: Useless / No Backpack
+
+## Component items for crafting
+item.adventurebackpack:backpack_component.name=Backpack Component Item
+item.adventurebackpack:sleeping_bag.name=Sleeping Bag
+item.adventurebackpack:backpack_tank.name=Backpack Tank
+item.adventurebackpack:machete_handle.name=Machete Handle
+item.adventurebackpack:hose_head.name=Hose Nozzle
+item.adventurebackpack:copter_engine.name=Two-Cylinder Diesel Engine
+item.adventurebackpack:copter_blades.name=Copter Blades
+item.adventurebackpack:hydro_blades.name=Hydro Blades
+item.adventurebackpack:inflatable_boat.name=Inflatable Boat
+item.adventurebackpack:inflatable_boat_motorized.name=Inflatable Boat (Motorized)
+
+## Entity
+entity.adventurebackpack:inflatable_boat.name=Inflatable Boat
+
+## Blocks
+tile.adventurebackpack:backpack_block.name=Adventure Backpack(s)
+tile.adventurebackpack:campfire_block.name=Campfire
+tile.adventurebackpack:sleeping_bag_block.name=Sleeping Bag
+
+## Fluids
+fluid.melon_juice=Melon Juice
+fluid.milk=Milk
+fluid.mushrrom_stew=Mushroom Stew
+
+## Messages
+adventurebackpack:messages.already.equipped.backpack=You are already equipping a Backpack.
+adventurebackpack:messages.already.equipped.copter=You are already equipping a Copter.
+adventurebackpack:messages.already.equipped.jetpack=You are already equipping a Jetpack.
+adventurebackpack:messages.already.impossibru=You aren't wearing any backpacks.
+adventurebackpack:messages.backpack.cant.bag=Can't deploy the sleeping bag! Check the surrounding area.
+adventurebackpack:messages.cant.sleep.here=Ancient forces do not welcome sleep here.
+adventurebackpack:messages.copter.hover=CopterPack: Hover Mode.
+adventurebackpack:messages.copter.normal=CopterPack: Normal Mode.
+adventurebackpack:messages.copter.outoffuel=CopterPack: Out of fuel.
+adventurebackpack:messages.copter.cantwater=CopterPack: Can't function in water.
+adventurebackpack:messages.copter.off=CopterPack: Off.
+adventurebackpack:messages.jetpack.on=Jetpack: On.
+adventurebackpack:messages.jetpack.off=Jetpack: Off.
+adventurebackpack:messages.nightvision.on=Night Vision: On.
+adventurebackpack:messages.nightvision.off=Night Vision: Off.
+adventurebackpack:messages.cycling.on=Tool Cycling: On.
+adventurebackpack:messages.cycling.off=Tool Cycling: Off.
+
+## Tooltips
+adventurebackpack:tooltips.on=ON
+adventurebackpack:tooltips.off=OFF
+adventurebackpack:tooltips.empty=Empty
+adventurebackpack:tooltips.meters=meters
+adventurebackpack:tooltips.error=Error
+adventurebackpack:tooltips.steam=Steam
+adventurebackpack:tooltips.press=Press
+adventurebackpack:tooltips.hold.shift=Hold Shift
+adventurebackpack:tooltips.hold.ctrl=Hold Ctrl
+adventurebackpack:tooltips.mouse.wheel=Wheel
+adventurebackpack:tooltips.max.altitude=Maximum altitude
+
+adventurebackpack:tooltips.backpack.slots.used=Slots used
+adventurebackpack:tooltips.backpack.tank.left=Left Tank
+adventurebackpack:tooltips.backpack.tank.right=Right Tank
+adventurebackpack:tooltips.backpack.cycling=Tool Cycling
+adventurebackpack:tooltips.backpack.cycling.key1=while wearing
+adventurebackpack:tooltips.backpack.cycling.key2=backpack, for turn cycling
+adventurebackpack:tooltips.backpack.vision=Night Vision
+adventurebackpack:tooltips.backpack.vision.key1=while wearing
+adventurebackpack:tooltips.backpack.vision.key2=backpack, for turn nightvision
+
+adventurebackpack:tooltips.copter.tank.fuel=Fuel Tank
+adventurebackpack:tooltips.copter.rate.fuel=Fuel consumption rate
+adventurebackpack:tooltips.copter.key.onoff1=while wearing
+adventurebackpack:tooltips.copter.key.onoff2=copterpack, for turn it
+adventurebackpack:tooltips.copter.key.hover1=during flight to
+adventurebackpack:tooltips.copter.key.hover2=switch hover mode
+
+adventurebackpack:tooltips.jetpack.fuel=Fuel
+adventurebackpack:tooltips.jetpack.tank.water=Left Tank
+adventurebackpack:tooltips.jetpack.tank.steam=Right Tank
+adventurebackpack:tooltips.jetpack.key.onoff1=while wearing
+adventurebackpack:tooltips.jetpack.key.onoff2=jetpack, for turn it
+
+adventurebackpack:tooltips.hose.key.header=While holding Hose:
+adventurebackpack:tooltips.hose.key.tank=to change active tank
+adventurebackpack:tooltips.hose.key.mode=to change mode
+adventurebackpack:tooltips.hose.dump1=Put Hose into bucketOut slot of wearable pack
+adventurebackpack:tooltips.hose.dump2=to empty corresponded tank
+adventurebackpack:tooltips.hose.dump.warn=WARNING! Fluid will be dumped and lost. Forever.
+
+## Skins
+adventurebackpack:skin.standard.name=Standard
+adventurebackpack:skin.bat.name=Bat
+adventurebackpack:skin.black.name=Black
+adventurebackpack:skin.blaze.name=Blaze
+adventurebackpack:skin.blue.name=Blue
+adventurebackpack:skin.bookshelf.name=Bookshelf
+adventurebackpack:skin.brown.name=Brown
+adventurebackpack:skin.brown_mushroom.name=Brown Mushroom
+adventurebackpack:skin.cactus.name=Cactus
+adventurebackpack:skin.cake.name=Cake
+adventurebackpack:skin.carrot.name=Carrot
+adventurebackpack:skin.chest.name=Chest
+adventurebackpack:skin.chicken.name=Chicken
+adventurebackpack:skin.coal.name=Coal
+adventurebackpack:skin.cookie.name=Cookie
+adventurebackpack:skin.cow.name=Cow
+adventurebackpack:skin.creeper.name=Creeper
+adventurebackpack:skin.cyan.name=Cyan
+adventurebackpack:skin.deluxe.name=Deluxe
+adventurebackpack:skin.diamond.name=Diamond
+adventurebackpack:skin.dragon.name=Dragon
+adventurebackpack:skin.egg.name=Egg
+adventurebackpack:skin.electric.name=Electric
+adventurebackpack:skin.emerald.name=Emerald
+adventurebackpack:skin.end.name=End
+adventurebackpack:skin.enderman.name=Enderman
+adventurebackpack:skin.ghast.name=Ghast
+adventurebackpack:skin.glowstone.name=Glowstone
+adventurebackpack:skin.gold.name=Gold
+adventurebackpack:skin.gray.name=Gray
+adventurebackpack:skin.green.name=Green
+adventurebackpack:skin.haybale.name=Haybale
+adventurebackpack:skin.horse.name=Horse
+adventurebackpack:skin.iron.name=Iron
+adventurebackpack:skin.iron_golem.name=Iron Golem
+adventurebackpack:skin.lapis.name=Lapis
+adventurebackpack:skin.leather.name=Leather
+adventurebackpack:skin.light_blue.name=Light Blue
+adventurebackpack:skin.light_gray.name=Light Gray
+adventurebackpack:skin.lime.name=Lime
+adventurebackpack:skin.magenta.name=Magenta
+adventurebackpack:skin.magma_cube.name=Magma Cube
+adventurebackpack:skin.melon.name=Melon
+adventurebackpack:skin.mooshroom.name=Mooshroom
+adventurebackpack:skin.nether.name=Nether
+adventurebackpack:skin.obsidian.name=Obsidian
+adventurebackpack:skin.ocelot.name=Ocelot
+adventurebackpack:skin.orange.name=Orange
+adventurebackpack:skin.overworld.name=Overworld
+adventurebackpack:skin.pig.name=Pig
+adventurebackpack:skin.pigman.name=Pigman
+adventurebackpack:skin.pink.name=Pink
+adventurebackpack:skin.pumpkin.name=Pumpkin
+adventurebackpack:skin.purple.name=Purple
+adventurebackpack:skin.quartz.name=Quartz
+adventurebackpack:skin.rainbow.name=Rainbow
+adventurebackpack:skin.red.name=Red
+adventurebackpack:skin.red_mushroom.name=Red Mushroom
+adventurebackpack:skin.redstone.name=Redstone
+adventurebackpack:skin.sandstone.name=Sandstone
+adventurebackpack:skin.sheep.name=Sheep
+adventurebackpack:skin.silverfish.name=Silverfish
+adventurebackpack:skin.skeleton.name=Skeleton
+adventurebackpack:skin.slime.name=Slime
+adventurebackpack:skin.snow.name=Snow
+adventurebackpack:skin.spider.name=Spider
+adventurebackpack:skin.sponge.name=Sponge
+adventurebackpack:skin.squid.name=Squid
+adventurebackpack:skin.sunflower.name=Sunflower
+adventurebackpack:skin.villager.name=Villager
+adventurebackpack:skin.white.name=White
+adventurebackpack:skin.wither.name=Wither
+adventurebackpack:skin.wither_skeleton.name=Wither Skeleton
+adventurebackpack:skin.wolf.name=Wolf
+adventurebackpack:skin.yellow.name=Yellow
+adventurebackpack:skin.zombie.name=Zombie
+adventurebackpack:skin.unknown.name=?Unknown?

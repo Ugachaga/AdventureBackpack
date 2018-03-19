@@ -12,11 +12,6 @@ import com.darkona.adventurebackpack.client.models.ModelInflatableBoat;
 import com.darkona.adventurebackpack.entity.EntityInflatableBoat;
 import com.darkona.adventurebackpack.util.Resources;
 
-/**
- * Created on 05/01/2015
- *
- * @author Darkona
- */
 public class RendererInflatableBoat extends Render
 {
     private ResourceLocation boatTexture = Resources.modelTextures("inflatableBoat");

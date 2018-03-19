@@ -27,11 +27,6 @@ import com.darkona.adventurebackpack.reference.ToolHandler;
 import com.darkona.adventurebackpack.util.LogHelper;
 import com.darkona.adventurebackpack.util.Wearing;
 
-/**
- * Created on 09/01/2015
- *
- * @author Darkona
- */
 public class GuiOverlay extends Gui
 {
     private static final ResourceLocation TANKS_OVERLAY = new ResourceLocation(ModInfo.MODID, "textures/gui/overlay.png");

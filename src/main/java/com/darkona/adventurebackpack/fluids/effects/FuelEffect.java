@@ -10,12 +10,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import com.darkona.adventurebackpack.util.Utils;
 import adventurebackpack.api.FluidEffect;
 
-/**
- * Created on 12/10/2014
- *
- * @author Darkona
- */
-
 public class FuelEffect extends FluidEffect
 {
     public FuelEffect()

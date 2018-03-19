@@ -1,5 +1,7 @@
 package com.darkona.adventurebackpack.util;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -7,11 +9,6 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import com.darkona.adventurebackpack.reference.BackpackTypes;
 
-/**
- * Created on 12/10/2014
- *
- * @author Darkona
- */
 public class Utils
 {
     public static boolean inServer()
@@ -66,7 +63,7 @@ public class Utils
     public static String getColoredSkinName(BackpackTypes type)
     {
         String result;
-        String name = BackpackTypes.getLocalizedName(type);
+        String name = type.getLocalizedName();
         switch (type)
         {
             case BAT:
@@ -111,7 +108,6 @@ public class Utils
 
     private static String animateString(String stringIn, TextFormatting bold)
     {
-        if (Minecraft.getMinecraft().world == null) return stringIn;
         return animateString(stringIn, TextFormatting.GRAY, bold);
     }
 
@@ -134,7 +130,7 @@ public class Utils
         return stringIn;
     }
 
-    private static String decorateCharInString(String stringIn, int charID, TextFormatting regular, TextFormatting bold, boolean dir)
+    private static String decorateCharInString(String stringIn, int charID, @Nullable TextFormatting regular, TextFormatting bold, boolean dir)
     {
         int len = stringIn.length();
         StringBuilder decorated = new StringBuilder();

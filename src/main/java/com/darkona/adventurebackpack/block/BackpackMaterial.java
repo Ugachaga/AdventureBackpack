@@ -3,11 +3,6 @@ package com.darkona.adventurebackpack.block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 
-/**
- * Created on 24/12/2014
- *
- * @author Darkona
- */
 public class BackpackMaterial extends Material
 {
     public BackpackMaterial()

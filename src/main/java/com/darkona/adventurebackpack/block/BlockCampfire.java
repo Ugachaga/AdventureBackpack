@@ -17,26 +17,20 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.darkona.adventurebackpack.CreativeTabAB;
 import com.darkona.adventurebackpack.reference.ModInfo;
 import com.darkona.adventurebackpack.util.CoordsUtils;
 
-/**
- * Created on 05/01/2015
- *
- * @author Darkona
- */
-public class BlockCampfire0 extends Block
+public class BlockCampfire extends Block
 {
     public static final AxisAlignedBB CAMP_FIRE_AABB = new AxisAlignedBB(0.2D, 0.0D, 0.2D, 0.8D, 0.15D, 0.8D);
 
-    public BlockCampfire0()
+    public BlockCampfire(String name)
     {
         super(Material.ROCK);
-        setRegistryName(ModInfo.MODID, "block_campfire");
-        setUnlocalizedName("block_campfire");
-        setTickRandomly(true);
-        setCreativeTab(CreativeTabAB.TAB_AB);
+        AdventureBlock.setBlockName(this, name);
+
+        this.setCreativeTab(ModInfo.CREATIVE_TAB);
+        this.setTickRandomly(true);
     }
 
     @Override
@@ -48,7 +42,7 @@ public class BlockCampfire0 extends Block
     @Override
     public TileEntity createTileEntity(World world, IBlockState state)
     {
-        return new TileCampfire0();
+        return new TileCampfire();
     }
 
     @Override

@@ -14,11 +14,6 @@ import com.darkona.adventurebackpack.util.LogHelper;
 
 import static com.darkona.adventurebackpack.common.Constants.TAG_INVENTORY;
 
-/**
- * Created on 03.03.2018
- *
- * @author Ugachaga
- */
 public class ShapedBackpackRecipe extends ShapedOreRecipe
 {
     public ShapedBackpackRecipe(ItemStack result, Object... recipe)

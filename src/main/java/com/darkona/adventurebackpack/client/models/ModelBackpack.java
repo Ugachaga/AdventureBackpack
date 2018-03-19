@@ -25,11 +25,6 @@ import static com.darkona.adventurebackpack.reference.BackpackTypes.SLIME;
 import static com.darkona.adventurebackpack.reference.BackpackTypes.SNOW;
 import static com.darkona.adventurebackpack.reference.BackpackTypes.VILLAGER;
 
-/**
- * Created on 17/12/2014
- *
- * @author Darkona
- */
 public class ModelBackpack extends ModelWearable
 {
     public static final ModelBackpack instance = new ModelBackpack();

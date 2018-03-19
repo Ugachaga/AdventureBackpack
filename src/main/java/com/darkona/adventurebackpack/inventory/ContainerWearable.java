@@ -10,13 +10,8 @@ import net.minecraft.item.ItemStack;
 
 import com.darkona.adventurebackpack.common.Constants.Source;
 
-/**
- * Created on 10.04.2017
- *
- * @author Ugachaga
- */
 @SuppressWarnings("WeakerAccess")
-public abstract class ContainerAdventure extends Container
+public abstract class ContainerWearable extends Container
 {
     protected static final int PLAYER_INV_ROWS = 3;
     protected static final int PLAYER_INV_COLUMNS = 9;
@@ -32,7 +27,7 @@ public abstract class ContainerAdventure extends Container
     private final int[] fluidsAmount;
     private int itemsCount;
 
-    protected ContainerAdventure(EntityPlayer player, IInventoryTanks inventory, Source source)
+    protected ContainerWearable(EntityPlayer player, IInventoryTanks inventory, Source source)
     {
         this.player = player;
         this.inventory = inventory;

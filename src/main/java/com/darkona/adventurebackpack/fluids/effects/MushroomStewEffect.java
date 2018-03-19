@@ -7,11 +7,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 
 import adventurebackpack.api.FluidEffect;
 
-/**
- * Created on 11/01/2015
- *
- * @author Darkona
- */
 public class MushroomStewEffect extends FluidEffect
 {
     public MushroomStewEffect()

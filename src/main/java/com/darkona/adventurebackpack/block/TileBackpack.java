@@ -50,10 +50,7 @@ import static com.darkona.adventurebackpack.common.Constants.TAG_WEARABLE_COMPOU
 import static com.darkona.adventurebackpack.common.Constants.TOOL_LOWER;
 import static com.darkona.adventurebackpack.common.Constants.TOOL_UPPER;
 
-/**
- * Created by Darkona on 12/10/2014.
- */
-public class TileBackpack extends TileAdventure implements IInventoryBackpack, ITickable, ISidedInventory//, IInteractionObject//, IItemHandler
+public class TileBackpack extends TileWearable implements IInventoryBackpack, ITickable, ISidedInventory//, IInteractionObject//, IItemHandler
 {
     private static final int[] MAIN_INVENTORY_SLOTS = Utils.createSlotArray(0, Constants.INVENTORY_MAIN_SIZE);
 
@@ -186,7 +183,7 @@ public class TileBackpack extends TileAdventure implements IInventoryBackpack, I
             compound.setTag("ench", ench);
 
         NBTTagCompound backpackTag = new NBTTagCompound();
-        backpackTag.setByte(TAG_TYPE, BackpackTypes.getMeta(type));
+        backpackTag.setByte(TAG_TYPE, type.getMeta());
         backpackTag.setTag(TAG_INVENTORY, getInventoryTagList());
         backpackTag.setTag(TAG_RIGHT_TANK, rightTank.writeToNBT(new NBTTagCompound()));
         backpackTag.setTag(TAG_LEFT_TANK, leftTank.writeToNBT(new NBTTagCompound()));
@@ -331,7 +328,7 @@ public class TileBackpack extends TileAdventure implements IInventoryBackpack, I
     public void removeSleepingBag(World world)
     {
         BlockPos pos = new BlockPos(sbx, sby, sbz);
-        if (sleepingBagDeployed && world.getBlockState(pos).getBlock() == ModBlocks.BLOCK_SLEEPING_BAG)
+        if (sleepingBagDeployed && world.getBlockState(pos).getBlock() == ModBlocks.SLEEPING_BAG_BLOCK)
             world.destroyBlock(pos, false);
 
         sleepingBagDeployed = false;
@@ -389,7 +386,7 @@ public class TileBackpack extends TileAdventure implements IInventoryBackpack, I
     public void update()
     {
         //Execute this backpack's TILE ability. No, seriously. You might not infer that from the code. Just sayin'
-        if (ConfigHandler.backpackAbilities && BackpackTypes.hasProperty(type, BackpackTypes.Props.TILE))
+        if (ConfigHandler.backpackAbilities && type.hasProperty(BackpackTypes.Props.TILE))
         {
             BackpackAbilities.backpackAbilities.executeTileAbility(this.world, this);
         }
@@ -403,11 +400,11 @@ public class TileBackpack extends TileAdventure implements IInventoryBackpack, I
             luminosity = Math.max(left, right);
             if (luminosity != lastLumen)
             {
-                world.setBlockState(this.pos, ModBlocks.BLOCK_BACKPACK.getDefaultState(), 3);
+                world.setBlockState(this.pos, ModBlocks.BACKPACK_BLOCK.getDefaultState(), 3);
                 world.setLightFor(EnumSkyBlock.BLOCK, this.pos, luminosity);
             }
 
-            if (sleepingBagDeployed && world.getBlockState(new BlockPos(sbx, sby, sbz)) != ModBlocks.BLOCK_SLEEPING_BAG)
+            if (sleepingBagDeployed && world.getBlockState(new BlockPos(sbx, sby, sbz)) != ModBlocks.SLEEPING_BAG_BLOCK)
                 sleepingBagDeployed = false;
 
             checkTime = 20;

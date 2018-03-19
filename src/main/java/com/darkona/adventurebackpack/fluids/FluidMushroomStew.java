@@ -6,11 +6,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.darkona.adventurebackpack.reference.ModInfo;
 
-/**
- * Created on 11/01/2015
- *
- * @author Darkona
- */
 public class FluidMushroomStew extends Fluid
 {
     public FluidMushroomStew()

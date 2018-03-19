@@ -17,11 +17,6 @@ import net.minecraft.util.ResourceLocation;
 import com.darkona.adventurebackpack.item.IBackWearableItem;
 import com.darkona.adventurebackpack.util.Wearing;
 
-/**
- * Created on 25/12/2014
- *
- * @author Darkona
- */
 public class RendererWearableEquipped extends RenderLivingBase
 {
     public ResourceLocation texture;

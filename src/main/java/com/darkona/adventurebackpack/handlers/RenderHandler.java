@@ -5,11 +5,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- * Created on 25/12/2014
- *
- * @author Darkona
- */
 public class RenderHandler
 {
     @SubscribeEvent

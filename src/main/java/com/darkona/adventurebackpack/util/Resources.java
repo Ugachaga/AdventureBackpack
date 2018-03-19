@@ -6,11 +6,6 @@ import com.darkona.adventurebackpack.init.ModDates;
 import com.darkona.adventurebackpack.reference.BackpackTypes;
 import com.darkona.adventurebackpack.reference.ModInfo;
 
-/**
- * Created on 10/10/2014
- *
- * @author Darkona
- */
 public class Resources
 {
     private static final String TEXTURE_LOCATION = ModInfo.MODID;
@@ -29,7 +24,7 @@ public class Resources
 
     private static ResourceLocation backpackTextureFromType(BackpackTypes type)
     {
-        return new ResourceLocation(TEXTURE_LOCATION, "textures/backpack/" + BackpackTypes.getSkinName(type) + ".png");
+        return new ResourceLocation(TEXTURE_LOCATION, "textures/backpack/" + type.getName() + ".png");
     }
 
     public static String modelTextureResourceString(String name)
@@ -54,7 +49,7 @@ public class Resources
 
     public static ResourceLocation fluidTextures(String name)
     {
-        return new ResourceLocation(TEXTURE_LOCATION, "textures/blocks/fluid." + name + ".png");
+        return new ResourceLocation(TEXTURE_LOCATION, "textures/blocks/fluid_" + name + ".png");
     }
 
     public static ResourceLocation modelTextures(String name)

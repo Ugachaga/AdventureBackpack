@@ -9,11 +9,6 @@ import net.minecraftforge.common.util.Constants.NBT;
 import com.darkona.adventurebackpack.config.ConfigHandler;
 import com.darkona.adventurebackpack.reference.LoadedMods;
 
-/**
- * Created on 24.03.2017
- *
- * @author Ugachaga
- */
 public final class EnchUtils
 {
     // -3 - disabled by config

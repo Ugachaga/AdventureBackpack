@@ -13,13 +13,8 @@ import com.darkona.adventurebackpack.inventory.IInventoryTanks;
 
 import static com.darkona.adventurebackpack.common.Constants.TAG_SLOT;
 
-/**
- * Created on 26.02.2018
- *
- * @author Ugachaga
- */
 @SuppressWarnings("WeakerAccess")
-abstract class TileAdventure extends TileEntity implements IInventoryTanks
+abstract class TileWearable extends TileEntity implements IInventoryTanks
 {
     // when porting to java 8+ most this methods should move to IInventoryTanks
 
@@ -44,7 +39,7 @@ abstract class TileAdventure extends TileEntity implements IInventoryTanks
 
     protected final ItemStack[] inventory;
 
-    protected TileAdventure(int inventorySize)
+    protected TileWearable(int inventorySize)
     {
         this.inventory = new ItemStack[inventorySize];
     }

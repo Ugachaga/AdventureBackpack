@@ -1,10 +1,5 @@
 package com.darkona.adventurebackpack.util;
 
-/**
- * Created on 25.02.2018
- *
- * @author Ugachaga
- */
 public final class ToolRenderHelper
 {
     private static final String METHOD_RENDERER = "renderItem";

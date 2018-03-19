@@ -16,11 +16,6 @@ import net.minecraft.world.World;
 import com.darkona.adventurebackpack.block.TileBackpack;
 import com.darkona.adventurebackpack.init.ModBlocks;
 
-/**
- * Created on 31.01.2018
- *
- * @author Ugachaga
- */
 public class CoordsUtils
 {
     private CoordsUtils() {}
@@ -253,7 +248,7 @@ public class CoordsUtils
 
     public static boolean spawnSleepingBag(EntityPlayer player, World world, int meta, int x, int y, int z)
     {
-        Block sleepingBag = ModBlocks.BLOCK_SLEEPING_BAG;
+        Block sleepingBag = ModBlocks.SLEEPING_BAG_BLOCK;
         BlockPos pos = new BlockPos(x, y, z);
         if (world.setBlockState(pos, sleepingBag.getDefaultState(), 3)) //TODO meta = getDefaultState() ?
         //if (world.setBlock(x, y, z, sleepingBag, meta, 3))

@@ -2,7 +2,6 @@ package com.darkona.adventurebackpack.init;
 
 import java.util.HashSet;
 import java.util.Set;
-import javax.annotation.Nonnull;
 
 import com.google.common.base.Preconditions;
 
@@ -18,10 +17,10 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import com.darkona.adventurebackpack.block.BlockBackpack;
-import com.darkona.adventurebackpack.block.BlockCampfire0;
+import com.darkona.adventurebackpack.block.BlockCampfire;
 import com.darkona.adventurebackpack.block.BlockSleepingBag;
 import com.darkona.adventurebackpack.block.TileBackpack;
-import com.darkona.adventurebackpack.block.TileCampfire0;
+import com.darkona.adventurebackpack.block.TileCampfire;
 import com.darkona.adventurebackpack.reference.ModInfo;
 
 import static com.darkona.adventurebackpack.util.Utils.getNull;
@@ -30,9 +29,9 @@ import static com.darkona.adventurebackpack.util.Utils.getNull;
 @GameRegistry.ObjectHolder(ModInfo.MODID)
 public class ModBlocks
 {
-    @Nonnull public static final BlockBackpack BLOCK_BACKPACK = getNull();
-    @Nonnull public static final BlockCampfire0 BLOCK_CAMPFIRE = getNull();
-    @Nonnull public static final BlockSleepingBag BLOCK_SLEEPING_BAG = getNull();
+    public static final BlockBackpack BACKPACK_BLOCK = getNull();
+    public static final BlockCampfire CAMPFIRE_BLOCK = getNull();
+    public static final BlockSleepingBag SLEEPING_BAG_BLOCK = getNull();
 
     @Mod.EventBusSubscriber(modid = ModInfo.MODID)
     public static class RegistrationHandler
@@ -40,14 +39,14 @@ public class ModBlocks
         public static final Set<ItemBlock> ITEM_BLOCKS = new HashSet<>();
 
         @SubscribeEvent
-        public static void registerBlocks(final RegistryEvent.Register<Block> event)
+        public static void registerBlocks(RegistryEvent.Register<Block> event)
         {
             final IForgeRegistry<Block> registry = event.getRegistry();
 
             final Block[] blocks = {
-                    new BlockBackpack(),
-                    new BlockCampfire0(),
-                    new BlockSleepingBag(),
+                    new BlockBackpack("backpack_block"),
+                    new BlockCampfire("campfire_block"),
+                    new BlockSleepingBag("sleeping_bag_block"),
             };
 
             registry.registerAll(blocks);
@@ -55,20 +54,20 @@ public class ModBlocks
         }
 
         @SubscribeEvent
-        public static void registerItemBlocks(final RegistryEvent.Register<Item> event)
+        public static void registerItemBlocks(RegistryEvent.Register<Item> event)
         {
             final ItemBlock[] items = {
-                    new ItemBlock(BLOCK_BACKPACK),
-                    new ItemBlock(BLOCK_CAMPFIRE),
-                    new ItemBlock(BLOCK_SLEEPING_BAG),
+                    new ItemBlock(BACKPACK_BLOCK),
+                    new ItemBlock(CAMPFIRE_BLOCK),
+                    new ItemBlock(SLEEPING_BAG_BLOCK),
             };
 
-            final IForgeRegistry<Item> registry = event.getRegistry();
+            IForgeRegistry<Item> registry = event.getRegistry();
 
-            for (final ItemBlock item : items)
+            for (ItemBlock item : items)
             {
-                final Block block = item.getBlock();
-                final ResourceLocation registryName = Preconditions.checkNotNull(block.getRegistryName(), "Block %s has null registry name", block);
+                Block block = item.getBlock();
+                ResourceLocation registryName = Preconditions.checkNotNull(block.getRegistryName(), "Block %s has null registry name", block);
                 registry.register(item.setRegistryName(registryName));
                 ITEM_BLOCKS.add(item);
             }
@@ -77,11 +76,11 @@ public class ModBlocks
 
     private static void registerTileEntities()
     {
-        registerTileEntity(TileBackpack.class, "tile_backpack");
-        registerTileEntity(TileCampfire0.class, "tile_campfire");
+        registerTileEntity(TileBackpack.class, "backpack_tile");
+        registerTileEntity(TileCampfire.class, "campfire_tile");
     }
 
-    private static void registerTileEntity(final Class<? extends TileEntity> tileEntityClass, final String name)
+    private static void registerTileEntity(Class<? extends TileEntity> tileEntityClass, String name)
     {
         GameRegistry.registerTileEntity(tileEntityClass, ModInfo.MODID + ":" + name);
     }

@@ -18,11 +18,6 @@ import com.darkona.adventurebackpack.fluids.effects.MushroomStewEffect;
 import com.darkona.adventurebackpack.util.LogHelper;
 import adventurebackpack.api.FluidEffect;
 
-/**
- * Created on 12/10/2014
- *
- * @author Darkona
- */
 public class FluidEffectRegistry
 {
     static BiMap<String, FluidEffect> EFFECT_REGISTRY = HashBiMap.create();

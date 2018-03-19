@@ -1,10 +1,5 @@
 package com.darkona.adventurebackpack.util.calendar;
 
-/**
- * Created on 22/12/2014
- *
- * @author Darkona
- */
 public class ChineseCalendar
 {
     private int gregorianYear;

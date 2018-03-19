@@ -3,8 +3,6 @@ package com.darkona.adventurebackpack.util.calendar;
 /**
  * Created on 22/12/2014
  * Copyright © by Ulrich and David Greve (2005)
- *
- * @author Darkona
  */
 public class CalendarDate
 {

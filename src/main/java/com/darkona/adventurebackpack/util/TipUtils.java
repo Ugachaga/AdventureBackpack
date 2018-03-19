@@ -15,11 +15,6 @@ import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.config.Keybindings;
 import com.darkona.adventurebackpack.reference.GeneralReference;
 
-/**
- * Created on 24.03.2017
- *
- * @author Ugachaga
- */
 public final class TipUtils
 {
     private TipUtils() {}
@@ -191,6 +186,7 @@ public final class TipUtils
         String dataFormatted;
         try
         {
+            @SuppressWarnings("ConstantConditions")
             ItemStack iStack = new ItemStack(Item.REGISTRY.getObjectById(id), 0, meta);
             dataFormatted = iStack.getDisplayName() + " (" + stackSizeFormat(iStack, count) + ")";
         }

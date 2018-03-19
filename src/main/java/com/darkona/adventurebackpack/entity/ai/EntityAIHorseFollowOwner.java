@@ -9,11 +9,6 @@ import net.minecraft.world.World;
 import com.darkona.adventurebackpack.reference.BackpackTypes;
 import com.darkona.adventurebackpack.util.Wearing;
 
-/**
- * Created on 09/01/2015
- *
- * @author Darkona
- */
 public class EntityAIHorseFollowOwner extends EntityAIBase
 {
     private EntityHorse theHorse;

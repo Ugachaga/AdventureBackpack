@@ -7,9 +7,6 @@ import net.minecraft.pathfinding.PathNavigate;
 
 import com.darkona.adventurebackpack.reference.BackpackTypes;
 
-/**
- * Created by Darkona on 12/10/2014.
- */
 public class EntityAIAvoidPlayerWithBackpack extends EntityAIBase
 {
     private BackpackTypes type;

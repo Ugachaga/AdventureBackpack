@@ -15,9 +15,6 @@ import com.darkona.adventurebackpack.inventory.InventoryJetpack;
 import com.darkona.adventurebackpack.reference.GeneralReference;
 import com.darkona.adventurebackpack.util.Wearing;
 
-/**
- * Created by Darkona on 12/10/2014.
- */
 public class GuiPacket implements IMessageHandler<GuiPacket.GuiMessage, IMessage>
 {
     public static final byte FROM_WEARING = 0;

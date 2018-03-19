@@ -5,22 +5,16 @@ import java.util.Map;
 import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.inventory.IInventoryBackpack;
-import com.darkona.adventurebackpack.inventory.InventoryJetpack;
 import com.darkona.adventurebackpack.inventory.InventoryCopter;
+import com.darkona.adventurebackpack.inventory.InventoryJetpack;
 import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
 import com.darkona.adventurebackpack.util.LogHelper;
 
-/**
- * Created on 22/12/2014
- *
- * @author Darkona
- */
 public class ServerProxy implements IProxy
 {
     private static final Map<UUID, NBTTagCompound> extendedEntityData = new HashMap<>();
@@ -57,18 +51,6 @@ public class ServerProxy implements IProxy
 
     @Override
     public void synchronizePlayer(int id, NBTTagCompound compound)
-    {
-
-    }
-
-    @Override
-    public void registerItemRenderer(Item item, int meta, String id)
-    {
-
-    }
-
-    @Override
-    public void setCustomModelResourceLocation(Item item, int meta, String id)
     {
 
     }

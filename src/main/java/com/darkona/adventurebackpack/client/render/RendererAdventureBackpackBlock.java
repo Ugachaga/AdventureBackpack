@@ -11,12 +11,6 @@ import com.darkona.adventurebackpack.block.TileBackpack;
 import com.darkona.adventurebackpack.client.models.ModelBackpackBlock;
 import com.darkona.adventurebackpack.util.Resources;
 
-/**
- * Created on 12/10/2014
- *
- * @author Darkona
- */
-
 public class RendererAdventureBackpackBlock extends TileEntitySpecialRenderer
 {
     private ModelBackpackBlock model;

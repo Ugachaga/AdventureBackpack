@@ -1,6 +1,7 @@
 package com.darkona.adventurebackpack.inventory;
 
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFishingRod;
 import net.minecraft.item.ItemFlintAndSteel;
@@ -13,12 +14,7 @@ import com.darkona.adventurebackpack.util.GregtechUtils;
 import com.darkona.adventurebackpack.util.ThaumcraftUtils;
 import com.darkona.adventurebackpack.util.TinkersUtils;
 
-/**
- * Created on 12/10/2014
- *
- * @author Darkona
- */
-public class SlotTool extends SlotAdventure
+public class SlotTool extends Slot
 {
     private static final String[] VALID_TOOL_NAMES = {"axe", "crowbar", "drill", "grafter", "hammer", "scoop", "shovel",
             "wrench",};

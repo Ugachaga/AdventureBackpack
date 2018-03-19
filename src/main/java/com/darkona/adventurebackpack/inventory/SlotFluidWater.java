@@ -8,11 +8,6 @@ import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.item.ItemHose;
 import com.darkona.adventurebackpack.util.FluidUtils;
 
-/**
- * Created on 10.04.2017
- *
- * @author Ugachaga
- */
 public class SlotFluidWater extends SlotFluid
 {
     SlotFluidWater(IInventory inventory, int slotIndex, int posX, int posY)

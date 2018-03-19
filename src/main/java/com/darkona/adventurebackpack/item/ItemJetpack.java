@@ -39,41 +39,33 @@ import com.darkona.adventurebackpack.network.PlayerActionPacket;
 import com.darkona.adventurebackpack.network.messages.EntityParticlePacket;
 import com.darkona.adventurebackpack.network.messages.EntitySoundPacket;
 import com.darkona.adventurebackpack.proxy.ClientProxy;
-import com.darkona.adventurebackpack.reference.ModInfo;
 import com.darkona.adventurebackpack.util.BackpackUtils;
 import com.darkona.adventurebackpack.util.Resources;
 import com.darkona.adventurebackpack.util.TipUtils;
 
 import static com.darkona.adventurebackpack.util.TipUtils.l10n;
 
-/**
- * Created on 15/01/2015
- *
- * @author Darkona
- */
-public class ItemJetpack extends ItemAdventure
+public class ItemJetpack extends ItemWearable
 {
     private static final int MAX_ALTITUDE = 185;
 
-    public ItemJetpack()
+    public ItemJetpack(String name)
     {
-        super();
-        setUnlocalizedName("steamJetpack");
-        this.setRegistryName(ModInfo.MODID, "steam_jetpack");
+        super(name);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
     {
         items.add(BackpackUtils.createJetpackStack());
     }
 
     @Override
-    @SuppressWarnings({"unchecked"})
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag)
     {
+        if (world == null) return;
+
         FluidTank waterTank = new FluidTank(Constants.Jetpack.WATER_CAPACITY);
         FluidTank steamTank = new FluidTank(Constants.Jetpack.STEAM_CAPACITY);
         NBTTagCompound jetpackTag = BackpackUtils.getWearableCompound(stack);

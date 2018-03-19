@@ -2,28 +2,13 @@ package com.darkona.adventurebackpack.item;
 
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemStack;
 
-import com.darkona.adventurebackpack.reference.ModInfo;
-
-/**
- * Created on 11/10/2014
- *
- * @author Darkona
- */
-public class ItemAdventureSuit extends ArmorAB
+public class ItemAdventureSuit extends AdventureArmor
 {
-    public ItemAdventureSuit()
+    public ItemAdventureSuit(String name)
     {
-        super(1, EntityEquipmentSlot.CHEST);
-        setMaxDamage(Items.LEATHER_CHESTPLATE.getMaxDamage() + 70);
-        setUnlocalizedName("adventureSuit");
-        this.setRegistryName(ModInfo.MODID, "adventure_suit");
-    }
+        super(name,1, EntityEquipmentSlot.CHEST);
 
-    @Override
-    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair)
-    {
-        return repair.isItemEqual(new ItemStack(Items.LEATHER));
+        setMaxDamage(Items.LEATHER_CHESTPLATE.getMaxDamage() + 70);
     }
 }

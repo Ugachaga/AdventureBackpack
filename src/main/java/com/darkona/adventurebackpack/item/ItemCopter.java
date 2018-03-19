@@ -31,7 +31,6 @@ import com.darkona.adventurebackpack.network.GuiPacket;
 import com.darkona.adventurebackpack.network.messages.EntityParticlePacket;
 import com.darkona.adventurebackpack.proxy.ClientProxy;
 import com.darkona.adventurebackpack.reference.GeneralReference;
-import com.darkona.adventurebackpack.reference.ModInfo;
 import com.darkona.adventurebackpack.util.BackpackUtils;
 import com.darkona.adventurebackpack.util.Resources;
 import com.darkona.adventurebackpack.util.TipUtils;
@@ -42,40 +41,33 @@ import static com.darkona.adventurebackpack.common.Constants.Copter.TAG_FUEL_TAN
 import static com.darkona.adventurebackpack.common.Constants.Copter.TAG_STATUS;
 import static com.darkona.adventurebackpack.util.TipUtils.l10n;
 
-/**
- * Created on 31/12/2014
- *
- * @author Darkona
- */
-public class ItemCopter extends ItemAdventure
+public class ItemCopter extends ItemWearable
 {
-    public static byte OFF_MODE = 0;
-    public static byte NORMAL_MODE = 1;
-    public static byte HOVER_MODE = 2;
+    public static final byte OFF_MODE = 0;
+    public static final byte NORMAL_MODE = 1;
+    public static final byte HOVER_MODE = 2;
 
     private static final int MAX_ALTITUDE = 250;
 
     private float fuelSpent;
 
-    public ItemCopter()
+    public ItemCopter(String name)
     {
-        super();
-        setUnlocalizedName("copterPack");
-        this.setRegistryName(ModInfo.MODID, "copter_pack");
+        super(name);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
     {
         items.add(BackpackUtils.createCopterStack());
     }
 
     @Override
-    @SuppressWarnings({"unchecked"})
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag)
     {
+        if (world == null) return;
+
         FluidTank fuelTank = new FluidTank(FUEL_CAPACITY);
         NBTTagCompound copterTag = BackpackUtils.getWearableCompound(stack);
 

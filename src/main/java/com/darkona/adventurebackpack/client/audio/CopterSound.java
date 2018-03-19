@@ -15,11 +15,6 @@ import com.darkona.adventurebackpack.util.Wearing;
 
 import static com.darkona.adventurebackpack.common.Constants.Copter.TAG_STATUS;
 
-/**
- * Created on 16/10/2014
- *
- * @author Darkona
- */
 public class CopterSound extends MovingSound
 {
     private EntityPlayer thePlayer;

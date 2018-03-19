@@ -16,12 +16,7 @@ import static com.darkona.adventurebackpack.common.Constants.Copter.TAG_STATUS;
 import static com.darkona.adventurebackpack.common.Constants.TAG_INVENTORY;
 import static com.darkona.adventurebackpack.common.Constants.TAG_WEARABLE_COMPOUND;
 
-/**
- * Created on 02/01/2015
- *
- * @author Darkona
- */
-public class InventoryCopter extends InventoryAdventure
+public class InventoryCopter extends InventoryWearable
 {
     private FluidTank fuelTank = new FluidTank(Constants.Copter.FUEL_CAPACITY);
 

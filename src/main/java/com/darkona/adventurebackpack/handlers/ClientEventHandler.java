@@ -19,11 +19,6 @@ import com.darkona.adventurebackpack.network.CycleToolPacket;
 import com.darkona.adventurebackpack.reference.ModInfo;
 import com.darkona.adventurebackpack.util.Wearing;
 
-/**
- * Created on 17/10/2014
- *
- * @author Darkona
- */
 @Mod.EventBusSubscriber(modid = ModInfo.MODID)
 public class ClientEventHandler
 {
