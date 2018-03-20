@@ -36,7 +36,7 @@ public class ItemComponent extends AdventureItem
     }
 
     @Override
-    public String getUnlocalizedName(final ItemStack stack)
+    public String getUnlocalizedName(ItemStack stack)
     {
         return "item." + ModInfo.MODID + ":" + Types.getType(stack.getMetadata()).getName();
     }

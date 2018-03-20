@@ -8,8 +8,14 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.darkona.adventurebackpack.reference.ModInfo;
 
+//@Config(modid = ModInfo.MODID)
+//@Config.LangKey("adventurebackpack.config.title")
 public class ConfigHandler
 {
+
+//    @Config.RangeInt(min = 0, max = 10)
+//    public static int typeTankRe = 2;
+
     public static Configuration config;
 
     public static boolean allowSoulBound = true;
@@ -37,12 +43,12 @@ public class ConfigHandler
     public static boolean allowSoundJetpack = true;
     public static boolean allowSoundPiston = true;
 
-    public static String[] copterFuels;
+    public static String[] copterFuels = {};
     private static String[] defaultFuels = {"biodiesel, 1.0", "biofuel, 1.0", "bioethanol, 1.5", "creosote, 7.0",
             "fuel, 0.8", "lava, 5.0", "liquid_light_oil, 3.0", "liquid_medium_oil, 3.0", "liquid_heavy_oil, 3.0",
             "liquid_light_fuel, 1.0", "liquid_heavy_fuel, 1.3", "nitrofuel, 0.4", "oil, 3.0", "rocket_fuel, 0.8"};
-    public static String[] forbiddenDimensions;
-    public static String[] itemBlacklist;
+    public static String[] forbiddenDimensions = {};
+    public static String[] itemBlacklist = {};
 
     public static boolean consumeDragonEgg = false;
     public static boolean recipeSaddle = true;

@@ -28,7 +28,7 @@ public class WearableModePacket implements IMessageHandler<WearableModePacket.Me
 
             if (player != null)
             {
-                if ((message.type == COPTER_ON_OFF || message.type == COPTER_TOGGLE))
+                if (message.type == COPTER_ON_OFF || message.type == COPTER_TOGGLE)
                     ServerActions.toggleCopter(player, Wearing.getWearingCopter(player), message.type);
 
                 if (message.type == JETPACK_ON_OFF)

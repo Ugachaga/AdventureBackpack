@@ -4,9 +4,9 @@
 itemGroup.adventurebackpack=Adventure Backpack Mod
 
 ## Keybindings
-keys.adventureBackpack:category=Adventure Backpack
-keys.adventureBackpack:open_inventory=Open Inventory
-keys.adventureBackpack:toggle_actions=Toggle Actions
+key.adventurebackpack:category=Adventure Backpack
+key.adventurebackpack:open_inventory=Open Inventory
+key.adventurebackpack:toggle_actions=Toggle Actions
 
 ## Wearables
 item.adventurebackpack:adventure_backpack.name=Adventure Backpack

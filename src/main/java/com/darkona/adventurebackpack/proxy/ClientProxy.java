@@ -4,8 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import com.darkona.adventurebackpack.client.gui.GuiBackpack;
 import com.darkona.adventurebackpack.client.gui.GuiCopter;
@@ -69,7 +69,7 @@ public class ClientProxy implements IProxy
     {
         ClientRegistry.registerKeyBinding(Keybindings.openInventory);
         ClientRegistry.registerKeyBinding(Keybindings.toggleActions);
-        FMLCommonHandler.instance().bus().register(new KeyInputEventHandler());
+        MinecraftForge.EVENT_BUS.register(new KeyInputEventHandler());
     }
 
     @Override

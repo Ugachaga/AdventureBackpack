@@ -3,7 +3,7 @@
         "category":"player",
         "sounds":[
             {
-                "name":"nyan",
+                "name":"adventurebackpack:nyan",
                 "stream":"true"
             }
         ]
@@ -12,7 +12,7 @@
         "category":"player",
         "sounds":[
             {
-                "name":"helicopter",
+                "name":"adventurebackpack:helicopter",
                 "stream":"false"
             }
         ]
@@ -21,7 +21,7 @@
         "category":"player",
         "sounds":[
             {
-                "name":"s_jetpackon",
+                "name":"adventurebackpack:jetpack_on",
                 "stream":"false"
             }
         ]
@@ -30,7 +30,7 @@
         "category":"player",
         "sounds":[
             {
-                "name":"boiling_boiler",
+                "name":"adventurebackpack:boiling_boiler",
                 "stream":"false"
             }
         ]
@@ -39,7 +39,7 @@
         "category":"player",
         "sounds":[
             {
-                "name":"leaking_boiler",
+                "name":"adventurebackpack:leaking_boiler",
                 "stream":"false"
             }
         ]
