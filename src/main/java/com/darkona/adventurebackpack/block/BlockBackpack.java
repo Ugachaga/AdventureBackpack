@@ -219,7 +219,7 @@ public class BlockBackpack extends Block
             {
                 //TODO
                 ((EntityPlayerMP) player).getServerWorld().addScheduledTask(()
-                        -> AdventureBackpack.proxy.displayBackpackGUI(player,
+                        -> AdventureBackpack.PROXY.displayBackpackGUI(player,
                         (TileBackpack) world.getTileEntity(pos), Constants.Source.TILE));
                 return true;
             }

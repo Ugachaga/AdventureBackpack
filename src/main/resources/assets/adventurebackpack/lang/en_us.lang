@@ -46,6 +46,7 @@ item.adventurebackpack:inflatable_boat_motorized.name=Inflatable Boat (Motorized
 
 ## Entity
 entity.adventurebackpack:inflatable_boat.name=Inflatable Boat
+entity.adventurebackpack:friendly_spider.name=Friendly Spider
 
 ## Blocks
 tile.adventurebackpack:backpack_block.name=Adventure Backpack(s)

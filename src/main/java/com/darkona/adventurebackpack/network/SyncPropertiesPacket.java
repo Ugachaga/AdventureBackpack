@@ -31,7 +31,7 @@ public class SyncPropertiesPacket implements IMessageHandler<SyncPropertiesPacke
             }
             else
             {
-                AdventureBackpack.proxy.synchronizePlayer(message.ID, message.properties);
+                AdventureBackpack.PROXY.synchronizePlayer(message.ID, message.properties);
             }
         }
         if (ctx.side.isServer())

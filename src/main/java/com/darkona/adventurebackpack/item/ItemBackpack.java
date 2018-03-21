@@ -1,6 +1,8 @@
 package com.darkona.adventurebackpack.item;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.gui.GuiScreen;
@@ -67,22 +69,15 @@ public class ItemBackpack extends ItemWearable
     @SideOnly(Side.CLIENT)
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
     {
-        for (BackpackTypes type : BackpackTypes.values())
+        if (isInCreativeTab(tab))
         {
-            if (type == BackpackTypes.UNKNOWN)
-                continue;
+            List<ItemStack> backpacks = Stream.of(BackpackTypes.values())
+                    .filter(type -> type != BackpackTypes.UNKNOWN)
+                    .map(BackpackUtils::createBackpackStack)
+                    .collect(Collectors.toList());
 
-            items.add(BackpackUtils.createBackpackStack(type));
+            items.addAll(backpacks);
         }
-
-//        if (isInCreativeTab(tab))
-//        {
-//            List<ItemStack> itemz = Stream.of(BackpackTypes.values())
-//                    .map(BackpackUtils::createBackpackStack)
-//                    .collect(Collectors.toList());
-//
-//            items.addAll(itemz);
-//        }
     }
 
     @Override

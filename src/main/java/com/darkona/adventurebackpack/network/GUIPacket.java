@@ -42,7 +42,7 @@ public class GuiPacket implements IMessageHandler<GuiPacket.GuiMessage, IMessage
                 if (Wearing.isWearingCopter(player))
                 {
                     player.getServerWorld().addScheduledTask(()
-                            -> AdventureBackpack.proxy.displayCopterGUI(player,
+                            -> AdventureBackpack.PROXY.displayCopterGUI(player,
                             new InventoryCopter(Wearing.getWearingCopter(player)), Constants.Source.WEARING));
                     return null;
                 }
@@ -52,7 +52,7 @@ public class GuiPacket implements IMessageHandler<GuiPacket.GuiMessage, IMessage
                 if (Wearing.isHoldingCopter(player))
                 {
                     player.getServerWorld().addScheduledTask(()
-                            -> AdventureBackpack.proxy.displayCopterGUI(player,
+                            -> AdventureBackpack.PROXY.displayCopterGUI(player,
                             new InventoryCopter(Wearing.getHoldingCopter(player)), Constants.Source.HOLDING));
                     return null;
                 }
@@ -65,7 +65,7 @@ public class GuiPacket implements IMessageHandler<GuiPacket.GuiMessage, IMessage
                 if (Wearing.isWearingJetpack(player))
                 {
                     player.getServerWorld().addScheduledTask(()
-                            -> AdventureBackpack.proxy.displayJetpackGUI(player,
+                            -> AdventureBackpack.PROXY.displayJetpackGUI(player,
                             new InventoryJetpack(Wearing.getWearingJetpack(player)), Constants.Source.WEARING));
                     return null;
                 }
@@ -75,7 +75,7 @@ public class GuiPacket implements IMessageHandler<GuiPacket.GuiMessage, IMessage
                 if (Wearing.isHoldingJetpack(player))
                 {
                     player.getServerWorld().addScheduledTask(()
-                            -> AdventureBackpack.proxy.displayJetpackGUI(player,
+                            -> AdventureBackpack.PROXY.displayJetpackGUI(player,
                             new InventoryJetpack(Wearing.getHoldingJetpack(player)), Constants.Source.HOLDING));
                     return null;
                 }
@@ -91,7 +91,7 @@ public class GuiPacket implements IMessageHandler<GuiPacket.GuiMessage, IMessage
                 if (Wearing.isWearingBackpack(player))
                 {
                     player.getServerWorld().addScheduledTask(()
-                            -> AdventureBackpack.proxy.displayBackpackGUI(player,
+                            -> AdventureBackpack.PROXY.displayBackpackGUI(player,
                             new InventoryBackpack(Wearing.getWearingBackpack(player)), Constants.Source.WEARING));
                     return null;
                 }
@@ -101,7 +101,7 @@ public class GuiPacket implements IMessageHandler<GuiPacket.GuiMessage, IMessage
                 if (Wearing.isHoldingBackpack(player))
                 {
                     player.getServerWorld().addScheduledTask(()
-                            -> AdventureBackpack.proxy.displayBackpackGUI(player,
+                            -> AdventureBackpack.PROXY.displayBackpackGUI(player,
                             new InventoryBackpack(Wearing.getHoldingBackpack(player)), Constants.Source.HOLDING));
                     return null;
                 }

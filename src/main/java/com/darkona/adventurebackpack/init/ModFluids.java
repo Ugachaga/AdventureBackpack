@@ -42,8 +42,8 @@ public class ModFluids
             fluid -> fluid.setLuminosity(0).setDensity(1000).setViscosity(1000),
             fluid -> new BlockFluidClassic(fluid, new MaterialLiquid(MapColor.RED)));
 
-    // getColor: 0xcd8c6f //TODO flow asset is invalid, remake it?
-    public static final Fluid MUSHROOM_STEW = createFluid("mushroom_stew", false,
+    // getColor: 0xcd8c6f
+    public static final Fluid MUSHROOM_STEW = createFluid("mushroom_stew", true,
             fluid -> fluid.setLuminosity(0).setDensity(1200).setViscosity(1200),
             fluid -> new BlockFluidClassic(fluid, new MaterialLiquid(MapColor.BROWN)));
 

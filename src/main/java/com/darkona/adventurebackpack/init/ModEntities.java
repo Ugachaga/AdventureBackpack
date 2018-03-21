@@ -1,24 +1,56 @@
 package com.darkona.adventurebackpack.init;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
-import com.darkona.adventurebackpack.AdventureBackpack;
 import com.darkona.adventurebackpack.entity.EntityFriendlySpider;
 import com.darkona.adventurebackpack.entity.EntityInflatableBoat;
 import com.darkona.adventurebackpack.reference.ModInfo;
 
+import static com.darkona.adventurebackpack.util.Utils.getNull;
+
+@GameRegistry.ObjectHolder(ModInfo.MODID)
 public class ModEntities
 {
-    private static final String NAME_BOAT = "inflatableBoat";
-    private static final String NAME_SPIDER = "rideableSpider";
+    public static final EntityEntry FRIENDLY_SPIDER = getNull();
+    public static final EntityEntry INFLATABLE_BOAT = getNull();
 
-    public static void init()
+    @Mod.EventBusSubscriber(modid = ModInfo.MODID)
+    public static class RegistrationHandler
     {
-        int counter = 0;
-        EntityRegistry.registerModEntity(new ResourceLocation(ModInfo.MODID, NAME_BOAT), EntityInflatableBoat.class,
-                NAME_BOAT, counter++, AdventureBackpack.instance, 64, 1, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(ModInfo.MODID, NAME_SPIDER), EntityFriendlySpider.class,
-                NAME_SPIDER, counter++, AdventureBackpack.instance, 64, 2, true);
+        @SubscribeEvent
+        public static void registerEntities(RegistryEvent.Register<EntityEntry> event)
+        {
+            EntityEntry[] entries = {
+                    createBuilder("friendly_spider")
+                            .entity(EntityFriendlySpider.class)
+                            .tracker(80, 3, true)
+                            .egg(0xC424E, 0xA80E0E)
+                            .build(),
+
+                    createBuilder("inflatable_boat")
+                            .entity(EntityInflatableBoat.class)
+                            .tracker(64, 3, true)
+                            .build(),
+            };
+
+            event.getRegistry().registerAll(entries);
+        }
+
+        private static int entityID = 0;
+
+        private static <E extends Entity> EntityEntryBuilder<E> createBuilder(String name)
+        {
+            EntityEntryBuilder<E> builder = EntityEntryBuilder.create();
+            ResourceLocation registryName = new ResourceLocation(ModInfo.MODID, name);
+            return builder.id(registryName, entityID++).name(registryName.toString());
+        }
     }
+
 }

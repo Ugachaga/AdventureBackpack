@@ -59,7 +59,10 @@ public class ItemCopter extends ItemWearable
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
     {
-        items.add(BackpackUtils.createCopterStack());
+        if (isInCreativeTab(tab))
+        {
+            items.add(BackpackUtils.createCopterStack());
+        }
     }
 
     @Override
