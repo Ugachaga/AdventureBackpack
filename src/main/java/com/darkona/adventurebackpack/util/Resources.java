@@ -8,6 +8,8 @@ import com.darkona.adventurebackpack.reference.ModInfo;
 
 public class Resources
 {
+    public  static final String RESOURCE_PREFIX = ModInfo.MODID + ":";
+
     private static final String TEXTURE_LOCATION = ModInfo.MODID;
 
     public static ResourceLocation getBackpackTexture(BackpackTypes type)
@@ -27,39 +29,14 @@ public class Resources
         return new ResourceLocation(TEXTURE_LOCATION, "textures/backpack/" + type.getName() + ".png");
     }
 
-    public static String modelTextureResourceString(String name)
-    {
-        return new ResourceLocation(TEXTURE_LOCATION, "textures/models/" + name).toString();
-    }
-
     public static ResourceLocation guiTextures(String name)
     {
         return new ResourceLocation(TEXTURE_LOCATION, "textures/gui/" + name + ".png");
     }
 
-    public static ResourceLocation itemTextures(String name)
-    {
-        return new ResourceLocation(TEXTURE_LOCATION, name);
-    }
-
-    public static ResourceLocation blockTextures(String name)
-    {
-        return new ResourceLocation(TEXTURE_LOCATION, name);
-    }
-
-    public static ResourceLocation fluidTextures(String name)
-    {
-        return new ResourceLocation(TEXTURE_LOCATION, "textures/blocks/fluid_" + name + ".png");
-    }
-
     public static ResourceLocation modelTextures(String name)
     {
         return new ResourceLocation(TEXTURE_LOCATION, "textures/models/" + name + ".png");
-    }
-
-    public static String getIconString(String name)
-    {
-        return TEXTURE_LOCATION + ":" + name;
     }
 
 }

@@ -15,6 +15,7 @@ import net.minecraftforge.fml.client.config.IConfigElement;
 
 import com.darkona.adventurebackpack.reference.ModInfo;
 
+@SuppressWarnings("unused")
 public class ConfigGuiFactory implements IModGuiFactory
 {
     @Override

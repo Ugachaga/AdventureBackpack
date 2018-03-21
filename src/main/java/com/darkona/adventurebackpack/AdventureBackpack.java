@@ -18,7 +18,6 @@ import com.darkona.adventurebackpack.handlers.GuiHandler;
 import com.darkona.adventurebackpack.handlers.PlayerEventHandler;
 import com.darkona.adventurebackpack.init.ModDates;
 import com.darkona.adventurebackpack.init.ModEntities;
-import com.darkona.adventurebackpack.init.ModFluids;
 import com.darkona.adventurebackpack.init.ModNetwork;
 import com.darkona.adventurebackpack.init.ModRecipes;
 import com.darkona.adventurebackpack.init.ModWorldGen;
@@ -53,7 +52,6 @@ public class AdventureBackpack
         //ModStuff
         ModDates.init();
 
-        ModFluids.init();
         FluidEffectRegistry.init();
         ModEntities.init();
         ModNetwork.init();

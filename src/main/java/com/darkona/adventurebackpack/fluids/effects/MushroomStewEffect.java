@@ -3,15 +3,15 @@ package com.darkona.adventurebackpack.fluids.effects;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidRegistry;
 
+import com.darkona.adventurebackpack.init.ModFluids;
 import adventurebackpack.api.FluidEffect;
 
 public class MushroomStewEffect extends FluidEffect
 {
     public MushroomStewEffect()
     {
-        super(FluidRegistry.getFluid("mushroomstew"));
+        super(ModFluids.MUSHROOM_STEW);
     }
 
     @Override

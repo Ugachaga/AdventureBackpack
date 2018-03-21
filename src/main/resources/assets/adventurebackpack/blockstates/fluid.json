@@ -1,0 +1,29 @@
+{
+    "forge_marker":1,
+    "defaults":{
+        "model":"forge:fluid"
+    },
+    "variants":{
+        "milk":[
+            {
+                "custom":{
+                    "fluid":"milk"
+                }
+            }
+        ],
+        "melon_juice":[
+            {
+                "custom":{
+                    "fluid":"melon_juice"
+                }
+            }
+        ],
+        "mushroom_stew":[
+            {
+                "custom":{
+                    "fluid":"mushroom_stew"
+                }
+            }
+        ]
+    }
+}

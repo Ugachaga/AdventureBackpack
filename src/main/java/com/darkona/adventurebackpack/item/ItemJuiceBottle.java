@@ -27,7 +27,7 @@ public class ItemJuiceBottle extends AdventureItem
     @Override
     public ItemStack onItemUseFinish(ItemStack stack, World world, EntityLivingBase entity)
     {
-        FluidEffectRegistry.executeFluidEffectsForFluid(ModFluids.melonJuice, entity, world);
+        FluidEffectRegistry.executeFluidEffectsForFluid(ModFluids.MELON_JUICE, entity, world);
         return new ItemStack(Items.GLASS_BOTTLE, 1);
     }
 

@@ -54,8 +54,10 @@ tile.adventurebackpack:sleeping_bag_block.name=Sleeping Bag
 
 ## Fluids
 fluid.melon_juice=Melon Juice
-fluid.milk=Milk
-fluid.mushrrom_stew=Mushroom Stew
+fluid.mushroom_stew=Mushroom Stew
+tile.adventurebackpack:fluid.melon_juice.name=Melon Juice
+tile.adventurebackpack:fluid.milk.name=Milk
+tile.adventurebackpack:fluid.mushroom_stew.name=Mushroom Stew
 
 ## Messages
 adventurebackpack:messages.already.equipped.backpack=You are already equipping a Backpack.

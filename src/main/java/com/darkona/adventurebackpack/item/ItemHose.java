@@ -418,7 +418,7 @@ public class ItemHose extends AdventureItem
         if (entity instanceof EntityMooshroom)
         {
             FluidTank tank = getHoseTank(stack) == 0 ? inventory.getLeftTank() : inventory.getRightTank();
-            tank.fill(new FluidStack(ModFluids.mushroomStew, BUCKET), true);
+            tank.fill(new FluidStack(ModFluids.MUSHROOM_STEW, BUCKET), true);
             inventory.dirtyTanks();
 
             ((EntityMooshroom) entity).faceEntity(player, 0.1f, 0.1f);
@@ -427,7 +427,7 @@ public class ItemHose extends AdventureItem
         else if (entity instanceof EntityCow )
         {
             FluidTank tank = getHoseTank(stack) == 0 ? inventory.getLeftTank() : inventory.getRightTank();
-            tank.fill(new FluidStack(ModFluids.milk, BUCKET), true);
+            tank.fill(new FluidStack(ModFluids.MILK, BUCKET), true);
             inventory.dirtyTanks();
 
             ((EntityCow) entity).faceEntity(player, 0.1f, 0.1f);

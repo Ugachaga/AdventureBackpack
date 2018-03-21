@@ -3,15 +3,15 @@ package com.darkona.adventurebackpack.fluids.effects;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidRegistry;
 
+import com.darkona.adventurebackpack.init.ModFluids;
 import adventurebackpack.api.FluidEffect;
 
 public class MilkEffect extends FluidEffect
 {
     public MilkEffect()
     {
-        super(FluidRegistry.getFluid("milk"), 7);
+        super(ModFluids.MILK, 7);
     }
 
     @Override

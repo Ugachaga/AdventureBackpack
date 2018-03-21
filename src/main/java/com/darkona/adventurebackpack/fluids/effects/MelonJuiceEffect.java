@@ -14,7 +14,7 @@ public class MelonJuiceEffect extends FluidEffect
 {
     public MelonJuiceEffect()
     {
-        super(ModFluids.melonJuice, 30);
+        super(ModFluids.MELON_JUICE, 30);
     }
 
     @Override

@@ -421,7 +421,7 @@ public class BackpackAbilities
         if (inv.getLastTime() <= 0 && drops > 0)
         {
             inv.setLastTime(5);
-            FluidStack raindrop = new FluidStack(ModFluids.melonJuice, drops);
+            FluidStack raindrop = new FluidStack(ModFluids.MELON_JUICE, drops);
             inv.getLeftTank().fill(raindrop, true);
             inv.getRightTank().fill(raindrop, true);
         }
@@ -732,7 +732,7 @@ public class BackpackAbilities
 
     public void tileMelon(World world, TileBackpack backpack)
     {
-        fillWithRain(world, backpack, new FluidStack(ModFluids.melonJuice, 2), 5);
+        fillWithRain(world, backpack, new FluidStack(ModFluids.MELON_JUICE, 2), 5);
     }
 
     /*public void tileCow(World world, TileBackpack backpack)

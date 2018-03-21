@@ -4,23 +4,30 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.b3d.B3DLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
+import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 import com.darkona.adventurebackpack.init.ModBlocks;
+import com.darkona.adventurebackpack.init.ModFluids;
 import com.darkona.adventurebackpack.init.ModItems;
 import com.darkona.adventurebackpack.item.ItemComponent;
 import com.darkona.adventurebackpack.reference.ModInfo;
+import com.darkona.adventurebackpack.util.Resources;
 import com.darkona.adventurebackpack.util.temp.IVariant;
 
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = ModInfo.MODID)
@@ -28,17 +35,39 @@ public class ModModelManager
 {
     public static final ModModelManager INSTANCE = new ModModelManager();
 
-    private static final String FLUID_MODEL_PATH = ModInfo.MODID + ":fluid";
+    private static final String FLUID_MODEL_PATH = Resources.RESOURCE_PREFIX + "fluid";
 
     private ModModelManager() {}
 
     @SubscribeEvent
     public static void registerAllModels(ModelRegistryEvent event)
     {
+        INSTANCE.registerFluidModels();
         INSTANCE.registerBlockModels();
         INSTANCE.registerItemModels();
     }
 
+    private void registerFluidModels()
+    {
+        ModFluids.MOD_FLUID_BLOCKS.forEach(this::registerFluidModel);
+    }
+
+    private void registerFluidModel(IFluidBlock fluidBlock)
+    {
+        Item item = Item.getItemFromBlock((Block) fluidBlock);
+        assert item != Items.AIR;
+        ModelBakery.registerItemVariants(item);
+        ModelResourceLocation modelResourceLocation = new ModelResourceLocation(FLUID_MODEL_PATH, fluidBlock.getFluid().getName());
+        ModelLoader.setCustomMeshDefinition(item, stack -> modelResourceLocation);
+        ModelLoader.setCustomStateMapper((Block) fluidBlock, new StateMapperBase()
+        {
+            @Override
+            protected ModelResourceLocation getModelResourceLocation(IBlockState p_178132_1_)
+            {
+                return modelResourceLocation;
+            }
+        });
+    }
 
     private void registerBlockModels()
     {
@@ -52,7 +81,6 @@ public class ModModelManager
                 .filter(item -> !itemsRegistered.contains(item))
                 .forEach(this::registerItemModel);
     }
-
 
 
     private final Set<Item> itemsRegistered = new HashSet<>();
@@ -108,5 +136,5 @@ public class ModModelManager
         itemsRegistered.add(item);
         ModelLoader.setCustomMeshDefinition(item, meshDefinition);
     }
-
+    
 }
