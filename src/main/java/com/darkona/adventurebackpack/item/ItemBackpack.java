@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.util.ITooltipFlag;
@@ -63,6 +64,7 @@ public class ItemBackpack extends ItemWearable
     public ItemBackpack(String name)
     {
         super(name);
+        this.setHasSubtypes(true);
     }
 
     @Override
@@ -88,7 +90,7 @@ public class ItemBackpack extends ItemWearable
 
         NBTTagCompound backpackTag = BackpackUtils.getWearableCompound(stack);
 
-        BackpackTypes type = BackpackTypes.getType(backpackTag.getByte(TAG_TYPE));
+        BackpackTypes type = BackpackTypes.getType(backpackTag.getInteger(TAG_TYPE));
         tooltip.add(Utils.getColoredSkinName(type));
 
         FluidTank tank = new FluidTank(BASIC_TANK_CAPACITY);
@@ -153,7 +155,7 @@ public class ItemBackpack extends ItemWearable
         {
             if (world.isRemote)
             {
-                ModNetwork.INSTANCE.sendToServer(new GuiPacket.GuiMessage(GuiPacket.GUI_BACKPACK, GuiPacket.FROM_HOLDING));
+                ModNetwork.INSTANCE.sendToServer(new GuiPacket.Message(GuiPacket.GUI_BACKPACK, GuiPacket.FROM_HOLDING));
             }
         }
         return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));
@@ -218,7 +220,8 @@ public class ItemBackpack extends ItemWearable
             {
                 if (world.setBlockState(pos, backpack.getDefaultState()))
                 {
-                    backpack.onBlockPlacedBy(world, pos, backpack.getDefaultState(), player, stack);
+                    IBlockState state = backpack.getDefaultState().withProperty(BlockBackpack.FACING, player.getHorizontalFacing().getOpposite());
+                    backpack.onBlockPlacedBy(world, pos, state, player, stack);
                     player.playSound(SoundEvents.BLOCK_CLOTH_PLACE, 0.5f, 1.0f);
                     ((TileBackpack) world.getTileEntity(pos)).loadFromNBT(stack.getTagCompound());
                     if (from)

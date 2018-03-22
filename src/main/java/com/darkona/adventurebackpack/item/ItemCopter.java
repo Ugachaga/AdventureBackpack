@@ -109,7 +109,7 @@ public class ItemCopter extends ItemWearable
     {
         if (world.isRemote)
         {
-            ModNetwork.INSTANCE.sendToServer(new GuiPacket.GuiMessage(GuiPacket.GUI_COPTER, GuiPacket.FROM_HOLDING));
+            ModNetwork.INSTANCE.sendToServer(new GuiPacket.Message(GuiPacket.GUI_COPTER, GuiPacket.FROM_HOLDING));
         }
         return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));
     }

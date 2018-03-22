@@ -1,5 +1,7 @@
 package com.darkona.adventurebackpack.network;
 
+import javax.annotation.Nullable;
+
 import io.netty.buffer.ByteBuf;
 
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -9,14 +11,15 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import com.darkona.adventurebackpack.common.ServerActions;
 
-public class CycleToolPacket implements IMessageHandler<CycleToolPacket.CycleToolMessage, IMessage>
+public class CycleToolPacket implements IMessageHandler<CycleToolPacket.Message, IMessage>
 {
     public static final byte TOGGLE_HOSE_TANK = 0;
     public static final byte SWITCH_HOSE_ACTION = 1;
     public static final byte CYCLE_TOOL_ACTION = 2;
 
+    @Nullable
     @Override
-    public IMessage onMessage(CycleToolMessage message, MessageContext ctx)
+    public IMessage onMessage(Message message, MessageContext ctx)
     {
         if (ctx.side.isServer())
         {
@@ -37,18 +40,15 @@ public class CycleToolPacket implements IMessageHandler<CycleToolPacket.CycleToo
         return null;
     }
 
-    public static class CycleToolMessage implements IMessage
+    public static class Message implements IMessage
     {
         private byte typeOfAction;
         private boolean isWheelUp;
         private int slot;
 
-        public CycleToolMessage()
-        {
+        public Message() {}
 
-        }
-
-        public CycleToolMessage(boolean isWheelUp, int slot, byte typeOfAction)
+        public Message(boolean isWheelUp, int slot, byte typeOfAction)
         {
             this.typeOfAction = typeOfAction;
             this.isWheelUp = isWheelUp;

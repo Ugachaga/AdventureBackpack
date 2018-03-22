@@ -33,12 +33,12 @@ public class ModNetwork
         registerMessage(EntitySoundPacket.class, EntitySoundPacket.Message.class);
 
         registerMessage(WearableModePacket.class, WearableModePacket.Message.class);
-        registerMessage(CycleToolPacket.class, CycleToolPacket.CycleToolMessage.class);
-        //registerMessage(GuiPacket.class, GuiPacket.GuiMessage.class);
-        registerServerSide(GuiPacket.class, GuiPacket.GuiMessage.class);
-        registerMessage(SleepingBagPacket.class, SleepingBagPacket.SleepingBagMessage.class);
-        registerMessage(CowAbilityPacket.class, CowAbilityPacket.CowAbilityMessage.class);
-        registerMessage(PlayerActionPacket.class, PlayerActionPacket.ActionMessage.class);
+        registerMessage(CycleToolPacket.class, CycleToolPacket.Message.class);
+        registerMessage(GuiPacket.class, GuiPacket.Message.class);
+        //registerServerSide(GuiPacket.class, GuiPacket.Message.class);
+        registerMessage(SleepingBagPacket.class, SleepingBagPacket.Message.class);
+        registerMessage(CowAbilityPacket.class, CowAbilityPacket.Message.class);
+        registerMessage(PlayerActionPacket.class, PlayerActionPacket.Message.class);
         registerMessage(EquipUnequipBackWearablePacket.class, EquipUnequipBackWearablePacket.Message.class);
     }
 

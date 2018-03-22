@@ -136,14 +136,14 @@ public class GuiBackpack extends GuiWithTanks
             if (source == Source.TILE)
             {
                 TileBackpack te = (TileBackpack) inventory;
-                ModNetwork.INSTANCE.sendToServer(new SleepingBagPacket.SleepingBagMessage(true, te.getPos().getX(), te.getPos().getY(), te.getPos().getZ()));
+                ModNetwork.INSTANCE.sendToServer(new SleepingBagPacket.Message(true, te.getPos().getX(), te.getPos().getY(), te.getPos().getZ()));
             }
             else
             {
                 int posX = MathHelper.floor(player.posX);
                 int posY = MathHelper.floor(player.posY) - 1;
                 int posZ = MathHelper.floor(player.posZ);
-                ModNetwork.INSTANCE.sendToServer(new SleepingBagPacket.SleepingBagMessage(false, posX, posY, posZ));
+                ModNetwork.INSTANCE.sendToServer(new SleepingBagPacket.Message(false, posX, posY, posZ));
             }
         }
         else
@@ -162,7 +162,7 @@ public class GuiBackpack extends GuiWithTanks
             if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
             {
                 isHoldingSpace = true;
-                ModNetwork.INSTANCE.sendToServer(new PlayerActionPacket.ActionMessage(PlayerActionPacket.GUI_HOLDING_SPACE));
+                ModNetwork.INSTANCE.sendToServer(new PlayerActionPacket.Message(PlayerActionPacket.GUI_HOLDING_SPACE));
                 inventory.getExtendedProperties().setBoolean(Constants.TAG_HOLDING_SPACE, true);
             }
         }
@@ -171,7 +171,7 @@ public class GuiBackpack extends GuiWithTanks
             if (!Keyboard.isKeyDown(Keyboard.KEY_SPACE))
             {
                 isHoldingSpace = false;
-                ModNetwork.INSTANCE.sendToServer(new PlayerActionPacket.ActionMessage(PlayerActionPacket.GUI_NOT_HOLDING_SPACE));
+                ModNetwork.INSTANCE.sendToServer(new PlayerActionPacket.Message(PlayerActionPacket.GUI_NOT_HOLDING_SPACE));
                 inventory.getExtendedProperties().removeTag(Constants.TAG_HOLDING_SPACE);
             }
         }

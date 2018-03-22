@@ -45,13 +45,13 @@ public class ClientEventHandler
 
                         if ((!Wearing.getWearingBackpackInv(player).getDisableCycling() && SlotTool.isValidTool(heldItem)))
                         {
-                            ModNetwork.INSTANCE.sendToServer(new CycleToolPacket.CycleToolMessage(isWheelUp, slot, CycleToolPacket.CYCLE_TOOL_ACTION));
+                            ModNetwork.INSTANCE.sendToServer(new CycleToolPacket.Message(isWheelUp, slot, CycleToolPacket.CYCLE_TOOL_ACTION));
                             ServerActions.cycleTool(player, isWheelUp, slot);
                             event.setCanceled(true);
                         }
                         else if (theItem instanceof ItemHose)
                         {
-                            ModNetwork.INSTANCE.sendToServer(new CycleToolPacket.CycleToolMessage(isWheelUp, slot, CycleToolPacket.SWITCH_HOSE_ACTION));
+                            ModNetwork.INSTANCE.sendToServer(new CycleToolPacket.Message(isWheelUp, slot, CycleToolPacket.SWITCH_HOSE_ACTION));
                             ServerActions.switchHose(player, isWheelUp, ServerActions.HOSE_SWITCH);
                             event.setCanceled(true);
                         }

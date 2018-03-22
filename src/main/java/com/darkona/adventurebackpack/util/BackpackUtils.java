@@ -134,7 +134,7 @@ public class BackpackUtils
 
     public static void setBackpackType(ItemStack stack, BackpackTypes type)
     {
-        getWearableCompound(stack).setByte(TAG_TYPE, type.getMeta());
+        getWearableCompound(stack).setInteger(TAG_TYPE, type.getMeta());
     }
 
     public static ItemStack createCopterStack()

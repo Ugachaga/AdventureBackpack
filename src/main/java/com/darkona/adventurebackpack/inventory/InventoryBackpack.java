@@ -103,7 +103,7 @@ public class InventoryBackpack extends InventoryWearable implements IInventoryBa
             return; // this need for NEI and WAILA trying to render tile.backpack and comes here w/o nbt
 
         NBTTagCompound backpackTag = compound.getCompoundTag(TAG_WEARABLE_COMPOUND);
-        type = BackpackTypes.getType(backpackTag.getByte(TAG_TYPE));
+        type = BackpackTypes.getType(backpackTag.getInteger(TAG_TYPE));
         setInventoryFromTagList(backpackTag.getTagList(TAG_INVENTORY, NBT.TAG_COMPOUND));
         leftTank.readFromNBT(backpackTag.getCompoundTag(TAG_LEFT_TANK));
         rightTank.readFromNBT(backpackTag.getCompoundTag(TAG_RIGHT_TANK));
@@ -118,7 +118,7 @@ public class InventoryBackpack extends InventoryWearable implements IInventoryBa
     public void saveToNBT(NBTTagCompound compound)
     {
         NBTTagCompound backpackTag = new NBTTagCompound();
-        backpackTag.setByte(TAG_TYPE, type.getMeta());
+        backpackTag.setInteger(TAG_TYPE, type.getMeta());
         backpackTag.setTag(TAG_INVENTORY, getInventoryTagList());
         backpackTag.setTag(TAG_RIGHT_TANK, rightTank.writeToNBT(new NBTTagCompound()));
         backpackTag.setTag(TAG_LEFT_TANK, leftTank.writeToNBT(new NBTTagCompound()));

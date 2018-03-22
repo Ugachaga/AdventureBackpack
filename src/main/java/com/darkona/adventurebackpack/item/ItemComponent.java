@@ -23,7 +23,7 @@ import net.minecraft.world.World;
 
 import com.darkona.adventurebackpack.entity.EntityInflatableBoat;
 import com.darkona.adventurebackpack.reference.ModInfo;
-import com.darkona.adventurebackpack.util.temp.IVariant;
+import com.darkona.adventurebackpack.reference.IType;
 
 public class ItemComponent extends AdventureItem
 {
@@ -38,7 +38,7 @@ public class ItemComponent extends AdventureItem
     @Override
     public String getUnlocalizedName(ItemStack stack)
     {
-        return "item." + ModInfo.MODID + ":" + Types.getType(stack.getMetadata()).getName();
+        return "item." + ModInfo.MODID + ":" + Types.get(stack.getMetadata()).getName();
     }
 
     @Override
@@ -54,7 +54,7 @@ public class ItemComponent extends AdventureItem
         }
     }
 
-    public enum Types implements IVariant
+    public enum Types implements IType
     {
         SLEEPING_BAG (0),
         BACKPACK_TANK (1),
@@ -92,7 +92,7 @@ public class ItemComponent extends AdventureItem
             return name;
         }
 
-        public static Types getType(int meta)
+        public static Types get(int meta)
         {
             if (meta < 0 || meta >= BY_META.length)
                 meta = 0;

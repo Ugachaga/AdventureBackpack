@@ -26,9 +26,9 @@ import com.darkona.adventurebackpack.init.ModBlocks;
 import com.darkona.adventurebackpack.init.ModFluids;
 import com.darkona.adventurebackpack.init.ModItems;
 import com.darkona.adventurebackpack.item.ItemComponent;
+import com.darkona.adventurebackpack.reference.IType;
 import com.darkona.adventurebackpack.reference.ModInfo;
 import com.darkona.adventurebackpack.util.Resources;
-import com.darkona.adventurebackpack.util.temp.IVariant;
 
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = ModInfo.MODID)
 public class ModModelManager
@@ -87,6 +87,7 @@ public class ModModelManager
 
     private void registerItemModels()
     {
+        //registerVariantItemModels(ModItems.ADVENTURE_BACKPACK, "type", BackpackTypes.values());
         registerVariantItemModels(ModItems.COMPONENT, "variant", ItemComponent.Types.values());
 
         ModItems.RegistrationHandler.ITEMS.stream()
@@ -94,7 +95,7 @@ public class ModModelManager
                 .forEach(this::registerItemModel);
     }
 
-    private <T extends IVariant> void registerVariantItemModels(Item item, String variantName, T[] values)
+    private <T extends IType> void registerVariantItemModels(Item item, String variantName, T[] values)
     {
         for (T value : values)
         {

@@ -39,20 +39,20 @@ public class AbstractBackpackRecipeTwo //implements IRecipe //TODO unused, imple
         return false;
     }
 
-    private static ItemStack makeBackpack(ItemStack backpackIn, BackpackTypes type)
+    private static ItemStack makeBackpack(ItemStack backpack, BackpackTypes type)
     {
-        if (backpackIn == null)
+        if (backpack == null)
             return null;
 
-        if (backpackIn.getTagCompound() == null)
+        if (backpack.getTagCompound() == null)
         {
-            backpackIn.setTagCompound(new NBTTagCompound());
-            backpackIn.getTagCompound().setByte(TAG_TYPE, type.getMeta());
+            backpack.setTagCompound(new NBTTagCompound());
+            backpack.getTagCompound().setInteger(TAG_TYPE, type.getMeta());
         }
-        ItemStack newBackpack = backpackIn.copy();
-        NBTTagCompound compound = backpackIn.getTagCompound().copy();
+        ItemStack newBackpack = backpack.copy();
+        NBTTagCompound compound = backpack.getTagCompound().copy();
         newBackpack.setTagCompound(compound);
-        newBackpack.getTagCompound().setByte(TAG_TYPE, type.getMeta());
+        newBackpack.getTagCompound().setInteger(TAG_TYPE, type.getMeta());
         return newBackpack;
     }
 

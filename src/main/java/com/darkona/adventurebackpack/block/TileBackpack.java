@@ -152,7 +152,7 @@ public class TileBackpack extends TileWearable implements IInventoryBackpack, IT
             ench = compound.getTagList("ench", NBT.TAG_COMPOUND);
 
         NBTTagCompound backpackTag = compound.getCompoundTag(TAG_WEARABLE_COMPOUND);
-        type = BackpackTypes.getType(backpackTag.getByte(TAG_TYPE));
+        type = BackpackTypes.getType(backpackTag.getInteger(TAG_TYPE));
         setInventoryFromTagList(backpackTag.getTagList(TAG_INVENTORY, NBT.TAG_COMPOUND));
         leftTank.readFromNBT(backpackTag.getCompoundTag(TAG_LEFT_TANK));
         rightTank.readFromNBT(backpackTag.getCompoundTag(TAG_RIGHT_TANK));
@@ -183,7 +183,7 @@ public class TileBackpack extends TileWearable implements IInventoryBackpack, IT
             compound.setTag("ench", ench);
 
         NBTTagCompound backpackTag = new NBTTagCompound();
-        backpackTag.setByte(TAG_TYPE, type.getMeta());
+        backpackTag.setInteger(TAG_TYPE, type.getMeta());
         backpackTag.setTag(TAG_INVENTORY, getInventoryTagList());
         backpackTag.setTag(TAG_RIGHT_TANK, rightTank.writeToNBT(new NBTTagCompound()));
         backpackTag.setTag(TAG_LEFT_TANK, leftTank.writeToNBT(new NBTTagCompound()));

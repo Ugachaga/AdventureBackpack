@@ -20,6 +20,7 @@ public class CoordsUtils
 {
     private CoordsUtils() {}
 
+    @Nullable
     public static BlockPos findBlock2D(World world, int x, int y, int z, Block block, int range)
     {
         for (int i = x - range; i <= x + range; i++)
@@ -34,6 +35,7 @@ public class CoordsUtils
         return null;
     }
 
+    @Nullable
     public static BlockPos findBlock3D(World world, int x, int y, int z, Block block, int hRange, int vRange)
     {
         for (int i = (y - vRange); i <= (y + vRange); i++)

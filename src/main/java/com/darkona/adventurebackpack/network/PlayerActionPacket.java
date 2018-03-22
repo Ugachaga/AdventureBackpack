@@ -1,5 +1,7 @@
 package com.darkona.adventurebackpack.network;
 
+import javax.annotation.Nullable;
+
 import io.netty.buffer.ByteBuf;
 
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -14,7 +16,7 @@ import com.darkona.adventurebackpack.inventory.IInventoryBackpack;
 import com.darkona.adventurebackpack.inventory.InventoryJetpack;
 import com.darkona.adventurebackpack.util.Wearing;
 
-public class PlayerActionPacket implements IMessageHandler<PlayerActionPacket.ActionMessage, IMessage>
+public class PlayerActionPacket implements IMessageHandler<PlayerActionPacket.Message, IMessage>
 {
     public static final byte SPIDER_JUMP = 0;
     public static final byte JETPACK_IN_USE = 1;
@@ -22,64 +24,60 @@ public class PlayerActionPacket implements IMessageHandler<PlayerActionPacket.Ac
     public static final byte GUI_HOLDING_SPACE = 3;
     public static final byte GUI_NOT_HOLDING_SPACE = 4;
 
+    @Nullable
     @Override
-    public IMessage onMessage(ActionMessage message, MessageContext ctx)
+    public IMessage onMessage(Message message, MessageContext ctx)
     {
-        if (ctx.side.isServer())
+        if (!ctx.side.isServer())
+            return null;
+
+        EntityPlayerMP player = ctx.getServerHandler().player;
+
+        if (message.type == SPIDER_JUMP)
         {
-            EntityPlayerMP player = ctx.getServerHandler().player;
-
-            if (player != null)
+            if (player.getRidingEntity() != null && player.getRidingEntity() instanceof EntityFriendlySpider)
             {
-                if (message.type == SPIDER_JUMP)
+                ((EntityFriendlySpider) player.getRidingEntity()).setJumping(true);
+            }
+        }
+
+        if (message.type == JETPACK_IN_USE || message.type == JETPACK_NOT_IN_USE)
+        {
+            if (Wearing.isWearingJetpack(player))
+            {
+                InventoryJetpack inv = new InventoryJetpack(Wearing.getWearingJetpack(player));
+                inv.setInUse(message.type == JETPACK_IN_USE);
+                inv.markDirty();
+            }
+        }
+
+        if (message.type == GUI_HOLDING_SPACE || message.type == GUI_NOT_HOLDING_SPACE)
+        {
+            if (player.openContainer instanceof ContainerBackpack)
+            {
+                IInventoryBackpack inv = ((ContainerBackpack) player.openContainer).getInventoryBackpack();
+
+                if (message.type == GUI_HOLDING_SPACE)
                 {
-                    if (player.getRidingEntity() != null && player.getRidingEntity() instanceof EntityFriendlySpider)
-                    {
-                        ((EntityFriendlySpider) player.getRidingEntity()).setJumping(true);
-                    }
+                    inv.getExtendedProperties().setBoolean(Constants.TAG_HOLDING_SPACE, true);
                 }
-
-                if (message.type == JETPACK_IN_USE || message.type == JETPACK_NOT_IN_USE)
+                else if (message.type == GUI_NOT_HOLDING_SPACE)
                 {
-                    if (Wearing.isWearingJetpack(player))
-                    {
-                        InventoryJetpack inv = new InventoryJetpack(Wearing.getWearingJetpack(player));
-                        inv.setInUse(message.type == JETPACK_IN_USE);
-                        inv.markDirty();
-                    }
-                }
-
-                if (message.type == GUI_HOLDING_SPACE || message.type == GUI_NOT_HOLDING_SPACE)
-                {
-                    if (player.openContainer instanceof ContainerBackpack)
-                    {
-                        IInventoryBackpack inv = ((ContainerBackpack) player.openContainer).getInventoryBackpack();
-
-                        if (message.type == GUI_HOLDING_SPACE)
-                        {
-                            inv.getExtendedProperties().setBoolean(Constants.TAG_HOLDING_SPACE, true);
-                        }
-                        else if (message.type == GUI_NOT_HOLDING_SPACE)
-                        {
-                            inv.getExtendedProperties().removeTag(Constants.TAG_HOLDING_SPACE);
-                        }
-                    }
+                    inv.getExtendedProperties().removeTag(Constants.TAG_HOLDING_SPACE);
                 }
             }
         }
+
         return null;
     }
 
-    public static class ActionMessage implements IMessage
+    public static class Message implements IMessage
     {
         private byte type;
 
-        public ActionMessage()
-        {
+        public Message() {}
 
-        }
-
-        public ActionMessage(byte type)
+        public Message(byte type)
         {
             this.type = type;
         }

@@ -1,12 +1,19 @@
 package com.darkona.adventurebackpack.block;
 
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -21,6 +28,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -46,29 +54,33 @@ import static com.darkona.adventurebackpack.reference.BackpackTypes.UNKNOWN;
 
 public class BlockBackpack extends Block
 {
-    public static final PropertyDirection FACING_HORIZONTAL = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+    public static final PropertyDirection FACING = BlockHorizontal.FACING;
+    private static final AxisAlignedBB X_AXIS_AABB = new AxisAlignedBB(0.4D, 0.0D, 0.0D, 0.6D, 0.6D, 1.0D);
+    private static final AxisAlignedBB Z_AXIS_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.4D, 1.0D, 0.6D, 0.6D);
 
     //TODO see https://shadowfacts.net/tutorials/forge-modding-112/tile-entities-inventory/
     //IBlockState immutable and pregenerated, so maybe we should avoid to use it for Types
-    //public static final PropertyEnum<BackpackTypes> TYPE = PropertyEnum.create();
+    public static final PropertyEnum<BackpackTypes> TYPE = PropertyEnum.create("type", BackpackTypes.class);
 
-//    @Override
-//    protected BlockStateContainer createBlockState()
-//    {
-//        return new BlockStateContainer(this);
-//    }
-//
+
+    @Override
+    protected BlockStateContainer createBlockState()
+    {
+        return new BlockStateContainer(this, FACING/*, TYPE*/);
+    }
+
+    //
 //    @Override
 //    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
 //    {
 //        return super.getActualState(state, worldIn, pos);
 //    }
 //
-//    @Override
-//    public int getMetaFromState(IBlockState state)
-//    {
-//        return super.getMetaFromState(state);
-//    }
+    @Override
+    public int getMetaFromState(IBlockState state)
+    {
+        return state.getValue(FACING).getHorizontalIndex();
+    }
 //
 //    @Override
 //    public IBlockState getStateFromMeta(int meta)
@@ -76,6 +88,24 @@ public class BlockBackpack extends Block
 //        return super.getStateFromMeta(meta);
 //    }
 
+    @SuppressWarnings("deprecation")
+    @Override
+    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
+    {
+        System.out.println(placer.getHorizontalFacing());
+        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+    }
+
+    @Override
+    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
+    {
+        List<ItemStack> backpacks = Stream.of(BackpackTypes.values())
+                .filter(type -> type != BackpackTypes.UNKNOWN)
+                .map(BackpackUtils::createBackpackStack)
+                .collect(Collectors.toList());
+
+        items.addAll(backpacks);
+    }
 
     public BlockBackpack(String name)
     {
@@ -86,9 +116,10 @@ public class BlockBackpack extends Block
         this.setHardness(1.0f);
         this.setResistance(2000f);
 
-//        setDefaultState(blockState.getBaseState()
-//                .withProperty(FACING_HORIZONTAL, EnumFacing.NORTH));
-//                //.withProperty(TYPE, BackpackTypes.STANDARD));
+        setDefaultState(blockState.getBaseState()
+                .withProperty(FACING, EnumFacing.NORTH)
+                //.withProperty(TYPE, BackpackTypes.STANDARD)
+        );
     }
 
     @Override
@@ -100,23 +131,8 @@ public class BlockBackpack extends Block
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
-//        IBlockState blockState = this.getActualState(state, source, pos);
-//        EnumFacing facing = blockState.getValue(FACING_HORIZONTAL);
-//        AxisAlignedBB aabb;
-//        switch (facing)
-//        {
-//            case NORTH:
-//            case SOUTH:
-//                aabb = new AxisAlignedBB(0.0F, 0.0F, 0.4F, 1.0F, 0.6F, 0.6F);
-//                break;
-//            case EAST:
-//            case WEST:
-//            default: // wat?
-//                aabb = new AxisAlignedBB(0.4F, 0.0F, 0.0F, 0.6F, 0.6F, 1.0F);
-//                break;
-//        }
-//        return aabb;
-        return new AxisAlignedBB(0.4F, 0.0F, 0.0F, 0.6F, 0.6F, 1.0F);
+        EnumFacing enumfacing = state.getValue(FACING);
+        return enumfacing.getAxis() == EnumFacing.Axis.X ? X_AXIS_AABB : Z_AXIS_AABB;
     }
 
     @Nullable
@@ -404,20 +420,4 @@ public class BlockBackpack extends Block
     {
         return super.canRenderInLayer(state, layer); //TODO was: canRenderInPass(int pass) return true;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

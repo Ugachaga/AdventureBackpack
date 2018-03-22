@@ -106,7 +106,7 @@ public class ItemJetpack extends ItemWearable
     {
         if (world.isRemote)
         {
-            ModNetwork.INSTANCE.sendToServer(new GuiPacket.GuiMessage(GuiPacket.GUI_JETPACK, GuiPacket.FROM_HOLDING));
+            ModNetwork.INSTANCE.sendToServer(new GuiPacket.Message(GuiPacket.GUI_JETPACK, GuiPacket.FROM_HOLDING));
         }
         return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));
     }
@@ -147,7 +147,7 @@ public class ItemJetpack extends ItemWearable
             if (inv.getStatus() && canUse && Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown())
             {
                 inv.setInUse(true);
-                ModNetwork.INSTANCE.sendToServer(new PlayerActionPacket.ActionMessage(PlayerActionPacket.JETPACK_IN_USE));
+                ModNetwork.INSTANCE.sendToServer(new PlayerActionPacket.Message(PlayerActionPacket.JETPACK_IN_USE));
                 if (mustFizzz)
                 {
                     ModNetwork.INSTANCE.sendToServer(new EntitySoundPacket.Message(EntitySoundPacket.JETPACK_FIZZ, player));
@@ -156,7 +156,7 @@ public class ItemJetpack extends ItemWearable
             else
             {
                 inv.setInUse(false);
-                ModNetwork.INSTANCE.sendToServer(new PlayerActionPacket.ActionMessage(PlayerActionPacket.JETPACK_NOT_IN_USE));
+                ModNetwork.INSTANCE.sendToServer(new PlayerActionPacket.Message(PlayerActionPacket.JETPACK_NOT_IN_USE));
             }
         }
 

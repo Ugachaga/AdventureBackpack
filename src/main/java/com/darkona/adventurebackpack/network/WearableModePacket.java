@@ -1,5 +1,7 @@
 package com.darkona.adventurebackpack.network;
 
+import javax.annotation.Nullable;
+
 import io.netty.buffer.ByteBuf;
 
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -19,6 +21,7 @@ public class WearableModePacket implements IMessageHandler<WearableModePacket.Me
     public static final byte CYCLING_ON_OFF = 3;
     public static final byte NIGHTVISION_ON_OFF = 4;
 
+    @Nullable
     @Override
     public Message onMessage(Message message, MessageContext ctx)
     {
@@ -41,10 +44,6 @@ public class WearableModePacket implements IMessageHandler<WearableModePacket.Me
                     ServerActions.toggleNightVision(player, Wearing.getWearingBackpack(player));
             }
         }
-        if (ctx.side.isClient())
-        {
-
-        }
         return null;
     }
 
@@ -53,10 +52,7 @@ public class WearableModePacket implements IMessageHandler<WearableModePacket.Me
         private byte type;
         private String playerID;
 
-        public Message()
-        {
-
-        }
+        public Message() {}
 
         public Message(byte type, String playerID)
         {

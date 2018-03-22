@@ -1,5 +1,7 @@
 package com.darkona.adventurebackpack.network;
 
+import javax.annotation.Nullable;
+
 import io.netty.buffer.ByteBuf;
 
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -15,7 +17,7 @@ import com.darkona.adventurebackpack.inventory.InventoryJetpack;
 import com.darkona.adventurebackpack.reference.GeneralReference;
 import com.darkona.adventurebackpack.util.Wearing;
 
-public class GuiPacket implements IMessageHandler<GuiPacket.GuiMessage, IMessage>
+public class GuiPacket implements IMessageHandler<GuiPacket.Message, IMessage>
 {
     public static final byte FROM_WEARING = 0;
     public static final byte FROM_HOLDING = 1;
@@ -24,16 +26,17 @@ public class GuiPacket implements IMessageHandler<GuiPacket.GuiMessage, IMessage
     public static final byte GUI_COPTER = 2;
     public static final byte GUI_JETPACK = 3;
 
+    @Nullable
     @Override
-    public IMessage onMessage(GuiMessage message, MessageContext ctx)
+    public IMessage onMessage(Message message, MessageContext ctx)
     {
         if (!ctx.side.isServer())
             return null;
 
         EntityPlayerMP player = ctx.getServerHandler().player;
 
-        if (player == null)
-            return null;
+//        if (player == null)
+//            return null;
 
         if (message.type == GUI_COPTER)
         {
@@ -110,15 +113,14 @@ public class GuiPacket implements IMessageHandler<GuiPacket.GuiMessage, IMessage
         return null;
     }
 
-    public static class GuiMessage implements IMessage
+    public static class Message implements IMessage
     {
         private byte type;
         private byte from;
 
-        @SuppressWarnings("unused")
-        public GuiMessage() {}
+        public Message() {}
 
-        public GuiMessage(byte type, byte from)
+        public Message(byte type, byte from)
         {
             this.type = type;
             this.from = from;

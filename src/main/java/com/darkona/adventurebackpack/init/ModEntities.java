@@ -30,13 +30,13 @@ public class ModEntities
             EntityEntry[] entries = {
                     createBuilder("friendly_spider")
                             .entity(EntityFriendlySpider.class)
-                            .tracker(80, 3, true)
+                            .tracker(80, 2, true)
                             .egg(0xC424E, 0xA80E0E)
                             .build(),
 
                     createBuilder("inflatable_boat")
                             .entity(EntityInflatableBoat.class)
-                            .tracker(64, 3, true)
+                            .tracker(64, 2, true)
                             .build(),
             };
 

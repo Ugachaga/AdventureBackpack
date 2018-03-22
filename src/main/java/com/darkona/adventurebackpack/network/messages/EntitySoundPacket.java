@@ -1,5 +1,7 @@
 package com.darkona.adventurebackpack.network.messages;
 
+import javax.annotation.Nullable;
+
 import io.netty.buffer.ByteBuf;
 
 import net.minecraft.client.Minecraft;
@@ -14,14 +16,13 @@ import com.darkona.adventurebackpack.init.ModNetwork;
 
 public class EntitySoundPacket implements IMessageHandler<EntitySoundPacket.Message, EntitySoundPacket.Message>
 {
-    public static final boolean play = true;
-
     public static final byte NYAN_SOUND = 0;
     public static final byte COPTER_SOUND = 1;
     public static final byte JETPACK_FIZZ = 2;
     public static final byte BOILING_BUBBLES = 3;
     public static final byte LEAKING_STEAM = 4;
 
+    @Nullable
     @Override
     public Message onMessage(Message message, MessageContext ctx)
     {
@@ -42,15 +43,12 @@ public class EntitySoundPacket implements IMessageHandler<EntitySoundPacket.Mess
         private byte soundCode;
         private int entityID;
 
+        public Message() {}
+
         public Message(byte soundCode, Entity entity)
         {
             this.soundCode = soundCode;
             this.entityID = entity.getEntityId();
-        }
-
-        public Message()
-        {
-
         }
 
         @Override

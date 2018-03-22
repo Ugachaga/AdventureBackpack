@@ -1,47 +1,47 @@
 {
-    "nyan":{
-        "category":"player",
-        "sounds":[
-            {
-                "name":"adventurebackpack:nyan",
-                "stream":"true"
-            }
-        ]
-    },
-    "helicopter":{
-        "category":"player",
-        "sounds":[
-            {
-                "name":"adventurebackpack:helicopter",
-                "stream":"false"
-            }
-        ]
-    },
-    "jetpack_on":{
-        "category":"player",
-        "sounds":[
-            {
-                "name":"adventurebackpack:jetpack_on",
-                "stream":"false"
-            }
-        ]
-    },
-    "boiling_boiler":{
-        "category":"player",
-        "sounds":[
-            {
-                "name":"adventurebackpack:boiling_boiler",
-                "stream":"false"
-            }
-        ]
-    },
-    "leaking_boiler":{
-        "category":"player",
-        "sounds":[
-            {
-                "name":"adventurebackpack:leaking_boiler",
-                "stream":"false"
-            }
-        ]
-    }
+  "nyan": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "adventurebackpack:nyan",
+        "stream": "true"
+      }
+    ]
+  },
+  "helicopter": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "adventurebackpack:helicopter",
+        "stream": "false"
+      }
+    ]
+  },
+  "jetpack_on": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "adventurebackpack:jetpack_on",
+        "stream": "false"
+      }
+    ]
+  },
+  "boiling_boiler": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "adventurebackpack:boiling_boiler",
+        "stream": "false"
+      }
+    ]
+  },
+  "leaking_boiler": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "adventurebackpack:leaking_boiler",
+        "stream": "false"
+      }
+    ]
+  }
 }

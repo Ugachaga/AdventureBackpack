@@ -1,8 +1,11 @@
 package com.darkona.adventurebackpack.network;
 
+import javax.annotation.Nullable;
+
 import io.netty.buffer.ByteBuf;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -16,10 +19,10 @@ public class EquipUnequipBackWearablePacket implements IMessageHandler<EquipUneq
     public static final byte EQUIP_WEARABLE = 0;
     public static final byte UNEQUIP_WEARABLE = 1;
 
+    @Nullable
     @Override
     public Message onMessage(Message message, MessageContext ctx)
     {
-
         if (ctx.side.isServer())
         {
             EntityPlayer player = ctx.getServerHandler().player;
@@ -37,7 +40,7 @@ public class EquipUnequipBackWearablePacket implements IMessageHandler<EquipUneq
                     {
                         if (BackpackUtils.equipWearable(player.getHeldItemMainhand(), player) == BackpackUtils.Reasons.SUCCESSFUL)
                         {
-                            player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+                            player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
                             player.inventoryContainer.detectAndSendChanges();
                         }
                     }
@@ -55,10 +58,7 @@ public class EquipUnequipBackWearablePacket implements IMessageHandler<EquipUneq
     {
         private byte action;
 
-        public Message()
-        {
-
-        }
+        public Message() {}
 
         public Message(byte action)
         {

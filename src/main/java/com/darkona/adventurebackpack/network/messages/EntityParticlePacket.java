@@ -1,5 +1,7 @@
 package com.darkona.adventurebackpack.network.messages;
 
+import javax.annotation.Nullable;
+
 import io.netty.buffer.ByteBuf;
 
 import net.minecraft.client.Minecraft;
@@ -18,6 +20,7 @@ public class EntityParticlePacket implements IMessageHandler<EntityParticlePacke
     public static final byte SLIME_PARTICLE = 2;
     public static final byte JETPACK_PARTICLE = 3;
 
+    @Nullable
     @Override
     public Message onMessage(Message message, MessageContext ctx)
     {
@@ -38,15 +41,12 @@ public class EntityParticlePacket implements IMessageHandler<EntityParticlePacke
         private byte particleCode;
         private int entityID;
 
+        public Message() {}
+
         public Message(byte particleCode, Entity entity)
         {
             this.particleCode = particleCode;
             this.entityID = entity.getEntityId();
-        }
-
-        public Message()
-        {
-
         }
 
         @Override

@@ -11,7 +11,6 @@ import org.apache.commons.lang3.Validate;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.text.translation.I18n;
 
 import com.darkona.adventurebackpack.util.BackpackUtils;
@@ -23,7 +22,7 @@ import static com.darkona.adventurebackpack.reference.BackpackTypes.Props.SPECIA
 import static com.darkona.adventurebackpack.reference.BackpackTypes.Props.TILE;
 
 @SuppressWarnings("unused")
-public enum BackpackTypes implements IStringSerializable
+public enum BackpackTypes implements IType
 {
     // @formatter:off
     STANDARD        (  0),
@@ -104,13 +103,13 @@ public enum BackpackTypes implements IStringSerializable
     YELLOW          ( 74),
     ZOMBIE          ( 75),
 
-    UNKNOWN         (127), // null object
+    UNKNOWN         (127), // Byte.MAX_VALUE
     ;
     // @formatter:on
 
-    public static final ImmutableBiMap<Byte, BackpackTypes> BY_META;
+    public static final ImmutableBiMap<Integer, BackpackTypes> BY_META;
 
-    private final byte meta;
+    private final int meta;
     private final String name;
     private final ImmutableSet<Props> props;
 
@@ -118,14 +117,14 @@ public enum BackpackTypes implements IStringSerializable
     {
         Validate.inclusiveBetween(0, (int) Byte.MAX_VALUE, meta, "wrong meta value: %s (%s)", meta, this);
 
-        this.meta = (byte) meta;
+        this.meta = meta;
         this.name = name().toLowerCase();
         this.props = Sets.immutableEnumSet(Arrays.asList(props));
     }
 
     static
     {
-        BiMap<BackpackTypes, Byte> byMeta = EnumHashBiMap.create(BackpackTypes.class);
+        BiMap<BackpackTypes, Integer> byMeta = EnumHashBiMap.create(BackpackTypes.class);
 
         for (BackpackTypes type : BackpackTypes.values())
             if (byMeta.put(type, type.meta) != null)
@@ -142,13 +141,6 @@ public enum BackpackTypes implements IStringSerializable
     public static BackpackTypes getType(int meta)
     {
         Validate.inclusiveBetween(0, (int) Byte.MAX_VALUE, meta, "wrong meta value: %s", meta);
-        BackpackTypes type = BY_META.get((byte) meta);
-        return type != null ? type : UNKNOWN;
-    }
-
-    public static BackpackTypes getType(byte meta)
-    {
-        Validate.inclusiveBetween((byte) 0, Byte.MAX_VALUE, meta, "wrong meta value: %s", meta);
         BackpackTypes type = BY_META.get(meta);
         return type != null ? type : UNKNOWN;
     }
@@ -168,20 +160,20 @@ public enum BackpackTypes implements IStringSerializable
             return null;
 
         NBTTagCompound backpackTag = BackpackUtils.getWearableCompound(backpack);
-        if (backpackTag.getByte(TAG_TYPE) == UNKNOWN.meta) //TODO remove? are we rly need to normalize it?
+        int meta = backpackTag.getInteger(TAG_TYPE);
+        if (meta == UNKNOWN.meta) //TODO remove? are we rly need to normalize it?
         {
-            backpackTag.setByte(TAG_TYPE, STANDARD.meta);
+            backpackTag.setInteger(TAG_TYPE, STANDARD.meta);
         }
-        return getType(backpackTag.getByte(TAG_TYPE));
+        return getType(meta);
     }
 
     public static int getLowestUnusedMeta()
     {
-        for (byte b = 0; b < Byte.MAX_VALUE; b++)
-        {
-            if (BY_META.get(b) == null)
-                return b;
-        }
+        for (int i = 0; i < Byte.MAX_VALUE; i++)
+            if (BY_META.get(i) == null)
+                return i;
+
         return -1;
     }
 
@@ -218,7 +210,8 @@ public enum BackpackTypes implements IStringSerializable
         public static final ImmutableSet<Props> POTION_EFFECT = Sets.immutableEnumSet(SPECIAL, REMOVAL);
     }
 
-    public byte getMeta()
+    @Override
+    public int getMeta()
     {
         return this.meta;
     }

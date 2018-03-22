@@ -1,5 +1,7 @@
 package com.darkona.adventurebackpack.network;
 
+import javax.annotation.Nullable;
+
 import io.netty.buffer.ByteBuf;
 
 import net.minecraft.client.Minecraft;
@@ -15,11 +17,12 @@ import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
 
 public class SyncPropertiesPacket implements IMessageHandler<SyncPropertiesPacket.Message, SyncPropertiesPacket.Message>
 {
-    public static final byte DATA_ONLY = 0;
+    public static final byte DATA_ONLY = 0; //TODO del?
     public static final byte TANKS_ONLY = 1;
     public static final byte INVENTORY_ONLY = 2;
     public static final byte FULL_DATA = 3;
 
+    @Nullable
     @Override
     public Message onMessage(Message message, MessageContext ctx)
     {
@@ -47,10 +50,7 @@ public class SyncPropertiesPacket implements IMessageHandler<SyncPropertiesPacke
         private byte type;
         private NBTTagCompound properties;
 
-        public Message()
-        {
-
-        }
+        public Message() {}
 
         public Message(int id, NBTTagCompound props)
         {

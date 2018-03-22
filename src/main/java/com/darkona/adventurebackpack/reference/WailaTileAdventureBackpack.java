@@ -52,7 +52,7 @@ public class WailaTileAdventureBackpack implements IWailaDataProvider
         if (accessor.getNBTData().hasKey(TAG_WEARABLE_COMPOUND))
         {
             NBTTagCompound backpackTag = accessor.getNBTData().getCompoundTag(TAG_WEARABLE_COMPOUND);
-            BackpackTypes type = BackpackTypes.getType(backpackTag.getByte(TAG_TYPE));
+            BackpackTypes type = BackpackTypes.getType(backpackTag.getInteger(TAG_TYPE));
             return BackpackUtils.createBackpackStack(type);
         }
         return BackpackUtils.createBackpackStack(BackpackTypes.STANDARD);
@@ -61,23 +61,26 @@ public class WailaTileAdventureBackpack implements IWailaDataProvider
     @Override
     public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
     {
-        addHeadToBackpack(currenttip, accessor);
+        addHeadToBackpack(itemStack, currenttip);
         return currenttip;
     }
 
-    private static void addHeadToBackpack(List<String> currenttip, IWailaDataAccessor accessor)
+    private static void addHeadToBackpack(ItemStack itemStack, List<String> currenttip)
     {
-        if (accessor.getNBTData().hasKey(TAG_WEARABLE_COMPOUND))
+
+        //TODO come back here when tile.backpack is fixed
+        if (itemStack.getTagCompound() != null && itemStack.getTagCompound().hasKey(TAG_WEARABLE_COMPOUND))
         {
-            NBTTagCompound backpackTag = accessor.getNBTData().getCompoundTag(TAG_WEARABLE_COMPOUND);
+            //System.out.println(itemStack.getTagCompound().toString());
+            NBTTagCompound backpackTag = itemStack.getTagCompound().getCompoundTag(TAG_WEARABLE_COMPOUND);
             addHeadToBackpack(currenttip, backpackTag);
         }
     }
 
     private static void addHeadToBackpack(List<String> currenttip, NBTTagCompound backpackTag)
     {
-        currenttip.remove(0);
-        BackpackTypes type = BackpackTypes.getType(backpackTag.getByte(TAG_TYPE));
+        //currenttip.remove(0);
+        BackpackTypes type = BackpackTypes.getType(backpackTag.getInteger(TAG_TYPE));
         String skin = "";
         if (type != BackpackTypes.STANDARD)
             skin = TextFormatting.GRAY + " \"" + Utils.getColoredSkinName(type) + TextFormatting.GRAY + "\"";

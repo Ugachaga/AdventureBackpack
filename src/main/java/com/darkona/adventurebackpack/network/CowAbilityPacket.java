@@ -1,6 +1,7 @@
 package com.darkona.adventurebackpack.network;
 
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
 
@@ -15,12 +16,13 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import com.darkona.adventurebackpack.inventory.ContainerBackpack;
 import com.darkona.adventurebackpack.inventory.IInventoryBackpack;
 
-public class CowAbilityPacket implements IMessageHandler<CowAbilityPacket.CowAbilityMessage, IMessage>
+public class CowAbilityPacket implements IMessageHandler<CowAbilityPacket.Message, IMessage>
 {
     public static final byte CONSUME_WHEAT = 0;
 
+    @Nullable
     @Override
-    public IMessage onMessage(CowAbilityMessage message, MessageContext ctx)
+    public IMessage onMessage(Message message, MessageContext ctx)
     {
         if (ctx.side.isClient())
         {
@@ -41,17 +43,14 @@ public class CowAbilityPacket implements IMessageHandler<CowAbilityPacket.CowAbi
         return null;
     }
 
-    public static class CowAbilityMessage implements IMessage
+    public static class Message implements IMessage
     {
-
         private byte action;
         private String playerID;
 
-        public CowAbilityMessage()
-        {
-        }
+        public Message() {}
 
-        public CowAbilityMessage(String playerID, byte action)
+        public Message(String playerID, byte action)
         {
             this.playerID = playerID;
             this.action = action;
@@ -60,7 +59,6 @@ public class CowAbilityPacket implements IMessageHandler<CowAbilityPacket.CowAbi
         @Override
         public void fromBytes(ByteBuf buf)
         {
-
             playerID = ByteBufUtils.readUTF8String(buf);
             action = buf.readByte();
         }

@@ -147,7 +147,7 @@ public class KeyInputEventHandler
 
     private void sendGUIPacket(byte type, byte from)
     {
-        ModNetwork.INSTANCE.sendToServer(new GuiPacket.GuiMessage(type, from));
+        ModNetwork.INSTANCE.sendToServer(new GuiPacket.Message(type, from));
     }
 
     private void sendWearableModePacket(byte type)
@@ -157,11 +157,11 @@ public class KeyInputEventHandler
 
     private void sendCycleToolPacket(int slot, byte type)
     {
-        ModNetwork.INSTANCE.sendToServer(new CycleToolPacket.CycleToolMessage(false, slot, type));
+        ModNetwork.INSTANCE.sendToServer(new CycleToolPacket.Message(false, slot, type));
     }
 
     private void sendPlayerActionPacket(byte type)
     {
-        ModNetwork.INSTANCE.sendToServer(new PlayerActionPacket.ActionMessage(type));
+        ModNetwork.INSTANCE.sendToServer(new PlayerActionPacket.Message(type));
     }
 }
