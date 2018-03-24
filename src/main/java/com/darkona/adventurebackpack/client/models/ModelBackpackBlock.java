@@ -1,5 +1,7 @@
 package com.darkona.adventurebackpack.client.models;
 
+import javax.annotation.Nullable;
+
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.model.ModelBase;
@@ -13,52 +15,61 @@ import codechicken.lib.vec.Vector3;
 
 import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.inventory.IInventoryBackpack;
+import com.darkona.adventurebackpack.inventory.InventoryBackpack;
 import com.darkona.adventurebackpack.reference.BackpackTypes;
+import com.darkona.adventurebackpack.util.BackpackUtils;
 
 import static com.darkona.adventurebackpack.reference.BackpackTypes.*;
 
+@SuppressWarnings("WeakerAccess")
 public class ModelBackpackBlock extends ModelBase
 {
     public ModelRenderer mainBody;
-    public ModelRenderer lampLight;
-    public ModelRenderer tankLeftTop;
-    public ModelRenderer tankRightTop;
-    public ModelRenderer bed;
-    public ModelRenderer lampPole1;
-    public ModelRenderer kitchenBase;
-    public ModelRenderer villagerNose;
-    public ModelRenderer pigNose;
-    public ModelRenderer ocelotNose;
     public ModelRenderer leftStrap;
     public ModelRenderer rightStrap;
     public ModelRenderer top;
     public ModelRenderer bottom;
     public ModelRenderer pocketFace;
+
+    public ModelRenderer tankLeftTop;
     public ModelRenderer tankLeftBottom;
-    public ModelRenderer tankLeftWall4;
-    public ModelRenderer tankLeftWall3;
-    public ModelRenderer tankLeftWall2;
     public ModelRenderer tankLeftWall1;
+    public ModelRenderer tankLeftWall2;
+    public ModelRenderer tankLeftWall3;
+    public ModelRenderer tankLeftWall4;
+
+    public ModelRenderer tankRightTop;
     public ModelRenderer tankRightBottom;
-    public ModelRenderer tankRightWall2;
     public ModelRenderer tankRightWall1;
+    public ModelRenderer tankRightWall2;
     public ModelRenderer tankRightWall3;
     public ModelRenderer tankRightWall4;
-    public ModelRenderer bedStrapLeftMid;
-    public ModelRenderer bedStrapRightBottom;
-    public ModelRenderer bedStrapLeftBottom;
-    public ModelRenderer bedStrapRightMid;
+
+    public ModelRenderer bed;
     public ModelRenderer bedStrapRightTop;
+    public ModelRenderer bedStrapRightMid;
+    public ModelRenderer bedStrapRightBottom;
     public ModelRenderer bedStrapLeftTop;
+    public ModelRenderer bedStrapLeftMid;
+    public ModelRenderer bedStrapLeftBottom;
+
+    public ModelRenderer lampPole1;
     public ModelRenderer lampPole2;
-    public ModelRenderer lampTop;
     public ModelRenderer lampPole3;
+    public ModelRenderer lampTop;
     public ModelRenderer lampBottom;
-    public ModelRenderer lampGlassLeft;
     public ModelRenderer lampGlassRight;
-    public ModelRenderer lampGlassBack;
     public ModelRenderer lampGlassFront;
+    public ModelRenderer lampGlassBack;
+    public ModelRenderer lampGlassLeft;
+    public ModelRenderer lampLight;
+
+    public ModelRenderer kitchenBase;
     public ModelRenderer kitchen;
+
+    public ModelRenderer ocelotNose;
+    public ModelRenderer pigNose;
+    public ModelRenderer villagerNose;
 
     public ModelBackpackBlock()
     {
@@ -263,10 +274,11 @@ public class ModelBackpackBlock extends ModelBase
         this.pigNose.addBox(0.0F, 0.0F, 0.0F, 4, 3, 1);
     }
 
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float scale, IInventoryBackpack backpack)
+    public void render(@Nullable Entity entity, float f, float f1, float f2, float f3, float f4, float scale, IInventoryBackpack backpack)
     {
-        //scale*=0.9;
-        boolean sleepingbag = backpack.isSleepingBagDeployed();
+        if (backpack == null) //TODO remove then sync fixed
+            backpack = new InventoryBackpack(BackpackUtils.createBackpackStack());
+
         FluidTank tankLeft = backpack.getLeftTank();
         FluidTank tankRight = backpack.getRightTank();
         setRotationAngles(f, f1, f2, f3, f4, scale, entity);
@@ -276,7 +288,7 @@ public class ModelBackpackBlock extends ModelBase
         //renderFluidsInTanks(backpack.getLeftTank(),backpack.getRightTank(),scale);
         GL11.glPopMatrix();
 
-        if (tankLeft != null && tankLeft.getFluid() != null)
+        if (tankLeft.getFluid() != null)
         {
             Vector3 victor = new Vector3(
                     (tankLeftTop.rotationPointX * 0.1f - 0.22f),
@@ -291,7 +303,7 @@ public class ModelBackpackBlock extends ModelBase
 
         }
 
-        if (tankRight != null && tankRight.getFluid() != null)
+        if (tankRight.getFluid() != null)
         {
             Vector3 victor = new Vector3(
                     (tankRightTop.rotationPointX * 0.1f + 0.48f),
@@ -318,7 +330,7 @@ public class ModelBackpackBlock extends ModelBase
         float maxY = 0f;
         float maxZ = 0.17f;
 
-        if (tankLeft != null && tankLeft.getFluid() != null)
+        if (tankLeft.getFluid() != null)
         {
             //0.5F, -0.1F, -0.25F - Rotation Points of the top
             //X++ to the right, X-- to the left
@@ -336,7 +348,7 @@ public class ModelBackpackBlock extends ModelBase
             RenderUtils.renderFluidCuboid(tankLeft.getFluid(), left.add(victor), ((1.0F * tankLeft.getFluidAmount()) / (1.0F * Constants.BASIC_TANK_CAPACITY)), 0.2);
         }
 
-        if (tankRight != null && tankRight.getFluid() != null)
+        if (tankRight.getFluid() != null)
         {
             //-0.9F, -0.1F, -0.25F - Rotation points of the top
             //X-- to the right, X++ to the left
@@ -379,7 +391,10 @@ public class ModelBackpackBlock extends ModelBase
         tankLeftTop.render(scale);
         tankRightTop.render(scale);
 
-        if (!backpack.isSleepingBagDeployed()) bed.render(scale);
+        if (!backpack.isSleepingBagDeployed())
+        {
+            bed.render(scale);
+        }
 
         if (type == PIG || type == HORSE)
         {
@@ -405,13 +420,13 @@ public class ModelBackpackBlock extends ModelBase
         }*/
     }
 
-    /**
-     * This is a helper function from Tabula to set the rotation of model parts
-     */
-    public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z)
-    {
-        modelRenderer.rotateAngleX = x;
-        modelRenderer.rotateAngleY = y;
-        modelRenderer.rotateAngleZ = z;
-    }
+//    /**
+//     * This is a helper function from Tabula to set the rotation of model parts
+//     */
+//    public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z)
+//    {
+//        modelRenderer.rotateAngleX = x;
+//        modelRenderer.rotateAngleY = y;
+//        modelRenderer.rotateAngleZ = z;
+//    }
 }

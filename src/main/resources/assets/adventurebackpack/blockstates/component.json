@@ -1,55 +1,55 @@
 {
-    "forge_marker":1,
-    "defaults":{
-        "model":"adventurebackpack:item/generated"
-    },
-    "variants":{
-        "variant":{
-            "sleeping_bag":{
-                "textures":{
-                    "layer0":"adventurebackpack:items/sleeping_bag"
-                }
-            },
-            "backpack_tank":{
-                "textures":{
-                    "layer0":"adventurebackpack:items/backpack_tank"
-                }
-            },
-            "hose_head":{
-                "textures":{
-                    "layer0":"adventurebackpack:items/hose_head"
-                }
-            },
-            "machete_handle":{
-                "textures":{
-                    "layer0":"adventurebackpack:items/machete_handle"
-                }
-            },
-            "copter_engine":{
-                "textures":{
-                    "layer0":"adventurebackpack:items/copter_engine"
-                }
-            },
-            "copter_blades":{
-                "textures":{
-                    "layer0":"adventurebackpack:items/copter_blades"
-                }
-            },
-            "inflatable_boat":{
-                "textures":{
-                    "layer0":"adventurebackpack:items/inflatable_boat"
-                }
-            },
-            "inflatable_boat_motorized":{
-                "textures":{
-                    "layer0":"adventurebackpack:items/inflatable_boat_motorized"
-                }
-            },
-            "hydro_blades":{
-                "textures":{
-                    "layer0":"adventurebackpack:items/hydro_blades"
-                }
-            }
+  "forge_marker": 1,
+  "defaults": {
+    "model": "adventurebackpack:item/generated"
+  },
+  "variants": {
+    "variant": {
+      "sleeping_bag": {
+        "textures": {
+          "layer0": "adventurebackpack:items/sleeping_bag"
         }
+      },
+      "backpack_tank": {
+        "textures": {
+          "layer0": "adventurebackpack:items/backpack_tank"
+        }
+      },
+      "hose_head": {
+        "textures": {
+          "layer0": "adventurebackpack:items/hose_head"
+        }
+      },
+      "machete_handle": {
+        "textures": {
+          "layer0": "adventurebackpack:items/machete_handle"
+        }
+      },
+      "copter_engine": {
+        "textures": {
+          "layer0": "adventurebackpack:items/copter_engine"
+        }
+      },
+      "copter_blades": {
+        "textures": {
+          "layer0": "adventurebackpack:items/copter_blades"
+        }
+      },
+      "inflatable_boat": {
+        "textures": {
+          "layer0": "adventurebackpack:items/inflatable_boat"
+        }
+      },
+      "inflatable_boat_motorized": {
+        "textures": {
+          "layer0": "adventurebackpack:items/inflatable_boat_motorized"
+        }
+      },
+      "hydro_blades": {
+        "textures": {
+          "layer0": "adventurebackpack:items/hydro_blades"
+        }
+      }
     }
+  }
 }

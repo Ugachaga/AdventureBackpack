@@ -22,7 +22,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -32,7 +31,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -52,60 +50,23 @@ import static com.darkona.adventurebackpack.reference.BackpackTypes.GLOWSTONE;
 import static com.darkona.adventurebackpack.reference.BackpackTypes.REDSTONE;
 import static com.darkona.adventurebackpack.reference.BackpackTypes.UNKNOWN;
 
-public class BlockBackpack extends Block
+public class BlockBackpack extends Block //TODO extends BlockHorizontal ?
 {
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
     private static final AxisAlignedBB X_AXIS_AABB = new AxisAlignedBB(0.4D, 0.0D, 0.0D, 0.6D, 0.6D, 1.0D);
     private static final AxisAlignedBB Z_AXIS_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.4D, 1.0D, 0.6D, 0.6D);
 
+
     //TODO see https://shadowfacts.net/tutorials/forge-modding-112/tile-entities-inventory/
     //IBlockState immutable and pregenerated, so maybe we should avoid to use it for Types
     public static final PropertyEnum<BackpackTypes> TYPE = PropertyEnum.create("type", BackpackTypes.class);
 
-
     @Override
-    protected BlockStateContainer createBlockState()
+    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos)
     {
-        return new BlockStateContainer(this, FACING/*, TYPE*/);
+        return super.getActualState(state, world, pos); //TODO
     }
 
-    //
-//    @Override
-//    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
-//    {
-//        return super.getActualState(state, worldIn, pos);
-//    }
-//
-    @Override
-    public int getMetaFromState(IBlockState state)
-    {
-        return state.getValue(FACING).getHorizontalIndex();
-    }
-//
-//    @Override
-//    public IBlockState getStateFromMeta(int meta)
-//    {
-//        return super.getStateFromMeta(meta);
-//    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
-    {
-        System.out.println(placer.getHorizontalFacing());
-        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
-    }
-
-    @Override
-    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
-    {
-        List<ItemStack> backpacks = Stream.of(BackpackTypes.values())
-                .filter(type -> type != BackpackTypes.UNKNOWN)
-                .map(BackpackUtils::createBackpackStack)
-                .collect(Collectors.toList());
-
-        items.addAll(backpacks);
-    }
 
     public BlockBackpack(String name)
     {
@@ -116,42 +77,48 @@ public class BlockBackpack extends Block
         this.setHardness(1.0f);
         this.setResistance(2000f);
 
-        setDefaultState(blockState.getBaseState()
+        this.setDefaultState(blockState.getBaseState()
                 .withProperty(FACING, EnumFacing.NORTH)
                 //.withProperty(TYPE, BackpackTypes.STANDARD)
         );
     }
 
     @Override
+    @SuppressWarnings("deprecation")
+    public IBlockState getStateFromMeta(int meta)
+    {
+        return getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta & 3));
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state)
+    {
+        return state.getValue(FACING).getHorizontalIndex();
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean isFullCube(IBlockState state)
+    {
+        return false;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
     public EnumBlockRenderType getRenderType(IBlockState state)
     {
-        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED; //TODO not sure
+        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
-        EnumFacing enumfacing = state.getValue(FACING);
-        return enumfacing.getAxis() == EnumFacing.Axis.X ? X_AXIS_AABB : Z_AXIS_AABB;
-    }
-
-    @Nullable
-    @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos)
-    {
-        getBoundingBox(state, world, pos);
-        return super.getCollisionBoundingBox(state, world, pos);
+        return state.getValue(FACING).getAxis() == EnumFacing.Axis.X ? X_AXIS_AABB : Z_AXIS_AABB;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos)
-    {
-        getBoundingBox(state, world, pos);
-        return super.getSelectedBoundingBox(state, world, pos);
-    }
-
-    @Override
+    @SuppressWarnings("deprecation")
     public boolean isOpaqueCube(IBlockState state)
     {
         return false;
@@ -187,7 +154,7 @@ public class BlockBackpack extends Block
 
     private BackpackTypes getAssociatedTileBackpackType(IBlockAccess world, BlockPos pos)
     {
-        final TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = world.getTileEntity(pos);
         return tile instanceof TileBackpack ? ((TileBackpack) tile).getType() : UNKNOWN;
     }
 
@@ -195,14 +162,6 @@ public class BlockBackpack extends Block
     public int quantityDropped(Random random)
     {
         return 0;
-    }
-
-    @Nullable
-    @Override
-    public RayTraceResult collisionRayTrace(IBlockState state, World world, BlockPos pos, Vec3d start, Vec3d end)
-    {
-        getBoundingBox(state, world, pos);
-        return super.collisionRayTrace(state, world, pos, start, end);
     }
 
     @Override
@@ -216,7 +175,6 @@ public class BlockBackpack extends Block
     {
         return side == EnumFacing.UP;
     }
-
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
@@ -244,7 +202,15 @@ public class BlockBackpack extends Block
     }
 
     @Override
-    public int getWeakPower(IBlockState blockState, IBlockAccess world, BlockPos pos, EnumFacing side)
+    @SuppressWarnings("deprecation")
+    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
+    {
+        return getStateFromMeta(meta).withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public int getWeakPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side)
     {
         return getAssociatedTileBackpackType(world, pos) == REDSTONE ? 15 : 0;
     }
@@ -259,29 +225,32 @@ public class BlockBackpack extends Block
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase player, ItemStack stack)
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
     {
-        //TODO what should it do?
-//        int dir = MathHelper.floor((player.rotationYaw * 4F) / 360F + 0.5D) & 3;
-//        if (stack != null && stack.getTagCompound() != null && stack.getTagCompound().hasKey("color"))
-//        {
-//            if (stack.getTagCompound().getString("color").contains("BlockRedstone"))
-//            {
-//                dir = dir | 8;
-//            }
-//            if (stack.getTagCompound().getString("color").contains("Lightgem"))
-//            {
-//                dir = dir | 4;
-//            }
-//        }
-        world.setBlockState(pos, state, 3);
-        createTileEntity(world, state);
+        world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 3);
+    }
+
+    @Override
+    public void getSubBlocks(CreativeTabs item, NonNullList<ItemStack> items)
+    {
+        List<ItemStack> backpacks = Stream.of(BackpackTypes.values())
+                .filter(type -> type != BackpackTypes.UNKNOWN)
+                .map(BackpackUtils::createBackpackStack)
+                .collect(Collectors.toList());
+
+        items.addAll(backpacks);
     }
 
     @Override
     public boolean canDropFromExplosion(Explosion explosionIn)
     {
         return false;
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState()
+    {
+        return new BlockStateContainer(this, FACING);
     }
 
     @Override
@@ -310,7 +279,7 @@ public class BlockBackpack extends Block
 
         if (tile instanceof TileBackpack && !world.isRemote)
         {
-            if ((player.isSneaking())
+            if (player.isSneaking()
                 ? ((TileBackpack) tile).equip(world, player, pos)
                 : ((TileBackpack) tile).drop(world, player, pos))
             {
@@ -381,7 +350,7 @@ public class BlockBackpack extends Block
     @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player)
     {
-        return BackpackUtils.createBackpackStack(getAssociatedTileBackpackType(world, pos)); //TODO
+        return BackpackUtils.createBackpackStack(getAssociatedTileBackpackType(world, pos));
     }
 
     @Override
@@ -413,11 +382,5 @@ public class BlockBackpack extends Block
     public boolean isToolEffective(String type, IBlockState state)
     {
         return true;
-    }
-
-    @Override
-    public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer)
-    {
-        return super.canRenderInLayer(state, layer); //TODO was: canRenderInPass(int pass) return true;
     }
 }

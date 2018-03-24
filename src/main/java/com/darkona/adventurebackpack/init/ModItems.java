@@ -61,9 +61,9 @@ public class ModItems
         public static final Set<Item> ITEMS = new HashSet<>();
 
         @SubscribeEvent
-        public static void registerItems(final RegistryEvent.Register<Item> event)
+        public static void registerItems(RegistryEvent.Register<Item> event)
         {
-            final Item[] items = {
+            Item[] items = {
                     new ItemMachete("machete"),
                     new ItemAdventureHat("adventure_hat"),
                     new ItemAdventureSuit("adventure_suit"),
@@ -77,9 +77,9 @@ public class ModItems
                     new ItemJuiceBottle("melon_juice_bottle"),
             };
 
-            final IForgeRegistry<Item> registry = event.getRegistry();
+            IForgeRegistry<Item> registry = event.getRegistry();
 
-            for (final Item item : items)
+            for (Item item : items)
             {
                 registry.register(item);
                 ITEMS.add(item);

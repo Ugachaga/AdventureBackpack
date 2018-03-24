@@ -41,9 +41,9 @@ public class ModBlocks
         @SubscribeEvent
         public static void registerBlocks(RegistryEvent.Register<Block> event)
         {
-            final IForgeRegistry<Block> registry = event.getRegistry();
+            IForgeRegistry<Block> registry = event.getRegistry();
 
-            final Block[] blocks = {
+            Block[] blocks = {
                     new BlockBackpack("backpack_block"),
                     new BlockCampfire("campfire_block"),
                     new BlockSleepingBag("sleeping_bag_block"),
@@ -56,7 +56,7 @@ public class ModBlocks
         @SubscribeEvent
         public static void registerItemBlocks(RegistryEvent.Register<Item> event)
         {
-            final ItemBlock[] items = {
+            ItemBlock[] items = {
                     new ItemBlock(BACKPACK_BLOCK),
                     new ItemBlock(CAMPFIRE_BLOCK),
                     new ItemBlock(SLEEPING_BAG_BLOCK),

@@ -1,7 +1,5 @@
 package com.darkona.adventurebackpack.block;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -342,7 +340,7 @@ public class TileBackpack extends TileWearable implements IInventoryBackpack, IT
         if (GeneralReference.isDimensionAllowed(world.provider.getDimension()))
             return MAIN_INVENTORY_SLOTS;
 
-        return null;
+        return new int[]{};
     }
 
     @Override
@@ -367,19 +365,16 @@ public class TileBackpack extends TileWearable implements IInventoryBackpack, IT
     }
 
     // Syncing and Ticking
-    @Nullable
     @Override
     public SPacketUpdateTileEntity getUpdatePacket()
     {
-        // writeToNBT(new NBTTagCompound()); //TODO should we overribe getUpdateTag() ?
-        return new SPacketUpdateTileEntity(this.pos, getBlockMetadata(), getUpdateTag());
+        return new SPacketUpdateTileEntity(pos, getBlockMetadata(), writeToNBT(new NBTTagCompound()));
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
     {
-        super.onDataPacket(net, pkt);
-        //readFromNBT(pkt.getNbtCompound()); //TODO
+        readFromNBT(pkt.getNbtCompound());
     }
 
     @Override

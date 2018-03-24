@@ -17,6 +17,6 @@ public class JEIPluginAdventureBackpack implements IModPlugin
     {
         IIngredientBlacklist blacklist = registry.getJeiHelpers().getIngredientBlacklist();
         blacklist.addIngredientToBlacklist(new ItemStack(ModBlocks.BACKPACK_BLOCK));
-        blacklist.addIngredientToBlacklist(new ItemStack(ModBlocks.SLEEPING_BAG_BLOCK));
+        //blacklist.addIngredientToBlacklist(new ItemStack(ModBlocks.SLEEPING_BAG_BLOCK));
     }
 }

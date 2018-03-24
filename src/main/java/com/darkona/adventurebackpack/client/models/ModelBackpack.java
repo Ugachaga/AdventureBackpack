@@ -61,7 +61,6 @@ public class ModelBackpack extends ModelWearable
     RendererStack upperTool;
     public ItemStack backpack;
 
-    @SuppressWarnings("unchecked")
     private void init()
     {
         this.textureWidth = 128;

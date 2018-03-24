@@ -22,7 +22,7 @@ import com.darkona.adventurebackpack.util.CoordsUtils;
 
 public class BlockCampfire extends Block
 {
-    public static final AxisAlignedBB CAMP_FIRE_AABB = new AxisAlignedBB(0.2D, 0.0D, 0.2D, 0.8D, 0.15D, 0.8D);
+    private static final AxisAlignedBB CAMPFIRE_AABB = new AxisAlignedBB(0.2D, 0.0D, 0.2D, 0.8D, 0.15D, 0.8D);
 
     public BlockCampfire(String name)
     {
@@ -46,7 +46,7 @@ public class BlockCampfire extends Block
     }
 
     @Override
-    public int tickRate(World p_149738_1_)
+    public int tickRate(World world)
     {
         return 30;
     }
@@ -69,20 +69,21 @@ public class BlockCampfire extends Block
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public int getLightValue(IBlockState state)
     {
         return 11;
     }
 
-
     @Override
+    @SuppressWarnings("deprecation")
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
-        return CAMP_FIRE_AABB;
+        return CAMPFIRE_AABB;
     }
 
     @Override
-    public boolean isBed(IBlockState state, IBlockAccess world, BlockPos pos, Entity player)
+    public boolean isBed(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable Entity player)
     {
         return true;
     }

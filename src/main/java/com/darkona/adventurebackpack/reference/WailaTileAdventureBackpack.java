@@ -14,6 +14,7 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
 import mcp.mobius.waila.api.IWailaRegistrar;
 
+import com.darkona.adventurebackpack.block.BlockBackpack;
 import com.darkona.adventurebackpack.block.TileBackpack;
 import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.util.BackpackUtils;
@@ -38,7 +39,8 @@ public class WailaTileAdventureBackpack implements IWailaDataProvider
     {
         registrar.registerStackProvider(new WailaTileAdventureBackpack(), TileBackpack.class);
         registrar.registerHeadProvider(new WailaTileAdventureBackpack(), TileBackpack.class);
-        registrar.registerBodyProvider(new WailaTileAdventureBackpack(), TileBackpack.class);
+        //registrar.registerBodyProvider(new WailaTileAdventureBackpack(), TileBackpack.class);
+        registrar.registerBodyProvider(new WailaTileAdventureBackpack(), BlockBackpack.class);
     }
 
     @Override
@@ -61,13 +63,19 @@ public class WailaTileAdventureBackpack implements IWailaDataProvider
     @Override
     public List<String> getWailaHead(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config)
     {
+
+        if (accessor.getTileEntity() instanceof TileBackpack)
+        {
+            TileBackpack te = (TileBackpack) accessor.getTileEntity();
+            currenttip.add(Utils.getColoredSkinName(te.getType()));
+        }
+
         addHeadToBackpack(itemStack, currenttip);
         return currenttip;
     }
 
     private static void addHeadToBackpack(ItemStack itemStack, List<String> currenttip)
     {
-
         //TODO come back here when tile.backpack is fixed
         if (itemStack.getTagCompound() != null && itemStack.getTagCompound().hasKey(TAG_WEARABLE_COMPOUND))
         {

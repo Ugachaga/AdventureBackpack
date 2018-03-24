@@ -53,6 +53,7 @@ public class CoordsUtils
         return null;
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isValidHeight(World world, BlockPos pos)
     {
         return pos.getY() > 0 && pos.getY() < world.getHeight();
@@ -70,6 +71,7 @@ public class CoordsUtils
         return world.isAirBlock(pos) || world.getBlockState(pos).getBlock().isReplaceable(world, pos);
     }
 
+    @Nullable
     private static BlockPos checkCoordsForPlayer(IBlockAccess world, int origX, int origZ, int x, int y, int z, boolean except)
     {
         //TODO simplify
@@ -108,6 +110,7 @@ public class CoordsUtils
      * @param type   True = for player, False = for backpack
      * @return The coordinates of the block in the chunk of the world of the game of the server of the owner of the computer, where you can place something above it.
      */
+    @Nullable
     public static BlockPos getNearestEmptyChunkCoordinatesSpiral(IBlockAccess world, int origX, int origZ, int x, int y, int z, int radius, boolean except, int steps, byte pass, boolean type)
     {
         //Spiral search, because I'm awesome :)

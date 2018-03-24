@@ -13,6 +13,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -109,87 +110,81 @@ public class BlockSleepingBag extends BlockBed
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
         if (world.isRemote)
-        {
             return true;
-        }
-        else
-        {
-            if (state.getValue(PART) != EnumPartType.HEAD)
-            {
-                pos = pos.offset(state.getValue(FACING));
-                state = world.getBlockState(pos);
 
-                if (state.getBlock() != this)
+        if (state.getValue(PART) != EnumPartType.HEAD)
+        {
+            pos = pos.offset(state.getValue(FACING));
+            state = world.getBlockState(pos);
+
+            if (state.getBlock() != this)
+                return false;
+        }
+
+        if (world.provider.canRespawnHere() && world.getBiome(pos) != Biomes.HELL)
+        {
+            if (state.getValue(OCCUPIED))
+            {
+                EntityPlayer entityplayer = this.getPlayerInBed(world, pos);
+
+                if (entityplayer != null)
                 {
+                    player.sendStatusMessage(new TextComponentTranslation("tile.bed.occupied"), true);
                     return false;
                 }
+
+                state = state.withProperty(OCCUPIED, Boolean.FALSE);
+                world.setBlockState(pos, state, 4);
             }
 
-            if (world.provider.canRespawnHere() && world.getBiome(pos) != Biomes.HELL)
+            EntityPlayer.SleepResult entityplayer$sleepresult = player.trySleep(pos);
+
+            if (entityplayer$sleepresult == EntityPlayer.SleepResult.OK)
             {
-                if (state.getValue(OCCUPIED))
+                state = state.withProperty(OCCUPIED, Boolean.TRUE);
+                world.setBlockState(pos, state, 4);
+
+                if (isSleepingInPortableBag(player))
                 {
-                    EntityPlayer entityplayer = this.getPlayerInBed(world, pos);
-
-                    if (entityplayer != null)
+                    storeOriginalSpawn(player, Wearing.getWearingBackpackInv(player).getExtendedProperties());
+                    player.setSpawnChunk(pos, true, player.dimension);
+                }
+                else //TODO campfire logic could be buggy, not checking dimension and so on
+                {
+                    player.setSpawnChunk(pos, true, player.dimension);
+                    LogHelper.info("Looking for a campfire nearby...");
+                    BlockPos campfire = CoordsUtils.findBlock3D(world, pos.getX(), pos.getY(), pos.getZ(), ModBlocks.CAMPFIRE_BLOCK, 8, 2);
+                    if (campfire != null)
                     {
-                        player.sendStatusMessage(new TextComponentTranslation("tile.bed.occupied"), true);
-                        return false;
+                        LogHelper.info("Campfire Found, saving coordinates. " + campfire.toString());
+                        BackpackProperty.get(player).setCampFire(campfire);
                     }
-
-                    state = state.withProperty(OCCUPIED, Boolean.FALSE);
-                    world.setBlockState(pos, state, 4);
                 }
 
-                EntityPlayer.SleepResult entityplayer$sleepresult = player.trySleep(pos);
-
-                if (entityplayer$sleepresult == EntityPlayer.SleepResult.OK)
-                {
-                    state = state.withProperty(OCCUPIED, Boolean.TRUE);
-                    world.setBlockState(pos, state, 4);
-
-                    if (isSleepingInPortableBag(player))
-                    {
-                        storeOriginalSpawn(player, Wearing.getWearingBackpackInv(player).getExtendedProperties());
-                        player.setSpawnChunk(pos, true, player.dimension);
-                    }
-                    else //TODO campfire logic could be buggy, not checking dimension and so on
-                    {
-                        player.setSpawnChunk(pos, true, player.dimension);
-                        LogHelper.info("Looking for a campfire nearby...");
-                        BlockPos campfire = CoordsUtils.findBlock3D(world, pos.getX(), pos.getY(), pos.getZ(), ModBlocks.CAMPFIRE_BLOCK, 8, 2);
-                        if (campfire != null)
-                        {
-                            LogHelper.info("Campfire Found, saving coordinates. " + campfire.toString());
-                            BackpackProperty.get(player).setCampFire(campfire);
-                        }
-                    }
-
-                    return true;
-                }
-                else
-                {
-                    if (entityplayer$sleepresult == EntityPlayer.SleepResult.NOT_POSSIBLE_NOW)
-                        player.sendStatusMessage(new TextComponentTranslation("tile.bed.noSleep"), true);
-                    else if (entityplayer$sleepresult == EntityPlayer.SleepResult.NOT_SAFE)
-                        player.sendStatusMessage(new TextComponentTranslation("tile.bed.notSafe"), true);
-                    else if (entityplayer$sleepresult == EntityPlayer.SleepResult.TOO_FAR_AWAY)
-                        player.sendStatusMessage(new TextComponentTranslation("tile.bed.tooFarAway"), true);
-
-                    return false;
-                }
+                return true;
             }
             else
             {
-                world.setBlockToAir(pos);
-                BlockPos blockpos = pos.offset(state.getValue(FACING).getOpposite());
+                if (entityplayer$sleepresult == EntityPlayer.SleepResult.NOT_POSSIBLE_NOW)
+                    player.sendStatusMessage(new TextComponentTranslation("tile.bed.noSleep"), true);
+                else if (entityplayer$sleepresult == EntityPlayer.SleepResult.NOT_SAFE)
+                    player.sendStatusMessage(new TextComponentTranslation("tile.bed.notSafe"), true);
+                else if (entityplayer$sleepresult == EntityPlayer.SleepResult.TOO_FAR_AWAY)
+                    player.sendStatusMessage(new TextComponentTranslation("tile.bed.tooFarAway"), true);
 
-                if (world.getBlockState(blockpos).getBlock() == this)
-                    world.setBlockToAir(blockpos);
-
-                world.newExplosion(null, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, 5.0F, true, true);
                 return false;
             }
+        }
+        else
+        {
+            world.setBlockToAir(pos);
+            BlockPos blockpos = pos.offset(state.getValue(FACING).getOpposite());
+
+            if (world.getBlockState(blockpos).getBlock() == this)
+                world.setBlockToAir(blockpos);
+
+            world.newExplosion(null, (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, 5.0F, true, true);
+            return false;
         }
     }
 
@@ -210,11 +205,13 @@ public class BlockSleepingBag extends BlockBed
         return Item.getItemFromBlock(Blocks.AIR);
     }
 
+    @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
         return SLEEPING_BAG_AABB;
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public boolean hasCustomBreakingProgress(IBlockState state)
     {
@@ -228,15 +225,28 @@ public class BlockSleepingBag extends BlockBed
     }
 
     @Override
-    public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state)
+    public EnumBlockRenderType getRenderType(IBlockState state)
+    {
+        return EnumBlockRenderType.MODEL; //TODO
+    }
+
+    @Override
+    public ItemStack getItem(World world, BlockPos pos, IBlockState state)
     {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack)
+    public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack)
     {
         super.harvestBlock(world, player, pos, state, null, stack);
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta)
+    {
+        return null;
     }
 
     @Override
@@ -279,12 +289,6 @@ public class BlockSleepingBag extends BlockBed
 
     @Override
     public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) //TODO del?
-    {
-        return false;
-    }
-
-    @Override
-    public boolean isBlockNormalCube(IBlockState state) //TODO del?
     {
         return false;
     }

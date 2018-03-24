@@ -4,11 +4,12 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
+@SuppressWarnings("WeakerAccess")
 public class ModelSleepingBag extends ModelBase
 {
-    ModelRenderer footer;
-    ModelRenderer header;
-    ModelRenderer pillow;
+    public ModelRenderer footer;
+    public ModelRenderer header;
+    public ModelRenderer pillow;
 
     public ModelSleepingBag()
     {
@@ -18,7 +19,6 @@ public class ModelSleepingBag extends ModelBase
         footer = new ModelRenderer(this, 0, 0);
         header = new ModelRenderer(this, 0, 17);
         pillow = new ModelRenderer(this, 0, 34);
-
 
         footer.addBox(-8F, 0F, 0F, 16, 1, 16);
         footer.setRotationPoint(0F, 23F, -8F);
