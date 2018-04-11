@@ -243,7 +243,7 @@ public class InventoryBackpack extends InventoryWearable implements IInventoryBa
         }
     }
 
-    public boolean deploySleepingBag(EntityPlayer player, World world, int meta, int cX, int cY, int cZ)
+    public boolean deploySleepingBag(EntityPlayer player, World world, int meta, int x, int y, int z)
     {
         if (world.isRemote)
             return false;
@@ -251,12 +251,12 @@ public class InventoryBackpack extends InventoryWearable implements IInventoryBa
         if (sleepingBagDeployed)
             removeSleepingBag(world);
 
-        sleepingBagDeployed = CoordsUtils.spawnSleepingBag(player, world, meta, cX, cY, cZ);
+        sleepingBagDeployed = CoordsUtils.spawnSleepingBag(player, world, meta, x, y, z);
         if (sleepingBagDeployed)
         {
-            sleepingBagX = cX;
-            sleepingBagY = cY;
-            sleepingBagZ = cZ;
+            sleepingBagX = x;
+            sleepingBagY = y;
+            sleepingBagZ = z;
             markDirty();
         }
         return sleepingBagDeployed;

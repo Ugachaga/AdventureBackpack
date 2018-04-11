@@ -27,7 +27,7 @@ public class SlotFluidFuel extends SlotFluid
     @Override
     public boolean isItemValid(ItemStack stack)
     {
-        return stack != null && (isValidItem(stack) || stack.getItem() instanceof ItemHose);
+        return !stack.isEmpty() && (isValidItem(stack) || stack.getItem() instanceof ItemHose);
     }
 
     @Override

@@ -40,7 +40,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.darkona.adventurebackpack.AdventureBackpack;
 import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.reference.BackpackTypes;
-import com.darkona.adventurebackpack.reference.GeneralReference;
 import com.darkona.adventurebackpack.util.BackpackUtils;
 import com.darkona.adventurebackpack.util.CoordsUtils;
 
@@ -56,8 +55,6 @@ public class BlockBackpack extends Block //TODO extends BlockHorizontal ?
     private static final AxisAlignedBB X_AXIS_AABB = new AxisAlignedBB(0.4D, 0.0D, 0.0D, 0.6D, 0.6D, 1.0D);
     private static final AxisAlignedBB Z_AXIS_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.4D, 1.0D, 0.6D, 0.6D);
 
-
-    //TODO see https://shadowfacts.net/tutorials/forge-modding-112/tile-entities-inventory/
     //IBlockState immutable and pregenerated, so maybe we should avoid to use it for Types
     public static final PropertyEnum<BackpackTypes> TYPE = PropertyEnum.create("type", BackpackTypes.class);
 
@@ -66,6 +63,13 @@ public class BlockBackpack extends Block //TODO extends BlockHorizontal ?
     {
         return super.getActualState(state, world, pos); //TODO
     }
+
+//    @Override
+//    public float getPlayerRelativeBlockHardness(IBlockState state, EntityPlayer player, World worldIn, BlockPos pos)
+//    {
+//        return super.getPlayerRelativeBlockHardness(state, player, worldIn, pos);
+//    }
+
 
 
     public BlockBackpack(String name)
@@ -107,7 +111,7 @@ public class BlockBackpack extends Block //TODO extends BlockHorizontal ?
     @SuppressWarnings("deprecation")
     public EnumBlockRenderType getRenderType(IBlockState state)
     {
-        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+        return EnumBlockRenderType.INVISIBLE;
     }
 
     @Override
@@ -187,18 +191,20 @@ public class BlockBackpack extends Block //TODO extends BlockHorizontal ?
 //        }
 //        return true;
 
-        if (!world.isRemote && GeneralReference.isDimensionAllowed(player))
+        if (!world.isRemote /*&& GeneralReference.isDimensionAllowed(player)*/)
         {
+            System.out.println("here");
             if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileBackpack)
             {
                 //TODO
-                ((EntityPlayerMP) player).getServerWorld().addScheduledTask(()
-                        -> AdventureBackpack.PROXY.displayBackpackGUI(player,
-                        (TileBackpack) world.getTileEntity(pos), Constants.Source.TILE));
+                ((EntityPlayerMP) player).getServerWorld().addScheduledTask(() -> AdventureBackpack.PROXY
+                        .displayBackpackGUI(player, (TileBackpack) world.getTileEntity(pos), Constants.Source.TILE));
                 return true;
             }
         }
+
         return false;
+
     }
 
     @Override
@@ -227,7 +233,8 @@ public class BlockBackpack extends Block //TODO extends BlockHorizontal ?
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
     {
-        world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 3);
+        world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()));
+        //world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 3);
     }
 
     @Override

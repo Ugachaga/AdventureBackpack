@@ -14,7 +14,6 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
 import mcp.mobius.waila.api.IWailaRegistrar;
 
-import com.darkona.adventurebackpack.block.BlockBackpack;
 import com.darkona.adventurebackpack.block.TileBackpack;
 import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.util.BackpackUtils;
@@ -27,8 +26,12 @@ import static com.darkona.adventurebackpack.common.Constants.TAG_RIGHT_TANK;
 import static com.darkona.adventurebackpack.common.Constants.TAG_TYPE;
 import static com.darkona.adventurebackpack.common.Constants.TAG_WEARABLE_COMPOUND;
 
-public class WailaTileAdventureBackpack implements IWailaDataProvider
+public final class WailaTileAdventureBackpack implements IWailaDataProvider
 {
+    public static final WailaTileAdventureBackpack INSTANCE = new WailaTileAdventureBackpack();
+
+    private WailaTileAdventureBackpack() {}
+
 //    public static void init()
 //    {
 //        FMLInterModComms.sendMessage("waila", "register", "com.darkona.adventurebackpack.reference.WailaTileAdventureBackpack.callbackRegister");
@@ -37,10 +40,9 @@ public class WailaTileAdventureBackpack implements IWailaDataProvider
     @SuppressWarnings("unused")
     public static void callbackRegister(IWailaRegistrar registrar)
     {
-        registrar.registerStackProvider(new WailaTileAdventureBackpack(), TileBackpack.class);
-        registrar.registerHeadProvider(new WailaTileAdventureBackpack(), TileBackpack.class);
-        //registrar.registerBodyProvider(new WailaTileAdventureBackpack(), TileBackpack.class);
-        registrar.registerBodyProvider(new WailaTileAdventureBackpack(), BlockBackpack.class);
+        registrar.registerStackProvider(INSTANCE, TileBackpack.class);
+        registrar.registerHeadProvider(INSTANCE, TileBackpack.class);
+        registrar.registerBodyProvider(INSTANCE, TileBackpack.class);
     }
 
     @Override

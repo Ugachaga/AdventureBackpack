@@ -142,12 +142,13 @@ public class ItemBackpack extends ItemWearable
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-        return player.canPlayerEdit(pos, side, player.getHeldItem(hand))
-                && placeBackpack(player.getHeldItem(hand), player, world, pos, side, true)
-                ? EnumActionResult.SUCCESS : EnumActionResult.FAIL;
+        ItemStack held = player.getHeldItem(hand);
+        return player.canPlayerEdit(pos, side, held) && placeBackpack(held, player, world, pos, side, true)
+               ? EnumActionResult.SUCCESS : EnumActionResult.FAIL;
     }
 
     @Override
+    @SuppressWarnings("ConstantConditions")
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand)
     {
         RayTraceResult trace = rayTrace(world, player, true);

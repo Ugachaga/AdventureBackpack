@@ -244,7 +244,6 @@ public class ModelBackpack extends ModelWearable
         this.backpack = backpack;
     }
 
-    @SuppressWarnings("unchecked")
     private void renderBackpack(Float scale)
     {
         InventoryBackpack inv = new InventoryBackpack(this.backpack);

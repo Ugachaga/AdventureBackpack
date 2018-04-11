@@ -40,7 +40,10 @@ public class TileEntityBackpackRenderer extends TileEntitySpecialRenderer<TileBa
 
         int rotation = 0;
 
-        if (te != null) //TODO fix sync
+        //TODO seems TESR *items* comes here with NULL te... BackedModel? BlockStates? flattering? *custom model loader*? we have to get type somehow
+        //TODO we also have to solve more complex issue than just multiple skins: items icons (render item model in GUI) have to dynamically render tanks contents, bedroll status and maybe something else
+        //TODO see forge universal bucket for dynamic fluid rendering
+        if (te != null)
         {
             modelTexture = Resources.getBackpackTexture(te.getType());
             rotation = te.getBlockMetadata() * 90;

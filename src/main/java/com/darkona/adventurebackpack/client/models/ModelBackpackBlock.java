@@ -276,7 +276,7 @@ public class ModelBackpackBlock extends ModelBase
 
     public void render(@Nullable Entity entity, float f, float f1, float f2, float f3, float f4, float scale, IInventoryBackpack backpack)
     {
-        if (backpack == null) //TODO remove then sync fixed
+        if (backpack == null) //TODO remove when sync fixed
             backpack = new InventoryBackpack(BackpackUtils.createBackpackStack());
 
         FluidTank tankLeft = backpack.getLeftTank();

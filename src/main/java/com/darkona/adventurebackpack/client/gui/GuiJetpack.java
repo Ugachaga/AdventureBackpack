@@ -76,9 +76,9 @@ public class GuiJetpack extends GuiWithTanks
         inventory.openInventory(player);
         FluidTank water = inventory.getWaterTank();
         FluidTank steam = inventory.getSteamTank();
-        GL11.glPushMatrix();
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+//        GL11.glPushMatrix();
+//        GL11.glEnable(GL11.GL_BLEND);
+//        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         if (inventory.isBoiling() && steam.getFluidAmount() < steam.getCapacity() && water.getFluidAmount() > 0)
         {
             if (boiling < 83)
@@ -98,10 +98,10 @@ public class GuiJetpack extends GuiWithTanks
 
         int H = Math.round(((float) 72 / (float) Constants.Jetpack.MAX_TEMPERATURE) * (float) inventory.getTemperature());
         drawTexturedModalRect(139, 8 + (72 - H), 40, 167 + (72 - H), 5, H);
-
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glPopMatrix();
-        GL11.glDisable(GL11.GL_LIGHTING);
+//
+//        GL11.glDisable(GL11.GL_BLEND);
+//        GL11.glDisable(GL11.GL_LIGHTING);
+//        GL11.glPopMatrix();
 
         waterTank.draw(this, water);
         steamTank.draw(this, steam);

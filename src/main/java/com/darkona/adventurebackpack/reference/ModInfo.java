@@ -3,7 +3,7 @@ package com.darkona.adventurebackpack.reference;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 
-import com.darkona.adventurebackpack.init.ModItems;
+import com.darkona.adventurebackpack.util.BackpackUtils;
 
 public class ModInfo
 {
@@ -19,7 +19,8 @@ public class ModInfo
         @Override
         public ItemStack getTabIconItem()
         {
-            return new ItemStack(ModItems.MACHETE, 1, 0);
+            //return new ItemStack(ModItems.MACHETE, 1, 0);
+            return BackpackUtils.createBackpackStack(BackpackTypes.RAINBOW);
         }
 
         @Override

@@ -36,10 +36,10 @@ public class ModItems
     public static class Materials
     {
         public static final Item.ToolMaterial TOOL_RUGGED_IRON = EnumHelper.addToolMaterial(
-                "rugged_iron", 2, 350, 6.5F, 5.2F, 10);
+                "RUGGED_IRON", 2, 350, 6.5F, 5.2F, 10);
 
         public static final ItemArmor.ArmorMaterial ARMOR_RUGGED_LEATHER = EnumHelper.addArmorMaterial(
-                "rugged_leather", ModInfo.MODID + ":adventureSuit", 15,
+                "RUGGED_LEATHER", ModInfo.MODID + ":adventure_suit", 15,
                 new int[]{2, 5, 4, 2}, 12, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0f);
     }
 

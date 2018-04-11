@@ -16,6 +16,8 @@ import static com.darkona.adventurebackpack.common.Constants.TAG_INVENTORY;
 
 public class ShapedBackpackRecipe extends ShapedOreRecipe
 {
+
+    //TODO https://wiki.mcjty.eu/modding/index.php?title=Recipes-1.12
     public ShapedBackpackRecipe(ItemStack result, Object... recipe)
     {
         super(new ResourceLocation(ModInfo.MODID), result, recipe); //TODO is group correct?

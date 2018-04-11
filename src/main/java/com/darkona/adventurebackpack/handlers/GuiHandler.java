@@ -1,12 +1,16 @@
 package com.darkona.adventurebackpack.handlers;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
 import com.darkona.adventurebackpack.block.TileBackpack;
+import com.darkona.adventurebackpack.block.test.ContainerTest;
+import com.darkona.adventurebackpack.block.test.GuiTest;
+import com.darkona.adventurebackpack.block.test.TileTest;
 import com.darkona.adventurebackpack.client.gui.GuiBackpack;
 import com.darkona.adventurebackpack.client.gui.GuiCopter;
 import com.darkona.adventurebackpack.client.gui.GuiJetpack;
@@ -21,7 +25,7 @@ import com.darkona.adventurebackpack.util.Wearing;
 
 public class GuiHandler implements IGuiHandler
 {
-    private static final byte BACKPACK_TILE = 0;
+    public static final byte BACKPACK_TILE = 0;
     private static final byte BACKPACK_HOLDING = 1;
     private static final byte BACKPACK_WEARING = 2;
 
@@ -31,6 +35,8 @@ public class GuiHandler implements IGuiHandler
     private static final byte JETPACK_HOLDING = 5;
     private static final byte JETPACK_WEARING = 6;
 
+    public static final byte TEST_TILE = 7;
+
     public GuiHandler() {}
 
     @Override
@@ -38,6 +44,8 @@ public class GuiHandler implements IGuiHandler
     {
         switch (ID)
         {
+            case TEST_TILE:
+                return new ContainerTest(player.inventory, (TileTest) world.getTileEntity(new BlockPos(x, y, z)));
             case BACKPACK_TILE:
                 TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
                 if (tileEntity != null && tileEntity instanceof TileBackpack)
@@ -94,6 +102,9 @@ public class GuiHandler implements IGuiHandler
     {
         switch (ID)
         {
+            case TEST_TILE:
+                return new GuiTest((Container) getServerGuiElement(ID, player, world, x, y, z), player.inventory);
+
             case BACKPACK_TILE:
                 TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
                 if (tileEntity != null && tileEntity instanceof TileBackpack)

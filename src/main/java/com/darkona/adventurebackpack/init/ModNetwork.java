@@ -17,6 +17,8 @@ import com.darkona.adventurebackpack.network.SyncPropertiesPacket;
 import com.darkona.adventurebackpack.network.WearableModePacket;
 import com.darkona.adventurebackpack.network.messages.EntityParticlePacket;
 import com.darkona.adventurebackpack.network.messages.EntitySoundPacket;
+import com.darkona.adventurebackpack.network.updated.PacketRequestUpdateTest;
+import com.darkona.adventurebackpack.network.updated.PacketUpdateTest;
 import com.darkona.adventurebackpack.playerProperties.BackpackProperty;
 import com.darkona.adventurebackpack.reference.ModInfo;
 
@@ -40,6 +42,10 @@ public class ModNetwork
         registerMessage(CowAbilityPacket.class, CowAbilityPacket.Message.class);
         registerMessage(PlayerActionPacket.class, PlayerActionPacket.Message.class);
         registerMessage(EquipUnequipBackWearablePacket.class, EquipUnequipBackWearablePacket.Message.class);
+
+
+        INSTANCE.registerMessage(new PacketUpdateTest.Handler(), PacketUpdateTest.class, messageID++, Side.CLIENT);
+        INSTANCE.registerMessage(new PacketRequestUpdateTest.Handler(), PacketRequestUpdateTest.class, messageID++, Side.SERVER);
     }
 
     @SuppressWarnings("unchecked")

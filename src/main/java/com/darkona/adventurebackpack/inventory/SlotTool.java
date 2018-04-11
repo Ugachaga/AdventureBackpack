@@ -35,7 +35,7 @@ public class SlotTool extends Slot
 
     public static boolean isValidTool(ItemStack stack)
     {
-        if (stack == null || stack.getMaxStackSize() != 1)
+        if (stack.isEmpty() || stack.getMaxStackSize() != 1)
             return false;
 
         Item item = stack.getItem();

@@ -18,7 +18,7 @@ public abstract class GuiWithTanks extends GuiContainer
     protected EntityPlayer player;
     protected Source source;
 
-    GuiWithTanks(Container container)
+    public GuiWithTanks(Container container)
     {
         super(container);
     }
@@ -43,7 +43,15 @@ public abstract class GuiWithTanks extends GuiContainer
     protected abstract GuiImageButtonNormal getUnequipButton();
 
     @Override
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton)
+    public void drawScreen(int mouseX, int mouseY, float partialTicks)
+    {
+        drawDefaultBackground();
+        super.drawScreen(mouseX, mouseY, partialTicks);
+        renderHoveredToolTip(mouseX, mouseY);
+    }
+
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
         if (source == Source.WEARING)
         {
@@ -62,36 +70,22 @@ public abstract class GuiWithTanks extends GuiContainer
             }
         }
 
-        try
-        {
-            super.mouseClicked(mouseX, mouseY, mouseButton);
-        }
-        catch (IOException ioe)
-        {
-            //ioe.printStackTrace();
-        }
+        super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override
-    protected void keyTyped(char key, int keycode)
+    protected void keyTyped(char key, int keycode) throws IOException
     {
         if (keycode == Keybindings.openInventory.getKeyCode())
         {
             player.closeScreen();
         }
 
-        try
-        {
-            super.keyTyped(key, keycode);
-        }
-        catch (IOException ioe)
-        {
-            //ioe.printStackTrace();
-        }
+        super.keyTyped(key, keycode);
     }
 
     @Override
-    public void handleMouseInput()
+    public void handleMouseInput() throws IOException
     {
         if (Mouse.getEventDWheel() != 0)
         {
@@ -111,13 +105,6 @@ public abstract class GuiWithTanks extends GuiContainer
             }
         }
 
-        try
-        {
-            super.handleMouseInput();
-        }
-        catch (IOException ioe)
-        {
-            ioe.printStackTrace();
-        }
+        super.handleMouseInput();
     }
 }

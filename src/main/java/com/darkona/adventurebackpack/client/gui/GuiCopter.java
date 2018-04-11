@@ -68,8 +68,8 @@ public class GuiCopter extends GuiWithTanks
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_BLEND);
+//        GL11.glDisable(GL11.GL_LIGHTING);
+//        GL11.glDisable(GL11.GL_BLEND);
         inventory.openInventory(player);
         FluidTank tank = inventory.getFuelTank();
         fuelTank.draw(this, tank);

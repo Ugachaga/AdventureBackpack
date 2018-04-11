@@ -34,7 +34,7 @@ public class SlotBackpack extends Slot
 
     public static boolean isValidItem(ItemStack stack)
     {
-        if (stack == ItemStack.EMPTY)
+        if (stack.isEmpty())
             return false;
 
         Item itemCurrent = stack.getItem();

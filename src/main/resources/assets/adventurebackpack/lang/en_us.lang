@@ -53,6 +53,8 @@ tile.adventurebackpack:backpack_block.name=Adventure Backpack(s)
 tile.adventurebackpack:campfire_block.name=Campfire
 tile.adventurebackpack:sleeping_bag_block.name=Sleeping Bag
 
+tile.adventurebackpack:test_block.name=Test Block
+
 ## Fluids
 fluid.melon_juice=Melon Juice
 fluid.mushroom_stew=Mushroom Stew

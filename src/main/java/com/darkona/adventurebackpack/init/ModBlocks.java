@@ -21,6 +21,8 @@ import com.darkona.adventurebackpack.block.BlockCampfire;
 import com.darkona.adventurebackpack.block.BlockSleepingBag;
 import com.darkona.adventurebackpack.block.TileBackpack;
 import com.darkona.adventurebackpack.block.TileCampfire;
+import com.darkona.adventurebackpack.block.test.BlockTest;
+import com.darkona.adventurebackpack.block.test.TileTest;
 import com.darkona.adventurebackpack.reference.ModInfo;
 
 import static com.darkona.adventurebackpack.util.Utils.getNull;
@@ -32,6 +34,8 @@ public class ModBlocks
     public static final BlockBackpack BACKPACK_BLOCK = getNull();
     public static final BlockCampfire CAMPFIRE_BLOCK = getNull();
     public static final BlockSleepingBag SLEEPING_BAG_BLOCK = getNull();
+
+    public static final BlockTest TEST_BLOCK = getNull();
 
     @Mod.EventBusSubscriber(modid = ModInfo.MODID)
     public static class RegistrationHandler
@@ -47,6 +51,8 @@ public class ModBlocks
                     new BlockBackpack("backpack_block"),
                     new BlockCampfire("campfire_block"),
                     new BlockSleepingBag("sleeping_bag_block"),
+
+                    new BlockTest("test_block"),
             };
 
             registry.registerAll(blocks);
@@ -60,6 +66,8 @@ public class ModBlocks
                     new ItemBlock(BACKPACK_BLOCK),
                     new ItemBlock(CAMPFIRE_BLOCK),
                     new ItemBlock(SLEEPING_BAG_BLOCK),
+
+                    new ItemBlock(TEST_BLOCK),
             };
 
             IForgeRegistry<Item> registry = event.getRegistry();
@@ -72,12 +80,19 @@ public class ModBlocks
                 ITEM_BLOCKS.add(item);
             }
         }
+
+//        private static void registerItemBlock(IForgeRegistry<Item> registry, Block block, Item item)
+//        {
+//
+//        }
     }
 
     private static void registerTileEntities()
     {
-        registerTileEntity(TileBackpack.class, "backpack_tile");
+        registerTileEntity(TileBackpack.class, "backpack_tile"); //TODO name = getRegistryName().toString() ?
         registerTileEntity(TileCampfire.class, "campfire_tile");
+
+        registerTileEntity(TileTest.class, "test_tile");
     }
 
     private static void registerTileEntity(Class<? extends TileEntity> tileEntityClass, String name)

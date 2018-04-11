@@ -1,5 +1,7 @@
 package com.darkona.adventurebackpack.block;
 
+import io.netty.buffer.ByteBuf;
+
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -17,6 +19,7 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
 import com.darkona.adventurebackpack.common.BackpackAbilities;
 import com.darkona.adventurebackpack.common.Constants;
@@ -48,7 +51,7 @@ import static com.darkona.adventurebackpack.common.Constants.TAG_WEARABLE_COMPOU
 import static com.darkona.adventurebackpack.common.Constants.TOOL_LOWER;
 import static com.darkona.adventurebackpack.common.Constants.TOOL_UPPER;
 
-public class TileBackpack extends TileWearable implements IInventoryBackpack, ITickable, ISidedInventory//, IInteractionObject//, IItemHandler
+public class TileBackpack extends TileWearable implements IInventoryBackpack, ITickable, ISidedInventory, IEntityAdditionalSpawnData//, IInteractionObject//, IItemHandler
 {
     private static final int[] MAIN_INVENTORY_SLOTS = Utils.createSlotArray(0, Constants.INVENTORY_MAIN_SIZE);
 
@@ -87,6 +90,20 @@ public class TileBackpack extends TileWearable implements IInventoryBackpack, IT
 //    {
 //        return "tile:backpack";
 //    }
+
+
+    @Override
+    public void writeSpawnData(ByteBuf buffer)
+    {
+        buffer.writeInt(type.getMeta());
+    }
+
+    @Override
+    public void readSpawnData(ByteBuf additionalData)
+    {
+        type = BackpackTypes.getType(additionalData.readInt());
+        markDirty();
+    }
 
     @Override
     public BackpackTypes getType()
@@ -368,14 +385,40 @@ public class TileBackpack extends TileWearable implements IInventoryBackpack, IT
     @Override
     public SPacketUpdateTileEntity getUpdatePacket()
     {
-        return new SPacketUpdateTileEntity(pos, getBlockMetadata(), writeToNBT(new NBTTagCompound()));
+        //return new SPacketUpdateTileEntity(pos, getBlockMetadata(), writeToNBT(new NBTTagCompound()));
+
+        NBTTagCompound compound = new NBTTagCompound();
+        writeUpdateTag(compound);
+        return  new SPacketUpdateTileEntity(pos, getBlockMetadata(), compound);
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
     {
-        readFromNBT(pkt.getNbtCompound());
+        //readFromNBT(pkt.getNbtCompound());
+
+        NBTTagCompound compound = pkt.getNbtCompound();
+        readUpdateTag(compound);
     }
+
+    @Override
+    public NBTTagCompound getUpdateTag()
+    {
+        NBTTagCompound compound = super.getUpdateTag();
+        writeUpdateTag(compound);
+        return compound;
+    }
+
+    public void writeUpdateTag(NBTTagCompound compound)
+    {
+        compound.setInteger(TAG_TYPE, type.getMeta());
+    }
+
+    public void readUpdateTag(NBTTagCompound compound)
+    {
+        type = BackpackTypes.getType(compound.getInteger(TAG_TYPE));
+    }
+
 
     @Override
     public void update()

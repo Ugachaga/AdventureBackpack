@@ -65,7 +65,6 @@ public class ItemAdventureHat extends AdventureArmor
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type)
     {
-        return ModInfo.MODID + ":"  +"textures/models/armor/adventureHat.png";
-
+        return ModInfo.MODID + ":"  +"textures/models/armor/adventureHat.png"; //TODO
     }
 }
