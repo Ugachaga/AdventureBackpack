@@ -20,6 +20,12 @@ public class ServerProxy implements IProxy
     private static final Map<UUID, NBTTagCompound> extendedEntityData = new HashMap<>();
 
     @Override
+    public void registerLayers()
+    {
+
+    }
+
+    @Override
     public void displayBackpackGUI(EntityPlayer player, IInventoryBackpack inv, Constants.Source source)
     {
         throw new IllegalArgumentException("Tried to open the GUI on the server");

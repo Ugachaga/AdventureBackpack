@@ -21,4 +21,6 @@ public interface IProxy
     void registerKeybindings();
 
     void synchronizePlayer(int id, NBTTagCompound compound);
+
+    void registerLayers();
 }

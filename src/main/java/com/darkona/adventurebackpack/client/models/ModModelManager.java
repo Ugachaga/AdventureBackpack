@@ -26,7 +26,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import com.darkona.adventurebackpack.block.TileBackpack;
 import com.darkona.adventurebackpack.block.test.TESRTest;
 import com.darkona.adventurebackpack.block.test.TileTest;
-import com.darkona.adventurebackpack.client.renderer.TileEntityBackpackRenderer;
+import com.darkona.adventurebackpack.client.renderer.BackpackRenderer;
 import com.darkona.adventurebackpack.init.ModBlocks;
 import com.darkona.adventurebackpack.init.ModFluids;
 import com.darkona.adventurebackpack.init.ModItems;
@@ -78,7 +78,7 @@ public class ModModelManager
 
     private void registerTileEntityModels()
     {
-        ClientRegistry.bindTileEntitySpecialRenderer(TileBackpack.class, new TileEntityBackpackRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileBackpack.class, new BackpackRenderer.TileEntity());
         ClientRegistry.bindTileEntitySpecialRenderer(TileTest.class, new TESRTest());
     }
 

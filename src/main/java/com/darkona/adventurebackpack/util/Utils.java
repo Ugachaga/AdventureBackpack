@@ -2,6 +2,8 @@ package com.darkona.adventurebackpack.util;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.CaseFormat;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -150,4 +152,10 @@ public class Utils
     {
         return null;
     }
+
+    public static String convertCamelToUnderscore(String input)
+    {
+        return CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, input);
+    }
+
 }

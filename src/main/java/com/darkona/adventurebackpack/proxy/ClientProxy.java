@@ -13,6 +13,7 @@ import com.darkona.adventurebackpack.client.gui.GuiJetpack;
 import com.darkona.adventurebackpack.client.models.ModelBackpack;
 import com.darkona.adventurebackpack.client.models.ModelCopter;
 import com.darkona.adventurebackpack.client.models.ModelJetpack;
+import com.darkona.adventurebackpack.client.renderer.BackpackRenderer;
 import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.config.Keybindings;
 import com.darkona.adventurebackpack.handlers.KeyInputEventHandler;
@@ -30,6 +31,12 @@ public class ClientProxy implements IProxy
     public static ModelCopter modelCopter = new ModelCopter();
 
     private final Minecraft MINECRAFT = Minecraft.getMinecraft();
+
+    @Override
+    public void registerLayers()
+    {
+        Minecraft.getMinecraft().getRenderManager().getSkinMap().forEach((s, render) -> render.addLayer(new BackpackRenderer.Layer()));
+    }
 
     @Override
     public void displayBackpackGUI(EntityPlayer player, IInventoryBackpack inv, Constants.Source source)
@@ -87,4 +94,5 @@ public class ClientProxy implements IProxy
             BackpackProperty.get(player).loadNBTData(properties);
         }
     }
+
 }

@@ -7,19 +7,30 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
+
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.RenderUtils;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Vector3;
 
 import com.darkona.adventurebackpack.common.Constants;
+import com.darkona.adventurebackpack.init.ModFluids;
 import com.darkona.adventurebackpack.inventory.IInventoryBackpack;
 import com.darkona.adventurebackpack.inventory.InventoryBackpack;
 import com.darkona.adventurebackpack.reference.BackpackTypes;
 import com.darkona.adventurebackpack.util.BackpackUtils;
 
-import static com.darkona.adventurebackpack.reference.BackpackTypes.*;
+import static com.darkona.adventurebackpack.reference.BackpackTypes.HORSE;
+import static com.darkona.adventurebackpack.reference.BackpackTypes.IRON_GOLEM;
+import static com.darkona.adventurebackpack.reference.BackpackTypes.OCELOT;
+import static com.darkona.adventurebackpack.reference.BackpackTypes.PIG;
+import static com.darkona.adventurebackpack.reference.BackpackTypes.QUARTZ;
+import static com.darkona.adventurebackpack.reference.BackpackTypes.SLIME;
+import static com.darkona.adventurebackpack.reference.BackpackTypes.SNOW;
+import static com.darkona.adventurebackpack.reference.BackpackTypes.VILLAGER;
 
 @SuppressWarnings("WeakerAccess")
 public class ModelBackpackBlock extends ModelBase
@@ -288,7 +299,7 @@ public class ModelBackpackBlock extends ModelBase
         //renderFluidsInTanks(backpack.getLeftTank(),backpack.getRightTank(),scale);
         GL11.glPopMatrix();
 
-        if (tankLeft.getFluid() != null)
+        if (tankLeft.getFluid() != null) //TODO move to ModelWearable#renderFluidInTank
         {
             Vector3 victor = new Vector3(
                     (tankLeftTop.rotationPointX * 0.1f - 0.22f),
@@ -297,13 +308,13 @@ public class ModelBackpackBlock extends ModelBase
             GL11.glPushMatrix();
             CCRenderState.instance().reset();
             CCRenderState.instance().pullLightmap();
-            RenderUtils.renderFluidCuboid(tankLeft.getFluid(), new Cuboid6(0f, 0.39f, 0f, 0.15f, 0f, 0.15f).add(victor),
+            RenderUtils.renderFluidCuboidGL(tankLeft.getFluid(), new Cuboid6(0f, 0.39f, 0f, 0.15f, 0f, 0.15f).add(victor),
                     ((1.0F * tankLeft.getFluidAmount()) / (1.0F * tankLeft.getCapacity())), 0.8);
             GL11.glPopMatrix();
 
         }
 
-        if (tankRight.getFluid() != null)
+        if (tankRight.getFluid() != null) //TODO move to ModelWearable#renderFluidInTank
         {
             Vector3 victor = new Vector3(
                     (tankRightTop.rotationPointX * 0.1f + 0.48f),
@@ -312,13 +323,59 @@ public class ModelBackpackBlock extends ModelBase
             GL11.glPushMatrix();
             CCRenderState.instance().reset();
             CCRenderState.instance().pullLightmap();
-            RenderUtils.renderFluidCuboid(tankRight.getFluid(), new Cuboid6(0, 0.39, 0, 0.15, 0, 0.15).add(victor),
+            RenderUtils.renderFluidCuboidGL(tankRight.getFluid(), new Cuboid6(0, 0.39, 0, 0.15, 0, 0.15).add(victor),
                     ((1.0F * tankRight.getFluidAmount()) / (1.0F * tankRight.getCapacity())), 0.8);
             GL11.glPopMatrix();
         }
     }
 
-    private void renderFluidsInTanks(FluidTank tankLeft, FluidTank tankRight, float scale)
+
+    public void renderLayer(Entity entity, float scale, ItemStack backpack)
+    {
+        IInventoryBackpack inv = new InventoryBackpack(backpack);
+
+        FluidTank tankLeft = inv.getLeftTank();
+        FluidTank tankRight = inv.getRightTank();
+
+        GL11.glPushMatrix();
+        renderBackpack(inv, scale);
+        GL11.glPopMatrix();
+
+        FluidStack fs = new FluidStack(ModFluids.MILK, 1000);
+
+        //if (tankLeft.getFluid() != null) //TODO move to ModelWearable#renderFluidInTank
+        {
+            Vector3 victor = new Vector3(
+                    (tankLeftTop.rotationPointX * 0.1f - 0.22f),
+                    (tankLeftTop.rotationPointY * 0.1f + 0.05f),
+                    (tankLeftTop.rotationPointZ * 0.1f + 0.15f));
+            GL11.glPushMatrix();
+            CCRenderState.instance().reset();
+            CCRenderState.instance().pullLightmap();
+            RenderUtils.renderFluidCuboidGL(fs, new Cuboid6(0f, 0.39f, 0f, 0.15f, 0f, 0.15f).add(victor),
+                    1.0F, 0.8);
+//            RenderUtils.renderFluidCuboidGL(tankLeft.getFluid(), new Cuboid6(0f, 0.39f, 0f, 0.15f, 0f, 0.15f).add(victor),
+//                    ((1.0F * tankLeft.getFluidAmount()) / (1.0F * tankLeft.getCapacity())), 0.8);
+            GL11.glPopMatrix();
+        }
+
+        if (tankRight.getFluid() != null) //TODO move to ModelWearable#renderFluidInTank
+        {
+            Vector3 victor = new Vector3(
+                    (tankRightTop.rotationPointX * 0.1f + 0.48f),
+                    (tankRightTop.rotationPointY * 0.1f + 0.05f),
+                    (tankRightTop.rotationPointZ * 0.1f + 0.15f));
+            GL11.glPushMatrix();
+            CCRenderState.instance().reset();
+            CCRenderState.instance().pullLightmap();
+            RenderUtils.renderFluidCuboidGL(tankRight.getFluid(), new Cuboid6(0, 0.39, 0, 0.15, 0, 0.15).add(victor),
+                    ((1.0F * tankRight.getFluidAmount()) / (1.0F * tankRight.getCapacity())), 0.8);
+            GL11.glPopMatrix();
+        }
+    }
+
+
+    private void renderFluidsInTanks(FluidTank tankLeft, FluidTank tankRight, float scale) //TODO move to ModelWearable#renderFluidInTank
     {
         //Size of the cuboid
         //Y-- is up, Y++ is down
@@ -330,7 +387,7 @@ public class ModelBackpackBlock extends ModelBase
         float maxY = 0f;
         float maxZ = 0.17f;
 
-        if (tankLeft.getFluid() != null)
+        if (tankLeft.getFluid() != null) //TODO move to ModelWearable#renderFluidInTank
         {
             //0.5F, -0.1F, -0.25F - Rotation Points of the top
             //X++ to the right, X-- to the left
@@ -345,10 +402,10 @@ public class ModelBackpackBlock extends ModelBase
 
             Cuboid6 left = new Cuboid6(minX, minY, minZ, maxX, maxY, maxZ);
             //Thanks Chickenbones!
-            RenderUtils.renderFluidCuboid(tankLeft.getFluid(), left.add(victor), ((1.0F * tankLeft.getFluidAmount()) / (1.0F * Constants.BASIC_TANK_CAPACITY)), 0.2);
+            RenderUtils.renderFluidCuboidGL(tankLeft.getFluid(), left.add(victor), ((1.0F * tankLeft.getFluidAmount()) / (1.0F * Constants.BASIC_TANK_CAPACITY)), 0.2);
         }
 
-        if (tankRight.getFluid() != null)
+        if (tankRight.getFluid() != null) //TODO move to ModelWearable#renderFluidInTank
         {
             //-0.9F, -0.1F, -0.25F - Rotation points of the top
             //X-- to the right, X++ to the left
@@ -362,7 +419,7 @@ public class ModelBackpackBlock extends ModelBase
             CCRenderState.instance().pullLightmap();
 
             Cuboid6 right = new Cuboid6(minX, minY, minZ, maxX, maxY, maxZ);
-            RenderUtils.renderFluidCuboid(tankRight.getFluid(), right.add(victor), ((1.0F * tankRight.getFluidAmount()) / (1.0F * Constants.BASIC_TANK_CAPACITY)), 0.2);
+            RenderUtils.renderFluidCuboidGL(tankRight.getFluid(), right.add(victor), ((1.0F * tankRight.getFluidAmount()) / (1.0F * Constants.BASIC_TANK_CAPACITY)), 0.2);
         }
 
     }
