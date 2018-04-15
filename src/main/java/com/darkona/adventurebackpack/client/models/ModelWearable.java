@@ -16,6 +16,14 @@ import com.darkona.adventurebackpack.common.Constants;
 
 public abstract class ModelWearable extends ModelBase //ModelBiped
 {
+    protected Vector3 createVector3(ModelRenderer parentModel, double x, double y, double z)
+    {
+        return new Vector3(
+                (parentModel.rotationPointX * 0.1 + x),
+                (parentModel.rotationPointY * 0.1 + y),
+                (parentModel.rotationPointZ * 0.1 + z));
+    }
+
     protected void startBlending()
     {
         GL11.glEnable(GL11.GL_BLEND);
@@ -50,8 +58,8 @@ public abstract class ModelWearable extends ModelBase //ModelBiped
 
     //public abstract void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5, ItemStack stack);
 
-    protected void renderFluidInTank(FluidTank tank, Vector3 minCoords, Vector3 maxCoords, Vector3 offset, ModelRenderer parent)
-    { //TODO move to renderFluidInTank2
+    protected void renderFluidInTankOld(FluidTank tank, Vector3 minCoords, Vector3 maxCoords, Vector3 offset, ModelRenderer parent)
+    { //TODO move to renderFluidInTank
         if (tank.getFluid() != null)
         {
             Vector3 victor = new Vector3(
@@ -64,7 +72,7 @@ public abstract class ModelWearable extends ModelBase //ModelBiped
         }
     }
 
-    protected void renderFluidInTank2(FluidTank tank, Cuboid6 cuboid)
+    protected void renderFluidInTank(FluidTank tank, Cuboid6 cuboid)
     {
         if (tank.getFluid() == null)
         {

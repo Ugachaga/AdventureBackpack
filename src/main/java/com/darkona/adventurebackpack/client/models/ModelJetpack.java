@@ -194,7 +194,7 @@ public class ModelJetpack extends ModelWearable
 
         //codechicken stuff
         GL11.glPushMatrix();
-        renderFluidInTank(inv.getWaterTank(), new Vector3(0, .5f, 0), new Vector3(.155f, 0, .135f), new Vector3(0.18f, 0.0625f, -0.045f), tankTop);
+        renderFluidInTankOld(inv.getWaterTank(), new Vector3(0, .5f, 0), new Vector3(.155f, 0, .135f), new Vector3(0.18f, 0.0625f, -0.045f), tankTop);
         GL11.glPopMatrix();
     }
 }

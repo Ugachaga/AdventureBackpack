@@ -298,9 +298,9 @@ public class ModelBackpack extends ModelWearable
         GL11.glPushMatrix();
 //        GL11.glTranslatef(bipedBody.offsetX + 0, bipedBody.offsetY + 0.2F, bipedBody.offsetZ + 0.3f);
 
-        renderFluidInTank(inv.getLeftTank(), new Vector3(0f, .5f, 0f), new Vector3(.17f, 0, .17f), new Vector3(-.17f, .05f, .2f), tankLeftTop);
+        renderFluidInTankOld(inv.getLeftTank(), new Vector3(0f, .5f, 0f), new Vector3(.17f, 0, .17f), new Vector3(-.17f, .05f, .2f), tankLeftTop);
 
-        renderFluidInTank(inv.getRightTank(), new Vector3(0f, .5f, 0f), new Vector3(.17f, 0, .17f), new Vector3(.41f, .05f, .2f), tankRightTop);
+        renderFluidInTankOld(inv.getRightTank(), new Vector3(0f, .5f, 0f), new Vector3(.17f, 0, .17f), new Vector3(.41f, .05f, .2f), tankRightTop);
         GL11.glPopMatrix();
     }
 

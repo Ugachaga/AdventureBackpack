@@ -5,7 +5,6 @@ import net.minecraft.client.renderer.GlStateManager;
 
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.vec.Cuboid6;
-import codechicken.lib.vec.Vector3;
 
 import com.darkona.adventurebackpack.inventory.IInventoryBackpack;
 import com.darkona.adventurebackpack.inventory.InventoryBackpack;
@@ -24,11 +23,11 @@ import static com.darkona.adventurebackpack.reference.BackpackTypes.VILLAGER;
 @SuppressWarnings("FieldCanBeLocal")
 public class ModelBackpackBlock extends ModelWearable
 {
-    private final Cuboid6 leftFluidCuboid16;
-    private final Cuboid6 rightFluidCuboid16;
+    private Cuboid6 leftFluidCuboid16;
+    private Cuboid6 rightFluidCuboid16;
 
-    private final Cuboid6 rightFluidCuboid20;
-    private final Cuboid6 leftFluidCuboid20;
+    private Cuboid6 rightFluidCuboid20;
+    private Cuboid6 leftFluidCuboid20;
 
     private ModelRenderer mainBody;
     private ModelRenderer leftStrap;
@@ -280,33 +279,13 @@ public class ModelBackpackBlock extends ModelWearable
         this.pigNose.addBox(0.0F, 0.0F, 0.0F, 4, 3, 1);
 
         // fluid rendering stuff
-        // 0.0625 (1/16) scale variants
-        Vector3 leftTankVector16 = new Vector3(
-                (tankLeftTop.rotationPointX * 0.1F - 0.158F),
-                (tankLeftTop.rotationPointY * 0.1F + 0.06F),
-                (tankLeftTop.rotationPointZ * 0.1F + 0.125F));
+        // scale 0.0625 (1/16)
+        leftFluidCuboid16 = getFluidCuboid16().add(createVector3(tankLeftTop, -0.158, 0.06, 0.125));
+        rightFluidCuboid16 = getFluidCuboid16().add(createVector3(tankRightTop, 0.37, 0.06, 0.125));
 
-        Vector3 rightTankVector16 = new Vector3(
-                (tankRightTop.rotationPointX * 0.1F + 0.37F),
-                (tankRightTop.rotationPointY * 0.1F + 0.06F),
-                (tankRightTop.rotationPointZ * 0.1F + 0.125F));
-
-        leftFluidCuboid16 = getFluidCuboid16().add(leftTankVector16);
-        rightFluidCuboid16 = getFluidCuboid16().add(rightTankVector16);
-
-        // 0.05 (1/20) scale variants
-        Vector3 leftTankVector20 = new Vector3(
-                (tankLeftTop.rotationPointX * 0.1f - 0.22f),
-                (tankLeftTop.rotationPointY * 0.1f - 0.05f),
-                (tankLeftTop.rotationPointZ * 0.1f + 0.15f));
-
-        Vector3 rightTankVector20 = new Vector3(
-                (tankRightTop.rotationPointX * 0.1f + 0.48f),
-                (tankRightTop.rotationPointY * 0.1f - 0.05f),
-                (tankRightTop.rotationPointZ * 0.1f + 0.15f));
-
-        leftFluidCuboid20 = getFluidCuboid20().add(leftTankVector20);
-        rightFluidCuboid20 = getFluidCuboid20().add(rightTankVector20);
+        // scale 0.05 (1/20)
+        leftFluidCuboid20 = getFluidCuboid20().add(createVector3(tankLeftTop, -0.22, -0.05, 0.15));
+        rightFluidCuboid20 = getFluidCuboid20().add(createVector3(tankRightTop, 0.48, -0.05, 0.15));
 
         CCRenderState.instance().reset();
     }
@@ -332,9 +311,10 @@ public class ModelBackpackBlock extends ModelWearable
 
         GlStateManager.pushMatrix();
         GlStateManager.rotate(180F, 0.0F, 0.0F, 1.0F);
-        renderFluidInTank2(backpack.getLeftTank(), leftFluidCuboid20.copy());
-        renderFluidInTank2(backpack.getRightTank(), rightFluidCuboid20.copy());
+        renderFluidInTank(backpack.getLeftTank(), leftFluidCuboid20.copy());
+        renderFluidInTank(backpack.getRightTank(), rightFluidCuboid20.copy());
         GlStateManager.popMatrix();
+
     }
 
     public void renderLayer(IInventoryBackpack backpack, float scale)
@@ -344,8 +324,8 @@ public class ModelBackpackBlock extends ModelWearable
         GlStateManager.popMatrix();
 
         GlStateManager.pushMatrix();
-        renderFluidInTank2(backpack.getLeftTank(), leftFluidCuboid16.copy());
-        renderFluidInTank2(backpack.getRightTank(), rightFluidCuboid16.copy());
+        renderFluidInTank(backpack.getLeftTank(), leftFluidCuboid16.copy());
+        renderFluidInTank(backpack.getRightTank(), rightFluidCuboid16.copy());
         GlStateManager.popMatrix();
 
         //TODO render items in ToolSlots, see 1.7.10 implementation in ModelBackpack and RenderUtils#renderItemUniform
@@ -357,15 +337,13 @@ public class ModelBackpackBlock extends ModelWearable
 
         if (type == QUARTZ || type == SLIME || type == SNOW)
         {
-            GlStateManager.pushMatrix();
+            //GlStateManager.pushMatrix();
             startBlending();
             //GlStateManager.enableCull();
-
             this.mainBody.render(scale);
-
             //GlStateManager.disableCull();
             stopBlending();
-            GlStateManager.popMatrix();
+            //GlStateManager.popMatrix();
         }
         else
         {

@@ -201,7 +201,7 @@ public class ModelCopter extends ModelWearable
         this.Base.render(scale);
         this.Axis.render(scale);
         //codechicken stuff
-        renderFluidInTank(inv.getFuelTank(), new Vector3(0, .25f, 0), new Vector3(.25f, 0, .25f), new Vector3(0f, 0.0625f, 0.0f), TankTop);
+        renderFluidInTankOld(inv.getFuelTank(), new Vector3(0, .25f, 0), new Vector3(.25f, 0, .25f), new Vector3(0f, 0.0625f, 0.0f), TankTop);
     }
 
 //    @Override

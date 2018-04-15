@@ -33,9 +33,10 @@ public final class BackpackRenderer
             ResourceLocation modelTexture = Resources.getBackpackTexture(BackpackTypes.STANDARD);
             int rotation = 0;
 
-            //TODO TESR *items* comes here with NULL te and without access to parent itemStack (see: ForgeHooksClient#renderTileItem)... BakedModel? flattering? *custom model loader*? we have to get type somehow
+            //TODO TESR *items* comes here with NULL te and without access to parent itemStack (see: ForgeHooksClient#renderTileItem)... BakedModel? flattering? *custom model loader* (see: ModelLoaderRegistry)? we have to get type somehow
             //TODO we also have to solve more complex issue than just multiple skins: items icons (render item model in GUI) have to dynamically render tanks contents, bedroll status and maybe something else
             //TODO see forge universal bucket for dynamic fluid rendering
+            //ASM hook to TileEntityItemStackRenderer#renderByItem seems so tempting. I.. can't... resist....
             if (te != null)
             {
                 modelTexture = Resources.getBackpackTexture(te.getType());
@@ -53,6 +54,7 @@ public final class BackpackRenderer
 
             //MODEL_BACKPACK.render(0.0625F, te);
             MODEL_BACKPACK.renderTileEntity(te, 0.05F); //TODO scale to 0.0625, prescale to 0.8
+            //FIXME CC fluid renderer doesn't reset some GL stuff after work, so need to find how to reset it manually. reminder: black shield inventory icon
 
             GlStateManager.disableRescaleNormal();
             GlStateManager.popMatrix();
