@@ -1,13 +1,10 @@
 package com.darkona.adventurebackpack.client.models;
 
-import java.util.List;
-
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+
 import codechicken.lib.vec.Vector3;
 
 import com.darkona.adventurebackpack.inventory.InventoryJetpack;
@@ -98,20 +95,20 @@ public class ModelJetpack extends ModelWearable
         this.base.addChild(this.fireBox);
         this.base.addChild(this.tankTop);
 
-        bipedBody.addChild(base);
-        bipedBody.addChild(tubeStraightLeft);
-        bipedBody.addChild(tubeStraightRight);
-        bipedBody.addChild(tubeEndLeft);
-        bipedBody.addChild(tubeEndRight);
-        bipedBody.addChild(tankWallLeft);
-        bipedBody.addChild(tankWallRight);
+//        bipedBody.addChild(base);
+//        bipedBody.addChild(tubeStraightLeft);
+//        bipedBody.addChild(tubeStraightRight);
+//        bipedBody.addChild(tubeEndLeft);
+//        bipedBody.addChild(tubeEndRight);
+//        bipedBody.addChild(tankWallLeft);
+//        bipedBody.addChild(tankWallRight);
 
         float offsetZ = 0.08F;
         float offsetY = 0.0F;
-        for (ModelRenderer part : (List<ModelRenderer>) bipedBody.childModels)
-        {
-            setOffset(part, part.offsetX + 0, part.offsetY + offsetY, part.offsetZ + offsetZ);
-        }
+//        for (ModelRenderer part : (List<ModelRenderer>) bipedBody.childModels)
+//        {
+//            setOffset(part, part.offsetX + 0, part.offsetY + offsetY, part.offsetZ + offsetZ);
+//        }
     }
 
     public ModelJetpack setWearable(ItemStack wearable)
@@ -120,66 +117,66 @@ public class ModelJetpack extends ModelWearable
         return this;
     }
 
-    @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5, ItemStack stack)
-    {
-        this.jetpack = stack;
-        render(entity, f, f1, f2, f3, f4, f5);
-    }
+//    @Override
+//    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5, ItemStack stack)
+//    {
+//        this.jetpack = stack;
+//        render(entity, f, f1, f2, f3, f4, f5);
+//    }
 
-    @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
-    {
-        isSneak = (entity != null && entity.isSneaking());
-
-        setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-
-        if (entity != null && entity instanceof EntityPlayer)
-        {
-            GL11.glPushMatrix();
-
-            GL11.glTranslatef(bipedBody.offsetX, bipedBody.offsetY, bipedBody.offsetZ);
-            GL11.glColor4f(1, 1, 1, 1);
-
-            if (bipedBody.rotateAngleX == 0.0F && bipedBody.rotateAngleY == 0.0F && bipedBody.rotateAngleZ == 0.0F)
-            {
-                if (bipedBody.rotationPointX == 0.0F && bipedBody.rotationPointY == 0.0F && bipedBody.rotationPointZ == 0.0F)
-                {
-                    renderJetpack(f5);
-                }
-                else
-                {
-                    GL11.glTranslatef(bipedBody.rotationPointX * f5, bipedBody.rotationPointY * f5, bipedBody.rotationPointZ * f5);
-                    renderJetpack(f5);
-                    GL11.glTranslatef(-bipedBody.rotationPointX * f5, -bipedBody.rotationPointY * f5, -bipedBody.rotationPointZ * f5);
-                }
-            }
-            else
-            {
-                GL11.glPushMatrix();
-                GL11.glTranslatef(bipedBody.rotationPointX * f5, bipedBody.rotationPointY * f5, bipedBody.rotationPointZ * f5);
-
-                if (bipedBody.rotateAngleZ != 0.0F)
-                {
-                    GL11.glRotatef(bipedBody.rotateAngleZ * (180F / (float) Math.PI), 0.0F, 0.0F, 1.0F);
-                }
-
-                if (bipedBody.rotateAngleY != 0.0F)
-                {
-                    GL11.glRotatef(bipedBody.rotateAngleY * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
-                }
-
-                if (bipedBody.rotateAngleX != 0.0F)
-                {
-                    GL11.glRotatef(bipedBody.rotateAngleX * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
-                }
-                renderJetpack(f5);
-                GL11.glPopMatrix();
-            }
-            GL11.glTranslatef(-bipedBody.offsetX, -bipedBody.offsetY, -(bipedBody.offsetZ));
-            GL11.glPopMatrix();
-        }
-    }
+//    @Override
+//    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
+//    {
+//        isSneak = (entity != null && entity.isSneaking());
+//
+//        setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+//
+//        if (entity != null && entity instanceof EntityPlayer)
+//        {
+//            GL11.glPushMatrix();
+//
+//            GL11.glTranslatef(bipedBody.offsetX, bipedBody.offsetY, bipedBody.offsetZ);
+//            GL11.glColor4f(1, 1, 1, 1);
+//
+//            if (bipedBody.rotateAngleX == 0.0F && bipedBody.rotateAngleY == 0.0F && bipedBody.rotateAngleZ == 0.0F)
+//            {
+//                if (bipedBody.rotationPointX == 0.0F && bipedBody.rotationPointY == 0.0F && bipedBody.rotationPointZ == 0.0F)
+//                {
+//                    renderJetpack(f5);
+//                }
+//                else
+//                {
+//                    GL11.glTranslatef(bipedBody.rotationPointX * f5, bipedBody.rotationPointY * f5, bipedBody.rotationPointZ * f5);
+//                    renderJetpack(f5);
+//                    GL11.glTranslatef(-bipedBody.rotationPointX * f5, -bipedBody.rotationPointY * f5, -bipedBody.rotationPointZ * f5);
+//                }
+//            }
+//            else
+//            {
+//                GL11.glPushMatrix();
+//                GL11.glTranslatef(bipedBody.rotationPointX * f5, bipedBody.rotationPointY * f5, bipedBody.rotationPointZ * f5);
+//
+//                if (bipedBody.rotateAngleZ != 0.0F)
+//                {
+//                    GL11.glRotatef(bipedBody.rotateAngleZ * (180F / (float) Math.PI), 0.0F, 0.0F, 1.0F);
+//                }
+//
+//                if (bipedBody.rotateAngleY != 0.0F)
+//                {
+//                    GL11.glRotatef(bipedBody.rotateAngleY * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
+//                }
+//
+//                if (bipedBody.rotateAngleX != 0.0F)
+//                {
+//                    GL11.glRotatef(bipedBody.rotateAngleX * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
+//                }
+//                renderJetpack(f5);
+//                GL11.glPopMatrix();
+//            }
+//            GL11.glTranslatef(-bipedBody.offsetX, -bipedBody.offsetY, -(bipedBody.offsetZ));
+//            GL11.glPopMatrix();
+//        }
+//    }
 
     public void renderJetpack(float f5)
     {

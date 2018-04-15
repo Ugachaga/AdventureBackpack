@@ -6,7 +6,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,7 +37,6 @@ import com.darkona.adventurebackpack.network.GuiPacket;
 import com.darkona.adventurebackpack.network.PlayerActionPacket;
 import com.darkona.adventurebackpack.network.messages.EntityParticlePacket;
 import com.darkona.adventurebackpack.network.messages.EntitySoundPacket;
-import com.darkona.adventurebackpack.proxy.ClientProxy;
 import com.darkona.adventurebackpack.util.BackpackUtils;
 import com.darkona.adventurebackpack.util.Resources;
 import com.darkona.adventurebackpack.util.TipUtils;
@@ -352,12 +350,12 @@ public class ItemJetpack extends ItemWearable
         return 25;
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public ModelBiped getWearableModel(ItemStack wearable)
-    {
-        return ClientProxy.modelJetpack.setWearable(wearable);
-    }
+//    @Override
+//    @SideOnly(Side.CLIENT)
+//    public ModelBiped getWearableModel(ItemStack wearable)
+//    {
+//        return ClientProxy.modelJetpack.setWearable(wearable);
+//    }
 
     @Override
     @SideOnly(Side.CLIENT)

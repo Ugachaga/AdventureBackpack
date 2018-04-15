@@ -71,7 +71,6 @@ public class BlockBackpack extends Block //TODO extends BlockHorizontal ?
 //    }
 
 
-
     public BlockBackpack(String name)
     {
         super(new BackpackMaterial());
@@ -111,7 +110,7 @@ public class BlockBackpack extends Block //TODO extends BlockHorizontal ?
     @SuppressWarnings("deprecation")
     public EnumBlockRenderType getRenderType(IBlockState state)
     {
-        return EnumBlockRenderType.INVISIBLE;
+        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
     }
 
     @Override

@@ -1,24 +1,12 @@
 package com.darkona.adventurebackpack.client.models;
 
-import javax.annotation.Nullable;
-
-import org.lwjgl.opengl.GL11;
-
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
+import net.minecraft.client.renderer.GlStateManager;
 
 import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.RenderUtils;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Vector3;
 
-import com.darkona.adventurebackpack.common.Constants;
-import com.darkona.adventurebackpack.init.ModFluids;
 import com.darkona.adventurebackpack.inventory.IInventoryBackpack;
 import com.darkona.adventurebackpack.inventory.InventoryBackpack;
 import com.darkona.adventurebackpack.reference.BackpackTypes;
@@ -33,58 +21,61 @@ import static com.darkona.adventurebackpack.reference.BackpackTypes.SLIME;
 import static com.darkona.adventurebackpack.reference.BackpackTypes.SNOW;
 import static com.darkona.adventurebackpack.reference.BackpackTypes.VILLAGER;
 
-@SuppressWarnings("WeakerAccess")
-public class ModelBackpackBlock extends ModelBase
+@SuppressWarnings("FieldCanBeLocal")
+public class ModelBackpackBlock extends ModelWearable
 {
-    public final Vector3 leftTankVector;
-    public final Vector3 rightTankVector;
+    private final Cuboid6 leftFluidCuboid16;
+    private final Cuboid6 rightFluidCuboid16;
 
-    public ModelRenderer mainBody;
-    public ModelRenderer leftStrap;
-    public ModelRenderer rightStrap;
-    public ModelRenderer top;
-    public ModelRenderer bottom;
-    public ModelRenderer pocketFace;
+    private final Cuboid6 rightFluidCuboid20;
+    private final Cuboid6 leftFluidCuboid20;
 
-    public ModelRenderer tankLeftTop;
-    public ModelRenderer tankLeftBottom;
-    public ModelRenderer tankLeftWall1;
-    public ModelRenderer tankLeftWall2;
-    public ModelRenderer tankLeftWall3;
-    public ModelRenderer tankLeftWall4;
+    private ModelRenderer mainBody;
+    private ModelRenderer leftStrap;
+    private ModelRenderer rightStrap;
+    private ModelRenderer top;
+    private ModelRenderer bottom;
+    private ModelRenderer pocketFace;
 
-    public ModelRenderer tankRightTop;
-    public ModelRenderer tankRightBottom;
-    public ModelRenderer tankRightWall1;
-    public ModelRenderer tankRightWall2;
-    public ModelRenderer tankRightWall3;
-    public ModelRenderer tankRightWall4;
+    private ModelRenderer tankLeftTop;
+    private ModelRenderer tankLeftBottom;
+    private ModelRenderer tankLeftWall1;
+    private ModelRenderer tankLeftWall2;
+    private ModelRenderer tankLeftWall3;
+    private ModelRenderer tankLeftWall4;
 
-    public ModelRenderer bed;
-    public ModelRenderer bedStrapRightTop;
-    public ModelRenderer bedStrapRightMid;
-    public ModelRenderer bedStrapRightBottom;
-    public ModelRenderer bedStrapLeftTop;
-    public ModelRenderer bedStrapLeftMid;
-    public ModelRenderer bedStrapLeftBottom;
+    private ModelRenderer tankRightTop;
+    private ModelRenderer tankRightBottom;
+    private ModelRenderer tankRightWall1;
+    private ModelRenderer tankRightWall2;
+    private ModelRenderer tankRightWall3;
+    private ModelRenderer tankRightWall4;
 
-    public ModelRenderer lampPole1; // lamp unused
-    public ModelRenderer lampPole2;
-    public ModelRenderer lampPole3;
-    public ModelRenderer lampTop;
-    public ModelRenderer lampBottom;
-    public ModelRenderer lampGlassRight;
-    public ModelRenderer lampGlassFront;
-    public ModelRenderer lampGlassBack;
-    public ModelRenderer lampGlassLeft;
-    public ModelRenderer lampLight;
+    private ModelRenderer bed;
+    private ModelRenderer bedStrapRightTop;
+    private ModelRenderer bedStrapRightMid;
+    private ModelRenderer bedStrapRightBottom;
+    private ModelRenderer bedStrapLeftTop;
+    private ModelRenderer bedStrapLeftMid;
+    private ModelRenderer bedStrapLeftBottom;
 
-    public ModelRenderer kitchenBase; // kitchen unused
-    public ModelRenderer kitchen;
+    private ModelRenderer lampPole1; // lamp unused
+    private ModelRenderer lampPole2;
+    private ModelRenderer lampPole3;
+    private ModelRenderer lampTop;
+    private ModelRenderer lampBottom;
+    private ModelRenderer lampGlassRight;
+    private ModelRenderer lampGlassFront;
+    private ModelRenderer lampGlassBack;
+    private ModelRenderer lampGlassLeft;
+    private ModelRenderer lampLight;
 
-    public ModelRenderer ocelotNose;
-    public ModelRenderer pigNose;
-    public ModelRenderer villagerNose;
+    private ModelRenderer kitchenBase; // kitchen unused
+    private ModelRenderer kitchen;
+
+    private ModelRenderer ocelotNose;
+    private ModelRenderer pigNose;
+    private ModelRenderer villagerNose;
 
     public ModelBackpackBlock()
     {
@@ -288,207 +279,119 @@ public class ModelBackpackBlock extends ModelBase
         this.pigNose.setRotationPoint(-2.0F, 4.0F, 4.0F);
         this.pigNose.addBox(0.0F, 0.0F, 0.0F, 4, 3, 1);
 
-        leftTankVector = new Vector3(
-                (tankLeftTop.rotationPointX * 0.1f - 0.158f),
-                (tankLeftTop.rotationPointY * 0.1f + 0.05f),
-                (tankLeftTop.rotationPointZ * 0.1f + 0.125f));
+        // fluid rendering stuff
+        // 0.0625 (1/16) scale variants
+        Vector3 leftTankVector16 = new Vector3(
+                (tankLeftTop.rotationPointX * 0.1F - 0.158F),
+                (tankLeftTop.rotationPointY * 0.1F + 0.06F),
+                (tankLeftTop.rotationPointZ * 0.1F + 0.125F));
 
-        rightTankVector = new Vector3(
-                (tankRightTop.rotationPointX * 0.1f + 0.37f),
-                (tankRightTop.rotationPointY * 0.1f + 0.05f),
-                (tankRightTop.rotationPointZ * 0.1f + 0.125f));
+        Vector3 rightTankVector16 = new Vector3(
+                (tankRightTop.rotationPointX * 0.1F + 0.37F),
+                (tankRightTop.rotationPointY * 0.1F + 0.06F),
+                (tankRightTop.rotationPointZ * 0.1F + 0.125F));
+
+        leftFluidCuboid16 = getFluidCuboid16().add(leftTankVector16);
+        rightFluidCuboid16 = getFluidCuboid16().add(rightTankVector16);
+
+        // 0.05 (1/20) scale variants
+        Vector3 leftTankVector20 = new Vector3(
+                (tankLeftTop.rotationPointX * 0.1f - 0.22f),
+                (tankLeftTop.rotationPointY * 0.1f - 0.05f),
+                (tankLeftTop.rotationPointZ * 0.1f + 0.15f));
+
+        Vector3 rightTankVector20 = new Vector3(
+                (tankRightTop.rotationPointX * 0.1f + 0.48f),
+                (tankRightTop.rotationPointY * 0.1f - 0.05f),
+                (tankRightTop.rotationPointZ * 0.1f + 0.15f));
+
+        leftFluidCuboid20 = getFluidCuboid20().add(leftTankVector20);
+        rightFluidCuboid20 = getFluidCuboid20().add(rightTankVector20);
+
+        CCRenderState.instance().reset();
     }
 
-    public void render(@Nullable Entity entity, float f, float f1, float f2, float f3, float f4, float scale, IInventoryBackpack backpack)
+    private Cuboid6 getFluidCuboid16()
     {
-        if (backpack == null) //TODO remove when sync fixed
+        return new Cuboid6(0F, 0.505F, 0F, 0.188F, 0F, 0.188F);
+    }
+
+    private Cuboid6 getFluidCuboid20()
+    {
+        return new Cuboid6(0F, -0.40F, 0F, 0.15F, 0F, 0.15F);
+    }
+
+    public void renderTileEntity(IInventoryBackpack backpack, float scale)
+    {
+        if (backpack == null) //TODO remove when sync and TileItem fixed
             backpack = new InventoryBackpack(BackpackUtils.createBackpackStack());
 
-        FluidTank tankLeft = backpack.getLeftTank();
-        FluidTank tankRight = backpack.getRightTank();
-        setRotationAngles(f, f1, f2, f3, f4, scale, entity);
-
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
         renderBackpack(backpack, scale);
-        //renderFluidsInTanks(backpack.getLeftTank(),backpack.getRightTank(),scale);
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
 
-        if (tankLeft.getFluid() != null) //TODO move to ModelWearable#renderFluidInTank
-        {
-            Vector3 victor = new Vector3(
-                    (tankLeftTop.rotationPointX * 0.1f - 0.22f),
-                    (tankLeftTop.rotationPointY * 0.1f + 0.05f),
-                    (tankLeftTop.rotationPointZ * 0.1f + 0.15f));
-            GL11.glPushMatrix();
-            CCRenderState.instance().reset();
-            CCRenderState.instance().pullLightmap();
-            RenderUtils.renderFluidCuboidGL(tankLeft.getFluid(), new Cuboid6(0f, 0.39f, 0f, 0.15f, 0f, 0.15f).add(victor),
-                    ((1.0F * tankLeft.getFluidAmount()) / (1.0F * tankLeft.getCapacity())), 0.8);
-            GL11.glPopMatrix();
-
-        }
-
-        if (tankRight.getFluid() != null) //TODO move to ModelWearable#renderFluidInTank
-        {
-            Vector3 victor = new Vector3(
-                    (tankRightTop.rotationPointX * 0.1f + 0.48f),
-                    (tankRightTop.rotationPointY * 0.1f + 0.05f),
-                    (tankRightTop.rotationPointZ * 0.1f + 0.15f));
-            GL11.glPushMatrix();
-            CCRenderState.instance().reset();
-            CCRenderState.instance().pullLightmap();
-            RenderUtils.renderFluidCuboidGL(tankRight.getFluid(), new Cuboid6(0, 0.39, 0, 0.15, 0, 0.15).add(victor),
-                    ((1.0F * tankRight.getFluidAmount()) / (1.0F * tankRight.getCapacity())), 0.8);
-            GL11.glPopMatrix();
-        }
+        GlStateManager.pushMatrix();
+        GlStateManager.rotate(180F, 0.0F, 0.0F, 1.0F);
+        renderFluidInTank2(backpack.getLeftTank(), leftFluidCuboid20.copy());
+        renderFluidInTank2(backpack.getRightTank(), rightFluidCuboid20.copy());
+        GlStateManager.popMatrix();
     }
 
-    public void renderLayer(EntityPlayer player, float scale, ItemStack backpack)
+    public void renderLayer(IInventoryBackpack backpack, float scale)
     {
-        IInventoryBackpack inv = new InventoryBackpack(backpack);
+        GlStateManager.pushMatrix();
+        renderBackpack(backpack, scale);
+        GlStateManager.popMatrix();
 
-        FluidTank tankLeft = inv.getLeftTank();
-        FluidTank tankRight = inv.getRightTank();
+        GlStateManager.pushMatrix();
+        renderFluidInTank2(backpack.getLeftTank(), leftFluidCuboid16.copy());
+        renderFluidInTank2(backpack.getRightTank(), rightFluidCuboid16.copy());
+        GlStateManager.popMatrix();
 
-        GL11.glPushMatrix();
-        renderBackpack(inv, scale);
-        GL11.glPopMatrix();
-
-        FluidStack fs = new FluidStack(ModFluids.MUSHROOM_STEW, Constants.BASIC_TANK_CAPACITY); //TODO del
-
-        //if (tankLeft.getFluid() != null) //TODO move to ModelWearable#renderFluidInTank
-        {
-            GL11.glPushMatrix();
-            CCRenderState.instance().reset();
-            CCRenderState.instance().pullLightmap();
-            RenderUtils.renderFluidCuboidGL(fs, new Cuboid6(0f, 0.525f, 0f, 0.188f, 0f, 0.188f)
-                    .add(leftTankVector), 1.0F, 0.8);
-            GL11.glPopMatrix();
-        }
-
-        //if (tankRight.getFluid() != null) //TODO move to ModelWearable#renderFluidInTank
-        {
-            GL11.glPushMatrix();
-            CCRenderState.instance().reset();
-            CCRenderState.instance().pullLightmap();
-            RenderUtils.renderFluidCuboidGL(fs, new Cuboid6(0f, 0.525f, 0f, 0.188f, 0f, 0.188f)
-                    .add(rightTankVector), 1.0F, 0.8);
-            GL11.glPopMatrix();
-        }
-    }
-
-    private void renderFluidsInTanks(FluidTank tankLeft, FluidTank tankRight, float scale) //TODO move to ModelWearable#renderFluidInTank
-    {
-        //Size of the cuboid
-        //Y-- is up, Y++ is down
-        float minX = 0f;
-        float minY = 0.5f;
-        float minZ = 0f;
-
-        float maxX = 0.17f;
-        float maxY = 0f;
-        float maxZ = 0.17f;
-
-        if (tankLeft.getFluid() != null) //TODO move to ModelWearable#renderFluidInTank
-        {
-            //0.5F, -0.1F, -0.25F - Rotation Points of the top
-            //X++ to the right, X-- to the left
-            //Z-- to the front, Z++ to the back
-            Vector3 victor = new Vector3(
-                    (tankLeftTop.rotationPointX * 0.1f - 0.17f), //
-                    (tankLeftTop.rotationPointY * 0.1f + 0.1f),
-                    (tankLeftTop.rotationPointZ * 0.1f + 0.13f));
-            //ChickenStuff
-            CCRenderState.instance().reset();
-            CCRenderState.instance().pullLightmap();
-
-            Cuboid6 left = new Cuboid6(minX, minY, minZ, maxX, maxY, maxZ);
-            RenderUtils.renderFluidCuboidGL(tankLeft.getFluid(), left.add(victor), ((1.0F * tankLeft.getFluidAmount()) / (1.0F * Constants.BASIC_TANK_CAPACITY)), 0.2);
-        }
-
-        if (tankRight.getFluid() != null) //TODO move to ModelWearable#renderFluidInTank
-        {
-            //-0.9F, -0.1F, -0.25F - Rotation points of the top
-            //X-- to the right, X++ to the left
-            //Z-- to the front, Z++ to the back
-            Vector3 victor = new Vector3(
-                    (tankRightTop.rotationPointX * 0.1f + 0.41f), //
-                    (tankRightTop.rotationPointY * 0.1f + 0.1f),
-                    (tankRightTop.rotationPointZ * 0.1f + 0.13f));
-            //ChickenStuff
-            CCRenderState.instance().reset();
-            CCRenderState.instance().pullLightmap();
-
-            Cuboid6 right = new Cuboid6(minX, minY, minZ, maxX, maxY, maxZ);
-            RenderUtils.renderFluidCuboidGL(tankRight.getFluid(), right.add(victor), ((1.0F * tankRight.getFluidAmount()) / (1.0F * Constants.BASIC_TANK_CAPACITY)), 0.2);
-        }
-
+        //TODO render items in ToolSlots, see 1.7.10 implementation in ModelBackpack and RenderUtils#renderItemUniform
     }
 
     private void renderBackpack(IInventoryBackpack backpack, float scale)
     {
         BackpackTypes type = backpack.getType();
 
-        //GlStateManager.enableCull();
-
         if (type == QUARTZ || type == SLIME || type == SNOW)
         {
-            GL11.glPushMatrix();
-            GL11.glEnable(GL11.GL_BLEND);
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-            GL11.glEnable(GL11.GL_CULL_FACE);
+            GlStateManager.pushMatrix();
+            startBlending();
+            //GlStateManager.enableCull();
 
             this.mainBody.render(scale);
 
-            GL11.glPopMatrix();
-            GL11.glDisable(GL11.GL_CULL_FACE);
-            GL11.glDisable(GL11.GL_BLEND);
+            //GlStateManager.disableCull();
+            stopBlending();
+            GlStateManager.popMatrix();
         }
         else
         {
             this.mainBody.render(scale);
         }
+
         tankLeftTop.render(scale);
         tankRightTop.render(scale);
 
         if (!backpack.isSleepingBagDeployed())
-        {
             bed.render(scale);
-        }
 
         if (type == PIG || type == HORSE)
-        {
             pigNose.render(scale);
-        }
-        if (type == VILLAGER || type == IRON_GOLEM)
-        {
+        else if (type == VILLAGER || type == IRON_GOLEM)
             villagerNose.render(scale);
-        }
-        if (type == OCELOT)
-        {
+        else if (type == OCELOT)
             ocelotNose.render(scale);
-        }
 
-        /*if(type == STANDARD)
+        /*if(type == BackpackTypes.STANDARD)
         {
-            GL11.glEnable(GL11.GL_BLEND);
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-            GL11.glEnable(GL11.GL_CULL_FACE);
+            startBlending();
+            GlStateManager.enableCull();
             this.lampPole1.render(scale);
-            GL11.glDisable(GL11.GL_CULL_FACE);
-            GL11.glDisable(GL11.GL_BLEND);
+            GlStateManager.disableCull();
+            stopBlending();
         }*/
-
-        //GlStateManager.disableCull();
-    }
-
-    /**
-     * This is a helper function from Tabula to set the rotation of model parts
-     */
-    public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z)
-    {
-        modelRenderer.rotateAngleX = x;
-        modelRenderer.rotateAngleY = y;
-        modelRenderer.rotateAngleZ = z;
     }
 }

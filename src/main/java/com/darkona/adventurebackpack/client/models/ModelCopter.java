@@ -1,13 +1,9 @@
 package com.darkona.adventurebackpack.client.models;
 
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+
 import codechicken.lib.vec.Vector3;
 
 import com.darkona.adventurebackpack.inventory.InventoryCopter;
@@ -161,14 +157,14 @@ public class ModelCopter extends ModelWearable
         this.EscapeFilter.addBox(0.0F, 0.0F, 0.0F, 2, 5, 2);
         this.Base.addChild(this.EscapeFilter);
 
-        this.bipedBody.addChild(this.Base);
+//        this.bipedBody.addChild(this.Base);
 
         float offsetZ = 0.1F;
         float offsetY = 0.0F;
-        for (ModelRenderer part : (List<ModelRenderer>) bipedBody.childModels)
-        {
-            setOffset(part, part.offsetX + 0, part.offsetY + offsetY, part.offsetZ + offsetZ);
-        }
+//        for (ModelRenderer part : (List<ModelRenderer>) bipedBody.childModels)
+//        {
+//            setOffset(part, part.offsetX + 0, part.offsetY + offsetY, part.offsetZ + offsetZ);
+//        }
     }
 
     public ModelCopter setWearable(ItemStack wearable)
@@ -208,65 +204,65 @@ public class ModelCopter extends ModelWearable
         renderFluidInTank(inv.getFuelTank(), new Vector3(0, .25f, 0), new Vector3(.25f, 0, .25f), new Vector3(0f, 0.0625f, 0.0f), TankTop);
     }
 
-    @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5, ItemStack stack)
-    {
-        this.copter = stack;
-        render(entity, f, f1, f2, f3, f4, f5);
-    }
+//    @Override
+//    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5, ItemStack stack)
+//    {
+//        this.copter = stack;
+//        render(entity, f, f1, f2, f3, f4, f5);
+//    }
 
-    @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
-    {
-        isSneak = (entity != null && entity.isSneaking());
-
-        if (entity == null) Axis.isHidden = true;
-        setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-        if (entity != null && entity instanceof EntityPlayer)
-        {
-            GL11.glPushMatrix();
-
-            GL11.glTranslatef(bipedBody.offsetX, bipedBody.offsetY, bipedBody.offsetZ);
-            GL11.glColor4f(1, 1, 1, 1);
-
-            if (bipedBody.rotateAngleX == 0.0F && bipedBody.rotateAngleY == 0.0F && bipedBody.rotateAngleZ == 0.0F)
-            {
-                if (bipedBody.rotationPointX == 0.0F && bipedBody.rotationPointY == 0.0F && bipedBody.rotationPointZ == 0.0F)
-                {
-                    renderCopter(entity, f5);
-
-                }
-                else
-                {
-                    GL11.glTranslatef(bipedBody.rotationPointX * f5, bipedBody.rotationPointY * f5, bipedBody.rotationPointZ * f5);
-                    renderCopter(entity, f5);
-                    GL11.glTranslatef(-bipedBody.rotationPointX * f5, -bipedBody.rotationPointY * f5, -bipedBody.rotationPointZ * f5);
-                }
-            }
-            else
-            {
-                GL11.glPushMatrix();
-                GL11.glTranslatef(bipedBody.rotationPointX * f5, bipedBody.rotationPointY * f5, bipedBody.rotationPointZ * f5);
-
-                if (bipedBody.rotateAngleZ != 0.0F)
-                {
-                    GL11.glRotatef(bipedBody.rotateAngleZ * (180F / (float) Math.PI), 0.0F, 0.0F, 1.0F);
-                }
-
-                if (bipedBody.rotateAngleY != 0.0F)
-                {
-                    GL11.glRotatef(bipedBody.rotateAngleY * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
-                }
-
-                if (bipedBody.rotateAngleX != 0.0F)
-                {
-                    GL11.glRotatef(bipedBody.rotateAngleX * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
-                }
-                renderCopter(entity, f5);
-                GL11.glPopMatrix();
-            }
-            GL11.glTranslatef(-bipedBody.offsetX, -bipedBody.offsetY, -(bipedBody.offsetZ));
-            GL11.glPopMatrix();
-        }
-    }
+//    @Override
+//    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
+//    {
+//        isSneak = (entity != null && entity.isSneaking());
+//
+//        if (entity == null) Axis.isHidden = true;
+//        setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+//        if (entity != null && entity instanceof EntityPlayer)
+//        {
+//            GL11.glPushMatrix();
+//
+//            GL11.glTranslatef(bipedBody.offsetX, bipedBody.offsetY, bipedBody.offsetZ);
+//            GL11.glColor4f(1, 1, 1, 1);
+//
+//            if (bipedBody.rotateAngleX == 0.0F && bipedBody.rotateAngleY == 0.0F && bipedBody.rotateAngleZ == 0.0F)
+//            {
+//                if (bipedBody.rotationPointX == 0.0F && bipedBody.rotationPointY == 0.0F && bipedBody.rotationPointZ == 0.0F)
+//                {
+//                    renderCopter(entity, f5);
+//
+//                }
+//                else
+//                {
+//                    GL11.glTranslatef(bipedBody.rotationPointX * f5, bipedBody.rotationPointY * f5, bipedBody.rotationPointZ * f5);
+//                    renderCopter(entity, f5);
+//                    GL11.glTranslatef(-bipedBody.rotationPointX * f5, -bipedBody.rotationPointY * f5, -bipedBody.rotationPointZ * f5);
+//                }
+//            }
+//            else
+//            {
+//                GL11.glPushMatrix();
+//                GL11.glTranslatef(bipedBody.rotationPointX * f5, bipedBody.rotationPointY * f5, bipedBody.rotationPointZ * f5);
+//
+//                if (bipedBody.rotateAngleZ != 0.0F)
+//                {
+//                    GL11.glRotatef(bipedBody.rotateAngleZ * (180F / (float) Math.PI), 0.0F, 0.0F, 1.0F);
+//                }
+//
+//                if (bipedBody.rotateAngleY != 0.0F)
+//                {
+//                    GL11.glRotatef(bipedBody.rotateAngleY * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
+//                }
+//
+//                if (bipedBody.rotateAngleX != 0.0F)
+//                {
+//                    GL11.glRotatef(bipedBody.rotateAngleX * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
+//                }
+//                renderCopter(entity, f5);
+//                GL11.glPopMatrix();
+//            }
+//            GL11.glTranslatef(-bipedBody.offsetX, -bipedBody.offsetY, -(bipedBody.offsetZ));
+//            GL11.glPopMatrix();
+//        }
+//    }
 }

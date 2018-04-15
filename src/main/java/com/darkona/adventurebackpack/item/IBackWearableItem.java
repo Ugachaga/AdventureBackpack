@@ -1,6 +1,5 @@
 package com.darkona.adventurebackpack.item;
 
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -18,8 +17,8 @@ public interface IBackWearableItem
 
     void onUnequipped(World world, EntityPlayer player, ItemStack stack);
 
-    @SideOnly(Side.CLIENT)
-    ModelBiped getWearableModel(ItemStack wearable);
+//    @SideOnly(Side.CLIENT)
+//    ModelBiped getWearableModel(ItemStack wearable);
 
     @SideOnly(Side.CLIENT)
     ResourceLocation getWearableTexture(ItemStack wearable);

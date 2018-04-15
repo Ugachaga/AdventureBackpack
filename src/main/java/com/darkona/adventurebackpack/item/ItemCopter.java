@@ -5,7 +5,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -29,7 +28,6 @@ import com.darkona.adventurebackpack.init.ModNetwork;
 import com.darkona.adventurebackpack.inventory.InventoryCopter;
 import com.darkona.adventurebackpack.network.GuiPacket;
 import com.darkona.adventurebackpack.network.messages.EntityParticlePacket;
-import com.darkona.adventurebackpack.proxy.ClientProxy;
 import com.darkona.adventurebackpack.reference.GeneralReference;
 import com.darkona.adventurebackpack.util.BackpackUtils;
 import com.darkona.adventurebackpack.util.Resources;
@@ -323,12 +321,12 @@ public class ItemCopter extends ItemWearable
         onUnequipped(world, player, stack);
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public ModelBiped getWearableModel(ItemStack wearable)
-    {
-        return ClientProxy.modelCopter.setWearable(wearable);
-    }
+//    @Override
+//    @SideOnly(Side.CLIENT)
+//    public ModelBiped getWearableModel(ItemStack wearable)
+//    {
+//        return ClientProxy.modelCopter.setWearable(wearable);
+//    }
 
     @Override
     @SideOnly(Side.CLIENT)

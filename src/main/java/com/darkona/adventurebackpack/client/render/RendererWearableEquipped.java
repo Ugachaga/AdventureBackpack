@@ -40,7 +40,7 @@ public class RendererWearableEquipped extends RenderLivingBase
             if (!Wearing.isWearingWearable((EntityPlayer) entity)) return;
             ItemStack wearable = Wearing.getWearingWearable((EntityPlayer) entity).copy();
             IBackWearableItem wearableItem = (IBackWearableItem) wearable.getItem();
-            modelBipedMain = wearableItem.getWearableModel(wearable);
+//            modelBipedMain = wearableItem.getWearableModel(wearable);
             texture = wearableItem.getWearableTexture(wearable);
             modelBipedMain.bipedBody.rotateAngleX = rotX;
             modelBipedMain.bipedBody.rotateAngleY = rotY;

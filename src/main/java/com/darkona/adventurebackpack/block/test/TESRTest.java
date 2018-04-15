@@ -63,7 +63,7 @@ public class TESRTest extends TileEntitySpecialRenderer<TileTest>
         GlStateManager.rotate(180F, 0.0F, 0.0F, 1.0F); // flip from head to legs
         GlStateManager.rotate(rotation, 0.0F, 1.0F, 0.0F); // world direction
 
-        model_block.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1 / 20F,  new InventoryBackpack(BackpackUtils.createBackpackStack(te.type)));
+        model_block.renderTileEntity(new InventoryBackpack(BackpackUtils.createBackpackStack(te.type)), 1 / 20F);
 
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.disableRescaleNormal();
