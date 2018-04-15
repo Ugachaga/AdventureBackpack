@@ -1,7 +1,5 @@
 package com.darkona.adventurebackpack.client.renderer;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
@@ -17,8 +15,11 @@ import com.darkona.adventurebackpack.init.ModItems;
 import com.darkona.adventurebackpack.reference.BackpackTypes;
 import com.darkona.adventurebackpack.util.Resources;
 
-public final class BackpackRenderer extends TileEntitySpecialRenderer<TileBackpack>
+public final class BackpackRenderer
 {
+    // see: ModelBiped#setRotationAngles, ModelRenderer#renderWithRotation
+    private static final float ANGLE_SNEAK = 0.5F * (180.0F / (float) Math.PI);
+
     private BackpackRenderer() {}
 
     public static class TileEntity extends TileEntitySpecialRenderer<TileBackpack>
@@ -49,7 +50,7 @@ public final class BackpackRenderer extends TileEntitySpecialRenderer<TileBackpa
 
             int rotation = 0;
 
-            //TODO seems TESR *items* comes here with NULL te... BackedModel? BlockStates? flattering? *custom model loader*? we have to get type somehow
+            //TODO seems TESR *items* comes here with NULL te... BakedModel? BlockStates? flattering? *custom model loader*? we have to get type somehow
             //TODO we also have to solve more complex issue than just multiple skins: items icons (render item model in GUI) have to dynamically render tanks contents, bedroll status and maybe something else
             //TODO see forge universal bucket for dynamic fluid rendering
             if (te != null)
@@ -93,12 +94,21 @@ public final class BackpackRenderer extends TileEntitySpecialRenderer<TileBackpa
             {
                 Minecraft.getMinecraft().renderEngine.bindTexture(Resources.getBackpackTexture(BackpackTypes.getType(backpack)));
 
-                GL11.glPushMatrix();
-                GL11.glTranslatef(0.0F, 0.1F, 0.425F);
+                GlStateManager.pushMatrix();
+                GlStateManager.enableRescaleNormal();
+                GlStateManager.scale(.82f, .82f, .82f); //TODO tuning wearing backpack size
                 if (player.isSneaking())
-                    GL11.glTranslatef(0.0F, 0.2F, 0.0F);
+                {
+                    GlStateManager.translate(0.0F, 0.236F, 0.45F);
+                    GlStateManager.rotate(ANGLE_SNEAK, 1.0F, 0.0F, 0.0F);
+                }
+                else
+                {
+                    GlStateManager.translate(0.0F, 0.205F, 0.4F);
+                }
                 MODEL_BACKPACK.renderLayer(player, 0.0625F, backpack);
-                GL11.glPopMatrix();
+                GlStateManager.disableRescaleNormal();
+                GlStateManager.popMatrix();
             }
         }
 
