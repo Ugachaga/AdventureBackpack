@@ -289,14 +289,14 @@ public class ModelBackpackBlock extends ModelBase
         this.pigNose.addBox(0.0F, 0.0F, 0.0F, 4, 3, 1);
 
         leftTankVector = new Vector3(
-                (tankLeftTop.rotationPointX * 0.1f - 0.148f),
+                (tankLeftTop.rotationPointX * 0.1f - 0.158f),
                 (tankLeftTop.rotationPointY * 0.1f + 0.05f),
-                (tankLeftTop.rotationPointZ * 0.1f + 0.145f));
+                (tankLeftTop.rotationPointZ * 0.1f + 0.125f));
 
         rightTankVector = new Vector3(
-                (tankRightTop.rotationPointX * 0.1f + 0.394f),
+                (tankRightTop.rotationPointX * 0.1f + 0.37f),
                 (tankRightTop.rotationPointY * 0.1f + 0.05f),
-                (tankRightTop.rotationPointZ * 0.1f + 0.145f));
+                (tankRightTop.rotationPointZ * 0.1f + 0.125f));
     }
 
     public void render(@Nullable Entity entity, float f, float f1, float f2, float f3, float f4, float scale, IInventoryBackpack backpack)
@@ -361,7 +361,7 @@ public class ModelBackpackBlock extends ModelBase
             GL11.glPushMatrix();
             CCRenderState.instance().reset();
             CCRenderState.instance().pullLightmap();
-            RenderUtils.renderFluidCuboidGL(fs, new Cuboid6(0f, 0.525f, 0f, 0.15f, 0f, 0.15f)
+            RenderUtils.renderFluidCuboidGL(fs, new Cuboid6(0f, 0.525f, 0f, 0.188f, 0f, 0.188f)
                     .add(leftTankVector), 1.0F, 0.8);
             GL11.glPopMatrix();
         }
@@ -371,7 +371,7 @@ public class ModelBackpackBlock extends ModelBase
             GL11.glPushMatrix();
             CCRenderState.instance().reset();
             CCRenderState.instance().pullLightmap();
-            RenderUtils.renderFluidCuboidGL(fs, new Cuboid6(0f, 0.525f, 0f, 0.15f, 0f, 0.15f)
+            RenderUtils.renderFluidCuboidGL(fs, new Cuboid6(0f, 0.525f, 0f, 0.188f, 0f, 0.188f)
                     .add(rightTankVector), 1.0F, 0.8);
             GL11.glPopMatrix();
         }

@@ -68,7 +68,7 @@ public final class BackpackRenderer
             GlStateManager.rotate(180F, 0.0F, 0.0F, 1.0F); // flip from head to legs
             GlStateManager.rotate(rotation, 0.0F, 1.0F, 0.0F); // world direction
 
-            model_block.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1 / 20F, te);
+            model_block.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1 / 20F, te); //TODO scale to 0.0625, prescale to 0.8
 
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F); //TODO del?
             GlStateManager.disableRescaleNormal();
@@ -96,7 +96,7 @@ public final class BackpackRenderer
 
                 GlStateManager.pushMatrix();
                 GlStateManager.enableRescaleNormal();
-                GlStateManager.scale(.82f, .82f, .82f); //TODO tuning wearing backpack size
+                GlStateManager.scale(0.8F, 0.8F, 0.8F);
                 if (player.isSneaking())
                 {
                     GlStateManager.translate(0.0F, 0.236F, 0.45F);
@@ -106,7 +106,9 @@ public final class BackpackRenderer
                 {
                     GlStateManager.translate(0.0F, 0.205F, 0.4F);
                 }
+
                 MODEL_BACKPACK.renderLayer(player, 0.0625F, backpack);
+
                 GlStateManager.disableRescaleNormal();
                 GlStateManager.popMatrix();
             }
