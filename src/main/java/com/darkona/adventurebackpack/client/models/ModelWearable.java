@@ -4,24 +4,20 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 
 import codechicken.lib.render.RenderUtils;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Vector3;
 
-import com.darkona.adventurebackpack.common.Constants;
-
-public abstract class ModelWearable extends ModelBase //ModelBiped
+public abstract class ModelWearable extends ModelBase
 {
-    protected Vector3 createVector3(ModelRenderer parentModel, double x, double y, double z)
+    protected Vector3 createVector3(ModelRenderer parent, double x, double y, double z)
     {
         return new Vector3(
-                (parentModel.rotationPointX * 0.1 + x),
-                (parentModel.rotationPointY * 0.1 + y),
-                (parentModel.rotationPointZ * 0.1 + z));
+                (parent.rotationPointX * 0.1 + parent.offsetX * 0.1 + x),
+                (parent.rotationPointY * 0.1 + parent.offsetY * 0.1 + y),
+                (parent.rotationPointZ * 0.1 + parent.offsetZ * 0.1 + z));
     }
 
     protected void startBlending()
@@ -75,15 +71,13 @@ public abstract class ModelWearable extends ModelBase //ModelBiped
     protected void renderFluidInTank(FluidTank tank, Cuboid6 cuboid)
     {
         if (tank.getFluid() == null)
-        {
-            //return;
-        }
+            return;
 
         double fullness = ((double) tank.getFluidAmount()) / ((double) tank.getCapacity());
+        RenderUtils.renderFluidCuboidGL(tank.getFluid(), cuboid, fullness, 0.8);
 
-        FluidStack fs = new FluidStack(FluidRegistry.WATER, Constants.BASIC_TANK_CAPACITY); //TODO del
-        fullness = 1.0; //del
-
-        RenderUtils.renderFluidCuboidGL(fs/*tank.getFluid()*/, cuboid, fullness, 0.8);
+//        FluidStack fs = new FluidStack(FluidRegistry.LAVA, Constants.BASIC_TANK_CAPACITY); //TODO del
+//        fullness = 1.0; //del
+//        RenderUtils.renderFluidCuboidGL(fs, cuboid, fullness, 0.8);
     }
 }

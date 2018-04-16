@@ -2,25 +2,19 @@ package com.darkona.adventurebackpack.client.renderer;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
 import com.darkona.adventurebackpack.block.TileBackpack;
 import com.darkona.adventurebackpack.client.models.ModelBackpackBlock;
 import com.darkona.adventurebackpack.init.ModItems;
 import com.darkona.adventurebackpack.inventory.IInventoryBackpack;
 import com.darkona.adventurebackpack.inventory.InventoryBackpack;
-import com.darkona.adventurebackpack.reference.BackpackTypes;
 import com.darkona.adventurebackpack.util.Resources;
 
-public final class BackpackRenderer
+public final class BackpackRenderer extends WearableRenderer
 {
-    // see: ModelBiped#setRotationAngles, ModelRenderer#renderWithRotation
-    private static final float SNEAK_ANGLE = 0.5F * (180.0F / (float) Math.PI);
-
     private BackpackRenderer() {}
 
     public static class TileEntity extends TileEntitySpecialRenderer<TileBackpack>
@@ -30,20 +24,8 @@ public final class BackpackRenderer
         @Override
         public void render(TileBackpack te, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
         {
-            ResourceLocation modelTexture = Resources.getBackpackTexture(BackpackTypes.STANDARD);
-            int rotation = 0;
-
-            //TODO TESR *items* comes here with NULL te and without access to parent itemStack (see: ForgeHooksClient#renderTileItem)... BakedModel? flattering? *custom model loader* (see: ModelLoaderRegistry)? we have to get type somehow
-            //TODO we also have to solve more complex issue than just multiple skins: items icons (render item model in GUI) have to dynamically render tanks contents, bedroll status and maybe something else
-            //TODO see forge universal bucket for dynamic fluid rendering
-            //ASM hook to TileEntityItemStackRenderer#renderByItem seems so tempting. I.. can't... resist....
-            if (te != null)
-            {
-                modelTexture = Resources.getBackpackTexture(te.getType());
-                rotation = te.getBlockMetadata() * 90;
-            }
-
-            bindTexture(modelTexture);
+            int rotation = te.getBlockMetadata() * 90;
+            bindTexture(Resources.getBackpackTexture(te.getType()));
 
             GlStateManager.pushMatrix();
             GlStateManager.enableRescaleNormal();
@@ -54,14 +36,14 @@ public final class BackpackRenderer
 
             //MODEL_BACKPACK.render(0.0625F, te);
             MODEL_BACKPACK.renderTileEntity(te, 0.05F); //TODO scale to 0.0625, prescale to 0.8
-            //FIXME CC fluid renderer doesn't reset some GL stuff after work, so need to find how to reset it manually. reminder: black shield inventory icon
+            //FIXME CC fluid renderer doesn't reset some GL stuff after work, so need to find how to reset it manually. it's also blending-related (Slime backpack). reminder: black shield inventory icon.
 
             GlStateManager.disableRescaleNormal();
             GlStateManager.popMatrix();
         }
     }
 
-    public static class Layer implements LayerRenderer<EntityPlayer>
+    public static class Layer extends WearableLayer
     {
         private static final ModelBackpackBlock MODEL_BACKPACK = new ModelBackpackBlock();
 
@@ -97,12 +79,11 @@ public final class BackpackRenderer
             GlStateManager.disableRescaleNormal();
             GlStateManager.popMatrix();
         }
+    }
 
-        @Override
-        public boolean shouldCombineTextures()
-        {
-            return false;
-        }
+    public void renderItem(ItemStack stack, float scale)
+    {
+        //TODO
     }
 
 }

@@ -7,9 +7,7 @@ import codechicken.lib.render.CCRenderState;
 import codechicken.lib.vec.Cuboid6;
 
 import com.darkona.adventurebackpack.inventory.IInventoryBackpack;
-import com.darkona.adventurebackpack.inventory.InventoryBackpack;
 import com.darkona.adventurebackpack.reference.BackpackTypes;
-import com.darkona.adventurebackpack.util.BackpackUtils;
 
 import static com.darkona.adventurebackpack.reference.BackpackTypes.HORSE;
 import static com.darkona.adventurebackpack.reference.BackpackTypes.IRON_GOLEM;
@@ -292,19 +290,16 @@ public class ModelBackpackBlock extends ModelWearable
 
     private Cuboid6 getFluidCuboid16()
     {
-        return new Cuboid6(0F, 0.505F, 0F, 0.188F, 0F, 0.188F);
+        return new Cuboid6(0.0, 0.505, 0.0, 0.188, 0.0, 0.188);
     }
 
     private Cuboid6 getFluidCuboid20()
     {
-        return new Cuboid6(0F, -0.40F, 0F, 0.15F, 0F, 0.15F);
+        return new Cuboid6(0.0, -0.4, 0.0, 0.15, 0.0, 0.15);
     }
 
     public void renderTileEntity(IInventoryBackpack backpack, float scale)
     {
-        if (backpack == null) //TODO remove when sync and TileItem fixed
-            backpack = new InventoryBackpack(BackpackUtils.createBackpackStack());
-
         GlStateManager.pushMatrix();
         renderBackpack(backpack, scale);
         GlStateManager.popMatrix();
@@ -314,7 +309,6 @@ public class ModelBackpackBlock extends ModelWearable
         renderFluidInTank(backpack.getLeftTank(), leftFluidCuboid20.copy());
         renderFluidInTank(backpack.getRightTank(), rightFluidCuboid20.copy());
         GlStateManager.popMatrix();
-
     }
 
     public void renderLayer(IInventoryBackpack backpack, float scale)

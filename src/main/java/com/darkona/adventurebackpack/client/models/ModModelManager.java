@@ -10,11 +10,10 @@ import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.IFluidBlock;
@@ -26,12 +25,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import com.darkona.adventurebackpack.block.TileBackpack;
 import com.darkona.adventurebackpack.block.test.TESRTest;
 import com.darkona.adventurebackpack.block.test.TileTest;
+import com.darkona.adventurebackpack.client.renderer.TileEntityItemSpecialRenderer;
 import com.darkona.adventurebackpack.client.renderer.BackpackRenderer;
 import com.darkona.adventurebackpack.init.ModBlocks;
 import com.darkona.adventurebackpack.init.ModFluids;
 import com.darkona.adventurebackpack.init.ModItems;
 import com.darkona.adventurebackpack.item.ItemComponent;
-import com.darkona.adventurebackpack.reference.BackpackTypes;
 import com.darkona.adventurebackpack.reference.IType;
 import com.darkona.adventurebackpack.reference.ModInfo;
 import com.darkona.adventurebackpack.util.Resources;
@@ -52,6 +51,8 @@ public class ModModelManager
         INSTANCE.registerTileEntityModels();
         INSTANCE.registerBlockModels();
         INSTANCE.registerItemModels();
+
+        TileEntityItemStackRenderer.instance = new TileEntityItemSpecialRenderer(TileEntityItemStackRenderer.instance);
     }
 
     private void registerFluidModels()
@@ -86,11 +87,6 @@ public class ModModelManager
 
     private void registerBlockModels()
     {
-//        OBJLoader.INSTANCE.addDomain(ModInfo.MODID);
-//        B3DLoader.INSTANCE.addDomain(ModInfo.MODID);
-//        B3DLoader.INSTANCE.loadModel()
-//        OBJLoader.INSTANCE.loadModel()
-
         ModBlocks.RegistrationHandler.ITEM_BLOCKS.stream()
                 .filter(item -> !itemsRegistered.contains(item))
                 .forEach(this::registerItemModel);
@@ -98,25 +94,11 @@ public class ModModelManager
 
     private void registerItemModels()
     {
-        registerTileItemModel(ModItems.ADVENTURE_BACKPACK, TileBackpack.class);
-
-        //registerVariantItemModels(ModItems.ADVENTURE_BACKPACK, "type", BackpackTypes.values());
         registerVariantItemModels(ModItems.COMPONENT, "variant", ItemComponent.Types.values());
 
         ModItems.RegistrationHandler.ITEMS.stream()
                 .filter(item -> !itemsRegistered.contains(item))
                 .forEach(this::registerItemModel);
-    }
-
-    //TODO see https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/minecraft-mods/modification-development/2827924-rendering-tileentities-in-the-inventory
-    @SuppressWarnings("deprecation")
-    private <T extends TileEntity> void registerTileItemModel(Item item, Class<T> te) //TODO method signature
-    {
-        for (BackpackTypes type : BackpackTypes.values())
-        {
-            registerItemModel(item);
-            ForgeHooksClient.registerTESRItemStack(item, type.getMeta(), te);
-        }
     }
 
     @SuppressWarnings("SameParameterValue")
