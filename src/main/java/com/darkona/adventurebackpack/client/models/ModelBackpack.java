@@ -1,18 +1,15 @@
 package com.darkona.adventurebackpack.client.models;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 
-import codechicken.lib.vec.Vector3;
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.vec.Cuboid6;
 
-import com.darkona.adventurebackpack.client.render.RendererStack;
-import com.darkona.adventurebackpack.common.Constants;
-import com.darkona.adventurebackpack.config.ConfigHandler;
+import com.darkona.adventurebackpack.inventory.IInventoryBackpack;
 import com.darkona.adventurebackpack.inventory.InventoryBackpack;
 import com.darkona.adventurebackpack.reference.BackpackTypes;
-import com.darkona.adventurebackpack.reference.ToolHandler;
 
 import static com.darkona.adventurebackpack.reference.BackpackTypes.HORSE;
 import static com.darkona.adventurebackpack.reference.BackpackTypes.IRON_GOLEM;
@@ -23,51 +20,71 @@ import static com.darkona.adventurebackpack.reference.BackpackTypes.SLIME;
 import static com.darkona.adventurebackpack.reference.BackpackTypes.SNOW;
 import static com.darkona.adventurebackpack.reference.BackpackTypes.VILLAGER;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class ModelBackpack extends ModelWearable
 {
-    public static final ModelBackpack instance = new ModelBackpack();
+    private ModelRenderer mainBody;
+    private ModelRenderer leftStrap;
+    private ModelRenderer rightStrap;
+    private ModelRenderer top;
+    private ModelRenderer bottom;
+    private ModelRenderer pocketFace;
 
-    public ModelRenderer mainBody;
-    public ModelRenderer tankLeftTop;
-    public ModelRenderer tankRightTop;
-    public ModelRenderer bed;
-    public ModelRenderer villagerNose;
-    public ModelRenderer pigNose;
-    public ModelRenderer ocelotNose;
-    public ModelRenderer leftStrap;
-    public ModelRenderer rightStrap;
-    public ModelRenderer top;
-    public ModelRenderer bottom;
-    public ModelRenderer pocketFace;
-    public ModelRenderer tankLeftBottom;
-    public ModelRenderer tankLeftWall4;
-    public ModelRenderer tankLeftWall3;
-    public ModelRenderer tankLeftWall2;
-    public ModelRenderer tankLeftWall1;
-    public ModelRenderer tankRightBottom;
-    public ModelRenderer tankRightWall2;
-    public ModelRenderer tankRightWall1;
-    public ModelRenderer tankRightWall3;
-    public ModelRenderer tankRightWall4;
-    public ModelRenderer bedStrapLeftMid;
-    public ModelRenderer bedStrapRightBottom;
-    public ModelRenderer bedStrapLeftBottom;
-    public ModelRenderer bedStrapRightMid;
-    public ModelRenderer bedStrapRightTop;
-    public ModelRenderer bedStrapLeftTop;
-    RendererStack lowerTool;
-    RendererStack upperTool;
-    public ItemStack backpack;
+    private ModelRenderer tankLeftTop;
+    private ModelRenderer tankLeftBottom;
+    private ModelRenderer tankLeftWall1;
+    private ModelRenderer tankLeftWall2;
+    private ModelRenderer tankLeftWall3;
+    private ModelRenderer tankLeftWall4;
 
-    private void init()
+    private ModelRenderer tankRightTop;
+    private ModelRenderer tankRightBottom;
+    private ModelRenderer tankRightWall1;
+    private ModelRenderer tankRightWall2;
+    private ModelRenderer tankRightWall3;
+    private ModelRenderer tankRightWall4;
+
+    private ModelRenderer bed;
+    private ModelRenderer bedStrapRightTop;
+    private ModelRenderer bedStrapRightMid;
+    private ModelRenderer bedStrapRightBottom;
+    private ModelRenderer bedStrapLeftTop;
+    private ModelRenderer bedStrapLeftMid;
+    private ModelRenderer bedStrapLeftBottom;
+
+    private ModelRenderer lampPole1; // lamp unused
+    private ModelRenderer lampPole2;
+    private ModelRenderer lampPole3;
+    private ModelRenderer lampTop;
+    private ModelRenderer lampBottom;
+    private ModelRenderer lampGlassRight;
+    private ModelRenderer lampGlassFront;
+    private ModelRenderer lampGlassBack;
+    private ModelRenderer lampGlassLeft;
+    private ModelRenderer lampLight;
+
+    private ModelRenderer kitchenBase; // kitchen unused
+    private ModelRenderer kitchen;
+
+    private ModelRenderer ocelotNose;
+    private ModelRenderer pigNose;
+    private ModelRenderer villagerNose;
+
+    private Cuboid6 leftFluidCuboid16;
+    private Cuboid6 rightFluidCuboid16;
+
+    private Cuboid6 rightFluidCuboid20;
+    private Cuboid6 leftFluidCuboid20;
+
+    public ModelBackpack()
     {
         this.textureWidth = 128;
         this.textureHeight = 64;
 
         //Main Backpack
         this.mainBody = new ModelRenderer(this, 0, 9);
-        this.mainBody.addBox(-5.0F, 0.0F, -3.0F, 10, 9, 5);
         this.mainBody.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.mainBody.addBox(-5.0F, 0.0F, -3.0F, 10, 9, 5);
 
         this.leftStrap = new ModelRenderer(this, 21, 24);
         this.leftStrap.setRotationPoint(3.0F, 0.0F, -3.0F);
@@ -96,7 +113,7 @@ public class ModelBackpack extends ModelWearable
 
         //Left Tank
         this.tankLeftTop = new ModelRenderer(this, 0, 40);
-        this.tankLeftTop.setRotationPoint(5.0F, -1.0F, -2.5F);
+        this.tankLeftTop.setRotationPoint(5.0F, 0.0F, -2.5F);
         this.tankLeftTop.addBox(0.0F, 0.0F, 0.0F, 4, 1, 4);
 
         this.tankLeftBottom = new ModelRenderer(this, 0, 46);
@@ -126,7 +143,7 @@ public class ModelBackpack extends ModelWearable
 
         //Right Tank
         this.tankRightTop = new ModelRenderer(this, 17, 40);
-        this.tankRightTop.setRotationPoint(-9.0F, -1.0F, -2.5F);
+        this.tankRightTop.setRotationPoint(-9.0F, 0.0F, -2.5F);
         this.tankRightTop.addBox(0.0F, 0.0F, 0.0F, 4, 1, 4);
 
         this.tankRightBottom = new ModelRenderer(this, 17, 46);
@@ -189,178 +206,168 @@ public class ModelBackpack extends ModelWearable
         this.bedStrapLeftBottom.addBox(0.0F, 0.0F, 0.0F, 2, 1, 3);
         this.bed.addChild(this.bedStrapLeftBottom);
 
+        //Lamp
+        this.lampPole1 = new ModelRenderer(this, 32, 24);
+        this.lampPole1.setRotationPoint(5.0F, -10.0F, -1.0F);
+        this.lampPole1.addBox(0.0F, 0.0F, 0.0F, 1, 10, 1);
+
+        this.lampPole2 = new ModelRenderer(this, 37, 25);
+        this.lampPole2.setRotationPoint(1.0F, 0.0F, 0.0F);
+        this.lampPole2.addBox(0.0F, 0.0F, 0.0F, 4, 1, 1);
+        this.lampPole1.addChild(this.lampPole2);
+
+        this.lampPole3 = new ModelRenderer(this, 40, 28);
+        this.lampPole3.setRotationPoint(3.0F, 1.0F, 0.0F);
+        this.lampPole3.addBox(0.0F, 0.0F, 0.0F, 1, 1, 1);
+        this.lampPole2.addChild(this.lampPole3);
+
+        this.lampTop = new ModelRenderer(this, 53, 8);
+        this.lampTop.setRotationPoint(3.5F, 2.0F, 0.5F);
+        this.lampTop.addBox(-2.5F, 0.0F, -2.5F, 5, 1, 5);
+        this.lampPole2.addChild(this.lampTop);
+
+        this.lampGlassRight = new ModelRenderer(this, 41, 30);
+        this.lampGlassRight.setRotationPoint(-2.5F, 1.0F, -2.5F);
+        this.lampGlassRight.addBox(0.0F, 0.0F, 0.0F, 1, 4, 5);
+        this.lampTop.addChild(this.lampGlassRight);
+
+        this.lampGlassFront = new ModelRenderer(this, 40, 40);
+        this.lampGlassFront.setRotationPoint(-1.5F, 1.0F, -2.5F);
+        this.lampGlassFront.addBox(0.0F, 0.0F, 0.0F, 3, 4, 1);
+        this.lampTop.addChild(this.lampGlassFront);
+
+        this.lampGlassBack = new ModelRenderer(this, 40, 40);
+        this.lampGlassBack.setRotationPoint(-1.5F, 1.0F, 1.5F);
+        this.lampGlassBack.addBox(0.0F, 0.0F, 0.0F, 3, 4, 1);
+        this.lampTop.addChild(this.lampGlassBack);
+
+        this.lampGlassLeft = new ModelRenderer(this, 41, 30);
+        this.lampGlassLeft.setRotationPoint(1.5F, 1.0F, -2.5F);
+        this.lampGlassLeft.addBox(0.0F, 0.0F, 0.0F, 1, 4, 5);
+        this.lampTop.addChild(this.lampGlassLeft);
+
+        this.lampBottom = new ModelRenderer(this, 53, 23);
+        this.lampBottom.setRotationPoint(-2.5F, 5.0F, -0.5F);
+        this.lampBottom.addBox(0.0F, 0.0F, -2.0F, 5, 1, 5);
+        this.lampTop.addChild(this.lampBottom);
+
+        this.lampLight = new ModelRenderer(this, 57, 15);
+        this.lampLight.setRotationPoint(8.0F, -7.0F, -2.0F);
+        this.lampLight.addBox(0.0F, 0.0F, 0.0F, 3, 4, 3);
+
+        //Kitchen
+        this.kitchenBase = new ModelRenderer(this, 49, 46);
+        this.kitchenBase.setRotationPoint(-9.0F, -1.0F, -1.5F);
+        this.kitchenBase.addBox(0.0F, 0.0F, 0.0F, 3, 1, 2);
+
+        this.kitchen = new ModelRenderer(this, 49, 37);
+        this.kitchen.setRotationPoint(-3.0F, -2.0F, -1.5F);
+        this.kitchen.addBox(0.0F, 0.0F, 0.0F, 5, 2, 6);
+        this.kitchenBase.addChild(this.kitchen);
+
         //Noses
         this.villagerNose = new ModelRenderer(this, 64, 0);
         this.villagerNose.setRotationPoint(-1.0F, 4.0F, 4.0F);
         this.villagerNose.addBox(0.0F, 0.0F, 0.0F, 2, 4, 2);
 
-        ocelotNose = new ModelRenderer(this, 74, 0);
-        ocelotNose.setRotationPoint(-1.0F, 4.0F, 4.0F);
-        ocelotNose.addBox(0.0F, 0.0F, 0.0F, 3, 2, 1);
+        this.ocelotNose = new ModelRenderer(this, 74, 0);
+        this.ocelotNose.setRotationPoint(-1.0F, 4.0F, 4.0F);
+        this.ocelotNose.addBox(0.0F, 0.0F, 0.0F, 3, 2, 1);
 
-        pigNose = new ModelRenderer(this, 74, 0);
-        pigNose.setRotationPoint(-2.0F, 4.0F, 4.0F);
-        pigNose.addBox(0.0F, 0.0F, 0.0F, 4, 3, 1);
+        this.pigNose = new ModelRenderer(this, 74, 0);
+        this.pigNose.setRotationPoint(-2.0F, 4.0F, 4.0F);
+        this.pigNose.addBox(0.0F, 0.0F, 0.0F, 4, 3, 1);
 
-        lowerTool = new RendererStack(this, true);
-        upperTool = new RendererStack(this, false);
+        // fluid rendering stuff
+        // scale 0.0625 (1/16)
+        leftFluidCuboid16 = getFluidCuboid16().add(createVector3(tankLeftTop, -0.158, 0.06, 0.125));
+        rightFluidCuboid16 = getFluidCuboid16().add(createVector3(tankRightTop, 0.37, 0.06, 0.125));
 
-//        bipedBody.addChild(mainBody);
-//        bipedBody.addChild(bed);
-//        bipedBody.addChild(tankLeftTop);
-//        bipedBody.addChild(tankRightTop);
-//        bipedBody.addChild(villagerNose);
-//        bipedBody.addChild(ocelotNose);
-//        bipedBody.addChild(pigNose);
-        mainBody.addChild(lowerTool);
-        mainBody.addChild(upperTool);
+        // scale 0.05 (1/20)
+        leftFluidCuboid20 = getFluidCuboid20().add(createVector3(tankLeftTop, -0.22, -0.05, 0.15));
+        rightFluidCuboid20 = getFluidCuboid20().add(createVector3(tankRightTop, 0.48, -0.05, 0.15));
 
-        float offsetZ = 0.4F;
-        float offsetY = 0.2F;
-
-//        for (ModelRenderer part : (List<ModelRenderer>) bipedBody.childModels)
-//        {
-//            setOffset(part, part.offsetX + 0, part.offsetY + offsetY, part.offsetZ + offsetZ);
-//        }
-
+        CCRenderState.instance().reset();
     }
 
-    public ModelBackpack setWearable(ItemStack wearable)
+    private Cuboid6 getFluidCuboid16()
     {
-        this.backpack = wearable;
-        return this;
+        return new Cuboid6(0.0, 0.505, 0.0, 0.188, 0.0, 0.188);
     }
 
-    public ModelBackpack()
+    private Cuboid6 getFluidCuboid20()
     {
-        init();
+        return new Cuboid6(0.0, -0.4, 0.0, 0.15, 0.0, 0.15);
     }
 
-    public ModelBackpack(ItemStack backpack)
+    public void renderTileEntity(IInventoryBackpack backpack, float scale)
     {
-        init();
-        this.backpack = backpack;
+        GlStateManager.pushMatrix();
+        renderBackpack(backpack, scale);
+        GlStateManager.popMatrix();
+
+        GlStateManager.pushMatrix();
+        GlStateManager.rotate(180F, 0.0F, 0.0F, 1.0F);
+        renderFluidInTank(backpack.getLeftTank(), leftFluidCuboid20.copy());
+        renderFluidInTank(backpack.getRightTank(), rightFluidCuboid20.copy());
+        GlStateManager.popMatrix();
     }
 
-    private void renderBackpack(Float scale)
+    public void renderLayer(ItemStack stack, float scale)
     {
-        InventoryBackpack inv = new InventoryBackpack(this.backpack);
-        inv.loadFromNBT(backpack.getTagCompound());
-        BackpackTypes type = inv.getType();
-//        for (ModelRenderer model : (List<ModelRenderer>) bipedBody.childModels)
-//        {
-//            model.mirror = false;
-//        }
+        InventoryBackpack backpack = new InventoryBackpack(stack);
 
-        lowerTool.setRotationPoint(-.5F, .10F, .3F);
-        setOffset(lowerTool, -.28F, 0.8F, -.1F);
-        setOffset(upperTool, 0.0f, 0.04f, 0.25f);
+        GlStateManager.pushMatrix();
+        renderBackpack(backpack, scale);
+        GlStateManager.popMatrix();
 
-        if (ConfigHandler.enableToolsRender)
-        {
-            ItemStack upperStack = inv.getStackInSlot(Constants.TOOL_UPPER);
-            ItemStack lowerStack = inv.getStackInSlot(Constants.TOOL_LOWER);
-            upperTool.setStack(upperStack, ToolHandler.getToolHandler(upperStack));
-            lowerTool.setStack(lowerStack, ToolHandler.getToolHandler(lowerStack));
-        }
+        GlStateManager.pushMatrix();
+        renderFluidInTank(backpack.getLeftTank(), leftFluidCuboid16.copy());
+        renderFluidInTank(backpack.getRightTank(), rightFluidCuboid16.copy());
+        GlStateManager.popMatrix();
+
+        //TODO render items in ToolSlots, see 1.7.10 implementation in ModelBackpackOld and RenderUtils#renderItemUniform
+    }
+
+    private void renderBackpack(IInventoryBackpack backpack, float scale)
+    {
+        BackpackTypes type = backpack.getType();
 
         if (type == QUARTZ || type == SLIME || type == SNOW)
         {
+            //GlStateManager.pushMatrix();
             startBlending();
+            //GlStateManager.enableCull();
             this.mainBody.render(scale);
+            //GlStateManager.disableCull();
             stopBlending();
+            //GlStateManager.popMatrix();
         }
         else
         {
             this.mainBody.render(scale);
         }
 
-        GL11.glPushMatrix();
-
         tankLeftTop.render(scale);
         tankRightTop.render(scale);
 
-        bed.render(scale);
+        if (!backpack.isSleepingBagDeployed())
+            bed.render(scale);
+
         if (type == PIG || type == HORSE)
-        {
             pigNose.render(scale);
-        }
-        if (type == VILLAGER || type == IRON_GOLEM)
-        {
+        else if (type == VILLAGER || type == IRON_GOLEM)
             villagerNose.render(scale);
-        }
-        if (type == OCELOT)
-        {
+        else if (type == OCELOT)
             ocelotNose.render(scale);
-        }
-        GL11.glPopMatrix();
 
-        GL11.glPushMatrix();
-//        GL11.glTranslatef(bipedBody.offsetX + 0, bipedBody.offsetY + 0.2F, bipedBody.offsetZ + 0.3f);
-
-        renderFluidInTankOld(inv.getLeftTank(), new Vector3(0f, .5f, 0f), new Vector3(.17f, 0, .17f), new Vector3(-.17f, .05f, .2f), tankLeftTop);
-
-        renderFluidInTankOld(inv.getRightTank(), new Vector3(0f, .5f, 0f), new Vector3(.17f, 0, .17f), new Vector3(.41f, .05f, .2f), tankRightTop);
-        GL11.glPopMatrix();
+        /*if(type == BackpackTypes.STANDARD)
+        {
+            startBlending();
+            GlStateManager.enableCull();
+            this.lampPole1.render(scale);
+            GlStateManager.disableCull();
+            stopBlending();
+        }*/
     }
-
-//    @Override
-//    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
-//    {
-//        isSneak = ((entity != null) && (entity).isSneaking());
-//        setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-//        float oV = (isSneak) ? 0 : .3F;
-//
-//        float scale = f5 * 0.9f;
-//
-//        GL11.glPushMatrix();
-//
-//        GL11.glTranslatef(bipedBody.offsetX, bipedBody.offsetY, bipedBody.offsetZ);
-//        GL11.glColor4f(1, 1, 1, 1);
-//
-//        if (bipedBody.rotateAngleX == 0.0F && bipedBody.rotateAngleY == 0.0F && bipedBody.rotateAngleZ == 0.0F)
-//        {
-//            if (bipedBody.rotationPointX == 0.0F && bipedBody.rotationPointY == 0.0F && bipedBody.rotationPointZ == 0.0F)
-//            {
-//                renderBackpack(scale);
-//            }
-//            else
-//            {
-//                GL11.glTranslatef(bipedBody.rotationPointX * f5, bipedBody.rotationPointY * f5, bipedBody.rotationPointZ * f5);
-//                renderBackpack(scale);
-//                GL11.glTranslatef(-bipedBody.rotationPointX * f5, -bipedBody.rotationPointY * f5, -bipedBody.rotationPointZ * f5);
-//            }
-//        }
-//        else
-//        {
-//            GL11.glPushMatrix();
-//            GL11.glTranslatef(bipedBody.rotationPointX * f5, bipedBody.rotationPointY * f5, bipedBody.rotationPointZ * f5);
-//
-//            if (bipedBody.rotateAngleZ != 0.0F)
-//            {
-//                GL11.glRotatef(bipedBody.rotateAngleZ * (180F / (float) Math.PI), 0.0F, 0.0F, 1.0F);
-//            }
-//
-//            if (bipedBody.rotateAngleY != 0.0F)
-//            {
-//                GL11.glRotatef(bipedBody.rotateAngleY * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
-//            }
-//
-//            if (bipedBody.rotateAngleX != 0.0F)
-//            {
-//                GL11.glRotatef(bipedBody.rotateAngleX * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
-//            }
-//            renderBackpack(scale);
-//            GL11.glPopMatrix();
-//        }
-//        GL11.glTranslatef(-bipedBody.offsetX, -bipedBody.offsetY, -(bipedBody.offsetZ));
-//        GL11.glPopMatrix();
-//    }
-
-//    @Override
-//    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5, ItemStack stack)
-//    {
-//        this.backpack = stack;
-//        render(entity, f, f1, f2, f3, f4, f5);
-//    }
 }

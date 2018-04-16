@@ -8,7 +8,7 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import com.darkona.adventurebackpack.client.gui.GuiBackpack;
 import com.darkona.adventurebackpack.client.gui.GuiCopter;
 import com.darkona.adventurebackpack.client.gui.GuiJetpack;
-import com.darkona.adventurebackpack.client.renderer.BackpackRenderer;
+import com.darkona.adventurebackpack.client.renderer.WearableRenderer;
 import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.config.Keybindings;
 import com.darkona.adventurebackpack.handlers.KeyInputEventHandler;
@@ -47,7 +47,7 @@ public class ClientProxy implements IProxy
 
     private void registerLayers()
     {
-        MC.getRenderManager().getSkinMap().forEach((s, render) -> render.addLayer(new BackpackRenderer.Layer()));
+        MC.getRenderManager().getSkinMap().forEach((s, render) -> render.addLayer(new WearableRenderer.WearableLayer()));
     }
 
     @Override

@@ -2,22 +2,21 @@ package com.darkona.adventurebackpack.client.renderer;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 import com.darkona.adventurebackpack.block.TileBackpack;
-import com.darkona.adventurebackpack.client.models.ModelBackpackBlock;
-import com.darkona.adventurebackpack.init.ModItems;
+import com.darkona.adventurebackpack.client.models.ModelBackpack;
 import com.darkona.adventurebackpack.inventory.IInventoryBackpack;
 import com.darkona.adventurebackpack.inventory.InventoryBackpack;
+import com.darkona.adventurebackpack.reference.BackpackTypes;
 import com.darkona.adventurebackpack.util.Resources;
 
 public final class BackpackRenderer extends WearableRenderer
 {
     private static final Minecraft MC = Minecraft.getMinecraft();
-    private static final ModelBackpackBlock MODEL_BACKPACK = new ModelBackpackBlock();
+    private static final ModelBackpack MODEL_BACKPACK = new ModelBackpack();
 
     private BackpackRenderer() {}
 
@@ -40,7 +39,7 @@ public final class BackpackRenderer extends WearableRenderer
 
     public static class TileEntity extends TileEntitySpecialRenderer<TileBackpack>
     {
-        private static final ModelBackpackBlock MODEL_BACKPACK = new ModelBackpackBlock();
+        private static final ModelBackpack MODEL_BACKPACK = new ModelBackpack();
 
         @Override
         public void render(TileBackpack te, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
@@ -61,24 +60,13 @@ public final class BackpackRenderer extends WearableRenderer
         }
     }
 
-    public static class Layer extends WearableLayer
+    public static class Layer
     {
-        private static final TextureManager TEXTURE_MANAGER = Minecraft.getMinecraft().renderEngine;
-        private static final ModelBackpackBlock MODEL_BACKPACK = new ModelBackpackBlock();
+        private static final ModelBackpack MODEL_BACKPACK = new ModelBackpack();
 
-        @Override
-        public void doRenderLayer(EntityPlayer player, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
+        public static void render(EntityPlayer player, ItemStack stack)
         {
-            ItemStack stack = null;
-
-            if (player.getHeldItemMainhand().getItem() == ModItems.ADVENTURE_BACKPACK) //TODO capability: isWearingBackpack
-                stack = player.getHeldItemMainhand();
-
-            if (stack == null)
-                return;
-
-            IInventoryBackpack backpack = new InventoryBackpack(stack);
-            TEXTURE_MANAGER.bindTexture(Resources.getBackpackTexture(backpack.getType()));
+            TEXTURE_MANAGER.bindTexture(Resources.getBackpackTexture(BackpackTypes.getType(stack)));
 
             GlStateManager.pushMatrix();
             GlStateManager.enableRescaleNormal();
@@ -93,7 +81,7 @@ public final class BackpackRenderer extends WearableRenderer
                 GlStateManager.translate(0.0F, 0.205F, 0.4F);
             }
 
-            MODEL_BACKPACK.renderLayer(backpack, 0.0625F);
+            MODEL_BACKPACK.renderLayer(stack, 0.0625F);
 
             GlStateManager.disableRescaleNormal();
             GlStateManager.popMatrix();

@@ -1,10 +1,12 @@
 package com.darkona.adventurebackpack.client.models;
 
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-import codechicken.lib.vec.Vector3;
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.vec.Cuboid6;
 
 import com.darkona.adventurebackpack.inventory.InventoryCopter;
 import com.darkona.adventurebackpack.item.ItemCopter;
@@ -13,256 +15,190 @@ import com.darkona.adventurebackpack.util.Utils;
 
 import static com.darkona.adventurebackpack.common.Constants.Copter.TAG_STATUS;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class ModelCopter extends ModelWearable
 {
-    public static ModelCopter instance = new ModelCopter();
-    public ModelRenderer Base;
-    public ModelRenderer EngineBody;
-    public ModelRenderer TankTop;
+    private ModelRenderer base;
 
-    public ModelRenderer EnginePistonLeft;
-    public ModelRenderer EnginePistonRight;
-    public ModelRenderer Axis;
-    public ModelRenderer Blade1;
-    public ModelRenderer Blade2;
-    public ModelRenderer Blade3;
-    public ModelRenderer Blade4;
-    public ModelRenderer TankWallLeftBack;
-    public ModelRenderer TankWallRightBack;
-    public ModelRenderer TankWallLeftFront;
-    public ModelRenderer TankWallRightFront;
-    public ModelRenderer TankBottom;
-    public ModelRenderer FuelLine1;
-    public ModelRenderer FuelLine2;
-    public ModelRenderer Escape1;
-    public ModelRenderer Escape2;
-    public ModelRenderer Escape3;
-    public ModelRenderer EscapeFilter;
-    private ItemStack copter;
+    private ModelRenderer tankTop;
+    private ModelRenderer tankWallLeftFront;
+    private ModelRenderer tankWallLeftBack;
+    private ModelRenderer tankWallRightFront;
+    private ModelRenderer tankWallRightBack;
+    private ModelRenderer tankBottom;
+    private ModelRenderer fuelLine1;
+    private ModelRenderer fuelLine2;
 
-    @SuppressWarnings("unchecked")
-    private void init()
+    private ModelRenderer engineBody;
+    private ModelRenderer enginePistonLeft;
+    private ModelRenderer enginePistonRight;
+    private ModelRenderer axis;
+    private ModelRenderer blade1;
+    private ModelRenderer blade2;
+    private ModelRenderer blade3;
+    private ModelRenderer blade4;
+
+    private ModelRenderer escape1;
+    private ModelRenderer escape2;
+    private ModelRenderer escape3;
+    private ModelRenderer escapeFilter;
+
+    private Cuboid6 fluidCuboid;
+
+    public ModelCopter()
     {
         this.textureWidth = 64;
         this.textureHeight = 64;
 
-        this.Base = new ModelRenderer(this, 0, 0);
-        this.Base.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.Base.addBox(-4.0F, 0.0F, 2.0F, 8, 12, 1);
+        this.base = new ModelRenderer(this, 0, 0);
+        this.base.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.base.addBox(-4.0F, 0.0F, 2.0F, 8, 12, 1);
 
         //TANK
-        this.TankTop = new ModelRenderer(this, 0, 33);
-        this.TankTop.setRotationPoint(1.0F, 0.0F, 3.0F);
-        this.TankTop.addBox(0.0F, 0.0F, 0.0F, 5, 1, 5, 0.0F);
-        this.Base.addChild(this.TankTop);
+        this.tankTop = new ModelRenderer(this, 0, 33);
+        this.tankTop.setRotationPoint(1.0F, 0.0F, 3.0F);
+        this.tankTop.addBox(0.0F, 0.0F, 0.0F, 5, 1, 5, 0.0F);
+        this.base.addChild(this.tankTop);
 
-        this.TankWallLeftFront = new ModelRenderer(this, 0, 40);
-        this.TankWallLeftFront.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.TankWallLeftFront.addBox(4.0F, 1.0F, 0.0F, 1, 4, 1, 0.0F);
-        this.TankTop.addChild(this.TankWallLeftFront);
+        this.tankWallLeftFront = new ModelRenderer(this, 0, 40);
+        this.tankWallLeftFront.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.tankWallLeftFront.addBox(4.0F, 1.0F, 0.0F, 1, 4, 1, 0.0F);
+        this.tankTop.addChild(this.tankWallLeftFront);
 
-        this.TankWallLeftBack = new ModelRenderer(this, 0, 32);
-        this.TankWallLeftBack.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.TankWallLeftBack.addBox(4.0F, 1.0F, 4.0F, 1, 4, 1, 0.0F);
-        this.TankTop.addChild(this.TankWallLeftBack);
+        this.tankWallLeftBack = new ModelRenderer(this, 0, 32);
+        this.tankWallLeftBack.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.tankWallLeftBack.addBox(4.0F, 1.0F, 4.0F, 1, 4, 1, 0.0F);
+        this.tankTop.addChild(this.tankWallLeftBack);
 
-        this.TankWallRightFront = new ModelRenderer(this, 16, 40);
-        this.TankWallRightFront.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.TankWallRightFront.addBox(0.0F, 1.0F, 0.0F, 1, 4, 1, 0.0F);
-        this.TankTop.addChild(this.TankWallRightFront);
+        this.tankWallRightFront = new ModelRenderer(this, 16, 40);
+        this.tankWallRightFront.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.tankWallRightFront.addBox(0.0F, 1.0F, 0.0F, 1, 4, 1, 0.0F);
+        this.tankTop.addChild(this.tankWallRightFront);
 
-        this.TankWallRightBack = new ModelRenderer(this, 16, 32);
-        this.TankWallRightBack.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.TankWallRightBack.addBox(0.0F, 1.0F, 4.0F, 1, 4, 1, 0.0F);
-        this.TankTop.addChild(this.TankWallRightBack);
+        this.tankWallRightBack = new ModelRenderer(this, 16, 32);
+        this.tankWallRightBack.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.tankWallRightBack.addBox(0.0F, 1.0F, 4.0F, 1, 4, 1, 0.0F);
+        this.tankTop.addChild(this.tankWallRightBack);
 
-        this.TankBottom = new ModelRenderer(this, 0, 41);
-        this.TankBottom.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.TankBottom.addBox(0.0F, 5.0F, 0.0F, 5, 1, 5, 0.0F);
-        this.TankTop.addChild(this.TankBottom);
+        this.tankBottom = new ModelRenderer(this, 0, 41);
+        this.tankBottom.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.tankBottom.addBox(0.0F, 5.0F, 0.0F, 5, 1, 5, 0.0F);
+        this.tankTop.addChild(this.tankBottom);
 
-        this.FuelLine1 = new ModelRenderer(this, 15, 48);
-        this.FuelLine1.setRotationPoint(0.0F, 5.0F, 0.0F);
-        this.FuelLine1.addBox(2.0F, 1.0F, 2.0F, 1, 4, 1, 0.0F);
-        this.TankBottom.addChild(this.FuelLine1);
+        this.fuelLine1 = new ModelRenderer(this, 15, 48);
+        this.fuelLine1.setRotationPoint(0.0F, 5.0F, 0.0F);
+        this.fuelLine1.addBox(2.0F, 1.0F, 2.0F, 1, 4, 1, 0.0F);
+        this.tankBottom.addChild(this.fuelLine1);
 
-        this.FuelLine2 = new ModelRenderer(this, 0, 48);
-        this.FuelLine2.setRotationPoint(0.0F, 8.0F, 0.0F);
-        this.FuelLine2.addBox(1.0F, 1.0F, 2.0F, 1, 1, 1, 0.0F);
-        this.TankBottom.addChild(this.FuelLine2);
+        this.fuelLine2 = new ModelRenderer(this, 0, 48);
+        this.fuelLine2.setRotationPoint(0.0F, 8.0F, 0.0F);
+        this.fuelLine2.addBox(1.0F, 1.0F, 2.0F, 1, 1, 1, 0.0F);
+        this.tankBottom.addChild(this.fuelLine2);
 
         //ENGINE
-        this.EngineBody = new ModelRenderer(this, 0, 23);
-        this.EngineBody.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.EngineBody.addBox(-2.0F, 8.0F, 3.0F, 4, 4, 4);
-        this.Base.addChild(this.EngineBody);
+        this.engineBody = new ModelRenderer(this, 0, 23);
+        this.engineBody.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.engineBody.addBox(-2.0F, 8.0F, 3.0F, 4, 4, 4);
+        this.base.addChild(this.engineBody);
 
-        this.EnginePistonLeft = new ModelRenderer(this, 0, 18);
-        this.EnginePistonLeft.setRotationPoint(0.0F, 8.0F, 5.0F);
-        this.EnginePistonLeft.addBox(1.7F, 1.0F, -1.0F, 4, 2, 2);
-        this.setRotateAngle(EnginePistonLeft, 0.0F, -0.7853981633974483F, 0.0F);
-        this.EngineBody.addChild(this.EnginePistonLeft);
+        this.enginePistonLeft = new ModelRenderer(this, 0, 18);
+        this.enginePistonLeft.setRotationPoint(0.0F, 8.0F, 5.0F);
+        this.enginePistonLeft.addBox(1.7F, 1.0F, -1.0F, 4, 2, 2);
+        this.setRotateAngle(enginePistonLeft, 0.0F, -0.7853981633974483F, 0.0F);
+        this.engineBody.addChild(this.enginePistonLeft);
 
-        this.EnginePistonRight = new ModelRenderer(this, 13, 18);
-        this.EnginePistonRight.setRotationPoint(0.0F, 8.0F, 5.0F);
-        this.EnginePistonRight.addBox(1.7F, 1.0F, -1.0F, 4, 2, 2);
-        this.setRotateAngle(EnginePistonRight, 0.0F, -2.356194490192345F, 0.0F);
-        this.EngineBody.addChild(this.EnginePistonRight);
+        this.enginePistonRight = new ModelRenderer(this, 13, 18);
+        this.enginePistonRight.setRotationPoint(0.0F, 8.0F, 5.0F);
+        this.enginePistonRight.addBox(1.7F, 1.0F, -1.0F, 4, 2, 2);
+        this.setRotateAngle(enginePistonRight, 0.0F, -2.356194490192345F, 0.0F);
+        this.engineBody.addChild(this.enginePistonRight);
 
-        this.Axis = new ModelRenderer(this, 25, 22);
-        this.Axis.setRotationPoint(0.0F, 8.0F, 5.75F);
-        this.Axis.addBox(-0.5F, -25.0F, -0.5F, 1, 25, 1);
-        //this.EngineBody.addChild(this.Axis);
+        this.axis = new ModelRenderer(this, 25, 22);
+        this.axis.setRotationPoint(0.0F, 8.0F, 5.75F);
+        this.axis.addBox(-0.5F, -25.0F, -0.5F, 1, 25, 1);
+        //this.engineBody.addChild(this.axis);
 
-        this.Blade1 = new ModelRenderer(this, 29, 0);
-        this.Blade1.setRotationPoint(0.0F, -25.0F, 0.0F);
-        this.Blade1.addBox(0.0F, -0.5F, -1.0F, 15, 1, 2);
-        this.Axis.addChild(this.Blade1);
+        this.blade1 = new ModelRenderer(this, 29, 0);
+        this.blade1.setRotationPoint(0.0F, -25.0F, 0.0F);
+        this.blade1.addBox(0.0F, -0.5F, -1.0F, 15, 1, 2);
+        this.axis.addChild(this.blade1);
 
-        this.Blade2 = new ModelRenderer(this, 30, 4);
-        this.Blade2.setRotationPoint(0.0F, -25.0F, 0.0F);
-        this.Blade2.addBox(-1.0F, -0.5F, 0.0F, 2, 1, 15);
-        this.Axis.addChild(this.Blade2);
+        this.blade2 = new ModelRenderer(this, 30, 4);
+        this.blade2.setRotationPoint(0.0F, -25.0F, 0.0F);
+        this.blade2.addBox(-1.0F, -0.5F, 0.0F, 2, 1, 15);
+        this.axis.addChild(this.blade2);
 
-        this.Blade3 = new ModelRenderer(this, 29, 0);
-        this.Blade3.setRotationPoint(0.0F, -25.0F, 0.0F);
-        this.Blade3.addBox(0.0F, -0.5F, -1.0F, 15, 1, 2);
-        this.setRotateAngle(Blade3, 0.0F, 0.0F, 3.141592653589793F);
-        this.Axis.addChild(this.Blade3);
+        this.blade3 = new ModelRenderer(this, 29, 0);
+        this.blade3.setRotationPoint(0.0F, -25.0F, 0.0F);
+        this.blade3.addBox(0.0F, -0.5F, -1.0F, 15, 1, 2);
+        this.setRotateAngle(blade3, 0.0F, 0.0F, 3.141592653589793F);
+        this.axis.addChild(this.blade3);
 
-        this.Blade4 = new ModelRenderer(this, 30, 4);
-        this.Blade4.setRotationPoint(0.0F, -25.0F, 0.0F);
-        this.Blade4.addBox(-1.0F, -0.5F, 0.0F, 2, 1, 15);
-        this.setRotateAngle(Blade4, -3.141592653589793F, 0.0F, 0.0F);
-        this.Axis.addChild(this.Blade4);
+        this.blade4 = new ModelRenderer(this, 30, 4);
+        this.blade4.setRotationPoint(0.0F, -25.0F, 0.0F);
+        this.blade4.addBox(-1.0F, -0.5F, 0.0F, 2, 1, 15);
+        this.setRotateAngle(blade4, -3.141592653589793F, 0.0F, 0.0F);
+        this.axis.addChild(this.blade4);
 
         //ESCAPE
-        this.Escape1 = new ModelRenderer(this, 9, 35);
-        this.Escape1.setRotationPoint(-4.0F, 9.0F, 4.0F);
-        this.Escape1.addBox(0.0F, 0.0F, 0.0F, 2, 1, 1);
-        this.Base.addChild(this.Escape1);
+        this.escape1 = new ModelRenderer(this, 9, 35);
+        this.escape1.setRotationPoint(-4.0F, 9.0F, 4.0F);
+        this.escape1.addBox(0.0F, 0.0F, 0.0F, 2, 1, 1);
+        this.base.addChild(this.escape1);
 
-        this.Escape2 = new ModelRenderer(this, 38, 40);
-        this.Escape2.setRotationPoint(-4.0F, 0.0F, 4.0F);
-        this.Escape2.addBox(0.0F, 0.0F, 0.0F, 1, 9, 1);
-        this.Base.addChild(this.Escape2);
+        this.escape2 = new ModelRenderer(this, 38, 40);
+        this.escape2.setRotationPoint(-4.0F, 0.0F, 4.0F);
+        this.escape2.addBox(0.0F, 0.0F, 0.0F, 1, 9, 1);
+        this.base.addChild(this.escape2);
 
-        this.Escape3 = new ModelRenderer(this, 6, 24);
-        this.Escape3.setRotationPoint(-4.0F, 0.0F, 5.0F);
-        this.Escape3.addBox(0.0F, 0.0F, 0.0F, 1, 1, 2);
-        this.Base.addChild(this.Escape3);
+        this.escape3 = new ModelRenderer(this, 6, 24);
+        this.escape3.setRotationPoint(-4.0F, 0.0F, 5.0F);
+        this.escape3.addBox(0.0F, 0.0F, 0.0F, 1, 1, 2);
+        this.base.addChild(this.escape3);
 
-        this.EscapeFilter = new ModelRenderer(this, 35, 28);
-        this.EscapeFilter.setRotationPoint(-4.4F, 2.0F, 3.5F);
-        this.EscapeFilter.addBox(0.0F, 0.0F, 0.0F, 2, 5, 2);
-        this.Base.addChild(this.EscapeFilter);
+        this.escapeFilter = new ModelRenderer(this, 35, 28);
+        this.escapeFilter.setRotationPoint(-4.4F, 2.0F, 3.5F);
+        this.escapeFilter.addBox(0.0F, 0.0F, 0.0F, 2, 5, 2);
+        this.base.addChild(this.escapeFilter);
 
-//        this.bipedBody.addChild(this.Base);
+        // fluid rendering stuff
+        fluidCuboid = new Cuboid6(0, 0.2505, 0, 0.26, -0.005, 0.26)
+                .add(createVector3(tankTop, -0.015, 0.0625, -0.093));
 
-        float offsetZ = 0.1F;
-        float offsetY = 0.0F;
-//        for (ModelRenderer part : (List<ModelRenderer>) bipedBody.childModels)
-//        {
-//            setOffset(part, part.offsetX + 0, part.offsetY + offsetY, part.offsetZ + offsetZ);
-//        }
+        CCRenderState.instance().reset();
     }
 
-    public ModelCopter setWearable(ItemStack wearable)
+    public void renderLayer(EntityPlayer player, ItemStack stack, float scale)
     {
-        this.copter = wearable;
-        return this;
-    }
+        InventoryCopter copter = new InventoryCopter(stack);
+        copter.loadFromNBT(stack.getTagCompound()); //TODO redundant?
 
-    public ModelCopter()
-    {
-        init();
-    }
-
-    private void renderCopter(Entity entity, float scale)
-    {
-        InventoryCopter inv = new InventoryCopter(this.copter);
-        inv.loadFromNBT(copter.getTagCompound());
-        Axis.isHidden = true;
-        if (BackpackUtils.getWearableCompound(copter).getByte(TAG_STATUS) != ItemCopter.OFF_MODE)
+        if (BackpackUtils.getWearableCompound(stack).getByte(TAG_STATUS) != ItemCopter.OFF_MODE) //TODO get status from inventory?
         {
-            Axis.isHidden = false;
+            axis.isHidden = false;
+
             int degrees;
-            if (entity.onGround || (entity.isSneaking()))
-            {
+            if (player.onGround || player.isSneaking())
                 degrees = 16;
-            }
             else
-            {
-                degrees = entity.motionY > 0 ? 36 : 28;
-            }
-            float deg = Utils.radiansToDegrees(this.Axis.rotateAngleY);
-            this.Axis.rotateAngleY = (deg <= 360 + degrees) ? Utils.degreesToRadians(deg + degrees) : 0;
+                degrees = player.motionY > 0 ? 36 : 28;
+
+            float deg = Utils.radiansToDegrees(this.axis.rotateAngleY);
+            this.axis.rotateAngleY = (deg <= 360 + degrees) ? Utils.degreesToRadians(deg + degrees) : 0;
         }
-        this.Base.render(scale);
-        this.Axis.render(scale);
-        //codechicken stuff
-        renderFluidInTankOld(inv.getFuelTank(), new Vector3(0, .25f, 0), new Vector3(.25f, 0, .25f), new Vector3(0f, 0.0625f, 0.0f), TankTop);
+        else
+        {
+            axis.isHidden = true;
+        }
+
+        GlStateManager.pushMatrix();
+        this.base.render(scale);
+        this.axis.render(scale);
+        GlStateManager.popMatrix();
+
+        GlStateManager.pushMatrix();
+        renderFluidInTank(copter.getFuelTank(), fluidCuboid.copy());
+        GlStateManager.popMatrix();
     }
 
-//    @Override
-//    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5, ItemStack stack)
-//    {
-//        this.copter = stack;
-//        render(entity, f, f1, f2, f3, f4, f5);
-//    }
-
-//    @Override
-//    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
-//    {
-//        isSneak = (entity != null && entity.isSneaking());
-//
-//        if (entity == null) Axis.isHidden = true;
-//        setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-//        if (entity != null && entity instanceof EntityPlayer)
-//        {
-//            GL11.glPushMatrix();
-//
-//            GL11.glTranslatef(bipedBody.offsetX, bipedBody.offsetY, bipedBody.offsetZ);
-//            GL11.glColor4f(1, 1, 1, 1);
-//
-//            if (bipedBody.rotateAngleX == 0.0F && bipedBody.rotateAngleY == 0.0F && bipedBody.rotateAngleZ == 0.0F)
-//            {
-//                if (bipedBody.rotationPointX == 0.0F && bipedBody.rotationPointY == 0.0F && bipedBody.rotationPointZ == 0.0F)
-//                {
-//                    renderCopter(entity, f5);
-//
-//                }
-//                else
-//                {
-//                    GL11.glTranslatef(bipedBody.rotationPointX * f5, bipedBody.rotationPointY * f5, bipedBody.rotationPointZ * f5);
-//                    renderCopter(entity, f5);
-//                    GL11.glTranslatef(-bipedBody.rotationPointX * f5, -bipedBody.rotationPointY * f5, -bipedBody.rotationPointZ * f5);
-//                }
-//            }
-//            else
-//            {
-//                GL11.glPushMatrix();
-//                GL11.glTranslatef(bipedBody.rotationPointX * f5, bipedBody.rotationPointY * f5, bipedBody.rotationPointZ * f5);
-//
-//                if (bipedBody.rotateAngleZ != 0.0F)
-//                {
-//                    GL11.glRotatef(bipedBody.rotateAngleZ * (180F / (float) Math.PI), 0.0F, 0.0F, 1.0F);
-//                }
-//
-//                if (bipedBody.rotateAngleY != 0.0F)
-//                {
-//                    GL11.glRotatef(bipedBody.rotateAngleY * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
-//                }
-//
-//                if (bipedBody.rotateAngleX != 0.0F)
-//                {
-//                    GL11.glRotatef(bipedBody.rotateAngleX * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
-//                }
-//                renderCopter(entity, f5);
-//                GL11.glPopMatrix();
-//            }
-//            GL11.glTranslatef(-bipedBody.offsetX, -bipedBody.offsetY, -(bipedBody.offsetZ));
-//            GL11.glPopMatrix();
-//        }
-//    }
 }

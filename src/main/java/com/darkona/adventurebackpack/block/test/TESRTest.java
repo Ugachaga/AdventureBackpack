@@ -13,14 +13,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.ForgeHooksClient;
 
-import com.darkona.adventurebackpack.client.models.ModelBackpackBlock;
+import com.darkona.adventurebackpack.client.models.ModelBackpack;
 import com.darkona.adventurebackpack.inventory.InventoryBackpack;
 import com.darkona.adventurebackpack.util.BackpackUtils;
 import com.darkona.adventurebackpack.util.Resources;
 
 public class TESRTest extends TileEntitySpecialRenderer<TileTest>
 {
-    private ModelBackpackBlock model_block = new ModelBackpackBlock();
+    private ModelBackpack model_block = new ModelBackpack();
 
 
     @Override

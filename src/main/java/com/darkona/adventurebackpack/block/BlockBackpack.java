@@ -1,9 +1,6 @@
 package com.darkona.adventurebackpack.block;
 
-import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
@@ -13,7 +10,6 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -27,7 +23,6 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -40,6 +35,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.darkona.adventurebackpack.AdventureBackpack;
 import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.reference.BackpackTypes;
+import com.darkona.adventurebackpack.reference.GeneralReference;
 import com.darkona.adventurebackpack.util.BackpackUtils;
 import com.darkona.adventurebackpack.util.CoordsUtils;
 
@@ -190,7 +186,7 @@ public class BlockBackpack extends Block //TODO extends BlockHorizontal ?
 //        }
 //        return true;
 
-        if (!world.isRemote /*&& GeneralReference.isDimensionAllowed(player)*/)
+        if (!world.isRemote && GeneralReference.isDimensionAllowed(player))
         {
             System.out.println("here");
             if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileBackpack)
@@ -234,17 +230,6 @@ public class BlockBackpack extends Block //TODO extends BlockHorizontal ?
     {
         world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()));
         //world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 3);
-    }
-
-    @Override
-    public void getSubBlocks(CreativeTabs item, NonNullList<ItemStack> items)
-    {
-        List<ItemStack> backpacks = Stream.of(BackpackTypes.values())
-                .filter(type -> type != BackpackTypes.UNKNOWN)
-                .map(BackpackUtils::createBackpackStack)
-                .collect(Collectors.toList());
-
-        items.addAll(backpacks);
     }
 
     @Override
