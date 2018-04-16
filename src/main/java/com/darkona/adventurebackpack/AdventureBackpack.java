@@ -76,8 +76,6 @@ public class AdventureBackpack
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
-        PROXY.registerLayers(); //TODO move out of proxy?
-
         GeneralReference.init();
 
         //ConditionalFluidEffect.init();

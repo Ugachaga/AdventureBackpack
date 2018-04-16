@@ -327,9 +327,9 @@ public class PlayerEventHandler
 
         EntityPlayer player = event.getEntityPlayer();
         BlockPos bedLocation = player.getBedLocation(player.dimension);
-        if (player.world.getBlockState(bedLocation) == ModBlocks.SLEEPING_BAG_BLOCK)
+        if (player.world.getBlockState(bedLocation).getBlock() == ModBlocks.SLEEPING_BAG_BLOCK)
         {
-            //If the player wakes up in one of those super confortable SleepingBags (tm) (Patent Pending)
+            //If the player wakes up in one of those super comfortable SleepingBags (tm) (Patent Pending)
             if (BlockSleepingBag.isSleepingInPortableBag(player))
             {
                 BlockSleepingBag.packPortableSleepingBag(player);

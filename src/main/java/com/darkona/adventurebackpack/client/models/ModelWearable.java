@@ -76,8 +76,7 @@ public abstract class ModelWearable extends ModelBase
         double fullness = ((double) tank.getFluidAmount()) / ((double) tank.getCapacity());
         RenderUtils.renderFluidCuboidGL(tank.getFluid(), cuboid, fullness, 0.8);
 
-//        FluidStack fs = new FluidStack(FluidRegistry.LAVA, Constants.BASIC_TANK_CAPACITY); //TODO del
-//        fullness = 1.0; //del
-//        RenderUtils.renderFluidCuboidGL(fs, cuboid, fullness, 0.8);
+//        FluidStack fs = new FluidStack(FluidRegistry.LAVA, Constants.BASIC_TANK_CAPACITY);
+//        RenderUtils.renderFluidCuboidGL(fs, cuboid, 1.0, 0.8);
     }
 }

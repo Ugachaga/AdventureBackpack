@@ -111,8 +111,8 @@ public class GuiBackpack extends GuiWithTanks
         FluidTank rgt = inventory.getRightTank();
         tankLeft.draw(this, lft);
         tankRight.draw(this, rgt);
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_BLEND);
+//        GL11.glDisable(GL11.GL_LIGHTING);
+//        GL11.glDisable(GL11.GL_BLEND);
     }
 
     @Override

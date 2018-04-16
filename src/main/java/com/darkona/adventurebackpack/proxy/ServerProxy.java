@@ -17,10 +17,8 @@ import com.darkona.adventurebackpack.util.LogHelper;
 
 public class ServerProxy implements IProxy
 {
-    private static final Map<UUID, NBTTagCompound> extendedEntityData = new HashMap<>();
-
     @Override
-    public void registerLayers()
+    public void init()
     {
 
     }
@@ -43,23 +41,10 @@ public class ServerProxy implements IProxy
         throw new IllegalArgumentException("Tried to open the GUI on the server");
     }
 
-    @Override
-    public void init()
-    {
 
-    }
+    //---
 
-    @Override
-    public void registerKeybindings()
-    {
-
-    }
-
-    @Override
-    public void synchronizePlayer(int id, NBTTagCompound compound)
-    {
-
-    }
+    private static final Map<UUID, NBTTagCompound> extendedEntityData = new HashMap<>();
 
     public static void storePlayerProps(EntityPlayer player)
     {

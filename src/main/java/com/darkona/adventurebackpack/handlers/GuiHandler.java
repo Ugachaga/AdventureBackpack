@@ -48,7 +48,7 @@ public class GuiHandler implements IGuiHandler
                 return new ContainerTest(player.inventory, (TileTest) world.getTileEntity(new BlockPos(x, y, z)));
             case BACKPACK_TILE:
                 TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
-                if (tileEntity != null && tileEntity instanceof TileBackpack)
+                if (tileEntity instanceof TileBackpack)
                 {
                     return new ContainerBackpack(player, (TileBackpack) tileEntity, Source.TILE);
                 }
@@ -107,7 +107,7 @@ public class GuiHandler implements IGuiHandler
 
             case BACKPACK_TILE:
                 TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
-                if (tileEntity != null && tileEntity instanceof TileBackpack)
+                if (tileEntity instanceof TileBackpack)
                 {
                     return new GuiBackpack(player, (TileBackpack) tileEntity, Source.TILE);
                 }

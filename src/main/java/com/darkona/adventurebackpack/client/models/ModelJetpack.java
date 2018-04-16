@@ -28,7 +28,6 @@ public class ModelJetpack extends ModelWearable
     public ModelRenderer tubeBendRight;
     private ItemStack jetpack;
 
-    @SuppressWarnings("unchecked")
     public ModelJetpack()
     {
         this.textureWidth = 64;
@@ -178,19 +177,19 @@ public class ModelJetpack extends ModelWearable
 //        }
 //    }
 
-    public void renderJetpack(float f5)
+    public void renderJetpack(float scale)
     {
         InventoryJetpack inv = new InventoryJetpack(jetpack);
 
         this.fireBox.setTextureOffset((inv.getBurnTicks() > 0) ? 9 : 26, 25);
 
-        tubeStraightRight.render(f5);
-        tubeEndLeft.render(f5);
-        tubeEndRight.render(f5);
-        base.render(f5);
-        tankWallLeft.render(f5);
-        tankWallRight.render(f5);
-        tubeStraightLeft.render(f5);
+        tubeStraightRight.render(scale);
+        tubeEndLeft.render(scale);
+        tubeEndRight.render(scale);
+        base.render(scale);
+        tankWallLeft.render(scale);
+        tankWallRight.render(scale);
+        tubeStraightLeft.render(scale);
 
         //codechicken stuff
         GL11.glPushMatrix();

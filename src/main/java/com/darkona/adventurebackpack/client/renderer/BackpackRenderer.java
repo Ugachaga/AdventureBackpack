@@ -2,6 +2,7 @@ package com.darkona.adventurebackpack.client.renderer;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -15,7 +16,27 @@ import com.darkona.adventurebackpack.util.Resources;
 
 public final class BackpackRenderer extends WearableRenderer
 {
+    private static final Minecraft MC = Minecraft.getMinecraft();
+    private static final ModelBackpackBlock MODEL_BACKPACK = new ModelBackpackBlock();
+
     private BackpackRenderer() {}
+
+    static void renderItem(ItemStack stack)
+    {
+        IInventoryBackpack backpack = new InventoryBackpack(stack);
+        MC.getTextureManager().bindTexture(Resources.getBackpackTexture(backpack.getType()));
+
+        GlStateManager.pushMatrix();
+        GlStateManager.enableRescaleNormal();
+        GlStateManager.translate(0.5F, 0.5F, 0.5F);
+        GlStateManager.rotate(180F, 0.0F, 0.0F, 1.0F);
+
+        MODEL_BACKPACK.renderTileEntity(backpack, 0.05F);
+        //FIXME CC fluid renderer doesn't reset some GL stuff after work, so need to find how to reset it manually. it's also blending-related (Slime backpack). reminder: black shield inventory icon.
+
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.popMatrix();
+    }
 
     public static class TileEntity extends TileEntitySpecialRenderer<TileBackpack>
     {
@@ -29,14 +50,11 @@ public final class BackpackRenderer extends WearableRenderer
 
             GlStateManager.pushMatrix();
             GlStateManager.enableRescaleNormal();
-            //GlStateManager.scale(0.8F, 0.8F, 0.8F);
             GlStateManager.translate((float) x + 0.5F, (float) y + 0.5F, (float) z + 0.5F);
             GlStateManager.rotate(180F, 0.0F, 0.0F, 1.0F); // flip from head to legs
             GlStateManager.rotate(rotation, 0.0F, 1.0F, 0.0F); // world direction
 
-            //MODEL_BACKPACK.render(0.0625F, te);
-            MODEL_BACKPACK.renderTileEntity(te, 0.05F); //TODO scale to 0.0625, prescale to 0.8
-            //FIXME CC fluid renderer doesn't reset some GL stuff after work, so need to find how to reset it manually. it's also blending-related (Slime backpack). reminder: black shield inventory icon.
+            MODEL_BACKPACK.renderTileEntity(te, 0.05F);
 
             GlStateManager.disableRescaleNormal();
             GlStateManager.popMatrix();
@@ -45,6 +63,7 @@ public final class BackpackRenderer extends WearableRenderer
 
     public static class Layer extends WearableLayer
     {
+        private static final TextureManager TEXTURE_MANAGER = Minecraft.getMinecraft().renderEngine;
         private static final ModelBackpackBlock MODEL_BACKPACK = new ModelBackpackBlock();
 
         @Override
@@ -59,7 +78,7 @@ public final class BackpackRenderer extends WearableRenderer
                 return;
 
             IInventoryBackpack backpack = new InventoryBackpack(stack);
-            Minecraft.getMinecraft().renderEngine.bindTexture(Resources.getBackpackTexture(backpack.getType()));
+            TEXTURE_MANAGER.bindTexture(Resources.getBackpackTexture(backpack.getType()));
 
             GlStateManager.pushMatrix();
             GlStateManager.enableRescaleNormal();
@@ -79,11 +98,6 @@ public final class BackpackRenderer extends WearableRenderer
             GlStateManager.disableRescaleNormal();
             GlStateManager.popMatrix();
         }
-    }
-
-    public void renderItem(ItemStack stack, float scale)
-    {
-        //TODO
     }
 
 }

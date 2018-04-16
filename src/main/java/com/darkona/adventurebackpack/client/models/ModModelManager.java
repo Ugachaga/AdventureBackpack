@@ -25,8 +25,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import com.darkona.adventurebackpack.block.TileBackpack;
 import com.darkona.adventurebackpack.block.test.TESRTest;
 import com.darkona.adventurebackpack.block.test.TileTest;
-import com.darkona.adventurebackpack.client.renderer.TileEntityItemSpecialRenderer;
 import com.darkona.adventurebackpack.client.renderer.BackpackRenderer;
+import com.darkona.adventurebackpack.client.renderer.TileEntityItemSpecialRenderer;
 import com.darkona.adventurebackpack.init.ModBlocks;
 import com.darkona.adventurebackpack.init.ModFluids;
 import com.darkona.adventurebackpack.init.ModItems;
@@ -51,8 +51,7 @@ public class ModModelManager
         INSTANCE.registerTileEntityModels();
         INSTANCE.registerBlockModels();
         INSTANCE.registerItemModels();
-
-        TileEntityItemStackRenderer.instance = new TileEntityItemSpecialRenderer(TileEntityItemStackRenderer.instance);
+        INSTANCE.registerTEISR();
     }
 
     private void registerFluidModels()
@@ -144,6 +143,11 @@ public class ModModelManager
     {
         itemsRegistered.add(item);
         ModelLoader.setCustomMeshDefinition(item, meshDefinition);
+    }
+
+    private void registerTEISR()
+    {
+        TileEntityItemStackRenderer.instance = new TileEntityItemSpecialRenderer(TileEntityItemStackRenderer.instance);
     }
     
 }
