@@ -44,7 +44,7 @@ public class Visuals
     {
         Vec3d playerPosition = new Vec3d(player.posX, player.posY, player.posZ);
         Vec3d victor = new Vec3d(-0.25D, -0.19D, -0.40D);
-        victor.rotateYaw(-player.renderYawOffset * 3.141593F / 180.0F);
+        victor.rotateYaw(-player.renderYawOffset * (float) Math.PI / 180.0F);
         Vec3d finalPosition = playerPosition.addVector(victor.x, victor.y, victor.z);
         world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, finalPosition.x, finalPosition.y, finalPosition.z,
                 0, -0.4, 0);
@@ -55,8 +55,8 @@ public class Visuals
         Vec3d playerPosition = new Vec3d(player.posX, player.posY, player.posZ);
         Vec3d victor = new Vec3d(-0.5D, -0.5D, -0.5D);
         Vec3d victoria = new Vec3d(0.5D, -0.5D, -0.5D);
-        victor.rotateYaw(-player.renderYawOffset * 3.141593F / 180.0F);
-        victoria.rotateYaw(-player.renderYawOffset * 3.141593F / 180.0F);
+        victor.rotateYaw(-player.renderYawOffset * (float) Math.PI / 180.0F);
+        victoria.rotateYaw(-player.renderYawOffset * (float) Math.PI / 180.0F);
         Vec3d leftPosition = victor.addVector(playerPosition.x, playerPosition.y, playerPosition.z);
         Vec3d rightPosition = victoria.addVector(playerPosition.x, playerPosition.y, playerPosition.z);
         for (int i = 0; i < 4; i++)

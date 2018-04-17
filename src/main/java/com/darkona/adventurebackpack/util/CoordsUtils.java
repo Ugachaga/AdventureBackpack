@@ -21,6 +21,17 @@ public class CoordsUtils
     private CoordsUtils() {}
 
     @Nullable
+    public static BlockPos findBlock3D(World world, int x, int y, int z, Block block, int hRange, int vRange)
+    {
+        for (int i = y - vRange; i <= y + vRange; i++)
+        {
+            BlockPos pos = findBlock2D(world, x, i, z, block, hRange);
+            if (pos != null) return pos;
+        }
+        return null;
+    }
+
+    @Nullable
     public static BlockPos findBlock2D(World world, int x, int y, int z, Block block, int range)
     {
         for (int i = x - range; i <= x + range; i++)
@@ -28,26 +39,8 @@ public class CoordsUtils
             for (int j = z - range; j <= z + range; j++)
             {
                 BlockPos pos = new BlockPos(i, y, j);
-                if (world.getBlockState(new BlockPos(pos)) == block)
+                if (world.getBlockState(pos).getBlock() == block)
                     return pos;
-            }
-        }
-        return null;
-    }
-
-    @Nullable
-    public static BlockPos findBlock3D(World world, int x, int y, int z, Block block, int hRange, int vRange)
-    {
-        for (int i = (y - vRange); i <= (y + vRange); i++)
-        {
-            for (int j = (x - hRange); j <= (x + hRange); j++)
-            {
-                for (int k = (z - hRange); k <= (z + hRange); k++)
-                {
-                    BlockPos pos = new BlockPos(j, i, k);
-                    if (world.getBlockState(pos) == block)
-                        return pos;
-                }
             }
         }
         return null;

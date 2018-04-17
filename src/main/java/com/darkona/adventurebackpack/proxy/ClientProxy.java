@@ -4,13 +4,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 import com.darkona.adventurebackpack.client.gui.GuiBackpack;
 import com.darkona.adventurebackpack.client.gui.GuiCopter;
 import com.darkona.adventurebackpack.client.gui.GuiJetpack;
+import com.darkona.adventurebackpack.client.render.RenderFriendlySpider;
 import com.darkona.adventurebackpack.client.renderer.WearableRenderer;
 import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.config.Keybindings;
+import com.darkona.adventurebackpack.entity.EntityFriendlySpider;
 import com.darkona.adventurebackpack.handlers.KeyInputEventHandler;
 import com.darkona.adventurebackpack.inventory.IInventoryBackpack;
 import com.darkona.adventurebackpack.inventory.InventoryCopter;
@@ -21,6 +24,12 @@ import com.darkona.adventurebackpack.reference.LoadedMods;
 public class ClientProxy implements IProxy
 {
     private final Minecraft MC = Minecraft.getMinecraft();
+
+    @Override
+    public void preInit()
+    {
+        RenderingRegistry.registerEntityRenderingHandler(EntityFriendlySpider.class, RenderFriendlySpider::new); //TODO move
+    }
 
     @Override
     public void init()
@@ -36,6 +45,12 @@ public class ClientProxy implements IProxy
 //            codechicken.nei.api.API.hideItem(new ItemStack(ModBlocks.BACKPACK_BLOCK, 1, OreDictionary.WILDCARD_VALUE));
 //            codechicken.nei.api.API.hideItem(new ItemStack(ModBlocks.SLEEPING_BAG_BLOCK, 1, OreDictionary.WILDCARD_VALUE));
         }
+    }
+
+    @Override
+    public void postInit()
+    {
+
     }
 
     private void registerKeybindings()

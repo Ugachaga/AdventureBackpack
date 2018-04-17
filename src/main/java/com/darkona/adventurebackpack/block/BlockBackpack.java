@@ -7,7 +7,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -45,15 +44,13 @@ import static com.darkona.adventurebackpack.reference.BackpackTypes.GLOWSTONE;
 import static com.darkona.adventurebackpack.reference.BackpackTypes.REDSTONE;
 import static com.darkona.adventurebackpack.reference.BackpackTypes.UNKNOWN;
 
-public class BlockBackpack extends Block //TODO extends BlockHorizontal ?
+public class BlockBackpack extends Block
 {
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
-    private static final AxisAlignedBB X_AXIS_AABB = new AxisAlignedBB(0.4D, 0.0D, 0.0D, 0.6D, 0.6D, 1.0D);
-    private static final AxisAlignedBB Z_AXIS_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.4D, 1.0D, 0.6D, 0.6D);
+    private static final AxisAlignedBB X_AXIS_AABB = new AxisAlignedBB(0.3, 0.0, 0.05, 0.7, 0.65, 0.95);
+    private static final AxisAlignedBB Z_AXIS_AABB = new AxisAlignedBB(0.05, 0.0, 0.3, 0.95, 0.65, 0.7);
 
-    //IBlockState immutable and pregenerated, so maybe we should avoid to use it for Types
-    public static final PropertyEnum<BackpackTypes> TYPE = PropertyEnum.create("type", BackpackTypes.class);
-
+    @SuppressWarnings("deprecation")
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos)
     {
@@ -66,7 +63,6 @@ public class BlockBackpack extends Block //TODO extends BlockHorizontal ?
 //        return super.getPlayerRelativeBlockHardness(state, player, worldIn, pos);
 //    }
 
-
     public BlockBackpack(String name)
     {
         super(new BackpackMaterial());
@@ -76,10 +72,7 @@ public class BlockBackpack extends Block //TODO extends BlockHorizontal ?
         this.setHardness(1.0f);
         this.setResistance(2000f);
 
-        this.setDefaultState(blockState.getBaseState()
-                .withProperty(FACING, EnumFacing.NORTH)
-                //.withProperty(TYPE, BackpackTypes.STANDARD)
-        );
+        this.setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
     }
 
     @Override

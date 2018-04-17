@@ -43,6 +43,8 @@ public class AdventureBackpack
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
+        PROXY.preInit();
+
         //Configuration
         MinecraftForge.EVENT_BUS.register(new ConfigHandler());
         ConfigHandler.init(event.getSuggestedConfigurationFile());
@@ -63,7 +65,9 @@ public class AdventureBackpack
     public void init(FMLInitializationEvent event)
     {
         LoadedMods.init();
+
         PROXY.init();
+
         ModRecipes.init();
         ModWorldGen.init();
         //WailaTileAdventureBackpack.init();
@@ -76,6 +80,7 @@ public class AdventureBackpack
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
+        PROXY.postInit();
         GeneralReference.init();
 
         //ConditionalFluidEffect.init();

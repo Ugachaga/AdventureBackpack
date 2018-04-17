@@ -104,13 +104,13 @@ public class ModelCopter extends ModelWearable
         enginePistonLeft = new ModelRenderer(this, 0, 18);
         enginePistonLeft.setRotationPoint(0.0F, 8.0F, 5.0F);
         enginePistonLeft.addBox(1.7F, 1.0F, -1.0F, 4, 2, 2);
-        setRotateAngle(enginePistonLeft, 0.0F, -0.7853981633974483F, 0.0F);
+        setRotateAngle(enginePistonLeft, 0.0F, -1/4F * (float) Math.PI, 0.0F);
         engineBody.addChild(enginePistonLeft);
 
         enginePistonRight = new ModelRenderer(this, 13, 18);
         enginePistonRight.setRotationPoint(0.0F, 8.0F, 5.0F);
         enginePistonRight.addBox(1.7F, 1.0F, -1.0F, 4, 2, 2);
-        setRotateAngle(enginePistonRight, 0.0F, -2.356194490192345F, 0.0F);
+        setRotateAngle(enginePistonRight, 0.0F, -3/4F * (float) Math.PI, 0.0F);
         engineBody.addChild(enginePistonRight);
 
         axis = new ModelRenderer(this, 25, 22);
@@ -131,13 +131,13 @@ public class ModelCopter extends ModelWearable
         blade3 = new ModelRenderer(this, 29, 0);
         blade3.setRotationPoint(0.0F, -25.0F, 0.0F);
         blade3.addBox(0.0F, -0.5F, -1.0F, 15, 1, 2);
-        setRotateAngle(blade3, 0.0F, 0.0F, 3.141592653589793F);
+        setRotateAngle(blade3, 0.0F, 0.0F, (float) Math.PI);
         axis.addChild(blade3);
 
         blade4 = new ModelRenderer(this, 30, 4);
         blade4.setRotationPoint(0.0F, -25.0F, 0.0F);
         blade4.addBox(-1.0F, -0.5F, 0.0F, 2, 1, 15);
-        setRotateAngle(blade4, -3.141592653589793F, 0.0F, 0.0F);
+        setRotateAngle(blade4, (float) Math.PI, 0.0F, 0.0F);
         axis.addChild(blade4);
 
         //ESCAPE

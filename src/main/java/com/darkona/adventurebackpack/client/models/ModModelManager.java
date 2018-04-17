@@ -52,6 +52,8 @@ public class ModModelManager
         INSTANCE.registerItemModels();
         INSTANCE.registerTEISR();
         INSTANCE.registerTESR();
+
+        INSTANCE.registerEntityShaders(); //TODO move to ModRenderManager
     }
 
     private void registerFluidModels()
@@ -148,6 +150,12 @@ public class ModModelManager
     {
         ClientRegistry.bindTileEntitySpecialRenderer(TileBackpack.class, new BackpackRenderer.TileEntity());
         ClientRegistry.bindTileEntitySpecialRenderer(TileTest.class, new TESRTest());
+    }
+
+    private void registerEntityShaders()
+    {
+        //TODO are we rly need this?
+        //ClientRegistry.registerEntityShader(EntityFriendlySpider.class, new ResourceLocation("shaders/post/spider.json"));
     }
     
 }

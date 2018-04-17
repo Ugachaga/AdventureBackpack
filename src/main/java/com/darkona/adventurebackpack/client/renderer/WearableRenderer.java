@@ -18,7 +18,7 @@ public abstract class WearableRenderer
     public static class WearableLayer implements LayerRenderer<EntityPlayer>
     {
         @Override
-        public void doRenderLayer(EntityPlayer player, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
+        public void doRenderLayer(EntityPlayer player, float limbSwing, float limbSwingAmount, float partialTicks, float age, float yaw, float pitch, float scale)
         {
             if (player.isInvisible()) return;
 

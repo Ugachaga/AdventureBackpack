@@ -9,7 +9,12 @@ import com.darkona.adventurebackpack.inventory.InventoryJetpack;
 
 public interface IProxy
 {
+
+    void preInit();
+
     void init();
+
+    void postInit();
 
     void displayBackpackGUI(EntityPlayer player, IInventoryBackpack inv, Constants.Source source);
 

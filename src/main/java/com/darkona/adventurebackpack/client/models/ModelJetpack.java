@@ -106,12 +106,12 @@ public class ModelJetpack extends ModelWearable
         tubeEndLeft = new ModelRenderer(this, 0, 17);
         tubeEndLeft.setRotationPoint(7.6F, 1.7F, 8.3F);
         tubeEndLeft.addBox(0.0F, 0.0F, 0.0F, 1, 4, 1, -0.1F);
-        setRotateAngle(tubeEndLeft, 0.0F, 0.0F, -0.2617993877991494F);
+        setRotateAngle(tubeEndLeft, 0.0F, 0.0F, (float) Math.PI / -12.0F);
 
         tubeEndRight = new ModelRenderer(this, 0, 17);
         tubeEndRight.setRotationPoint(-7.7F, 1.6F, 8.3F);
         tubeEndRight.addBox(-1.0F, 0.0F, 0.0F, 1, 4, 1, -0.1F);
-        setRotateAngle(tubeEndRight, 0.0F, 0.0F, 0.2617993877991494F);
+        setRotateAngle(tubeEndRight, 0.0F, 0.0F, (float) Math.PI / 12.0F);
 
         // fluid rendering stuff
         fluidCuboid = new Cuboid6(0, 0.505, 0, 0.165, -0.005, 0.195)
