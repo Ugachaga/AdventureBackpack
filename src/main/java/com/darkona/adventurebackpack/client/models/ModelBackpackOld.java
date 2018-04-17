@@ -5,8 +5,6 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.item.ItemStack;
 
-import codechicken.lib.vec.Vector3;
-
 import com.darkona.adventurebackpack.client.render.RendererStack;
 import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.config.ConfigHandler;
@@ -65,134 +63,134 @@ public class ModelBackpackOld extends ModelWearable
         this.textureHeight = 64;
 
         //Main Backpack
-        this.mainBody = new ModelRenderer(this, 0, 9);
-        this.mainBody.addBox(-5.0F, 0.0F, -3.0F, 10, 9, 5);
-        this.mainBody.setRotationPoint(0.0F, 0.0F, 0.0F);
+        mainBody = new ModelRenderer(this, 0, 9);
+        mainBody.addBox(-5.0F, 0.0F, -3.0F, 10, 9, 5);
+        mainBody.setRotationPoint(0.0F, 0.0F, 0.0F);
 
-        this.leftStrap = new ModelRenderer(this, 21, 24);
-        this.leftStrap.setRotationPoint(3.0F, 0.0F, -3.0F);
-        this.leftStrap.addBox(0.0F, 0.0F, -1.0F, 1, 8, 1);
-        this.mainBody.addChild(this.leftStrap);
+        leftStrap = new ModelRenderer(this, 21, 24);
+        leftStrap.setRotationPoint(3.0F, 0.0F, -3.0F);
+        leftStrap.addBox(0.0F, 0.0F, -1.0F, 1, 8, 1);
+        mainBody.addChild(leftStrap);
 
-        this.rightStrap = new ModelRenderer(this, 26, 24);
-        this.rightStrap.setRotationPoint(-4.0F, 0.0F, -3.0F);
-        this.rightStrap.addBox(0.0F, 0.0F, -1.0F, 1, 8, 1);
-        this.mainBody.addChild(this.rightStrap);
+        rightStrap = new ModelRenderer(this, 26, 24);
+        rightStrap.setRotationPoint(-4.0F, 0.0F, -3.0F);
+        rightStrap.addBox(0.0F, 0.0F, -1.0F, 1, 8, 1);
+        mainBody.addChild(rightStrap);
 
-        this.top = new ModelRenderer(this, 0, 0);
-        this.top.setRotationPoint(0.0F, 0.0F, -3.0F);
-        this.top.addBox(-5.0F, -3.0F, 0.0F, 10, 3, 5);
-        this.mainBody.addChild(this.top);
+        top = new ModelRenderer(this, 0, 0);
+        top.setRotationPoint(0.0F, 0.0F, -3.0F);
+        top.addBox(-5.0F, -3.0F, 0.0F, 10, 3, 5);
+        mainBody.addChild(top);
 
-        this.bottom = new ModelRenderer(this, 0, 34);
-        this.bottom.setRotationPoint(-5.0F, 9.0F, -3.0F);
-        this.bottom.addBox(0.0F, 0.0F, 0.0F, 10, 1, 4);
-        this.mainBody.addChild(this.bottom);
+        bottom = new ModelRenderer(this, 0, 34);
+        bottom.setRotationPoint(-5.0F, 9.0F, -3.0F);
+        bottom.addBox(0.0F, 0.0F, 0.0F, 10, 1, 4);
+        mainBody.addChild(bottom);
 
-        this.pocketFace = new ModelRenderer(this, 0, 24);
-        this.pocketFace.setRotationPoint(0.0F, 6.9F, 2.0F);
-        this.pocketFace.addBox(-4.0F, -6.0F, 0.0F, 8, 6, 2);
-        this.mainBody.addChild(this.pocketFace);
+        pocketFace = new ModelRenderer(this, 0, 24);
+        pocketFace.setRotationPoint(0.0F, 6.9F, 2.0F);
+        pocketFace.addBox(-4.0F, -6.0F, 0.0F, 8, 6, 2);
+        mainBody.addChild(pocketFace);
 
         //Left Tank
-        this.tankLeftTop = new ModelRenderer(this, 0, 40);
-        this.tankLeftTop.setRotationPoint(5.0F, -1.0F, -2.5F);
-        this.tankLeftTop.addBox(0.0F, 0.0F, 0.0F, 4, 1, 4);
+        tankLeftTop = new ModelRenderer(this, 0, 40);
+        tankLeftTop.setRotationPoint(5.0F, -1.0F, -2.5F);
+        tankLeftTop.addBox(0.0F, 0.0F, 0.0F, 4, 1, 4);
 
-        this.tankLeftBottom = new ModelRenderer(this, 0, 46);
-        this.tankLeftBottom.setRotationPoint(0.0F, 9.0F, 0.0F);
-        this.tankLeftBottom.addBox(0.0F, 0.0F, 0.0F, 4, 1, 4);
-        this.tankLeftTop.addChild(this.tankLeftBottom);
+        tankLeftBottom = new ModelRenderer(this, 0, 46);
+        tankLeftBottom.setRotationPoint(0.0F, 9.0F, 0.0F);
+        tankLeftBottom.addBox(0.0F, 0.0F, 0.0F, 4, 1, 4);
+        tankLeftTop.addChild(tankLeftBottom);
 
-        this.tankLeftWall1 = new ModelRenderer(this, 0, 52);
-        this.tankLeftWall1.setRotationPoint(3.0F, -8.0F, 0.0F);
-        this.tankLeftWall1.addBox(0.0F, 0.0F, 0.0F, 1, 8, 1);
-        this.tankLeftBottom.addChild(this.tankLeftWall1);
+        tankLeftWall1 = new ModelRenderer(this, 0, 52);
+        tankLeftWall1.setRotationPoint(3.0F, -8.0F, 0.0F);
+        tankLeftWall1.addBox(0.0F, 0.0F, 0.0F, 1, 8, 1);
+        tankLeftBottom.addChild(tankLeftWall1);
 
-        this.tankLeftWall2 = new ModelRenderer(this, 5, 52);
-        this.tankLeftWall2.setRotationPoint(0.0F, -8.0F, 0.0F);
-        this.tankLeftWall2.addBox(0.0F, 0.0F, 0.0F, 1, 8, 1);
-        this.tankLeftBottom.addChild(this.tankLeftWall2);
+        tankLeftWall2 = new ModelRenderer(this, 5, 52);
+        tankLeftWall2.setRotationPoint(0.0F, -8.0F, 0.0F);
+        tankLeftWall2.addBox(0.0F, 0.0F, 0.0F, 1, 8, 1);
+        tankLeftBottom.addChild(tankLeftWall2);
 
-        this.tankLeftWall3 = new ModelRenderer(this, 10, 52);
-        this.tankLeftWall3.setRotationPoint(0.0F, -8.0F, 3.0F);
-        this.tankLeftWall3.addBox(0.0F, 0.0F, 0.0F, 1, 8, 1);
-        this.tankLeftBottom.addChild(this.tankLeftWall3);
+        tankLeftWall3 = new ModelRenderer(this, 10, 52);
+        tankLeftWall3.setRotationPoint(0.0F, -8.0F, 3.0F);
+        tankLeftWall3.addBox(0.0F, 0.0F, 0.0F, 1, 8, 1);
+        tankLeftBottom.addChild(tankLeftWall3);
 
-        this.tankLeftWall4 = new ModelRenderer(this, 15, 52);
-        this.tankLeftWall4.setRotationPoint(3.0F, -8.0F, 3.0F);
-        this.tankLeftWall4.addBox(0.0F, 0.0F, 0.0F, 1, 8, 1);
-        this.tankLeftBottom.addChild(this.tankLeftWall4);
+        tankLeftWall4 = new ModelRenderer(this, 15, 52);
+        tankLeftWall4.setRotationPoint(3.0F, -8.0F, 3.0F);
+        tankLeftWall4.addBox(0.0F, 0.0F, 0.0F, 1, 8, 1);
+        tankLeftBottom.addChild(tankLeftWall4);
 
         //Right Tank
-        this.tankRightTop = new ModelRenderer(this, 17, 40);
-        this.tankRightTop.setRotationPoint(-9.0F, -1.0F, -2.5F);
-        this.tankRightTop.addBox(0.0F, 0.0F, 0.0F, 4, 1, 4);
+        tankRightTop = new ModelRenderer(this, 17, 40);
+        tankRightTop.setRotationPoint(-9.0F, -1.0F, -2.5F);
+        tankRightTop.addBox(0.0F, 0.0F, 0.0F, 4, 1, 4);
 
-        this.tankRightBottom = new ModelRenderer(this, 17, 46);
-        this.tankRightBottom.setRotationPoint(0.0F, 9.0F, 0.0F);
-        this.tankRightBottom.addBox(0.0F, 0.0F, 0.0F, 4, 1, 4);
-        this.tankRightTop.addChild(this.tankRightBottom);
+        tankRightBottom = new ModelRenderer(this, 17, 46);
+        tankRightBottom.setRotationPoint(0.0F, 9.0F, 0.0F);
+        tankRightBottom.addBox(0.0F, 0.0F, 0.0F, 4, 1, 4);
+        tankRightTop.addChild(tankRightBottom);
 
-        this.tankRightWall1 = new ModelRenderer(this, 22, 52);
-        this.tankRightWall1.setRotationPoint(3.0F, -8.0F, 3.0F);
-        this.tankRightWall1.addBox(0.0F, 0.0F, 0.0F, 1, 8, 1);
-        this.tankRightBottom.addChild(this.tankRightWall1);
+        tankRightWall1 = new ModelRenderer(this, 22, 52);
+        tankRightWall1.setRotationPoint(3.0F, -8.0F, 3.0F);
+        tankRightWall1.addBox(0.0F, 0.0F, 0.0F, 1, 8, 1);
+        tankRightBottom.addChild(tankRightWall1);
 
-        this.tankRightWall2 = new ModelRenderer(this, 27, 52);
-        this.tankRightWall2.setRotationPoint(3.0F, -8.0F, 0.0F);
-        this.tankRightWall2.addBox(0.0F, 0.0F, 0.0F, 1, 8, 1);
-        this.tankRightBottom.addChild(this.tankRightWall2);
+        tankRightWall2 = new ModelRenderer(this, 27, 52);
+        tankRightWall2.setRotationPoint(3.0F, -8.0F, 0.0F);
+        tankRightWall2.addBox(0.0F, 0.0F, 0.0F, 1, 8, 1);
+        tankRightBottom.addChild(tankRightWall2);
 
-        this.tankRightWall3 = new ModelRenderer(this, 32, 52);
-        this.tankRightWall3.setRotationPoint(0.0F, -8.0F, 3.0F);
-        this.tankRightWall3.addBox(0.0F, 0.0F, 0.0F, 1, 8, 1);
-        this.tankRightBottom.addChild(this.tankRightWall3);
+        tankRightWall3 = new ModelRenderer(this, 32, 52);
+        tankRightWall3.setRotationPoint(0.0F, -8.0F, 3.0F);
+        tankRightWall3.addBox(0.0F, 0.0F, 0.0F, 1, 8, 1);
+        tankRightBottom.addChild(tankRightWall3);
 
-        this.tankRightWall4 = new ModelRenderer(this, 37, 52);
-        this.tankRightWall4.setRotationPoint(0.0F, -8.0F, 0.0F);
-        this.tankRightWall4.addBox(0.0F, 0.0F, 0.0F, 1, 8, 1);
-        this.tankRightBottom.addChild(this.tankRightWall4);
+        tankRightWall4 = new ModelRenderer(this, 37, 52);
+        tankRightWall4.setRotationPoint(0.0F, -8.0F, 0.0F);
+        tankRightWall4.addBox(0.0F, 0.0F, 0.0F, 1, 8, 1);
+        tankRightBottom.addChild(tankRightWall4);
 
         //Bed
-        this.bed = new ModelRenderer(this, 31, 0);
-        this.bed.setRotationPoint(-7.0F, 7.0F, 2.0F);
-        this.bed.addBox(0.0F, 0.0F, 0.0F, 14, 2, 2);
+        bed = new ModelRenderer(this, 31, 0);
+        bed.setRotationPoint(-7.0F, 7.0F, 2.0F);
+        bed.addBox(0.0F, 0.0F, 0.0F, 14, 2, 2);
 
-        this.bedStrapRightTop = new ModelRenderer(this, 40, 5);
-        this.bedStrapRightTop.setRotationPoint(2.0F, -1.0F, 0.0F);
-        this.bedStrapRightTop.addBox(0.0F, 0.0F, 0.0F, 1, 1, 3);
-        this.bed.addChild(this.bedStrapRightTop);
+        bedStrapRightTop = new ModelRenderer(this, 40, 5);
+        bedStrapRightTop.setRotationPoint(2.0F, -1.0F, 0.0F);
+        bedStrapRightTop.addBox(0.0F, 0.0F, 0.0F, 1, 1, 3);
+        bed.addChild(bedStrapRightTop);
 
-        this.bedStrapRightMid = new ModelRenderer(this, 38, 10);
-        this.bedStrapRightMid.setRotationPoint(2.0F, 0.0F, 2.0F);
-        this.bedStrapRightMid.addBox(0.0F, 0.0F, 0.0F, 2, 3, 1);
-        this.bed.addChild(this.bedStrapRightMid);
+        bedStrapRightMid = new ModelRenderer(this, 38, 10);
+        bedStrapRightMid.setRotationPoint(2.0F, 0.0F, 2.0F);
+        bedStrapRightMid.addBox(0.0F, 0.0F, 0.0F, 2, 3, 1);
+        bed.addChild(bedStrapRightMid);
 
-        this.bedStrapRightBottom = new ModelRenderer(this, 42, 15);
-        this.bedStrapRightBottom.setRotationPoint(2.0F, 2.0F, -1.0F);
-        this.bedStrapRightBottom.addBox(0.0F, 0.0F, 0.0F, 2, 1, 3);
-        this.bed.addChild(this.bedStrapRightBottom);
+        bedStrapRightBottom = new ModelRenderer(this, 42, 15);
+        bedStrapRightBottom.setRotationPoint(2.0F, 2.0F, -1.0F);
+        bedStrapRightBottom.addBox(0.0F, 0.0F, 0.0F, 2, 1, 3);
+        bed.addChild(bedStrapRightBottom);
 
-        this.bedStrapLeftTop = new ModelRenderer(this, 31, 5);
-        this.bedStrapLeftTop.setRotationPoint(11.0F, -1.0F, 0.0F);
-        this.bedStrapLeftTop.addBox(0.0F, 0.0F, 0.0F, 1, 1, 3);
-        this.bed.addChild(this.bedStrapLeftTop);
+        bedStrapLeftTop = new ModelRenderer(this, 31, 5);
+        bedStrapLeftTop.setRotationPoint(11.0F, -1.0F, 0.0F);
+        bedStrapLeftTop.addBox(0.0F, 0.0F, 0.0F, 1, 1, 3);
+        bed.addChild(bedStrapLeftTop);
 
-        this.bedStrapLeftMid = new ModelRenderer(this, 31, 10);
-        this.bedStrapLeftMid.setRotationPoint(10.0F, 0.0F, 2.0F);
-        this.bedStrapLeftMid.addBox(0.0F, 0.0F, 0.0F, 2, 3, 1);
-        this.bed.addChild(this.bedStrapLeftMid);
+        bedStrapLeftMid = new ModelRenderer(this, 31, 10);
+        bedStrapLeftMid.setRotationPoint(10.0F, 0.0F, 2.0F);
+        bedStrapLeftMid.addBox(0.0F, 0.0F, 0.0F, 2, 3, 1);
+        bed.addChild(bedStrapLeftMid);
 
-        this.bedStrapLeftBottom = new ModelRenderer(this, 31, 15);
-        this.bedStrapLeftBottom.setRotationPoint(10.0F, 2.0F, -1.0F);
-        this.bedStrapLeftBottom.addBox(0.0F, 0.0F, 0.0F, 2, 1, 3);
-        this.bed.addChild(this.bedStrapLeftBottom);
+        bedStrapLeftBottom = new ModelRenderer(this, 31, 15);
+        bedStrapLeftBottom.setRotationPoint(10.0F, 2.0F, -1.0F);
+        bedStrapLeftBottom.addBox(0.0F, 0.0F, 0.0F, 2, 1, 3);
+        bed.addChild(bedStrapLeftBottom);
 
         //Noses
-        this.villagerNose = new ModelRenderer(this, 64, 0);
-        this.villagerNose.setRotationPoint(-1.0F, 4.0F, 4.0F);
-        this.villagerNose.addBox(0.0F, 0.0F, 0.0F, 2, 4, 2);
+        villagerNose = new ModelRenderer(this, 64, 0);
+        villagerNose.setRotationPoint(-1.0F, 4.0F, 4.0F);
+        villagerNose.addBox(0.0F, 0.0F, 0.0F, 2, 4, 2);
 
         ocelotNose = new ModelRenderer(this, 74, 0);
         ocelotNose.setRotationPoint(-1.0F, 4.0F, 4.0F);
@@ -295,13 +293,13 @@ public class ModelBackpackOld extends ModelWearable
         }
         GL11.glPopMatrix();
 
-        GL11.glPushMatrix();
-//        GL11.glTranslatef(bipedBody.offsetX + 0, bipedBody.offsetY + 0.2F, bipedBody.offsetZ + 0.3f);
+        //GL11.glPushMatrix();
+        //GL11.glTranslatef(bipedBody.offsetX + 0, bipedBody.offsetY + 0.2F, bipedBody.offsetZ + 0.3f);
 
-        renderFluidInTankOld(inv.getLeftTank(), new Vector3(0f, .5f, 0f), new Vector3(.17f, 0, .17f), new Vector3(-.17f, .05f, .2f), tankLeftTop);
+        //renderFluidInTankOld(inv.getLeftTank(), new Vector3(0f, .5f, 0f), new Vector3(.17f, 0, .17f), new Vector3(-.17f, .05f, .2f), tankLeftTop);
 
-        renderFluidInTankOld(inv.getRightTank(), new Vector3(0f, .5f, 0f), new Vector3(.17f, 0, .17f), new Vector3(.41f, .05f, .2f), tankRightTop);
-        GL11.glPopMatrix();
+        //renderFluidInTankOld(inv.getRightTank(), new Vector3(0f, .5f, 0f), new Vector3(.17f, 0, .17f), new Vector3(.41f, .05f, .2f), tankRightTop);
+        //GL11.glPopMatrix();
     }
 
 //    @Override

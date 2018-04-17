@@ -10,6 +10,7 @@ import codechicken.lib.render.RenderUtils;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Vector3;
 
+@SuppressWarnings("WeakerAccess")
 public abstract class ModelWearable extends ModelBase
 {
     protected Vector3 createVector3(ModelRenderer parent, double x, double y, double z)
@@ -50,22 +51,6 @@ public abstract class ModelWearable extends ModelBase
         modelRenderer.rotationPointX = x;
         modelRenderer.rotationPointY = y;
         modelRenderer.rotationPointZ = z;
-    }
-
-    //public abstract void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5, ItemStack stack);
-
-    protected void renderFluidInTankOld(FluidTank tank, Vector3 minCoords, Vector3 maxCoords, Vector3 offset, ModelRenderer parent)
-    { //TODO move to renderFluidInTank
-        if (tank.getFluid() != null)
-        {
-            Vector3 victor = new Vector3(
-                    (parent.rotationPointX * 0.1f + parent.offsetX * 0.1 + offset.x),
-                    (parent.rotationPointY * 0.1f + parent.offsetY * 0.1 + offset.y),
-                    (parent.rotationPointZ * 0.1f + parent.offsetZ * 0.1 + offset.z));
-
-            Cuboid6 cat = new Cuboid6(minCoords.x, minCoords.y, minCoords.z, maxCoords.x, maxCoords.y, maxCoords.z);
-            RenderUtils.renderFluidCuboidGL(tank.getFluid(), cat.add(victor), ((1.0F * tank.getFluidAmount()) / (1.0F * tank.getCapacity())), 0.8);
-        }
     }
 
     protected void renderFluidInTank(FluidTank tank, Cuboid6 cuboid)

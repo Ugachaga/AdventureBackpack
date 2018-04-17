@@ -16,7 +16,7 @@ public class AdventureHatRenderer
 
     public AdventureHatRenderer()
     {
-        model = ModelAdventureHat.instance;
+        model = ModelAdventureHat.INSTANCE;
     }
     public void renderItem(/*IItemRenderer.ItemRenderType type,*/ ItemStack item, Object... data)
     {

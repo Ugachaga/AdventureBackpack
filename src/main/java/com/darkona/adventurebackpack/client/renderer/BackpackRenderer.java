@@ -70,18 +70,17 @@ public final class BackpackRenderer extends WearableRenderer
 
             GlStateManager.pushMatrix();
             GlStateManager.enableRescaleNormal();
-            GlStateManager.scale(0.8F, 0.8F, 0.8F);
+            GlStateManager.scale(0.9F, 0.9F, 0.9F);
+            GlStateManager.translate(0.0F, 0.2F, 0.46F);
             if (player.isSneaking())
             {
-                GlStateManager.translate(0.0F, 0.236F, 0.45F);
+                GlStateManager.translate(0.0F, 0.0F, 0.06F);
                 GlStateManager.rotate(SNEAK_ANGLE, 1.0F, 0.0F, 0.0F);
             }
-            else
-            {
-                GlStateManager.translate(0.0F, 0.205F, 0.4F);
-            }
 
+            //TODO raise tanks higher, see: ModelBackpackOld, maybe more diff
             MODEL_BACKPACK.renderLayer(player, stack, 0.0625F);
+            //TODO see: LayerArmorBase#renderEnchantedGlint
 
             GlStateManager.disableRescaleNormal();
             GlStateManager.popMatrix();

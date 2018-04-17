@@ -23,15 +23,11 @@ public final class CopterRenderer extends WearableRenderer
 
             GlStateManager.pushMatrix();
             GlStateManager.enableRescaleNormal();
-            GlStateManager.scale(0.8F, 0.8F, 0.8F);
+            GlStateManager.translate(0.0F, 0.0F, 0.1F);
             if (player.isSneaking())
             {
-                GlStateManager.translate(0.0F, 0.3F, 0.15F); //TODO tune it
+                GlStateManager.translate(0.0F, 0.14F, -0.03F);
                 GlStateManager.rotate(SNEAK_ANGLE, 1.0F, 0.0F, 0.0F);
-            }
-            else
-            {
-                GlStateManager.translate(0.0F, 0.1F, 0.1F);
             }
 
             MODEL_COPTER.renderLayer(player, stack, 0.0625F);
