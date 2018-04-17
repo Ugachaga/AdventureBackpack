@@ -6,16 +6,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import com.darkona.adventurebackpack.client.models.ModelJetpack;
-import com.darkona.adventurebackpack.reference.ModInfo;
+import com.darkona.adventurebackpack.util.Resources;
 
-public class JetpackRenderer extends WearableRenderer
+public final class JetpackRenderer extends WearableRenderer
 {
-
     private JetpackRenderer() {}
 
     public static class Layer
     {
-        private static final ResourceLocation TEXTURE_JETPACK = new ResourceLocation(ModInfo.MODID, "textures/models/jetpack.png");
+        private static final ResourceLocation TEXTURE_JETPACK = Resources.getModelTexture("jetpack");
         private static final ModelJetpack MODEL_JETPACK = new ModelJetpack();
 
         public static void render(EntityPlayer player, ItemStack stack)

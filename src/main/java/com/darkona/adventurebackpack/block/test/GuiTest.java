@@ -17,8 +17,8 @@ import com.darkona.adventurebackpack.util.TinkersUtils;
 
 public class GuiTest extends GuiWithTanks//GuiContainer
 {
-    private static final ResourceLocation BG_TEXTURE = Resources.guiTextures("backpack");
-    private static final ResourceLocation TEXTURE = Resources.guiTextures("backpack");
+    private static final ResourceLocation BG_TEXTURE = Resources.getGuiTexture("backpack");
+    private static final ResourceLocation TEXTURE = Resources.getGuiTexture("backpack");
     private static final int TINKERS_SLOT = 74; //ContainerBackpack.CRAFT_MATRIX_EMULATION[4] + 36
 
     private static GuiImageButtonNormal bedButton = new GuiImageButtonNormal(5, 91, 18, 18);

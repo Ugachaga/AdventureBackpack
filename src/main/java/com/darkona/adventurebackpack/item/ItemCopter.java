@@ -16,7 +16,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
@@ -30,7 +29,6 @@ import com.darkona.adventurebackpack.network.GuiPacket;
 import com.darkona.adventurebackpack.network.messages.EntityParticlePacket;
 import com.darkona.adventurebackpack.reference.GeneralReference;
 import com.darkona.adventurebackpack.util.BackpackUtils;
-import com.darkona.adventurebackpack.util.Resources;
 import com.darkona.adventurebackpack.util.TipUtils;
 import com.darkona.adventurebackpack.util.Wearing;
 
@@ -319,20 +317,6 @@ public class ItemCopter extends ItemWearable
     public void onPlayerDeath(World world, EntityPlayer player, ItemStack stack)
     {
         onUnequipped(world, player, stack);
-    }
-
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//    public ModelBiped getWearableModel(ItemStack wearable)
-//    {
-//        return ClientProxy.modelCopter.setWearable(wearable);
-//    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public ResourceLocation getWearableTexture(ItemStack wearable)
-    {
-        return Resources.modelTextures("copterPack");
     }
 
 }

@@ -2,6 +2,7 @@ package com.darkona.adventurebackpack.client.models;
 
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 import codechicken.lib.render.CCRenderState;
@@ -313,7 +314,7 @@ public class ModelBackpack extends ModelWearable
         GlStateManager.popMatrix();
     }
 
-    public void renderLayer(ItemStack stack, float scale)
+    public void renderLayer(EntityPlayer player, ItemStack stack, float scale)
     {
         InventoryBackpack backpack = new InventoryBackpack(stack);
 

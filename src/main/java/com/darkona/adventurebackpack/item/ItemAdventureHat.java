@@ -1,7 +1,6 @@
 package com.darkona.adventurebackpack.item;
 
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -10,7 +9,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.darkona.adventurebackpack.client.models.ModelAdventureHat;
-import com.darkona.adventurebackpack.reference.ModInfo;
 
 public class ItemAdventureHat extends AdventureArmor
 {
@@ -40,6 +38,8 @@ public class ItemAdventureHat extends AdventureArmor
                         break;
                 }
 
+                //TODO what kind of magic is this?
+
                 armorModel.bipedHead.showModel = armorSlot == EntityEquipmentSlot.HEAD;
                 armorModel.bipedHeadwear.showModel = armorSlot == EntityEquipmentSlot.HEAD;
                 armorModel.bipedBody.showModel = (armorSlot == EntityEquipmentSlot.CHEST);
@@ -60,11 +60,5 @@ public class ItemAdventureHat extends AdventureArmor
             }
         }
         return null;
-    }
-
-    @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type)
-    {
-        return ModInfo.MODID + ":"  +"textures/models/armor/adventureHat.png"; //TODO
     }
 }

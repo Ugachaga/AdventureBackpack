@@ -19,7 +19,6 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -44,7 +43,6 @@ import com.darkona.adventurebackpack.reference.BackpackTypes;
 import com.darkona.adventurebackpack.util.BackpackUtils;
 import com.darkona.adventurebackpack.util.CoordsUtils;
 import com.darkona.adventurebackpack.util.EnchUtils;
-import com.darkona.adventurebackpack.util.Resources;
 import com.darkona.adventurebackpack.util.TipUtils;
 import com.darkona.adventurebackpack.util.Utils;
 
@@ -291,19 +289,5 @@ public class ItemBackpack extends ItemWearable
     public boolean showDurabilityBar(ItemStack stack)
     {
         return ConfigHandler.enableFullnessBar && getItemCount(stack) > 0;
-    }
-
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//    public ModelBiped getWearableModel(ItemStack wearable)
-//    {
-//        return ClientProxy.modelBackpack.setWearable(wearable);
-//    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public ResourceLocation getWearableTexture(ItemStack wearable)
-    {
-        return Resources.getBackpackTexture(BackpackTypes.getType(wearable));
     }
 }

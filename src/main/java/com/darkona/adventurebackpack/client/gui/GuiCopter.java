@@ -16,7 +16,7 @@ import com.darkona.adventurebackpack.util.Resources;
 
 public class GuiCopter extends GuiWithTanks
 {
-    private static final ResourceLocation TEXTURE = Resources.guiTextures("copter");
+    private static final ResourceLocation TEXTURE = Resources.getGuiTexture("copter");
 
     private static GuiImageButtonNormal equipButton = new GuiImageButtonNormal(150, 64, 18, 18);
     private static GuiImageButtonNormal unequipButton = new GuiImageButtonNormal(150, 64, 18, 18);

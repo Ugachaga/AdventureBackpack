@@ -81,7 +81,7 @@ public final class BackpackRenderer extends WearableRenderer
                 GlStateManager.translate(0.0F, 0.205F, 0.4F);
             }
 
-            MODEL_BACKPACK.renderLayer(stack, 0.0625F);
+            MODEL_BACKPACK.renderLayer(player, stack, 0.0625F);
 
             GlStateManager.disableRescaleNormal();
             GlStateManager.popMatrix();

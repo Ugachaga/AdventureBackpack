@@ -10,11 +10,11 @@ import net.minecraft.util.ResourceLocation;
 import com.darkona.adventurebackpack.client.models.ModelCampFire;
 import com.darkona.adventurebackpack.util.Resources;
 
-public class RendererCampFire extends TileEntitySpecialRenderer
+public class CampfireRenderer extends TileEntitySpecialRenderer
 {
     private ModelCampFire model;
 
-    public RendererCampFire()
+    public CampfireRenderer()
     {
         this.model = new ModelCampFire();
     }
@@ -22,7 +22,7 @@ public class RendererCampFire extends TileEntitySpecialRenderer
     @Override
     public void render(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
     {
-        ResourceLocation modelTexture = Resources.modelTextures("campFire");
+        ResourceLocation modelTexture = Resources.getModelTexture("campfire");
         GL11.glPushMatrix();
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         GL11.glTranslatef((float) x + 0.5F, (float) y + 1.2f, (float) z + 0.5F);

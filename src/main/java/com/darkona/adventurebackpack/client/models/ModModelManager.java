@@ -48,10 +48,10 @@ public class ModModelManager
     public static void registerAllModels(ModelRegistryEvent event)
     {
         INSTANCE.registerFluidModels();
-        INSTANCE.registerTileEntityModels();
         INSTANCE.registerBlockModels();
         INSTANCE.registerItemModels();
         INSTANCE.registerTEISR();
+        INSTANCE.registerTESR();
     }
 
     private void registerFluidModels()
@@ -74,12 +74,6 @@ public class ModModelManager
                 return modelResourceLocation;
             }
         });
-    }
-
-    private void registerTileEntityModels()
-    {
-        ClientRegistry.bindTileEntitySpecialRenderer(TileBackpack.class, new BackpackRenderer.TileEntity());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileTest.class, new TESRTest());
     }
 
     private final Set<Item> itemsRegistered = new HashSet<>();
@@ -148,6 +142,12 @@ public class ModModelManager
     private void registerTEISR()
     {
         TileEntityItemStackRenderer.instance = new TileEntityItemSpecialRenderer(TileEntityItemStackRenderer.instance);
+    }
+
+    private void registerTESR()
+    {
+        ClientRegistry.bindTileEntitySpecialRenderer(TileBackpack.class, new BackpackRenderer.TileEntity());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileTest.class, new TESRTest());
     }
     
 }

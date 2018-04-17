@@ -20,7 +20,9 @@ public abstract class WearableRenderer
         @Override
         public void doRenderLayer(EntityPlayer player, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
         {
-            ItemStack stack = player.getHeldItemMainhand(); //TODO capability: isWearingBackpack
+            if (player.isInvisible()) return;
+
+            ItemStack stack = player.getHeldItemMainhand(); //TODO capability: isWearingWearable
             Item held = stack.getItem();
 
             if (held == ModItems.ADVENTURE_BACKPACK)

@@ -17,7 +17,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -38,7 +37,6 @@ import com.darkona.adventurebackpack.network.PlayerActionPacket;
 import com.darkona.adventurebackpack.network.messages.EntityParticlePacket;
 import com.darkona.adventurebackpack.network.messages.EntitySoundPacket;
 import com.darkona.adventurebackpack.util.BackpackUtils;
-import com.darkona.adventurebackpack.util.Resources;
 import com.darkona.adventurebackpack.util.TipUtils;
 
 import static com.darkona.adventurebackpack.util.TipUtils.l10n;
@@ -348,20 +346,6 @@ public class ItemJetpack extends ItemWearable
             }
         }
         return 25;
-    }
-
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//    public ModelBiped getWearableModel(ItemStack wearable)
-//    {
-//        return ClientProxy.modelJetpack.setWearable(wearable);
-//    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public ResourceLocation getWearableTexture(ItemStack wearable)
-    {
-        return Resources.modelTextures("steamJetpack");
     }
 
 }

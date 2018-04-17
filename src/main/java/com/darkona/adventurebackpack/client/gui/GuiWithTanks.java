@@ -42,13 +42,13 @@ public abstract class GuiWithTanks extends GuiContainer
 
     protected abstract GuiImageButtonNormal getUnequipButton();
 
-    @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks)
-    {
-        drawDefaultBackground();
-        super.drawScreen(mouseX, mouseY, partialTicks);
-        renderHoveredToolTip(mouseX, mouseY);
-    }
+//    @Override //TODO
+//    public void drawScreen(int mouseX, int mouseY, float partialTicks)
+//    {
+//        drawDefaultBackground();
+//        super.drawScreen(mouseX, mouseY, partialTicks);
+//        renderHoveredToolTip(mouseX, mouseY);
+//    }
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException

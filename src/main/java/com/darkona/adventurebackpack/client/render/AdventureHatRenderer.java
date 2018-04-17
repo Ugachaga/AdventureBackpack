@@ -10,17 +10,17 @@ import net.minecraft.util.ResourceLocation;
 import com.darkona.adventurebackpack.client.models.ModelAdventureHat;
 import com.darkona.adventurebackpack.util.Resources;
 
-public class RendererItemAdventureHat
+public class AdventureHatRenderer
 {
     private final ModelAdventureHat model;
 
-    public RendererItemAdventureHat()
+    public AdventureHatRenderer()
     {
         model = ModelAdventureHat.instance;
     }
     public void renderItem(/*IItemRenderer.ItemRenderType type,*/ ItemStack item, Object... data)
     {
-        ResourceLocation modelTexture = Resources.modelTextures("adventureHat_texture");
+        ResourceLocation modelTexture = Resources.getModelTexture("adventure_hat");
         Minecraft.getMinecraft().renderEngine.bindTexture(modelTexture);
         //switch (type)
         {

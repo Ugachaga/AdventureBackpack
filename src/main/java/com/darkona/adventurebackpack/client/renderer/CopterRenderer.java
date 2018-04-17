@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import com.darkona.adventurebackpack.client.models.ModelCopter;
-import com.darkona.adventurebackpack.reference.ModInfo;
+import com.darkona.adventurebackpack.util.Resources;
 
 public final class CopterRenderer extends WearableRenderer
 {
@@ -14,7 +14,7 @@ public final class CopterRenderer extends WearableRenderer
 
     public static class Layer
     {
-        private static final ResourceLocation TEXTURE_COPTER = new ResourceLocation(ModInfo.MODID, "textures/models/copter.png");
+        private static final ResourceLocation TEXTURE_COPTER = Resources.getModelTexture("copter");
         private static final ModelCopter MODEL_COPTER = new ModelCopter();
 
         public static void render(EntityPlayer player, ItemStack stack)

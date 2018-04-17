@@ -12,8 +12,6 @@ public class RendererHose
 {
     private FontRenderer fontRenderer;
 
-    //TODO see ForgeHooksClient.registerTESRItemStack as temporary solution for item render
-
     public void renderItem(/*ItemRenderType type,*/ ItemStack hose, Object... data)
     {
         //if (type == ItemRenderType.INVENTORY)
