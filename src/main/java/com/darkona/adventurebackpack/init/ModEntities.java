@@ -31,7 +31,7 @@ public class ModEntities
                     createBuilder("friendly_spider")
                             .entity(EntityFriendlySpider.class)
                             .tracker(80, 2, true)
-                            .egg(0xC424E, 0xA80E0E)
+                            .egg(0x342D27, 0xA80E0E)
                             .build(),
 
                     createBuilder("inflatable_boat")

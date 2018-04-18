@@ -8,6 +8,8 @@ import mezz.jei.api.ingredients.IIngredientBlacklist;
 @JEIPlugin
 public class JEIPluginAdventureBackpack implements IModPlugin
 {
+    //TODO are we still need this?
+
     @Override
     public void register(IModRegistry registry)
     {

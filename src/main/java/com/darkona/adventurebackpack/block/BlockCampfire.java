@@ -9,6 +9,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -22,7 +23,7 @@ import com.darkona.adventurebackpack.util.CoordsUtils;
 
 public class BlockCampfire extends Block
 {
-    private static final AxisAlignedBB CAMPFIRE_AABB = new AxisAlignedBB(0.2D, 0.0D, 0.2D, 0.8D, 0.15D, 0.8D);
+    private static final AxisAlignedBB CAMPFIRE_AABB = new AxisAlignedBB(0.2, 0.0, 0.2, 0.8, 0.15, 0.8);
 
     public BlockCampfire(String name)
     {
@@ -34,21 +35,38 @@ public class BlockCampfire extends Block
     }
 
     @Override
-    public boolean hasTileEntity(IBlockState state)
+    @SuppressWarnings("deprecation")
+    public int getLightValue(IBlockState state)
     {
-        return true;
+        return 11;
     }
 
     @Override
-    public TileEntity createTileEntity(World world, IBlockState state)
+    @SuppressWarnings("deprecation")
+    public boolean isFullCube(IBlockState state)
     {
-        return new TileCampfire();
+        return false;
     }
 
     @Override
-    public int tickRate(World world)
+    @SuppressWarnings("deprecation")
+    public EnumBlockRenderType getRenderType(IBlockState state)
     {
-        return 30;
+        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+    {
+        return CAMPFIRE_AABB;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean isOpaqueCube(IBlockState state)
+    {
+        return false;
     }
 
     @Override
@@ -69,17 +87,21 @@ public class BlockCampfire extends Block
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public int getLightValue(IBlockState state)
+    public int tickRate(World world)
     {
-        return 11;
+        return 30;
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+    public boolean hasTileEntity(IBlockState state)
     {
-        return CAMPFIRE_AABB;
+        return true;
+    }
+
+    @Override
+    public TileEntity createTileEntity(World world, IBlockState state)
+    {
+        return new TileCampfire();
     }
 
     @Override

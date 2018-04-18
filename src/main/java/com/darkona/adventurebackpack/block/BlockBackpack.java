@@ -123,7 +123,7 @@ public class BlockBackpack extends Block
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rnd)
     {
-        if (getAssociatedTileBackpackType(world, pos) == BOOKSHELF)
+        if (getAssociatedTileBackpackType(world, pos) == BOOKSHELF) //TODO && worldtime % 20 == 0
         {
             int x = pos.getX();
             int y = pos.getY();

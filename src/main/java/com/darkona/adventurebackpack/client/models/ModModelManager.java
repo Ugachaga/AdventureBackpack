@@ -23,8 +23,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 import com.darkona.adventurebackpack.block.TileBackpack;
+import com.darkona.adventurebackpack.block.TileCampfire;
 import com.darkona.adventurebackpack.block.test.TESRTest;
 import com.darkona.adventurebackpack.block.test.TileTest;
+import com.darkona.adventurebackpack.client.renderer.CampfireRenderer;
 import com.darkona.adventurebackpack.client.renderer.BackpackRenderer;
 import com.darkona.adventurebackpack.client.renderer.TileEntityItemSpecialRenderer;
 import com.darkona.adventurebackpack.init.ModBlocks;
@@ -149,6 +151,8 @@ public class ModModelManager
     private void registerTESR()
     {
         ClientRegistry.bindTileEntitySpecialRenderer(TileBackpack.class, new BackpackRenderer.TileEntity());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileCampfire.class, new CampfireRenderer.TileEntity());
+
         ClientRegistry.bindTileEntitySpecialRenderer(TileTest.class, new TESRTest());
     }
 

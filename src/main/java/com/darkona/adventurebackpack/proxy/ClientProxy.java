@@ -18,7 +18,6 @@ import com.darkona.adventurebackpack.handlers.KeyInputEventHandler;
 import com.darkona.adventurebackpack.inventory.IInventoryBackpack;
 import com.darkona.adventurebackpack.inventory.InventoryCopter;
 import com.darkona.adventurebackpack.inventory.InventoryJetpack;
-import com.darkona.adventurebackpack.reference.LoadedMods;
 
 @SuppressWarnings("unused")
 public class ClientProxy implements IProxy
@@ -38,13 +37,6 @@ public class ClientProxy implements IProxy
         registerLayers();
 
 //        MinecraftForge.EVENT_BUS.register(new GuiOverlay(Minecraft.getMinecraft()));
-
-        if (LoadedMods.NEI)
-        {
-            //TODO NEI utilize
-//            codechicken.nei.api.API.hideItem(new ItemStack(ModBlocks.BACKPACK_BLOCK, 1, OreDictionary.WILDCARD_VALUE));
-//            codechicken.nei.api.API.hideItem(new ItemStack(ModBlocks.SLEEPING_BAG_BLOCK, 1, OreDictionary.WILDCARD_VALUE));
-        }
     }
 
     @Override
