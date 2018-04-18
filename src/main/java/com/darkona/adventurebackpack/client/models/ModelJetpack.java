@@ -1,7 +1,6 @@
 package com.darkona.adventurebackpack.client.models;
 
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
@@ -123,7 +122,6 @@ public class ModelJetpack extends ModelWearable
         InventoryJetpack jetpack = new InventoryJetpack(stack);
         fireBox.setTextureOffset((jetpack.getBurnTicks() > 0) ? 9 : 26, 25);
 
-        GlStateManager.pushMatrix();
         tubeStraightRight.render(scale);
         tubeEndLeft.render(scale);
         tubeEndRight.render(scale);
@@ -131,10 +129,7 @@ public class ModelJetpack extends ModelWearable
         tankWallLeft.render(scale);
         tankWallRight.render(scale);
         tubeStraightLeft.render(scale);
-        GlStateManager.popMatrix();
 
-        GlStateManager.pushMatrix();
         renderFluidInTank(jetpack.getWaterTank(), fluidCuboid.copy());
-        GlStateManager.popMatrix();
     }
 }

@@ -1,7 +1,6 @@
 package com.darkona.adventurebackpack.client.models;
 
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
@@ -191,14 +190,10 @@ public class ModelCopter extends ModelWearable
             axis.isHidden = true;
         }
 
-        GlStateManager.pushMatrix();
         base.render(scale);
         axis.render(scale);
-        GlStateManager.popMatrix();
 
-        GlStateManager.pushMatrix();
         renderFluidInTank(copter.getFuelTank(), fluidCuboid.copy());
-        GlStateManager.popMatrix();
     }
 
 }

@@ -5,14 +5,16 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
 
 import com.darkona.adventurebackpack.block.TileCampfire;
-import com.darkona.adventurebackpack.client.models.ModelCampfire_;
+import com.darkona.adventurebackpack.client.models.ModelCampfire;
 import com.darkona.adventurebackpack.util.Resources;
 
-public class CampfireRenderer
+public final class CampfireRenderer
 {
+    private CampfireRenderer() {}
+
     public static class TileEntity extends TileEntitySpecialRenderer<TileCampfire>
     {
-        private static final ModelCampfire_ MODEL_CAMPFIRE = new ModelCampfire_();
+        private static final ModelCampfire MODEL_CAMPFIRE = new ModelCampfire();
         private static final ResourceLocation TEXTURE_CAMPFIRE = Resources.getModelTexture("campfire");
 
         @Override

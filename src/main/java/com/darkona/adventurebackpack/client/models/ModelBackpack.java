@@ -3,9 +3,11 @@ package com.darkona.adventurebackpack.client.models;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.RenderUtils;
 import codechicken.lib.vec.Cuboid6;
 
 import com.darkona.adventurebackpack.inventory.IInventoryBackpack;
@@ -24,6 +26,8 @@ import static com.darkona.adventurebackpack.reference.BackpackTypes.VILLAGER;
 @SuppressWarnings("FieldCanBeLocal")
 public class ModelBackpack extends ModelWearable
 {
+    private final RenderType renderType;
+
     private ModelRenderer mainBody;
     private ModelRenderer leftStrap;
     private ModelRenderer rightStrap;
@@ -77,7 +81,25 @@ public class ModelBackpack extends ModelWearable
     private Cuboid6 rightFluidCuboid20;
     private Cuboid6 leftFluidCuboid20;
 
-    public ModelBackpack()
+    public enum RenderType
+    {
+        TILE, ITEM, LAYER;
+    }
+
+    public ModelBackpack(RenderType renderType)
+    {
+        this.renderType = renderType;
+
+        init();
+
+        if (renderType == RenderType.LAYER) //TODO raised tanks looks good, should be done so for all renderTypes?
+        {
+            tankLeftTop.setRotationPoint(5.0F, -1.0F, -2.5F);
+            tankRightTop.setRotationPoint(-9.0F, -1.0F, -2.5F);
+        }
+    }
+
+    private void init()
     {
         this.textureWidth = 128;
         this.textureHeight = 64;
@@ -318,16 +340,52 @@ public class ModelBackpack extends ModelWearable
     {
         InventoryBackpack backpack = new InventoryBackpack(stack);
 
-        GlStateManager.pushMatrix();
         renderBackpack(backpack, scale);
-        GlStateManager.popMatrix();
+
+        ItemStack testUpper = new ItemStack(Items.DIAMOND_PICKAXE); //TODO del
+        ItemStack testLower = new ItemStack(Items.DIAMOND_AXE);
+
+        renderUpperTool(testUpper /*backpack.getStackInSlot(Constants.TOOL_UPPER)*/);
+        renderLowerTool(testLower /*backpack.getStackInSlot(Constants.TOOL_LOWER)*/);
 
         GlStateManager.pushMatrix();
+        GlStateManager.translate(0.0F, -0.1F, 0.0F);
         renderFluidInTank(backpack.getLeftTank(), leftFluidCuboid16.copy());
         renderFluidInTank(backpack.getRightTank(), rightFluidCuboid16.copy());
         GlStateManager.popMatrix();
+    }
 
-        //TODO render items in ToolSlots, see 1.7.10 implementation in ModelBackpackOld and RenderUtils#renderItemUniform
+    private void renderUpperTool(ItemStack upperTool)
+    {
+        if (upperTool.isEmpty()) return;
+
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(-0.5f, -0.5f, 0.3f);
+        GlStateManager.scale(1.45F, 1.45F, 1.45F);
+        GlStateManager.pushMatrix();
+        GlStateManager.rotate(-45F, 0, 0, 1);
+
+        RenderUtils.renderItemUniform(upperTool);
+
+        GlStateManager.popMatrix();
+        GlStateManager.popMatrix();
+    }
+
+    private void renderLowerTool(ItemStack lowerTool)
+    {
+        if (lowerTool.isEmpty()) return;
+
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(-0.335f, 0.4f, -0.53f);
+        GlStateManager.scale(1.45F, 1.45F, 1.45F);
+        GlStateManager.pushMatrix();
+        GlStateManager.rotate(90F, 0, 1, 0);
+        GlStateManager.rotate(45F, 0, 0, 1);
+
+        RenderUtils.renderItemUniform(lowerTool);
+
+        GlStateManager.popMatrix();
+        GlStateManager.popMatrix();
     }
 
     private void renderBackpack(IInventoryBackpack backpack, float scale)
@@ -337,7 +395,7 @@ public class ModelBackpack extends ModelWearable
         if (type == QUARTZ || type == SLIME || type == SNOW)
         {
             //GlStateManager.pushMatrix();
-            startBlending();
+            startBlending(); //TODO something wrong, it spoils images of enchanted items in open container
             //GlStateManager.enableCull();
             mainBody.render(scale);
             //GlStateManager.disableCull();

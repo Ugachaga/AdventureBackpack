@@ -16,7 +16,7 @@ import com.darkona.adventurebackpack.util.Resources;
 public final class BackpackRenderer extends WearableRenderer
 {
     private static final Minecraft MC = Minecraft.getMinecraft();
-    private static final ModelBackpack MODEL_BACKPACK = new ModelBackpack();
+    private static final ModelBackpack MODEL_BACKPACK = new ModelBackpack(ModelBackpack.RenderType.ITEM);
 
     private BackpackRenderer() {}
 
@@ -31,7 +31,6 @@ public final class BackpackRenderer extends WearableRenderer
         GlStateManager.rotate(180F, 0.0F, 0.0F, 1.0F);
 
         MODEL_BACKPACK.renderTileEntity(backpack, 0.05F);
-        //FIXME CC fluid renderer doesn't reset some GL stuff after work, so need to find how to reset it manually. it's also blending-related (Slime backpack). reminder: black shield inventory icon.
 
         GlStateManager.disableRescaleNormal();
         GlStateManager.popMatrix();
@@ -39,7 +38,7 @@ public final class BackpackRenderer extends WearableRenderer
 
     public static class TileEntity extends TileEntitySpecialRenderer<TileBackpack>
     {
-        private static final ModelBackpack MODEL_BACKPACK = new ModelBackpack();
+        private static final ModelBackpack MODEL_BACKPACK = new ModelBackpack(ModelBackpack.RenderType.TILE);
 
         @Override
         public void render(TileBackpack te, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
@@ -62,7 +61,7 @@ public final class BackpackRenderer extends WearableRenderer
 
     public static class Layer
     {
-        private static final ModelBackpack MODEL_BACKPACK = new ModelBackpack();
+        private static final ModelBackpack MODEL_BACKPACK = new ModelBackpack(ModelBackpack.RenderType.LAYER);
 
         public static void render(EntityPlayer player, ItemStack stack)
         {
@@ -78,7 +77,6 @@ public final class BackpackRenderer extends WearableRenderer
                 GlStateManager.rotate(SNEAK_ANGLE, 1.0F, 0.0F, 0.0F);
             }
 
-            //TODO raise tanks higher, see: ModelBackpackOld, maybe more diff
             MODEL_BACKPACK.renderLayer(player, stack, 0.0625F);
             //TODO see: LayerArmorBase#renderEnchantedGlint
 

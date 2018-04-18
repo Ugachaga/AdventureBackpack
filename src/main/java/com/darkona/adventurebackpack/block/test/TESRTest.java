@@ -20,7 +20,7 @@ import com.darkona.adventurebackpack.util.Resources;
 
 public class TESRTest extends TileEntitySpecialRenderer<TileTest>
 {
-    private ModelBackpack model_block = new ModelBackpack();
+    private ModelBackpack model_block = new ModelBackpack(ModelBackpack.RenderType.TILE);
 
 
     @Override

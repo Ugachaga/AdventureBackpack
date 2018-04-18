@@ -3,7 +3,7 @@ package com.darkona.adventurebackpack.client.models;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
-public class ModelCampfire_ extends ModelBase
+public class ModelCampfire extends ModelBase
 {
     private ModelRenderer log;
 
@@ -30,7 +30,7 @@ public class ModelCampfire_ extends ModelBase
     private ModelRenderer rock16;
     private ModelRenderer rock17;
 
-    public ModelCampfire_()
+    public ModelCampfire()
     {
         this.textureWidth = 32;
         this.textureHeight = 32;
