@@ -3,13 +3,13 @@ package com.darkona.adventurebackpack.client.models;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.RenderUtils;
 import codechicken.lib.vec.Cuboid6;
 
+import com.darkona.adventurebackpack.common.Constants;
 import com.darkona.adventurebackpack.inventory.IInventoryBackpack;
 import com.darkona.adventurebackpack.inventory.InventoryBackpack;
 import com.darkona.adventurebackpack.reference.BackpackTypes;
@@ -91,6 +91,8 @@ public class ModelBackpack extends ModelWearable
         this.renderType = renderType;
 
         init();
+
+        //TODO add opening/closing animation
 
         if (renderType == RenderType.LAYER) //TODO raised tanks looks good, should be done so for all renderTypes?
         {
@@ -303,31 +305,21 @@ public class ModelBackpack extends ModelWearable
 
         // fluid rendering stuff
         // scale 0.0625 (1/16)
-        leftFluidCuboid16 = getFluidCuboid16().add(createVector3(tankLeftTop, -0.158, 0.06, 0.125));
-        rightFluidCuboid16 = getFluidCuboid16().add(createVector3(tankRightTop, 0.37, 0.06, 0.125));
+        Cuboid6 fluidCuboid16 = new Cuboid6(0.0, 0.505, 0.0, 0.188, 0.0, 0.188);
+        leftFluidCuboid16 = fluidCuboid16.copy().add(createVector3(tankLeftTop, -0.158, 0.06, 0.125));
+        rightFluidCuboid16 = fluidCuboid16.copy().add(createVector3(tankRightTop, 0.37, 0.06, 0.125));
 
         // scale 0.05 (1/20)
-        leftFluidCuboid20 = getFluidCuboid20().add(createVector3(tankLeftTop, -0.22, -0.05, 0.15));
-        rightFluidCuboid20 = getFluidCuboid20().add(createVector3(tankRightTop, 0.48, -0.05, 0.15));
+        Cuboid6 fluidCuboid20 = new Cuboid6(0.0, -0.4, 0.0, 0.15, 0.0, 0.15);
+        leftFluidCuboid20 = fluidCuboid20.copy().add(createVector3(tankLeftTop, -0.22, -0.05, 0.15));
+        rightFluidCuboid20 = fluidCuboid20.copy().add(createVector3(tankRightTop, 0.48, -0.05, 0.15));
 
         CCRenderState.instance().reset();
     }
 
-    private Cuboid6 getFluidCuboid16()
-    {
-        return new Cuboid6(0.0, 0.505, 0.0, 0.188, 0.0, 0.188);
-    }
-
-    private Cuboid6 getFluidCuboid20()
-    {
-        return new Cuboid6(0.0, -0.4, 0.0, 0.15, 0.0, 0.15);
-    }
-
     public void renderTileEntity(IInventoryBackpack backpack, float scale)
     {
-        GlStateManager.pushMatrix();
         renderBackpack(backpack, scale);
-        GlStateManager.popMatrix();
 
         GlStateManager.pushMatrix();
         GlStateManager.rotate(180F, 0.0F, 0.0F, 1.0F);
@@ -342,11 +334,13 @@ public class ModelBackpack extends ModelWearable
 
         renderBackpack(backpack, scale);
 
-        ItemStack testUpper = new ItemStack(Items.DIAMOND_PICKAXE); //TODO del
-        ItemStack testLower = new ItemStack(Items.DIAMOND_AXE);
+//        ItemStack testUpper = new ItemStack(Items.DIAMOND_PICKAXE); //TODO del
+//        ItemStack testLower = new ItemStack(Items.DIAMOND_AXE);
+//        renderUpperTool(testUpper);
+//        renderLowerTool(testLower);
 
-        renderUpperTool(testUpper /*backpack.getStackInSlot(Constants.TOOL_UPPER)*/);
-        renderLowerTool(testLower /*backpack.getStackInSlot(Constants.TOOL_LOWER)*/);
+        renderUpperTool(backpack.getStackInSlot(Constants.TOOL_UPPER));
+        renderLowerTool(backpack.getStackInSlot(Constants.TOOL_LOWER));
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(0.0F, -0.1F, 0.0F);
@@ -360,10 +354,10 @@ public class ModelBackpack extends ModelWearable
         if (upperTool.isEmpty()) return;
 
         GlStateManager.pushMatrix();
-        GlStateManager.translate(-0.5f, -0.5f, 0.3f);
+        GlStateManager.translate(-0.5F, -0.5F, 0.3F);
         GlStateManager.scale(1.45F, 1.45F, 1.45F);
         GlStateManager.pushMatrix();
-        GlStateManager.rotate(-45F, 0, 0, 1);
+        GlStateManager.rotate(-45.0F, 0.0F, 0.0F, 1.0F);
 
         RenderUtils.renderItemUniform(upperTool);
 
@@ -376,11 +370,11 @@ public class ModelBackpack extends ModelWearable
         if (lowerTool.isEmpty()) return;
 
         GlStateManager.pushMatrix();
-        GlStateManager.translate(-0.335f, 0.4f, -0.53f);
+        GlStateManager.translate(-0.335F, 0.4F, -0.53F);
         GlStateManager.scale(1.45F, 1.45F, 1.45F);
         GlStateManager.pushMatrix();
-        GlStateManager.rotate(90F, 0, 1, 0);
-        GlStateManager.rotate(45F, 0, 0, 1);
+        GlStateManager.rotate(90.0F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(45.0F, 0.0F, 0.0F, 1.0F);
 
         RenderUtils.renderItemUniform(lowerTool);
 

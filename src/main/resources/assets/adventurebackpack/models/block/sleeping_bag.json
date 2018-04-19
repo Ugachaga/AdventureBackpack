@@ -1,0 +1,38 @@
+{
+  "textures": {
+    "head_top": "adventurebackpack:blocks/sleeping_bag_head_top",
+    "head_side": "adventurebackpack:blocks/sleeping_bag_head_side",
+    "head_end": "adventurebackpack:blocks/sleeping_bag_head_end",
+    "feet_top": "adventurebackpack:blocks/sleeping_bag_feet_top",
+    "feet_side": "adventurebackpack:blocks/sleeping_bag_feet_side",
+    "feet_end": "adventurebackpack:blocks/sleeping_bag_feet_end",
+    "particle": "adventurebackpack:items/sleeping_bag"
+  },
+  "elements": [
+    {
+      "name": "head",
+      "from": [0, 0, 0],
+      "to": [16, 1, 16],
+      "faces": {
+        "north": { "uv": [16, 14, 0, 15], "texture": "#head_side" },
+        "east": { "uv": [0, 14, 16, 15], "texture": "#head_end" },
+        "south": { "uv": [0, 14, 16, 15], "texture": "#head_side" },
+        "west": { "uv": [0, 14, 16, 15], "texture": "#feet_end" },
+        "up": { "uv": [0, 0, 16, 16], "texture": "#head_top" },
+        "down": { "uv": [0, 0, 16, 16], "texture": "#head_top" }
+      }
+    }, {
+      "name": "feet",
+      "from": [-16, 0, 0],
+      "to": [0, 1, 16],
+      "faces": {
+        "north": { "uv": [0, 14, 16, 15], "texture": "#feet_side" },
+        "east": { "uv": [0, 14, 16, 15], "texture": "#feet_end" },
+        "south": { "uv": [0, 14, 16, 15], "texture": "#feet_side" },
+        "west": { "uv": [0, 14, 16, 15], "texture": "#feet_end" },
+        "up": { "uv": [0, 0, 16, 16], "texture": "#feet_top" },
+        "down": { "uv": [0, 0, 16, 16], "texture": "#feet_top" }
+      }
+    }
+  ]
+}

@@ -55,8 +55,7 @@ public abstract class ModelWearable extends ModelBase
 
     protected void renderFluidInTank(FluidTank tank, Cuboid6 cuboid)
     {
-        if (tank.getFluid() == null)
-            return;
+        if (tank.getFluid() == null) return;
 
         double fullness = ((double) tank.getFluidAmount()) / ((double) tank.getCapacity());
         RenderUtils.renderFluidCuboidGL(tank.getFluid(), cuboid, fullness, 0.8);

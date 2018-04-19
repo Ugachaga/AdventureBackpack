@@ -2,56 +2,38 @@ package com.darkona.adventurebackpack.client.models;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 
-@SuppressWarnings("WeakerAccess")
-public class ModelSleepingBag extends ModelBase
+public class ModelSleepingBag extends ModelBase //unused
 {
-    public ModelRenderer footer;
-    public ModelRenderer header;
-    public ModelRenderer pillow;
+    private ModelRenderer header;
+    private ModelRenderer pillow;
+    private ModelRenderer footer;
 
     public ModelSleepingBag()
     {
         textureWidth = 64;
         textureHeight = 64;
 
-        footer = new ModelRenderer(this, 0, 0);
         header = new ModelRenderer(this, 0, 17);
-        pillow = new ModelRenderer(this, 0, 34);
-
-        footer.addBox(-8F, 0F, 0F, 16, 1, 16);
-        footer.setRotationPoint(0F, 23F, -8F);
-        footer.setTextureSize(64, 64);
-        footer.mirror = true;
-        setRotation(footer, 0F, 0F, 0F);
-
-        header.addBox(-16F, 0F, 16F, 16, 1, 16);
-        header.setRotationPoint(8F, 23F, -8F);
-        header.setTextureSize(64, 64);
+        header.addBox(-16.0F, 0.0F, 16.0F, 16, 1, 16);
+        header.setRotationPoint(8.0F, 23.0F, -8.0F);
         header.mirror = true;
-        setRotation(header, 0F, 0F, 0F);
 
-        pillow.addBox(-6F, -1F, 26F, 12, 1, 6);
-        pillow.setRotationPoint(0F, 23F, -8F);
-        pillow.setTextureSize(64, 64);
+        pillow = new ModelRenderer(this, 0, 34);
+        pillow.addBox(-6.0F, -1.0F, 26.0F, 12, 1, 6);
+        pillow.setRotationPoint(0.0F, 23.0F, -8.0F);
         pillow.mirror = true;
-        setRotation(pillow, 0F, 0F, 0F);
+
+        footer = new ModelRenderer(this, 0, 0);
+        footer.addBox(-8.0F, 0.0F, 0.0F, 16, 1, 16);
+        footer.setRotationPoint(0.0F, 23.0F, -8.0F);
+        footer.mirror = true;
     }
 
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
+    public void render(float scale)
     {
-        super.render(entity, f, f1, f2, f3, f4, f5);
-        setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-        footer.render(f5);
-        header.render(f5);
-        pillow.render(f5);
-    }
-
-    private void setRotation(ModelRenderer model, float x, float y, float z)
-    {
-        model.rotateAngleX = x;
-        model.rotateAngleY = y;
-        model.rotateAngleZ = z;
+        header.render(scale);
+        pillow.render(scale);
+        footer.render(scale);
     }
 }

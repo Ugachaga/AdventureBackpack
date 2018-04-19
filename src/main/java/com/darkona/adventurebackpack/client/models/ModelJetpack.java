@@ -122,13 +122,13 @@ public class ModelJetpack extends ModelWearable
         InventoryJetpack jetpack = new InventoryJetpack(stack);
         fireBox.setTextureOffset((jetpack.getBurnTicks() > 0) ? 9 : 26, 25);
 
-        tubeStraightRight.render(scale);
-        tubeEndLeft.render(scale);
-        tubeEndRight.render(scale);
         base.render(scale);
         tankWallLeft.render(scale);
         tankWallRight.render(scale);
         tubeStraightLeft.render(scale);
+        tubeStraightRight.render(scale);
+        tubeEndLeft.render(scale);
+        tubeEndRight.render(scale);
 
         renderFluidInTank(jetpack.getWaterTank(), fluidCuboid.copy());
     }

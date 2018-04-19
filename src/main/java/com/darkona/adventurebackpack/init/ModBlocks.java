@@ -65,7 +65,7 @@ public class ModBlocks
             ItemBlock[] items = {
                     //new ItemBlock(BACKPACK_BLOCK), //TODO maybe we should extends ItemBackpack from ItemBlock and register it here instead of ModItems?
                     new ItemBlock(CAMPFIRE_BLOCK),
-                    //new ItemBlock(SLEEPING_BAG_BLOCK),
+                    new ItemBlock(SLEEPING_BAG_BLOCK),
 
                     new ItemBlock(TEST_BLOCK),
             };
@@ -80,11 +80,6 @@ public class ModBlocks
                 ITEM_BLOCKS.add(item);
             }
         }
-
-//        private static void registerItemBlock(IForgeRegistry<Item> registry, Block block, Item item)
-//        {
-//
-//        }
     }
 
     private static void registerTileEntities()

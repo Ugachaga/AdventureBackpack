@@ -8,7 +8,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Biomes;
-import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -35,7 +35,7 @@ import com.darkona.adventurebackpack.util.Wearing;
 
 public class BlockSleepingBag extends BlockBed
 {
-    private static final AxisAlignedBB SLEEPING_BAG_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.1D, 1.0D);
+    private static final AxisAlignedBB SLEEPING_BAG_AABB = new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 0.1, 1.0);
 
     private static final String TAG_STORED_SPAWN = "storedSpawn";
     private static final String TAG_SPAWN_POS_X = "posX";
@@ -202,7 +202,8 @@ public class BlockSleepingBag extends BlockBed
     @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
-        return Item.getItemFromBlock(Blocks.AIR);
+        return state.getValue(PART) == BlockBed.EnumPartType.FOOT ? Items.AIR : Item.getItemFromBlock(ModBlocks.SLEEPING_BAG_BLOCK);
+        //return Item.getItemFromBlock(Blocks.AIR);
     }
 
     @Override
@@ -288,7 +289,7 @@ public class BlockSleepingBag extends BlockBed
     }
 
     @Override
-    public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) //TODO del?
+    public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos)
     {
         return false;
     }

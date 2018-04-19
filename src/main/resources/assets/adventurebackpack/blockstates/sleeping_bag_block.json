@@ -1,0 +1,18 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": {
+      "model": "adventurebackpack:sleeping_bag_block"
+    },
+    "inventory": {
+      "model": "adventurebackpack:sleeping_bag_block",
+      "transform": "forge:default-block"
+    },
+    "facing": {
+      "south": {},
+      "west": {},
+      "north": {},
+      "east": {}
+    }
+  }
+}
