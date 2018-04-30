@@ -46,22 +46,9 @@ import static com.darkona.adventurebackpack.reference.BackpackTypes.UNKNOWN;
 
 public class BlockBackpack extends Block
 {
-    public static final PropertyDirection FACING = BlockHorizontal.FACING;
+    private static final PropertyDirection FACING = BlockHorizontal.FACING;
     private static final AxisAlignedBB X_AXIS_AABB = new AxisAlignedBB(0.3, 0.0, 0.05, 0.7, 0.65, 0.95);
     private static final AxisAlignedBB Z_AXIS_AABB = new AxisAlignedBB(0.05, 0.0, 0.3, 0.95, 0.65, 0.7);
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos)
-    {
-        return super.getActualState(state, world, pos); //TODO
-    }
-
-//    @Override
-//    public float getPlayerRelativeBlockHardness(IBlockState state, EntityPlayer player, World worldIn, BlockPos pos)
-//    {
-//        return super.getPlayerRelativeBlockHardness(state, player, worldIn, pos);
-//    }
 
     public BlockBackpack(String name)
     {
@@ -69,8 +56,8 @@ public class BlockBackpack extends Block
         AdventureBlock.setBlockName(this, name);
 
         this.setSoundType(SoundType.CLOTH);
-        this.setHardness(1.0f);
-        this.setResistance(2000f);
+        this.setHardness(1.0F);
+        this.setResistance(2000F);
 
         this.setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
     }

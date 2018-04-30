@@ -50,7 +50,7 @@ public class Constants
     public static final String TAG_HOLDING_SPACE = "holdingSpace";
     public static final String TAG_SLEEPING_IN_BAG = "sleepingInBag";
 
-    public class Jetpack
+    public static class Jetpack
     {
         /**
          *  ### Steam Jetpack ###
@@ -70,7 +70,7 @@ public class Constants
         public static final String TAG_STEAM_TANK = "steamTank";
     }
 
-    public class Copter
+    public static class Copter
     {
         /**
          *  ### Copter Pack ###

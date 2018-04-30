@@ -2,10 +2,10 @@
   "forge_marker": 1,
   "variants": {
     "normal": {
-      "model": "adventurebackpack:sleeping_bag_block"
+      "model": "adventurebackpack:sleeping_bag"
     },
     "inventory": {
-      "model": "adventurebackpack:sleeping_bag_block",
+      "model": "adventurebackpack:sleeping_bag",
       "transform": "forge:default-block"
     },
     "facing": {

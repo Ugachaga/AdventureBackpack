@@ -39,15 +39,15 @@ public class ItemJuiceBottle extends AdventureItem
     }
 
     @Override
-    public EnumAction getItemUseAction(ItemStack p_77661_1_)
+    public EnumAction getItemUseAction(ItemStack stack)
     {
         return EnumAction.DRINK;
     }
 
     @Override
-    public int getMaxItemUseDuration(ItemStack p_77626_1_)
+    public int getMaxItemUseDuration(ItemStack stack)
     {
-        return 28;
+        return 32;
     }
 
 }

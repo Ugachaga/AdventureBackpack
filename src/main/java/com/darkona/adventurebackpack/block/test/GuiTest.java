@@ -27,13 +27,13 @@ public class GuiTest extends GuiWithTanks//GuiContainer
     private static GuiTank tankLeft = new GuiTank(25, 7, 100, 16, ConfigHandler.typeTankRender);
     private static GuiTank tankRight = new GuiTank(207, 7, 100, 16, ConfigHandler.typeTankRender);
 
-    private InventoryPlayer playerInv;
+//    private InventoryPlayer playerInv;
     private Source source = Source.TILE;
 
     public GuiTest(Container container, InventoryPlayer playerInv)
     {
         super(container);
-        this.playerInv = playerInv;
+//        this.playerInv = playerInv;
 
         xSize = 248;
         ySize = 207;

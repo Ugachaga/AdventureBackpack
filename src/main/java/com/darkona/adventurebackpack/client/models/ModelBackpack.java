@@ -92,8 +92,6 @@ public class ModelBackpack extends ModelWearable
 
         init();
 
-        //TODO add opening/closing animation
-
         if (renderType == RenderType.LAYER) //TODO raised tanks looks good, should be done so for all renderTypes?
         {
             tankLeftTop.setRotationPoint(5.0F, -1.0F, -2.5F);
@@ -314,7 +312,7 @@ public class ModelBackpack extends ModelWearable
         leftFluidCuboid20 = fluidCuboid20.copy().add(createVector3(tankLeftTop, -0.22, -0.05, 0.15));
         rightFluidCuboid20 = fluidCuboid20.copy().add(createVector3(tankRightTop, 0.48, -0.05, 0.15));
 
-        CCRenderState.instance().reset();
+        CCRenderState.instance().reset(); //TODO test if we can call it once, like from ClientProxy#init
     }
 
     public void renderTileEntity(IInventoryBackpack backpack, float scale)

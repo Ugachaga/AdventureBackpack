@@ -323,17 +323,17 @@ public class TileBackpack extends TileWearable implements IInventoryBackpack, IT
         this.sleepingBagDeployed = state;
     }
 
-    public boolean deploySleepingBag(EntityPlayer player, World world, int meta, int cX, int cY, int cZ)
+    public boolean deploySleepingBag(EntityPlayer player, World world, int meta, int x, int y, int z)
     {
         if (world.isRemote)
             return false;
 
-        sleepingBagDeployed = CoordsUtils.spawnSleepingBag(player, world, meta, cX, cY, cZ);
+        sleepingBagDeployed = CoordsUtils.spawnSleepingBag(player, world, meta, x, y, z);
         if (sleepingBagDeployed)
         {
-            sbx = cX;
-            sby = cY;
-            sbz = cZ;
+            sbx = x;
+            sby = y;
+            sbz = z;
             sbdir = meta;
             //world.notifyBlockUpdate(this.pos, , , ); //TODO check it
         }
@@ -442,7 +442,7 @@ public class TileBackpack extends TileWearable implements IInventoryBackpack, IT
                 world.setLightFor(EnumSkyBlock.BLOCK, this.pos, luminosity);
             }
 
-            if (sleepingBagDeployed && world.getBlockState(new BlockPos(sbx, sby, sbz)) != ModBlocks.SLEEPING_BAG_BLOCK)
+            if (sleepingBagDeployed && world.getBlockState(new BlockPos(sbx, sby, sbz)).getBlock() != ModBlocks.SLEEPING_BAG_BLOCK)
                 sleepingBagDeployed = false;
 
             checkTime = 20;
